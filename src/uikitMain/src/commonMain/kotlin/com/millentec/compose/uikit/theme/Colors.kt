@@ -2,16 +2,42 @@
 
 import androidx.compose.ui.graphics.Color
 
+/**
+ * UIKitTheme 主题的颜色部分, 默认为亮色主题, 使用 getDark() 方法获取默认的暗色主题
+ */
 data class Colors(
+    /**
+     * 一般可用于应用程序的窗口背景颜色
+     */
     val contentFillColorPrimaryBrush: Color = Color(0xFFFFFFFF),
+
+    /**
+     * 用于普通正文的颜色
+     */
     val textFillColorPrimaryBrush: Color = Color(0xFF1D1D1F),
+
+    /**
+     * 可用于副标题, 脚注, 不可用控件的文本颜色
+     */
     val textFillColorSubBrush: Color = Color(0xFF6E6E73)
 ) {
+
+    /**
+     * UIKitTheme 主题的颜色部分, 默认为亮色主题, 使用 getDark() 方法获取默认的暗色主题
+     */
     companion object {
+        /**
+         * 获取默认的亮色主题
+         * @return 包含默认亮色主题的 Colors 实例
+         */
         fun getLight(): Colors {
             return Colors()
         }
 
+        /**
+         * 获取默认的暗色主题
+         * @return 包含默认暗色主题的 Colors 实例
+         */
         fun getDark(): Colors {
             return Colors(
                 contentFillColorPrimaryBrush = Color(0xFF151517),
