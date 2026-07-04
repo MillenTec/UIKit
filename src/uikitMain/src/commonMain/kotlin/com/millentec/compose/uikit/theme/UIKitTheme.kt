@@ -8,8 +8,10 @@ import androidx.compose.runtime.compositionLocalOf
  * @param colors 颜色主题
  */
 data class UIKitTheme(
-    val typography: Typography = Typography(),
-    val colors: Colors = Colors.getLight()
+    val typography: UIKitTypography = UIKitTypography(),
+    val colors: UIKitColors = UIKitColors.getLight(),
+    val shapes: UIKitShapes = UIKitShapes(),
+    val layout: UIKitLayout = UIKitLayout(),
 ) {
 
     /**

@@ -9,14 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.component.UIKitTheme
-import com.millentec.compose.uikit.theme.Colors
+import com.millentec.compose.uikit.theme.UIKitColors
 import com.millentec.compose.uikit.theme.UIKitTheme
 
 @Composable
 @Preview
 fun App() {
     UIKitTheme(UIKitTheme(
-        colors = Colors.getDark()
+        colors = UIKitColors.getDark()
     )) {
         val themeCurrent = UIKitTheme.themeCurrent.current
 

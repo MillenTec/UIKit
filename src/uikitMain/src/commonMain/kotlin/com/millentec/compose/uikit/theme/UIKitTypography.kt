@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.sp
 /**
  * UIKitTheme 的文本排版部分
  */
-data class Typography(
+data class UIKitTypography(
 
     /**
      * 大型显示文本, 用于需突出强调的文本
