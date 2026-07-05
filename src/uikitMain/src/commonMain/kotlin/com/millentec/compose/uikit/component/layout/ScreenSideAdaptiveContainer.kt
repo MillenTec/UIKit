@@ -1,10 +1,14 @@
 ﻿package com.millentec.compose.uikit.component.layout
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.safeContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
@@ -13,13 +17,25 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.LayoutPosition
 import com.millentec.compose.uikit.foundation.LayoutPosition.*
 import com.millentec.compose.uikit.getScreenCornerRadius
+import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
 import com.millentec.compose.uikit.theme.getUIKitShapes
 
 @Composable
 @Preview
 private fun Preview() {
-
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        ScreenSideAdaptiveContainer(
+            modifier = Modifier
+                .fillMaxSize(),
+            state = rememberScreenSideAdaptiveContainerState()
+        ) {
+            Text(text = "Hello World")
+        }
+    }
 }
 
 /**
@@ -65,60 +81,71 @@ fun rememberScreenSideAdaptiveContainerState(
     maxMargin: Dp = getUIKitLayout().x4Spacing,
     fillWidth: Boolean = true,
     fillHeight: Boolean = false,
+    providedScreenCornerRadius: Dp = (getScreenCornerRadius() / LocalDensity.current.density).dp,
 ): ScreenSideAdaptiveContainerState {
-    val screenCornerRadius = (getScreenCornerRadius() / LocalDensity.current.density).dp
-    val safeContent = WindowInsets.safeContent
+    val safeDrawing = WindowInsets.safeDrawing
     val layoutDirection = LocalLayoutDirection.current
     val density = LocalDensity.current
     val densityDpi = LocalDensity.current.density
 
     // 取所需的几个侧边边距的最大值作为统一边距以达到等距效果
     var unifiedMargin: Dp? = maxOf(
-        // 在这三种位置布局下会需要底部边距
-        if (position == Bottom || position == BottomLeft || position == BottomRight)
+        // 在这五种位置布局下会需要底部边距
+        if (position == Bottom || position == BottomLeft || position == BottomRight || position == Left || position == Right)
         // 若底部安全边距小于期望最小边距则取期望最小边距, 在无需用到底部边距时底部边距取 0
-            maxOf(safeContent.getBottom(density).toFloat() / densityDpi, minMargin.value) else 0f,
+            maxOf(safeDrawing.getBottom(density).toFloat() / densityDpi, minMargin.value) else 0f,
 
-        if (position == TopRight || position == TopLeft || position == TopRight)
-            maxOf(safeContent.getTop(density).toFloat() / densityDpi, minMargin.value) else 0f,
+        if (position == Top || position == TopLeft || position == TopRight || position == Left || position == Right)
+            maxOf(safeDrawing.getTop(density).toFloat() / densityDpi, minMargin.value) else 0f,
 
-        if (position == Left || position == BottomLeft || position == TopLeft)
-            maxOf(safeContent.getLeft(density, layoutDirection).toFloat() / densityDpi, minMargin.value) else 0f,
+        if (position == Left || position == BottomLeft || position == TopLeft || position == Bottom || position == Top)
+            maxOf(safeDrawing.getLeft(density, layoutDirection).toFloat() / densityDpi, minMargin.value) else 0f,
 
-        if (position == Right || position == BottomRight || position == TopRight)
-            maxOf(safeContent.getRight(density, layoutDirection).toFloat() / densityDpi, minMargin.value) else 0f,
+        if (position == Right || position == BottomRight || position == TopRight || position == Top || position == Bottom)
+            maxOf(safeDrawing.getRight(density, layoutDirection).toFloat() / densityDpi, minMargin.value) else 0f,
     ).dp
 
     // 若最大边距超过一定阈值则标记为 null 表示不使用统一边距 (回退为不等距)
     unifiedMargin?.let { if (it > maxMargin) unifiedMargin = null }
 
     // 若无法统一出一个边距, 那么则没有必要适应圆角
-    val cornerRadius: Dp = if (unifiedMargin != null) {
-        if (screenCornerRadius - unifiedMargin >= expectCornerRadius)
-            expectCornerRadius else fallbackCornerRadius
+    val cornerRadius: Dp = if (position == Center) fallbackCornerRadius else
+        if (unifiedMargin != null) {
+            if (providedScreenCornerRadius - unifiedMargin >= expectCornerRadius)
+                providedScreenCornerRadius - unifiedMargin
+            else fallbackCornerRadius
+        } else {
+            fallbackCornerRadius
+        }
+
+    val height: Dp
+    val width: Dp
+    if (cornerRadius != fallbackCornerRadius) {
+        height = if (cornerRadius * 2 >= expectHeight) cornerRadius * 2 else expectHeight
+        width = if (cornerRadius * 2 >= expectWidth) cornerRadius * 2 else expectWidth
     } else {
-        fallbackCornerRadius
+        height = expectHeight
+        width = expectWidth
     }
 
-    val height = if (cornerRadius*2 >= expectHeight) cornerRadius*2 else expectHeight
-    val width = if (cornerRadius*2 >= expectWidth) cornerRadius*2 else expectWidth
+    val margins = PaddingValues(
+        // 如果不涉及这个边距则设置为 0, 否则若有统一边距则取统一边距 (此时若有统一边距, 统一边距一定大于每一个安全边距), 否则取安全边距或期望最小边距的最大值
+        top = if (position == Top || position == TopLeft || position == TopRight || position == Left || position == Right)
+            unifiedMargin ?: maxOf(safeDrawing.getTop(density).toFloat() / densityDpi, minMargin.value).dp
+        else 0.dp,
+        bottom = if (position == Bottom || position == BottomLeft || position == BottomRight || position == Left || position == Right)
+            unifiedMargin ?: maxOf(safeDrawing.getBottom(density).toFloat() / densityDpi, minMargin.value).dp
+        else 0.dp,
+        start = if (position == Left || position == BottomLeft || position == TopLeft || position == Bottom || position == Top)
+            unifiedMargin ?: maxOf(safeDrawing.getLeft(density, layoutDirection).toFloat() / densityDpi, minMargin.value).dp
+        else 0.dp,
+        end = if (position == Right || position == BottomRight || position == TopRight || position == Top || position == Bottom)
+            unifiedMargin ?: maxOf(safeDrawing.getRight(density, layoutDirection).toFloat() / densityDpi, minMargin.value).dp
+        else 0.dp,
+    )
 
     return ScreenSideAdaptiveContainerState(
-        margins = PaddingValues(
-            // 如果不涉及这个边距则设置为 0, 否则若有统一边距则取统一边距 (此时若有统一边距, 统一边距一定大于每一个安全边距), 否则取安全边距或期望最小边距的最大值
-            top = if (position == TopRight || position == TopLeft || position == TopRight)
-                unifiedMargin ?: maxOf(safeContent.getTop(density).toFloat() / densityDpi, minMargin.value).dp
-            else 0.dp,
-            bottom = if (position == Bottom || position == BottomLeft || position == BottomRight)
-                unifiedMargin ?: maxOf(safeContent.getBottom(density).toFloat() / densityDpi, minMargin.value).dp
-            else 0.dp,
-            start = if (position == Left || position == BottomLeft || position == TopLeft)
-                unifiedMargin ?: maxOf(safeContent.getLeft(density, layoutDirection).toFloat() / densityDpi, minMargin.value).dp
-            else 0.dp,
-            end = if (position == Right || position == BottomRight || position == TopRight)
-                unifiedMargin ?: maxOf(safeContent.getRight(density, layoutDirection).toFloat() / densityDpi, minMargin.value).dp
-            else 0.dp,
-        ),
+        margins = margins,
         fillHeight = fillHeight,
         fillWidth = fillWidth,
         height = height,
@@ -136,4 +163,27 @@ fun rememberScreenSideAdaptiveContainerState(
             Center -> Alignment.Center
         }
     )
+}
+
+@Composable
+fun ScreenSideAdaptiveContainer(
+    modifier: Modifier = Modifier,
+    state: ScreenSideAdaptiveContainerState,
+    background: Color = getUIKitColors().contentFillColorSecondaryBrush,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Box(
+        modifier = modifier,
+        contentAlignment = state.alignment
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(state.margins)
+                .clip(RoundedCornerShape(state.cornerRadius))
+                .background(background)
+                .then(if (state.fillWidth) Modifier.fillMaxWidth() else Modifier.width(state.width))
+                .then(if (state.fillHeight) Modifier.fillMaxHeight() else Modifier.height(state.height)),
+            content = content
+        )
+    }
 }
