@@ -24,7 +24,9 @@ data class UIKitColors(
     /**
      * 可用于副标题, 脚注, 不可用控件的文本颜色
      */
-    val textFillColorSubBrush: Color = Color(0xFF6E6E73)
+    val textFillColorSubBrush: Color = Color(0xFF6E6E73),
+
+    val highlightColorBrush: Color = Color(0xFF0071E3)
 ) {
 
     /**
@@ -48,7 +50,8 @@ data class UIKitColors(
                 contentFillColorPrimaryBrush = Color(0xFF151517),
                 contentFillColorSecondaryBrush = Color(0xFF1D1D1F),
                 textFillColorPrimaryBrush = Color(0xFFF5F5F7),
-                textFillColorSubBrush = Color(0xFF86868B)
+                textFillColorSubBrush = Color(0xFF86868B),
+                highlightColorBrush = Color(0xFF0071E3)
             )
         }
     }

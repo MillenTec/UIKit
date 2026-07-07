@@ -81,7 +81,7 @@ fun rememberScreenSideAdaptiveContainerState(
     maxMargin: Dp = getUIKitLayout().x4Spacing,
     fillWidth: Boolean = true,
     fillHeight: Boolean = false,
-    providedScreenCornerRadius: Dp = (getScreenCornerRadius() / LocalDensity.current.density).dp,
+    providedScreenCornerRadius: Dp = (getScreenCornerRadius() / LocalDensity.current.density).dp
 ): ScreenSideAdaptiveContainerState {
     val safeDrawing = WindowInsets.safeDrawing
     val layoutDirection = LocalLayoutDirection.current

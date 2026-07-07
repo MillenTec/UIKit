@@ -6,19 +6,21 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.UIKitTheme
-import com.millentec.compose.uikit.component.layout.ScreenSideAdaptiveContainer
+import com.millentec.compose.uikit.component.input.UIKitNavigationDock
+import com.millentec.compose.uikit.component.input.UIKitNavigationItem
 import com.millentec.compose.uikit.component.layout.rememberScreenSideAdaptiveContainerState
 import com.millentec.compose.uikit.foundation.LayoutPosition
 import com.millentec.compose.uikit.theme.UIKitColors
 import com.millentec.compose.uikit.theme.UIKitTheme
-import com.millentec.compose.uikit.theme.getUIKitLayout
+import com.millentec.compose.uikit.theme.getUIKitColors
+import com.millentec.compose.uikit.theme.getUIKitTypography
 
 @Composable
 @Preview
@@ -93,119 +95,39 @@ fun App() {
                 Spacer(Modifier.height(120.dp))
             }
 
-            Row(
+            val checkedIndex = remember { mutableStateOf(0) }
+
+            UIKitNavigationDock(
                 modifier = Modifier
                     .fillMaxSize(),
-                verticalAlignment = Alignment.Bottom
-            ) {
-                ScreenSideAdaptiveContainer(
-                    modifier = Modifier
-                        .weight(1f),
-                    state = state
-                ){
-
-                }
-
-                Spacer(Modifier.width(getUIKitLayout().mediumSpacing))
-
-                ScreenSideAdaptiveContainer(
-                    modifier = Modifier
-                        .scale(1f),
-                    state = rememberScreenSideAdaptiveContainerState(
-                        expectHeight = 50.dp,
-                        expectWidth = 50.dp,
-                        position = LayoutPosition.BottomRight,
-                        fillWidth = false,
-                        fillHeight = false,
+                checkedIndex = checkedIndex.value,
+                onChecked = {
+                    checkedIndex.value = it
+                },
+                independentButtonPosition = LayoutPosition.Right,
+                items = listOf(
+                    UIKitNavigationItem(
+                        "Home",
+                    ),
+                    UIKitNavigationItem(
+                        "Debug",
+                    ),
+                    UIKitNavigationItem(
+                        "App",
+                    ),
+                    UIKitNavigationItem(
+                        "Settings"
                     )
-                ) {
-
+                ),
+                hasIndependentButton = true,
+                independentButtonContent = {
+                    Text(
+                        text = "Button",
+                        style = getUIKitTypography().footnote,
+                        color = getUIKitColors().textFillColorPrimaryBrush
+                    )
                 }
-            }
-
-            ScreenSideAdaptiveContainer(
-                modifier = Modifier
-                    .fillMaxSize(),
-                state = rememberScreenSideAdaptiveContainerState(
-                    expectHeight = 50.dp,
-                    expectWidth = 50.dp,
-                    position = LayoutPosition.Center,
-                    fillWidth = false,
-                    fillHeight = false,
-                )
-            ) {
-
-            }
-
-            ScreenSideAdaptiveContainer(
-                modifier = Modifier
-                    .fillMaxSize(),
-                state = rememberScreenSideAdaptiveContainerState(
-                    expectHeight = 50.dp,
-                    expectWidth = 120.dp,
-                    position = LayoutPosition.TopLeft,
-                    fillWidth = false,
-                    fillHeight = false,
-                )
-            ) {
-
-            }
-
-            ScreenSideAdaptiveContainer(
-                modifier = Modifier
-                    .fillMaxSize(),
-                state = rememberScreenSideAdaptiveContainerState(
-                    expectHeight = 50.dp,
-                    expectWidth = 120.dp,
-                    position = LayoutPosition.Top,
-                    fillWidth = false,
-                    fillHeight = false,
-                )
-            ) {
-
-            }
-
-            ScreenSideAdaptiveContainer(
-                modifier = Modifier
-                    .fillMaxSize(),
-                state = rememberScreenSideAdaptiveContainerState(
-                    expectHeight = 50.dp,
-                    expectWidth = 50.dp,
-                    position = LayoutPosition.TopRight,
-                    fillWidth = false,
-                    fillHeight = false,
-                )
-            ) {
-
-            }
-
-            ScreenSideAdaptiveContainer(
-                modifier = Modifier
-                    .fillMaxSize(),
-                state = rememberScreenSideAdaptiveContainerState(
-                    expectHeight = 50.dp,
-                    expectWidth = 50.dp,
-                    position = LayoutPosition.Left,
-                    fillWidth = false,
-                    fillHeight = true,
-                )
-            ) {
-
-            }
-
-            ScreenSideAdaptiveContainer(
-                modifier = Modifier
-                    .fillMaxSize(),
-                state = rememberScreenSideAdaptiveContainerState(
-                    expectHeight = 120.dp,
-                    expectWidth = 50.dp,
-                    position = LayoutPosition.Right,
-                    fillWidth = false,
-                    fillHeight = false,
-                )
-            ) {
-
-            }
+            )
         }
     }
 }

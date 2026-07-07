@@ -5,7 +5,7 @@ import androidx.compose.ui.unit.dp
 
 data class UIKitLayout(
     val noneSpacing: Dp = 0.dp,
-    val smellSpacing: Dp = 4.dp,
+    val smallSpacing: Dp = 4.dp,
     val basicSpacing: Dp = 8.dp,
     val mediumSpacing: Dp = 12.dp,
     val x2Spacing: Dp = 16.dp,
