@@ -1,21 +1,14 @@
 ﻿package com.millentec.compose.uikit.component.input
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -215,29 +208,28 @@ fun UIKitNavigationDock(
                 background = background
             ) {
                 BoxWithConstraints {
-                    val maxWidth = maxWidth
+                    val itemWidth = (maxWidth - getUIKitLayout().smallSpacing * 2) / items.size
+                    val targetOffset = itemWidth * checkedIndex
 
-                    Row {
-                        Row(
-                            modifier = Modifier
-                                .animateContentSize(
-                                    animationSpec = tween(300, easing = FastOutSlowInEasing)
-                                )
-                        ) {
-                            repeat(checkedIndex) {
-                                Spacer(Modifier.width((maxWidth - getUIKitLayout().smallSpacing * 2) / items.size))
-                            }
-                        }
+                    val offsetAnimated = remember { Animatable(0.dp, Dp.VectorConverter) }
 
-                        Box(
-                            modifier = Modifier
-                                .padding(getUIKitLayout().smallSpacing)
-                                .clip(RoundedCornerShape(mainIslandState.cornerRadius - getUIKitLayout().smallSpacing))
-                                .fillMaxHeight()
-                                .width((maxWidth - getUIKitLayout().smallSpacing*2)/items.size)
-                                .background(indicatorBackground)
-                        )
+                    LaunchedEffect(checkedIndex) {
+                        offsetAnimated.animateTo(targetOffset, animationSpec = tween(300, easing = FastOutSlowInEasing))
                     }
+
+                    LaunchedEffect(maxWidth) {
+                        offsetAnimated.snapTo(targetOffset)
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .offset(offsetAnimated.value)
+                            .padding(getUIKitLayout().smallSpacing)
+                            .clip(RoundedCornerShape(mainIslandState.cornerRadius - getUIKitLayout().smallSpacing))
+                            .fillMaxHeight()
+                            .width(itemWidth)
+                            .background(indicatorBackground)
+                    )
 
                     Row(
                         modifier = Modifier
