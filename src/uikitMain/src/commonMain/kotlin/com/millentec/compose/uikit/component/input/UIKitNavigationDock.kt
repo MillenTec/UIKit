@@ -245,11 +245,15 @@ fun UIKitNavigationDock(
                         offsetAnimated.animateTo(currentOffset, animationSpec = spring(dampingRatio = 0.70f, stiffness = 240f))
                     }
 
-                    LaunchedEffect(maxWidth, draggingOffset.value) {
+                    LaunchedEffect(draggingOffset.value) {
                         if (draggingOffset.value == 0.dp && !isDragging.value) {
                             offsetAnimated.animateTo(currentOffset, animationSpec = spring(dampingRatio = 0.70f))
                             return@LaunchedEffect
                         }
+                        offsetAnimated.snapTo(currentOffset)
+                    }
+
+                    LaunchedEffect(maxWidth) {
                         offsetAnimated.snapTo(currentOffset)
                     }
 
