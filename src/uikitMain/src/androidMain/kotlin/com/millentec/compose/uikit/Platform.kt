@@ -17,7 +17,7 @@ actual fun getScreenCornerRadius(): Float {
         return it
     }
 
-    // 在Android 12(API 31)以上支持获取屏幕圆角的API
+    // 在 Android 12(API 31) 以上支持获取屏幕圆角的 API
     if (Build.VERSION.SDK_INT >= 31){
         val rootView = (content as? android.app.Activity)?.window?.decorView?.rootView
         val insets = rootView?.rootWindowInsets

@@ -4,11 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -17,10 +19,11 @@ import com.millentec.compose.uikit.component.input.UIKitNavigationDock
 import com.millentec.compose.uikit.component.input.UIKitNavigationItem
 import com.millentec.compose.uikit.component.layout.rememberScreenSideAdaptiveContainerState
 import com.millentec.compose.uikit.foundation.LayoutPosition
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.theme.UIKitColors
 import com.millentec.compose.uikit.theme.UIKitTheme
 import com.millentec.compose.uikit.theme.getUIKitColors
-import com.millentec.compose.uikit.theme.getUIKitTypography
 
 @Composable
 @Preview
@@ -92,6 +95,41 @@ fun App() {
                     style = themeCurrent.typography.body,
                     color = themeCurrent.colors.textFillColorSubBrush
                 )
+                Icon(
+                    modifier = Modifier
+                        .size(48.dp),
+                    imageVector = FluentIcons.addCircle(getUIKitColors().textFillColorPrimaryBrush),
+                    contentDescription = null,
+                    tint = Color.Unspecified
+                )
+                Icon(
+                    modifier = Modifier
+                        .size(48.dp),
+                    imageVector = FluentIcons.addCircle(getUIKitColors().textFillColorPrimaryBrush, true),
+                    contentDescription = null,
+                    tint = Color.Unspecified
+                )
+                Icon(
+                    modifier = Modifier
+                        .size(48.dp),
+                    imageVector = FluentIcons.addCircle(getUIKitColors().highlightColorBrush, true),
+                    contentDescription = null,
+                    tint = Color.Unspecified
+                )
+                Icon(
+                    modifier = Modifier
+                        .size(48.dp),
+                    imageVector = FluentIcons.addCircle(getUIKitColors().highlightColorBrush, getUIKitColors().textFillColorPrimaryBrush),
+                    contentDescription = null,
+                    tint = Color.Unspecified
+                )
+                Icon(
+                    modifier = Modifier
+                        .size(48.dp),
+                    imageVector = FluentIcons.addCircle(getUIKitColors().highlightColorBrush, getUIKitColors().textFillColorPrimaryBrush),
+                    contentDescription = null,
+                    tint = getUIKitColors().textFillColorPrimaryBrush
+                )
                 Spacer(Modifier.height(120.dp))
             }
 
@@ -108,23 +146,29 @@ fun App() {
                 items = listOf(
                     UIKitNavigationItem(
                         "Home",
+                        FluentIcons.Home
                     ),
                     UIKitNavigationItem(
                         "Debug",
+                        FluentIcons.Bug
                     ),
                     UIKitNavigationItem(
                         "App",
+                        FluentIcons.Apps
                     ),
                     UIKitNavigationItem(
-                        "Settings"
+                        "Settings",
+                        FluentIcons.Settings
                     )
                 ),
                 hasIndependentButton = true,
                 independentButtonContent = {
-                    Text(
-                        text = "Button",
-                        style = getUIKitTypography().footnote,
-                        color = getUIKitColors().textFillColorPrimaryBrush
+                    Icon(
+                        modifier = Modifier
+                            .fillMaxSize(0.6f),
+                        imageVector = FluentIcons.Add,
+                        contentDescription = null,
+                        tint = getUIKitColors().textFillColorPrimaryBrush
                     )
                 }
             )
