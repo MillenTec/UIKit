@@ -20,9 +20,8 @@ import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Add
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Home
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.toggleMultiple
-import com.millentec.compose.uikit.theme.getUIKitAnimate
+import com.millentec.compose.uikit.navigation.UIKitNavigation
 import com.millentec.compose.uikit.theme.getUIKitColors
-import com.millentec.compose.uikit.viewmodel.MainViewModel
 import com.millentec.compose.uikit.views.pages.Controls
 import com.millentec.compose.uikit.views.pages.Designs
 import com.millentec.compose.uikit.views.pages.Home
@@ -31,10 +30,16 @@ import com.millentec.compose.uikit.views.pages.Settings
 @Composable
 @Preview
 fun MainViewVerticalLayoutPreview() {
-    val viewModel: MainViewModel = remember { MainViewModel() }
-    val page by viewModel.page.collectAsState()
+    val nav = remember {
+        UIKitNavigation(
+            initialPage = Pages.Home,
+            homePage = Pages.Home
+        )
+    }
 
-    val uiKitAnimate = getUIKitAnimate()
+    val page by nav.page.collectAsState()
+    val navAnimate by nav.pageSwitchAnimate.collectAsState()
+    val hasHistoryPages by nav.hasHistoryPages.collectAsState()
 
     Box(
         modifier = Modifier
@@ -42,13 +47,13 @@ fun MainViewVerticalLayoutPreview() {
             .background(getUIKitColors().contentFillColorPrimaryBrush)
     ) {
 
-        BackHandler(viewModel.hasHistoryPages.collectAsState().value) {
-            viewModel.goBack()
+        BackHandler(hasHistoryPages) {
+            nav.goBack()
         }
 
         AnimatedContent(
             targetState = page,
-            transitionSpec = viewModel.pageSwitchAnimate.collectAsState().value
+            transitionSpec = { navAnimate }
         ) {
             when (it) {
                 Pages.Home -> Home()
@@ -63,7 +68,7 @@ fun MainViewVerticalLayoutPreview() {
                 .fillMaxSize(),
             checkedIndex = page.ordinal,
             onChecked = {
-                viewModel.switchPage(Pages.entries[it])
+                nav.switchPage(Pages.entries[it])
             },
             items = listOf(
                 UIKitNavigationItem(
