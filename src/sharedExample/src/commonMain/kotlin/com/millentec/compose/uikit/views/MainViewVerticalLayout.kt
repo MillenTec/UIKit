@@ -32,7 +32,7 @@ import com.millentec.compose.uikit.views.pages.Settings
 fun MainViewVerticalLayoutPreview() {
     val nav = remember {
         UIKitNavigation(
-            initialPage = Pages.Home,
+            initialPage = Pages.Design,
             homePage = Pages.Home
         )
     }

@@ -9,13 +9,15 @@ class UIKitNavigation<S>(
     val initialPage: S,
     val homePage: S
 ) {
-    private val _historyPages: MutableList<S> = mutableListOf()
+    private val _historyPages: MutableList<S> = if (initialPage == homePage)
+        mutableListOf(initialPage)
+    else mutableListOf(homePage, initialPage)
     private var _pageDepth: Int = 0
 
     private val _page = MutableStateFlow(initialPage)
     val page: StateFlow<S> = _page.asStateFlow()
 
-    private val _hasHistoryPages = MutableStateFlow(false)
+    private val _hasHistoryPages = MutableStateFlow(initialPage != homePage)
     val hasHistoryPages: StateFlow<Boolean> = _hasHistoryPages.asStateFlow()
 
     private val _pageSwitchAnimate = MutableStateFlow(NavigationAnimate().jump)
@@ -27,7 +29,7 @@ class UIKitNavigation<S>(
         if (type == NavigationType.Backward){
             if (_pageDepth == Int.MAX_VALUE) _pageDepth = 0
             _pageDepth++
-        }else{
+        } else{
             _pageDepth = 0
         }
 
