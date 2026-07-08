@@ -26,3 +26,8 @@ fun getUIKitTypography(): UIKitTypography {
 fun getUIKitLayout(): UIKitLayout {
     return UIKitTheme.themeCurrent.current.layout
 }
+
+@Composable
+fun getUIKitAnimate(): UIKitAnimate {
+    return UIKitTheme.themeCurrent.current.animate
+}

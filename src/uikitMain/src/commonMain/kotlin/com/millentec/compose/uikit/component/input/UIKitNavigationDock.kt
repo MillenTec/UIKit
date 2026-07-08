@@ -27,10 +27,7 @@ import com.millentec.compose.uikit.component.layout.ScreenSideAdaptiveContainer
 import com.millentec.compose.uikit.component.layout.ScreenSideAdaptiveContainerState
 import com.millentec.compose.uikit.component.layout.rememberScreenSideAdaptiveContainerState
 import com.millentec.compose.uikit.foundation.LayoutPosition
-import com.millentec.compose.uikit.theme.getUIKitColors
-import com.millentec.compose.uikit.theme.getUIKitLayout
-import com.millentec.compose.uikit.theme.getUIKitShapes
-import com.millentec.compose.uikit.theme.getUIKitTypography
+import com.millentec.compose.uikit.theme.*
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -167,7 +164,7 @@ fun UIKitNavigationDock(
                     val pressed = remember { mutableStateOf(false) }
                     val scaleAnimated by animateFloatAsState(
                         targetValue = if (pressed.value) 0.90f else 1f,
-                        animationSpec = tween(200, easing = FastOutSlowInEasing)
+                        animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = FastOutSlowInEasing)
                     )
 
                     ScreenSideAdaptiveContainer(
@@ -237,17 +234,18 @@ fun UIKitNavigationDock(
                         indicatorScaleAnimated.snapTo(targetIndicatorScale.value)
                     }
 
+                    val uiKitAnimate = getUIKitAnimate()
                     LaunchedEffect(checkedIndex) {
                         if (isDragging.value) {
                             offsetAnimated.snapTo(currentOffset)
                             return@LaunchedEffect
                         }
-                        offsetAnimated.animateTo(currentOffset, animationSpec = spring(dampingRatio = 0.70f, stiffness = 240f))
+                        offsetAnimated.animateTo(currentOffset, animationSpec = spring(dampingRatio = uiKitAnimate.standardSpringDampingRatio, stiffness = uiKitAnimate.standardSpringStiffness))
                     }
 
                     LaunchedEffect(draggingOffset.value) {
                         if (draggingOffset.value == 0.dp && !isDragging.value) {
-                            offsetAnimated.animateTo(currentOffset, animationSpec = spring(dampingRatio = 0.70f))
+                            offsetAnimated.animateTo(currentOffset, animationSpec = spring(dampingRatio = uiKitAnimate.standardSpringDampingRatio, stiffness = uiKitAnimate.standardSpringStiffness))
                             return@LaunchedEffect
                         }
                         offsetAnimated.snapTo(currentOffset)
@@ -338,7 +336,10 @@ fun UIKitNavigationDock(
                                         overDragOffset.value = 0.dp
                                         isDragging.value = false
                                         scope.launch {
-                                            indicatorScaleAnimated.animateTo(1f, animationSpec = spring(dampingRatio = 0.70f, stiffness = 240f))
+                                            indicatorScaleAnimated.animateTo(1f, animationSpec = spring(
+                                                dampingRatio = uiKitAnimate.standardSpringDampingRatio,
+                                                stiffness = uiKitAnimate.standardSpringStiffness
+                                            ))
                                         }
                                     },
                                     onDragCancel = {
@@ -346,7 +347,10 @@ fun UIKitNavigationDock(
                                         overDragOffset.value = 0.dp
                                         isDragging.value = false
                                         scope.launch {
-                                            indicatorScaleAnimated.animateTo(1f, animationSpec = spring(dampingRatio = 0.70f, stiffness = 240f))
+                                            indicatorScaleAnimated.animateTo(1f, animationSpec = spring(
+                                                dampingRatio = uiKitAnimate.standardSpringDampingRatio,
+                                                stiffness = uiKitAnimate.standardSpringStiffness
+                                            ))
                                         }
                                     }
                                 )
@@ -364,11 +368,11 @@ fun UIKitNavigationDock(
                             val pressed = remember { mutableStateOf(false) }
                             val scaleAnimated by animateFloatAsState(
                                 targetValue = if (pressed.value) 0.9f else 1f,
-                                animationSpec = tween(200, easing = FastOutSlowInEasing)
+                                animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = FastOutSlowInEasing)
                             )
                             val contentColorAnimated by animateColorAsState(
                                 targetValue = if (checked) contentColorChecked else contentColor,
-                                animationSpec = tween(200, easing = LinearEasing)
+                                animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
                             )
 
                             Column(
