@@ -27,6 +27,7 @@ import com.millentec.compose.uikit.component.layout.ScreenSideAdaptiveContainer
 import com.millentec.compose.uikit.component.layout.ScreenSideAdaptiveContainerState
 import com.millentec.compose.uikit.component.layout.rememberScreenSideAdaptiveContainerState
 import com.millentec.compose.uikit.foundation.LayoutPosition
+import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
 import com.millentec.compose.uikit.theme.*
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -82,7 +83,9 @@ fun UIKitNavigationDock(
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     indicatorBackground: Color = getUIKitColors().contentFillColorPrimaryBrush,
     contentColor: Color = getUIKitColors().textFillColorPrimaryBrush,
-    contentColorChecked: Color = getUIKitColors().highlightColorBrush
+    contentColorChecked: Color = getUIKitColors().highlightColorBrush,
+    acrylicEffectEnabled: Boolean = true,
+    acrylicState: AcrylicMaterialsState? = null
 ) {
     val mainIslandState: ScreenSideAdaptiveContainerState = rememberScreenSideAdaptiveContainerState(
         expectHeight = minHeight,
@@ -129,7 +132,9 @@ fun UIKitNavigationDock(
         contentColor = contentColor,
         contentColorChecked = contentColorChecked,
         mainIslandState = mainIslandState,
-        independentIslandState = independentIslandState
+        independentIslandState = independentIslandState,
+        acrylicEffectEnabled = acrylicEffectEnabled,
+        acrylicState = acrylicState
     )
 }
 
@@ -150,6 +155,8 @@ fun UIKitNavigationDock(
     contentColorChecked: Color = getUIKitColors().highlightColorBrush,
     mainIslandState: ScreenSideAdaptiveContainerState,
     independentIslandState: ScreenSideAdaptiveContainerState,
+    acrylicEffectEnabled: Boolean = true,
+    acrylicState: AcrylicMaterialsState? = null,
 ) {
     Box(
         modifier = modifier,
@@ -187,7 +194,9 @@ fun UIKitNavigationDock(
                                 )
                             },
                         state = independentIslandState,
-                        background = background
+                        background = background,
+                        acrylicEffectEnabled = acrylicEffectEnabled,
+                        acrylicState = acrylicState
                     ) {
                         Box(
                             modifier = Modifier
@@ -209,7 +218,9 @@ fun UIKitNavigationDock(
                 modifier = Modifier
                     .weight(1f),
                 state = mainIslandState,
-                background = background
+                background = background,
+                acrylicEffectEnabled = acrylicEffectEnabled,
+                acrylicState = acrylicState
             ) {
                 BoxWithConstraints {
                     val itemWidth = (maxWidth - getUIKitLayout().smallSpacing * 2) / items.size
@@ -267,7 +278,8 @@ fun UIKitNavigationDock(
                             .clip(RoundedCornerShape(mainIslandState.cornerRadius - getUIKitLayout().smallSpacing))
                             .fillMaxHeight()
                             .width(itemWidth)
-                            .background(indicatorBackground)
+                            .background(if (acrylicEffectEnabled && acrylicState != null)
+                                getUIKitMaterials().acrylicMaterial.secondaryTint else indicatorBackground)
                             .pointerInput(Unit) {
                                 detectDragGestures(
                                     onDragStart = {

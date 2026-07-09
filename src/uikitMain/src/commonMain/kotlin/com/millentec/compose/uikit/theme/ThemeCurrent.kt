@@ -31,3 +31,8 @@ fun getUIKitLayout(): UIKitLayout {
 fun getUIKitAnimate(): UIKitAnimate {
     return UIKitTheme.themeCurrent.current.animate
 }
+
+@Composable
+fun getUIKitMaterials(): UIKitMaterials {
+    return UIKitTheme.themeCurrent.current.materials
+}

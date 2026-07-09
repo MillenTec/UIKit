@@ -12,7 +12,8 @@ data class UIKitTheme(
     val colors: UIKitColors = UIKitColors.getLight(),
     val shapes: UIKitShapes = UIKitShapes(),
     val layout: UIKitLayout = UIKitLayout(),
-    val animate: UIKitAnimate = UIKitAnimate()
+    val animate: UIKitAnimate = UIKitAnimate(),
+    val materials: UIKitMaterials = UIKitMaterials.getLight()
 ) {
 
     /**

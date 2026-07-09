@@ -15,6 +15,8 @@ import com.millentec.compose.uikit.BackHandler
 import com.millentec.compose.uikit.component.input.UIKitNavigationDock
 import com.millentec.compose.uikit.component.input.UIKitNavigationItem
 import com.millentec.compose.uikit.data.Pages
+import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
+import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialsState
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Add
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Home
@@ -32,7 +34,7 @@ import com.millentec.compose.uikit.views.pages.Settings
 fun MainViewVerticalLayoutPreview() {
     val nav = remember {
         UIKitNavigation(
-            initialPage = Pages.Design,
+            initialPage = Pages.Home,
             homePage = Pages.Home
         )
     }
@@ -40,6 +42,8 @@ fun MainViewVerticalLayoutPreview() {
     val page by nav.page.collectAsState()
     val navAnimate by nav.pageSwitchAnimate.collectAsState()
     val hasHistoryPages by nav.hasHistoryPages.collectAsState()
+
+    val acrylicMaterialsState = rememberAcrylicMaterialsState()
 
     Box(
         modifier = Modifier
@@ -51,21 +55,28 @@ fun MainViewVerticalLayoutPreview() {
             nav.goBack()
         }
 
-        AnimatedContent(
-            targetState = page,
-            transitionSpec = { navAnimate }
+        Box(
+            modifier = Modifier
+                .acrylicMaterialSource(acrylicMaterialsState),
         ) {
-            when (it) {
-                Pages.Home -> Home()
-                Pages.Controls -> Controls()
-                Pages.Design -> Designs()
-                Pages.Settings -> Settings()
+            AnimatedContent(
+                targetState = page,
+                transitionSpec = { navAnimate }
+            ) {
+                when (it) {
+                    Pages.Home -> Home()
+                    Pages.Controls -> Controls()
+                    Pages.Design -> Designs()
+                    Pages.Settings -> Settings()
+                }
             }
         }
 
         UIKitNavigationDock(
             modifier = Modifier
                 .fillMaxSize(),
+            acrylicEffectEnabled = true,
+            acrylicState = acrylicMaterialsState,
             checkedIndex = page.ordinal,
             onChecked = {
                 nav.switchPage(Pages.entries[it])

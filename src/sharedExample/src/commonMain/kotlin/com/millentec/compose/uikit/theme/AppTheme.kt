@@ -6,7 +6,8 @@ import kotlinx.coroutines.flow.asStateFlow
 object AppTheme {
     val themeLight: UIKitTheme = UIKitTheme()
     val themeDark: UIKitTheme = UIKitTheme(
-        colors = UIKitColors.getDark()
+        colors = UIKitColors.getDark(),
+        materials = UIKitMaterials.getDark()
     )
 
     private val _theme = MutableStateFlow(themeLight)

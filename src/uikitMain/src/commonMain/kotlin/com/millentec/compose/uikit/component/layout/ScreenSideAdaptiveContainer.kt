@@ -1,6 +1,7 @@
 ﻿package com.millentec.compose.uikit.component.layout
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -16,9 +17,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.LayoutPosition
 import com.millentec.compose.uikit.foundation.LayoutPosition.*
+import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
+import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
 import com.millentec.compose.uikit.getScreenCornerRadius
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
+import com.millentec.compose.uikit.theme.getUIKitMaterials
 import com.millentec.compose.uikit.theme.getUIKitShapes
 
 @Composable
@@ -81,7 +85,7 @@ fun rememberScreenSideAdaptiveContainerState(
     maxMargin: Dp = getUIKitLayout().x4Spacing,
     fillWidth: Boolean = true,
     fillHeight: Boolean = false,
-    providedScreenCornerRadius: Dp = (getScreenCornerRadius() / LocalDensity.current.density).dp
+    providedScreenCornerRadius: Dp = (getScreenCornerRadius() / LocalDensity.current.density).dp,
 ): ScreenSideAdaptiveContainerState {
     val safeDrawing = WindowInsets.safeDrawing
     val layoutDirection = LocalLayoutDirection.current
@@ -170,6 +174,8 @@ fun ScreenSideAdaptiveContainer(
     modifier: Modifier = Modifier,
     state: ScreenSideAdaptiveContainerState,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
+    acrylicEffectEnabled: Boolean = true,
+    acrylicState: AcrylicMaterialsState? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
     Box(
@@ -180,9 +186,20 @@ fun ScreenSideAdaptiveContainer(
             modifier = Modifier
                 .padding(state.margins)
                 .clip(RoundedCornerShape(state.cornerRadius))
-                .background(background)
+                .background(if (acrylicEffectEnabled && acrylicState != null)
+                    Color.Transparent else background)
                 .then(if (state.fillWidth) Modifier.fillMaxWidth() else Modifier.width(state.width))
-                .then(if (state.fillHeight) Modifier.fillMaxHeight() else Modifier.height(state.height)),
+                .then(if (state.fillHeight) Modifier.fillMaxHeight() else Modifier.height(state.height))
+                .then(if (acrylicEffectEnabled && acrylicState != null) Modifier.acrylicMaterial(
+                    state = acrylicState
+                ) else Modifier)
+                .then(if (acrylicEffectEnabled && getUIKitMaterials().acrylicMaterial.lightingEffectsEnabled) {
+                    Modifier.border(
+                        width = getUIKitMaterials().acrylicMaterial.edgeHighlightThickness,
+                        brush = getUIKitMaterials().acrylicMaterial.edgeHighlightColor,
+                        shape = RoundedCornerShape(getUIKitShapes().circular)
+                    )
+                } else Modifier),
             content = content
         )
     }
