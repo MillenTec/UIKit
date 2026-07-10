@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -176,6 +177,7 @@ fun ScreenSideAdaptiveContainer(
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialsState? = null,
+    shadowEnable: Boolean = true,
     content: @Composable ColumnScope.() -> Unit
 ) {
     Box(
@@ -185,6 +187,13 @@ fun ScreenSideAdaptiveContainer(
         Column(
             modifier = Modifier
                 .padding(state.margins)
+                .then(if (shadowEnable && getUIKitMaterials().ambientShadowMaterial.shadowEnable)
+                    Modifier.shadow(
+                        elevation = getUIKitMaterials().ambientShadowMaterial.elevation,
+                        shape = RoundedCornerShape(state.cornerRadius),
+                        ambientColor = getUIKitMaterials().ambientShadowMaterial.ambientColor,
+                        spotColor = getUIKitMaterials().ambientShadowMaterial.spotColor,
+                    ) else Modifier)
                 .clip(RoundedCornerShape(state.cornerRadius))
                 .background(if (acrylicEffectEnabled && acrylicState != null)
                     Color.Transparent else background)

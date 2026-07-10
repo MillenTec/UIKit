@@ -85,7 +85,8 @@ fun UIKitNavigationDock(
     contentColor: Color = getUIKitColors().textFillColorPrimaryBrush,
     contentColorChecked: Color = getUIKitColors().highlightColorBrush,
     acrylicEffectEnabled: Boolean = true,
-    acrylicState: AcrylicMaterialsState? = null
+    acrylicState: AcrylicMaterialsState? = null,
+    shadowEnable: Boolean = true
 ) {
     val mainIslandState: ScreenSideAdaptiveContainerState = rememberScreenSideAdaptiveContainerState(
         expectHeight = minHeight,
@@ -134,7 +135,8 @@ fun UIKitNavigationDock(
         mainIslandState = mainIslandState,
         independentIslandState = independentIslandState,
         acrylicEffectEnabled = acrylicEffectEnabled,
-        acrylicState = acrylicState
+        acrylicState = acrylicState,
+        shadowEnable = shadowEnable
     )
 }
 
@@ -157,6 +159,7 @@ fun UIKitNavigationDock(
     independentIslandState: ScreenSideAdaptiveContainerState,
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialsState? = null,
+    shadowEnable: Boolean = true
 ) {
     Box(
         modifier = modifier,
@@ -172,6 +175,12 @@ fun UIKitNavigationDock(
                     val scaleAnimated by animateFloatAsState(
                         targetValue = if (pressed.value) 0.90f else 1f,
                         animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = FastOutSlowInEasing)
+                    )
+
+                    // 优先保证其高度与主岛一致且为正圆, 优先级高于屏幕同步
+                    val state = independentIslandState.copy(
+                        height = mainIslandState.height,
+                        width = mainIslandState.height,
                     )
 
                     ScreenSideAdaptiveContainer(
@@ -193,10 +202,11 @@ fun UIKitNavigationDock(
                                     }
                                 )
                             },
-                        state = independentIslandState,
+                        state = state,
                         background = background,
                         acrylicEffectEnabled = acrylicEffectEnabled,
-                        acrylicState = acrylicState
+                        acrylicState = acrylicState,
+                        shadowEnable = shadowEnable
                     ) {
                         Box(
                             modifier = Modifier
@@ -220,7 +230,8 @@ fun UIKitNavigationDock(
                 state = mainIslandState,
                 background = background,
                 acrylicEffectEnabled = acrylicEffectEnabled,
-                acrylicState = acrylicState
+                acrylicState = acrylicState,
+                shadowEnable = shadowEnable
             ) {
                 BoxWithConstraints {
                     val itemWidth = (maxWidth - getUIKitLayout().smallSpacing * 2) / items.size

@@ -3,6 +3,7 @@
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,7 +19,11 @@ import uikit.sharedexample.generated.resources.testimg1
 
 @Composable
 @Preview
-fun Home() {
+fun Home(
+    onAdd: () -> Unit = {},
+    onRemove: () -> Unit = {},
+    onChange: () -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -41,13 +46,37 @@ fun Home() {
                 modifier = Modifier
                     .fillMaxSize()
                     .safeDrawingPadding()
-                    .padding(getUIKitLayout().x4Spacing)
+                    .padding(getUIKitLayout().x4Spacing, getUIKitLayout().x6Spacing)
             ) {
                 Text(
                     text = "UIKit Gallery",
                     style = getUIKitTypography().largeTitle,
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
+
+                Button(
+                    onClick = {
+                        onAdd()
+                    }
+                ) {
+                    Text("Add")
+                }
+
+                Button(
+                    onClick = {
+                        onRemove()
+                    }
+                ) {
+                    Text("Remove")
+                }
+
+                Button(
+                    onClick = {
+                        onChange()
+                    }
+                ) {
+                    Text("Change")
+                }
             }
         }
     }

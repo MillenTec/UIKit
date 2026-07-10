@@ -26,6 +26,8 @@ data class UIKitColors(
      */
     val textFillColorSubBrush: Color = Color(0xFF6E6E73),
 
+    val lineFillColorPrimaryBrush: Color = Color(0xFFE9EAEE),
+
     val highlightColorBrush: Color = Color(0xFF0071E3)
 ) {
 
@@ -51,6 +53,7 @@ data class UIKitColors(
                 contentFillColorSecondaryBrush = Color(0xFF1D1D1F),
                 textFillColorPrimaryBrush = Color(0xFFF5F5F7),
                 textFillColorSubBrush = Color(0xFF86868B),
+                lineFillColorPrimaryBrush = Color(0xFF26282C),
                 highlightColorBrush = Color(0xFF0071E3)
             )
         }

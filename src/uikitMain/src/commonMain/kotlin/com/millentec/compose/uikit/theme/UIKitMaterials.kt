@@ -22,8 +22,16 @@ data class UIKitAcrylicMaterial(
     val edgeHighlightThickness: Dp = 1.dp
 )
 
+data class UIKitAmbientShadowMaterial(
+    val shadowEnable: Boolean = true,
+    val elevation: Dp = 5.dp,
+    val ambientColor: Color = Color(0xFF000000),
+    val spotColor: Color = Color(0x00000000),
+)
+
 data class UIKitMaterials(
-    val acrylicMaterial: UIKitAcrylicMaterial = UIKitAcrylicMaterial()
+    val acrylicMaterial: UIKitAcrylicMaterial = UIKitAcrylicMaterial(),
+    val ambientShadowMaterial: UIKitAmbientShadowMaterial = UIKitAmbientShadowMaterial(),
 ) {
     companion object {
         fun getLight(): UIKitMaterials {
