@@ -87,8 +87,6 @@ fun UIKitIslandButton(
     acrylicState: AcrylicMaterialsState? = null,
     shadowEnable: Boolean = true,
 ) {
-    println(items.size)
-
     val containerPadding = getUIKitLayout().smallSpacing
     val containerLength = remember(state, itemSpace, items.size) { state.height * items.size + itemSpace * (items.size - 1) }
 

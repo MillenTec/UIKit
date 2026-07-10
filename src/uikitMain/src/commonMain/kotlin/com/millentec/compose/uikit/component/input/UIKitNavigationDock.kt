@@ -59,7 +59,7 @@ private fun Preview(){
         hasIndependentButton = true,
         independentButtonContent = {
             Text("Button")
-        }
+        },
     )
 }
 
@@ -86,7 +86,8 @@ fun UIKitNavigationDock(
     contentColorChecked: Color = getUIKitColors().highlightColorBrush,
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialsState? = null,
-    shadowEnable: Boolean = true
+    shadowEnable: Boolean = true,
+    maxWidth: Dp = (-1).dp
 ) {
     val mainIslandState: ScreenSideAdaptiveContainerState = rememberScreenSideAdaptiveContainerState(
         expectHeight = minHeight,
@@ -136,7 +137,8 @@ fun UIKitNavigationDock(
         independentIslandState = independentIslandState,
         acrylicEffectEnabled = acrylicEffectEnabled,
         acrylicState = acrylicState,
-        shadowEnable = shadowEnable
+        shadowEnable = shadowEnable,
+        maxWidth = maxWidth
     )
 }
 
@@ -159,7 +161,8 @@ fun UIKitNavigationDock(
     independentIslandState: ScreenSideAdaptiveContainerState,
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialsState? = null,
-    shadowEnable: Boolean = true
+    shadowEnable: Boolean = true,
+    maxWidth: Dp = (-1).dp
 ) {
     Box(
         modifier = modifier,
@@ -167,7 +170,10 @@ fun UIKitNavigationDock(
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
+                .then(if (maxWidth == (-1).dp)
+                    Modifier.fillMaxWidth()
+                else Modifier.width(maxWidth)),
+            horizontalArrangement = Arrangement.Center
         ) {
             val independentIsland = @Composable {
                 if (hasIndependentButton) {
@@ -234,7 +240,7 @@ fun UIKitNavigationDock(
                 shadowEnable = shadowEnable
             ) {
                 BoxWithConstraints {
-                    val itemWidth = (maxWidth - getUIKitLayout().smallSpacing * 2) / items.size
+                    val itemWidth = (this.maxWidth - getUIKitLayout().smallSpacing * 2) / items.size
                     val targetOffset = itemWidth * checkedIndex
                     val draggingOffset = remember { mutableStateOf(0.dp) }
                     val isDragging = remember { mutableStateOf(false) }
@@ -273,7 +279,7 @@ fun UIKitNavigationDock(
                         offsetAnimated.snapTo(currentOffset)
                     }
 
-                    LaunchedEffect(maxWidth) {
+                    LaunchedEffect(this.maxWidth) {
                         offsetAnimated.snapTo(currentOffset)
                     }
 

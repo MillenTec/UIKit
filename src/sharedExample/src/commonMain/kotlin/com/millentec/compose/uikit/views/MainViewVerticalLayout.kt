@@ -177,7 +177,8 @@ fun MainViewVerticalLayoutPreview() {
                     contentDescription = null,
                     tint = getUIKitColors().textFillColorPrimaryBrush
                 )
-            }
+            },
+            maxWidth = 600.dp
         )
 
         UIKitIslandButton(
