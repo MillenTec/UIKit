@@ -113,7 +113,8 @@ fun MainViewVerticalLayoutPreview() {
                             val item0 = items[0]
                             items[0] = items[1]
                             items[1] = item0
-                        }
+                        },
+                        acrylicState = acrylicMaterialsState
                     )
                     Pages.Controls -> Controls()
                     Pages.Design -> Designs()
@@ -198,7 +199,8 @@ fun MainViewVerticalLayoutPreview() {
             shadowEnable = acrylicEnabled,
             dividerColor = if (AppTheme.theme.collectAsState().value == AppTheme.themeLight) {
                 getUIKitColors().lineFillColorPrimaryBrush.copy(alpha = 0.75f)
-            } else Color(0x4C000000)
+            } else Color(0x4C000000),
+            maxWidth = 200.dp
         )
 
         UIKitIslandButton(

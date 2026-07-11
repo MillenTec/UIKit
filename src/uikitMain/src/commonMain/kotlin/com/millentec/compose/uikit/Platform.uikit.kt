@@ -1,6 +1,7 @@
 ﻿package com.millentec.compose.uikit
 
 import androidx.compose.runtime.Composable
+import com.millentec.compose.uikit.foundation.OperatingSystem
 
 /**
  * 获取设备屏幕圆角的半径, 单位为 px, 仅 Android 端有效, 其余平台返回 0
@@ -8,3 +9,5 @@ import androidx.compose.runtime.Composable
  */
 @Composable
 expect fun getScreenCornerRadius(): Float
+
+expect fun getOperatingSystem(): OperatingSystem

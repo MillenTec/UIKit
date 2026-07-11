@@ -4,6 +4,7 @@ import android.os.Build
 import android.view.RoundedCorner
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.millentec.compose.uikit.foundation.OperatingSystem
 
 private var screenCornerRadius: Float? = null
 
@@ -29,4 +30,8 @@ actual fun getScreenCornerRadius(): Float {
     }
 
     return cornerRadius
+}
+
+actual fun getOperatingSystem(): OperatingSystem {
+    return OperatingSystem.Android
 }

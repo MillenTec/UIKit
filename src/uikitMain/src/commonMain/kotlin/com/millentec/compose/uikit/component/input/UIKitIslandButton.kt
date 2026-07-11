@@ -5,7 +5,9 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.VerticalDivider
@@ -16,12 +18,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.layout.ScreenSideAdaptiveContainerState
 import com.millentec.compose.uikit.component.layout.rememberScreenSideAdaptiveContainerState
@@ -86,6 +89,7 @@ fun UIKitIslandButton(
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialsState? = null,
     shadowEnable: Boolean = true,
+    maxWidth: Dp = (-1).dp
 ) {
     val containerPadding = getUIKitLayout().smallSpacing
     val containerLength = remember(state, itemSpace, items.size) { state.height * items.size + itemSpace * (items.size - 1) }
@@ -115,16 +119,14 @@ fun UIKitIslandButton(
                     scaleX = buttonScaleAnimated,
                     scaleY = buttonScaleAnimated,
                 )
-                .then(if (shadowEnable && getUIKitMaterials().ambientShadowMaterial.shadowEnable)
-                    Modifier.shadow(
-                        elevation = getUIKitMaterials().ambientShadowMaterial.elevation,
+                .then(if (shadowEnable && getUIKitMaterials().shadowMaterial.shadowEnable)
+                    Modifier.dropShadow(
                         shape = RoundedCornerShape(state.cornerRadius),
-                        ambientColor = getUIKitMaterials().ambientShadowMaterial.ambientColor,
-                        spotColor = getUIKitMaterials().ambientShadowMaterial.spotColor,
+                        shadow = UIKitShadowMaterial.getShadow()
                     ) else Modifier)
                 .clip(RoundedCornerShape(state.cornerRadius))
                 .height(state.height)
-                .width(containerLengthAnimated)
+                .width(if (maxWidth == (-1).dp) containerLengthAnimated else containerLengthAnimated.coerceAtMost(maxWidth))
                 .then(if (items.size == 1)
                     Modifier.pointerInput(Unit) {
                         detectTapGestures(
@@ -149,7 +151,8 @@ fun UIKitIslandButton(
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .horizontalScroll(rememberScrollState()),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 items.forEachIndexed { index, item ->

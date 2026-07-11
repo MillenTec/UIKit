@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -21,10 +21,7 @@ import com.millentec.compose.uikit.foundation.LayoutPosition.*
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
 import com.millentec.compose.uikit.getScreenCornerRadius
-import com.millentec.compose.uikit.theme.getUIKitColors
-import com.millentec.compose.uikit.theme.getUIKitLayout
-import com.millentec.compose.uikit.theme.getUIKitMaterials
-import com.millentec.compose.uikit.theme.getUIKitShapes
+import com.millentec.compose.uikit.theme.*
 
 @Composable
 @Preview
@@ -187,12 +184,10 @@ fun ScreenSideAdaptiveContainer(
         Column(
             modifier = Modifier
                 .padding(state.margins)
-                .then(if (shadowEnable && getUIKitMaterials().ambientShadowMaterial.shadowEnable)
-                    Modifier.shadow(
-                        elevation = getUIKitMaterials().ambientShadowMaterial.elevation,
+                .then(if (shadowEnable && getUIKitMaterials().shadowMaterial.shadowEnable)
+                    Modifier.dropShadow(
                         shape = RoundedCornerShape(state.cornerRadius),
-                        ambientColor = getUIKitMaterials().ambientShadowMaterial.ambientColor,
-                        spotColor = getUIKitMaterials().ambientShadowMaterial.spotColor,
+                        shadow = UIKitShadowMaterial.getShadow()
                     ) else Modifier)
                 .clip(RoundedCornerShape(state.cornerRadius))
                 .background(if (acrylicEffectEnabled && acrylicState != null)

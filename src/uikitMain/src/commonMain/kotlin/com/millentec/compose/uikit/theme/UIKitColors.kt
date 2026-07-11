@@ -16,19 +16,39 @@ data class UIKitColors(
      */
     val contentFillColorSecondaryBrush: Color = Color(0xFFF5F5F7),
 
+    val contentFillColorTertiaryBrush: Color = Color(0xFFE8E8ED),
+
+    val contentFillColorBrushDisabled: Color = Color(0xFFEFEFF2),
+
     /**
      * 用于普通正文的颜色
      */
     val textFillColorPrimaryBrush: Color = Color(0xFF1D1D1F),
 
+    val textFillColorPrimaryBrushReversed: Color = Color(0xFFF5F5F7),
+
     /**
      * 可用于副标题, 脚注, 不可用控件的文本颜色
      */
-    val textFillColorSubBrush: Color = Color(0xFF6E6E73),
+    val textFillColorSecondaryBrush: Color = Color(0xFF6E6E73),
 
-    val lineFillColorPrimaryBrush: Color = Color(0xFFE9EAEE),
+    val textFillColorDisabled: Color = Color(0xFFB9B9BB),
 
-    val highlightColorBrush: Color = Color(0xFF0071E3)
+    val lineFillColorPrimaryBrush: Color = Color(0xFFE8E8ED),
+
+    val lineFillColorDisabled: Color = Color(0xFFB9B9BB),
+
+    val highlightColorPrimaryBrush: Color = Color(0xFF0071E3),
+
+    val highlightColorSecondaryBrush: Color = Color(0xAA0071E3),
+
+    val highlightColorTertiaryBrush: Color = Color(0x6C0071E3),
+
+    val highlightColorLightBrush: Color = Color(0x4C0071E3),
+
+    val pointerHoverInteractionColor: Color = Color(0x2CB9B9BB),
+
+    val pointerTapInteractionColor: Color = Color(0x2C6E6E73)
 ) {
 
     /**
@@ -39,23 +59,27 @@ data class UIKitColors(
          * 获取默认的亮色主题
          * @return 包含默认亮色主题的 UIKitColors 实例
          */
-        fun getLight(): UIKitColors {
-            return UIKitColors()
-        }
+        fun getLight(): UIKitColors = UIKitColors()
 
         /**
          * 获取默认的暗色主题
          * @return 包含默认暗色主题的 UIKitColors 实例
          */
-        fun getDark(): UIKitColors {
-            return UIKitColors(
-                contentFillColorPrimaryBrush = Color(0xFF151517),
-                contentFillColorSecondaryBrush = Color(0xFF1D1D1F),
-                textFillColorPrimaryBrush = Color(0xFFF5F5F7),
-                textFillColorSubBrush = Color(0xFF86868B),
-                lineFillColorPrimaryBrush = Color(0xFF26282C),
-                highlightColorBrush = Color(0xFF0071E3)
-            )
-        }
+        fun getDark(): UIKitColors = UIKitColors(
+            contentFillColorPrimaryBrush = Color(0xFF151517),
+            contentFillColorSecondaryBrush = Color(0xFF1D1D1F),
+            contentFillColorTertiaryBrush = Color(0xFF353537),
+            contentFillColorBrushDisabled = Color(0xFF111113),
+            textFillColorPrimaryBrush = Color(0xFFF5F5F7),
+            textFillColorPrimaryBrushReversed = Color(0xFF1D1D1F),
+            textFillColorSecondaryBrush = Color(0xFF86868B),
+            textFillColorDisabled = Color(0xFF4D4D4F),
+            lineFillColorPrimaryBrush = Color(0xFF303032),
+            lineFillColorDisabled = Color(0xFF4D4D4F),
+            highlightColorPrimaryBrush = Color(0xFF0071E3),
+            highlightColorSecondaryBrush = Color(0xAA0071E3),
+            highlightColorTertiaryBrush = Color(0x6C0071E3),
+            highlightColorLightBrush = Color(0x4C0071E3)
+        )
     }
 }

@@ -3,13 +3,15 @@
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
+import com.millentec.compose.uikit.component.input.UIKitButton
+import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
+import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialsState
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
 import com.millentec.compose.uikit.theme.getUIKitTypography
@@ -22,7 +24,8 @@ import uikit.sharedexample.generated.resources.testimg1
 fun Home(
     onAdd: () -> Unit = {},
     onRemove: () -> Unit = {},
-    onChange: () -> Unit = {}
+    onChange: () -> Unit = {},
+    acrylicState: AcrylicMaterialsState = rememberAcrylicMaterialsState(),
 ) {
     Column(
         modifier = Modifier
@@ -54,28 +57,40 @@ fun Home(
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
 
-                Button(
+                UIKitButton(
                     onClick = {
                         onAdd()
-                    }
+                    },
                 ) {
-                    Text("Add")
+                    Text(
+                        "Add",
+                        style = getUIKitTypography().body,
+                        color = getUIKitColors().textFillColorPrimaryBrush
+                    )
                 }
 
-                Button(
+                UIKitButton(
                     onClick = {
                         onRemove()
                     }
                 ) {
-                    Text("Remove")
+                    Text(
+                        "Remove",
+                        style = getUIKitTypography().body,
+                        color = getUIKitColors().textFillColorPrimaryBrush
+                    )
                 }
 
-                Button(
+                UIKitButton(
                     onClick = {
                         onChange()
                     }
                 ) {
-                    Text("Change")
+                    Text(
+                        "Change",
+                        style = getUIKitTypography().body,
+                        color = getUIKitColors().textFillColorPrimaryBrush
+                    )
                 }
             }
         }

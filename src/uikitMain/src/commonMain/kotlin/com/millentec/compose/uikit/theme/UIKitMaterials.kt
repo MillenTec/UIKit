@@ -1,8 +1,12 @@
 ﻿package com.millentec.compose.uikit.theme
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 
 data class UIKitAcrylicMaterial(
@@ -22,36 +26,47 @@ data class UIKitAcrylicMaterial(
     val edgeHighlightThickness: Dp = 1.dp
 )
 
-data class UIKitAmbientShadowMaterial(
+data class UIKitShadowMaterial(
     val shadowEnable: Boolean = true,
-    val elevation: Dp = 5.dp,
-    val ambientColor: Color = Color(0xFF000000),
-    val spotColor: Color = Color(0x00000000),
-)
+    val radius: Dp = 10.dp,
+    val spread: Dp = 1.dp,
+    val offset: DpOffset = DpOffset.Zero,
+    val color: Color = Color(0xFF000000),
+    val alpha: Float = 0.1f,
+    val blendMode: BlendMode = BlendMode.Darken
+) {
+    companion object {
+        @Composable
+        fun getShadow(): Shadow = Shadow(
+            radius = getUIKitMaterials().shadowMaterial.radius,
+            spread = getUIKitMaterials().shadowMaterial.spread,
+            offset = getUIKitMaterials().shadowMaterial.offset,
+            color = getUIKitMaterials().shadowMaterial.color,
+            alpha = getUIKitMaterials().shadowMaterial.alpha,
+            blendMode = getUIKitMaterials().shadowMaterial.blendMode,
+        )
+    }
+}
 
 data class UIKitMaterials(
     val acrylicMaterial: UIKitAcrylicMaterial = UIKitAcrylicMaterial(),
-    val ambientShadowMaterial: UIKitAmbientShadowMaterial = UIKitAmbientShadowMaterial(),
+    val shadowMaterial: UIKitShadowMaterial = UIKitShadowMaterial(),
 ) {
     companion object {
-        fun getLight(): UIKitMaterials {
-            return UIKitMaterials()
-        }
+        fun getLight(): UIKitMaterials = UIKitMaterials()
 
-        fun getDark(): UIKitMaterials {
-            return UIKitMaterials(
-                acrylicMaterial = UIKitAcrylicMaterial(
-                    tint = Color(0x4C151517),
-                    secondaryTint = Color(0x4CF5F5F7),
-                    edgeHighlightColor = Brush.linearGradient(
-                        listOf(
-                            Color(0x8DFFFFFF),
-                            Color(0x00FFFFFF),
-                            Color(0x8DFFFFFF)
-                        )
+        fun getDark(): UIKitMaterials = UIKitMaterials(
+            acrylicMaterial = UIKitAcrylicMaterial(
+                tint = Color(0x4C151517),
+                secondaryTint = Color(0x4CF5F5F7),
+                edgeHighlightColor = Brush.linearGradient(
+                    listOf(
+                        Color(0x8DFFFFFF),
+                        Color(0x00FFFFFF),
+                        Color(0x8DFFFFFF)
                     )
                 )
             )
-        }
+        )
     }
 }
