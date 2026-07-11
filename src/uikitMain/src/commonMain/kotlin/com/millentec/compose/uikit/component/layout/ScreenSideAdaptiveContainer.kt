@@ -1,7 +1,6 @@
 ﻿package com.millentec.compose.uikit.component.layout
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -196,14 +195,7 @@ fun ScreenSideAdaptiveContainer(
                 .then(if (state.fillHeight) Modifier.fillMaxHeight() else Modifier.height(state.height))
                 .then(if (acrylicEffectEnabled && acrylicState != null) Modifier.acrylicMaterial(
                     state = acrylicState
-                ) else Modifier)
-                .then(if (acrylicEffectEnabled && getUIKitMaterials().acrylicMaterial.lightingEffectsEnabled) {
-                    Modifier.border(
-                        width = getUIKitMaterials().acrylicMaterial.edgeHighlightThickness,
-                        brush = getUIKitMaterials().acrylicMaterial.edgeHighlightColor,
-                        shape = RoundedCornerShape(getUIKitShapes().circular)
-                    )
-                } else Modifier),
+                ) else Modifier),
             content = content
         )
     }

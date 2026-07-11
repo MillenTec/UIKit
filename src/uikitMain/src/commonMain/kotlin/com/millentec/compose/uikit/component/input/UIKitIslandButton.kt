@@ -3,7 +3,6 @@
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -85,6 +84,50 @@ fun UIKitIslandButton(
     hasDivider: Boolean = true,
     dividerColor: Color = getUIKitColors().lineFillColorPrimaryBrush,
     dividerWidth: Dp = 1.dp,
+    minMargin: Dp = getUIKitLayout().mediumSpacing,
+    minHeight: Dp = getUIKitLayout().interactiveHotspot,
+    position: LayoutPosition = LayoutPosition.TopRight,
+    acrylicEffectEnabled: Boolean = true,
+    acrylicState: AcrylicMaterialsState? = null,
+    shadowEnable: Boolean = true,
+    maxWidth: Dp = (-1).dp
+) {
+    val state = rememberScreenSideAdaptiveContainerState(
+        position = position,
+        expectHeight = minHeight,
+        expectWidth = minHeight,
+        minMargin = minMargin,
+        fillWidth = false,
+        fillHeight = false,
+    )
+
+    UIKitIslandButton(
+        modifier = modifier,
+        itemSpace = itemSpace,
+        onClicked = onClicked,
+        items = items,
+        background = background,
+        hasDivider = hasDivider,
+        dividerColor = dividerColor,
+        dividerWidth = dividerWidth,
+        state = state,
+        acrylicEffectEnabled = acrylicEffectEnabled,
+        acrylicState = acrylicState,
+        shadowEnable = shadowEnable,
+        maxWidth = maxWidth
+    )
+}
+
+@Composable
+fun UIKitIslandButton(
+    modifier: Modifier = Modifier,
+    itemSpace: Dp = getUIKitLayout().smallSpacing,
+    onClicked: (Int) -> Unit,
+    items: List<@Composable BoxScope.() -> Unit>,
+    background: Color = getUIKitColors().contentFillColorSecondaryBrush,
+    hasDivider: Boolean = true,
+    dividerColor: Color = getUIKitColors().lineFillColorPrimaryBrush,
+    dividerWidth: Dp = 1.dp,
     state: ScreenSideAdaptiveContainerState,
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialsState? = null,
@@ -142,12 +185,6 @@ fun UIKitIslandButton(
                     } else Modifier)
                 .background(if (acrylicEffectEnabled && acrylicState != null) Color.Transparent else background)
                 .then(if (acrylicEffectEnabled && acrylicState != null) Modifier.acrylicMaterial(acrylicState) else Modifier)
-                .then(if (acrylicEffectEnabled && getUIKitMaterials().acrylicMaterial.lightingEffectsEnabled)
-                    Modifier.border(
-                        width = getUIKitMaterials().acrylicMaterial.edgeHighlightThickness,
-                        brush = getUIKitMaterials().acrylicMaterial.edgeHighlightColor,
-                        shape = RoundedCornerShape(getUIKitShapes().circular)
-                    ) else Modifier)
         ) {
             Row(
                 modifier = Modifier

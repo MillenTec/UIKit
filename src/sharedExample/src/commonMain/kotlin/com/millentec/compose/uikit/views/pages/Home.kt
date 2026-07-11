@@ -69,6 +69,8 @@ fun Home(
                     )
                 }
 
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
                 UIKitButton(
                     onClick = {
                         onRemove()
@@ -80,6 +82,8 @@ fun Home(
                         color = getUIKitColors().textFillColorPrimaryBrush
                     )
                 }
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
                 UIKitButton(
                     onClick = {

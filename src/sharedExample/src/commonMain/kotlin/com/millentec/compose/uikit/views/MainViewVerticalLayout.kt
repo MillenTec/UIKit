@@ -3,21 +3,22 @@
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.BackHandler
-import com.millentec.compose.uikit.component.input.UIKitIslandButton
-import com.millentec.compose.uikit.component.input.UIKitNavigationDock
-import com.millentec.compose.uikit.component.input.UIKitNavigationItem
+import com.millentec.compose.uikit.component.input.*
 import com.millentec.compose.uikit.component.layout.ScreenSideAdaptiveContainerState
 import com.millentec.compose.uikit.component.layout.rememberScreenSideAdaptiveContainerState
 import com.millentec.compose.uikit.data.Pages
 import com.millentec.compose.uikit.foundation.LayoutPosition
+import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialsState
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
@@ -230,5 +231,24 @@ fun MainViewVerticalLayoutPreview() {
                 getUIKitColors().lineFillColorPrimaryBrush.copy(alpha = 0.75f)
             } else Color(0x4C000000)
         )
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            UIKitButton(
+                text = "Hello",
+                modifier = Modifier
+                    .acrylicMaterial(
+                        state = acrylicMaterialsState,
+                        shape = RoundedCornerShape(getUIKitShapes().circular)
+                    ),
+                colors = UIKitButtonColors.default().copy(
+                    background = Color.Transparent
+                ),
+                onClick = {}
+            )
+        }
     }
 }

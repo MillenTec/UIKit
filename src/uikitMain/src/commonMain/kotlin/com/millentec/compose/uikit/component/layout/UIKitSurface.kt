@@ -43,7 +43,7 @@ fun UIKitSurface(
     border: BorderStroke? = null,
     interactionSource: MutableInteractionSource? = null,
     indication: Indication? = ripple(),
-    content: @Composable () -> Unit,
+    content: @Composable () -> Unit
 ) {
     val interactionSource = interactionSource ?: remember { MutableInteractionSource() }
 
@@ -78,3 +78,40 @@ fun UIKitSurface(
         }
     }
 }
+
+@Composable
+fun UIKitSurface(
+    modifier: Modifier = Modifier,
+    shape: Shape = RectangleShape,
+    color: Color = getUIKitColors().contentFillColorTertiaryBrush,
+    shadow: Shadow? = null,
+    border: BorderStroke? = null,
+    content: @Composable () -> Unit
+) = UIKitSurface(
+    onClick = {},
+    modifier = modifier,
+    enabled = false,
+    shape = shape,
+    color = color,
+    shadow = shadow,
+    border = border,
+    interactionSource = null,
+    indication = null,
+    content = content
+)
+
+@Composable
+fun UIKitSurface(
+    modifier: Modifier = Modifier,
+    shape: Shape = RectangleShape,
+    color: Color = getUIKitColors().contentFillColorTertiaryBrush,
+    shadow: Shadow? = null,
+    border: BorderStroke? = null
+) = UIKitSurface(
+    modifier = modifier,
+    shape = shape,
+    color = color,
+    shadow = shadow,
+    border = border,
+    content = {}
+)

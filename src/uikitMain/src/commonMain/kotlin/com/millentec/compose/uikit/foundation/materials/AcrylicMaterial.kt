@@ -1,11 +1,14 @@
 ﻿package com.millentec.compose.uikit.foundation.materials
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import com.millentec.compose.uikit.theme.getUIKitMaterials
+import com.millentec.compose.uikit.theme.getUIKitShapes
 import com.skydoves.cloudy.Sky
 import com.skydoves.cloudy.cloudy
 import com.skydoves.cloudy.rememberSky
@@ -37,7 +40,12 @@ fun Modifier.acrylicMaterial(
     tint = getUIKitMaterials().acrylicMaterial.tint,
     radius = getUIKitMaterials().acrylicMaterial.radius,
     cpuBlurEnabled = getUIKitMaterials().acrylicMaterial.cpuComputationEnabled
-)
+).then(if (getUIKitMaterials().acrylicMaterial.lightingEffectsEnabled)
+    Modifier.border(
+        width = getUIKitMaterials().acrylicMaterial.edgeHighlightThickness,
+        brush = getUIKitMaterials().acrylicMaterial.edgeHighlightColor,
+        shape = RoundedCornerShape(getUIKitShapes().circular)
+    ) else Modifier)
 
 @Composable
 fun Modifier.acrylicMaterialSource(
