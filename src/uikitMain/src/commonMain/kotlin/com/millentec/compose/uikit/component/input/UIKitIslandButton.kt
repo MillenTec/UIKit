@@ -138,7 +138,7 @@ fun UIKitIslandButton(
     val containerLength = remember(state, itemSpace, items.size) { state.height * items.size + itemSpace * (items.size - 1) }
 
     val containerLengthAnimated by animateDpAsState(
-        targetValue = containerLength,
+        targetValue = if (maxWidth == (-1).dp) containerLength else containerLength.coerceAtMost(maxWidth),
         animationSpec = spring(
             dampingRatio = getUIKitAnimate().standardSpringDampingRatio,
             stiffness = getUIKitAnimate().standardSpringStiffness
@@ -169,7 +169,7 @@ fun UIKitIslandButton(
                     ) else Modifier)
                 .clip(RoundedCornerShape(state.cornerRadius))
                 .height(state.height)
-                .width(if (maxWidth == (-1).dp) containerLengthAnimated else containerLengthAnimated.coerceAtMost(maxWidth))
+                .width(containerLengthAnimated)
                 .then(if (items.size == 1)
                     Modifier.pointerInput(Unit) {
                         detectTapGestures(

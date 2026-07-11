@@ -50,14 +50,21 @@ data class UIKitButtonColors(
 ) {
     companion object {
         @Composable
-        fun default(): UIKitButtonColors {
+        fun default(
+            background: Color = getUIKitColors().contentFillColorTertiaryBrush,
+            backgroundDisabled: Color = getUIKitColors().contentFillColorBrushDisabled,
+            content: Color = getUIKitColors().textFillColorPrimaryBrush,
+            contentDisabled: Color = getUIKitColors().textFillColorDisabled,
+            border: Color = getUIKitColors().lineFillColorPrimaryBrush,
+            borderDisabled: Color = getUIKitColors().lineFillColorPrimaryBrush
+        ): UIKitButtonColors {
             return UIKitButtonColors(
-                background = getUIKitColors().contentFillColorTertiaryBrush,
-                backgroundDisabled = getUIKitColors().contentFillColorBrushDisabled,
-                content = getUIKitColors().textFillColorPrimaryBrush,
-                contentDisabled = getUIKitColors().textFillColorDisabled,
-                border = getUIKitColors().lineFillColorPrimaryBrush,
-                borderDisabled = getUIKitColors().lineFillColorPrimaryBrush
+                background = background,
+                backgroundDisabled = backgroundDisabled,
+                content = content,
+                contentDisabled = contentDisabled,
+                border = border,
+                borderDisabled = borderDisabled
             )
         }
     }
@@ -152,7 +159,7 @@ fun UIKitButton(
     iconSize: Dp = icon.defaultWidth,
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(getUIKitShapes().circular),
-    colors: UIKitButtonColors = UIKitButtonColors.default().copy(
+    colors: UIKitButtonColors = UIKitButtonColors.default(
         content = Color.Unspecified
     ),
     hasBorder: Boolean = false,
@@ -191,9 +198,7 @@ fun UIKitButton(
     text: String,
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(getUIKitShapes().circular),
-    colors: UIKitButtonColors = UIKitButtonColors.default().copy(
-        content = Color.Unspecified
-    ),
+    colors: UIKitButtonColors = UIKitButtonColors.default(),
     hasBorder: Boolean = false,
     borderWidth: Dp = 1.dp,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
