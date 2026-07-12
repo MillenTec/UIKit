@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.input.UIKitButton
 import com.millentec.compose.uikit.component.input.UIKitButtonColors
+import com.millentec.compose.uikit.component.input.UIKitSlider
 import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
@@ -89,6 +90,52 @@ fun Controls() {
                     background = getUIKitColors().highlightColorLightBrush,
                     content = getUIKitColors().textFillColorPrimaryBrush
                 )
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            val value = remember { mutableStateOf(10f) }
+            UIKitSlider(
+                value = value.value,
+                onValueChange = {
+                    value.value = it
+                    println(it)
+                },
+                enabled = enabled.value,
+                valueRange = 0f..100f,
+                tickStep = 20f,
+                adsorbedOntoTick = true
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            Text(
+                text = value.value.toString(),
+                style = getUIKitTypography().body,
+                color = getUIKitColors().textFillColorPrimaryBrush,
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            val value1 = remember { mutableStateOf(10f) }
+            UIKitSlider(
+                value = value1.value,
+                onValueChange = {
+                    value1.value = it
+                    println(it)
+                },
+                enabled = enabled.value,
+                valueRange = 0f..100f,
+                hasTick = false,
+                adsorbedOntoTick = false
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            Text(
+                text = value1.value.toString(),
+                style = getUIKitTypography().body,
+                color = getUIKitColors().textFillColorPrimaryBrush,
             )
 
             Spacer(Modifier.height(getUIKitLayout().basicSpacing))
