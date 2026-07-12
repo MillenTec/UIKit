@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.component.input.UIKitButton
 import com.millentec.compose.uikit.component.input.UIKitButtonColors
+import com.millentec.compose.uikit.component.input.UIKitToggleButton
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.toggleMultiple
@@ -91,11 +91,12 @@ fun Controls() {
 
             Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
-            Switch(
+            UIKitToggleButton(
                 checked = enabled.value,
                 onCheckedChange = {
                     enabled.value = it
                 },
+                text = "Switch"
             )
         }
     }
