@@ -3,6 +3,7 @@
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +20,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import com.millentec.compose.uikit.component.UIKitTheme
 import com.millentec.compose.uikit.component.layout.UIKitSurface
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
@@ -29,15 +32,37 @@ import com.millentec.compose.uikit.theme.*
 @Composable
 @Preview
 private fun Preview() {
-    UIKitButton(
-        enabled = false,
-        onClick = {
+    UIKitTheme(
+        UIKitTheme(
+            colors = UIKitColors.getLight()
+        )
+    ) {
+        Column(
+            Modifier.background(getUIKitColors().contentFillColorPrimaryBrush)
+        ) {
+            UIKitButton(
+                enabled = true,
+                onClick = {
 
-        },
-        icon = FluentIcons.designIdeas(layered = true),
-        iconSize = 32.dp,
-        text = "Designs"
-    )
+                },
+                icon = FluentIcons.designIdeas(getUIKitColors().textFillColorPrimaryBrush, layered = true),
+                iconSize = DpSize(32.dp, 32.dp),
+                text = "Designs"
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            UIKitButton(
+                enabled = false,
+                onClick = {
+
+                },
+                icon = FluentIcons.designIdeas(getUIKitColors().textFillColorPrimaryBrush, layered = true),
+                iconSize = DpSize(32.dp, 32.dp),
+                text = "Designs"
+            )
+        }
+    }
 }
 
 data class UIKitButtonColors(
@@ -156,7 +181,7 @@ fun UIKitButton(
 @Composable
 fun UIKitButton(
     icon: ImageVector,
-    iconSize: Dp = icon.defaultWidth,
+    iconSize: DpSize = DpSize(icon.defaultWidth, icon.defaultHeight),
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(getUIKitShapes().circular),
     colors: UIKitButtonColors = UIKitButtonColors.default(
@@ -194,7 +219,7 @@ fun UIKitButton(
 @Composable
 fun UIKitButton(
     icon: ImageVector,
-    iconSize: Dp = icon.defaultWidth,
+    iconSize: DpSize = DpSize(icon.defaultWidth, icon.defaultHeight),
     text: String,
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(getUIKitShapes().circular),

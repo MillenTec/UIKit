@@ -3,6 +3,7 @@
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,35 +20,77 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import com.millentec.compose.uikit.component.UIKitTheme
 import com.millentec.compose.uikit.component.layout.UIKitSurface
 import com.millentec.compose.uikit.foundation.isDesktopOS
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
 import com.millentec.compose.uikit.theme.*
 
 @Composable
 @Preview
 private fun Preview() {
-    Column {
-        UIKitToggleButton(
-            onCheckedChange = {},
-            checked = false
+    UIKitTheme(
+        UIKitTheme(
+            colors = UIKitColors.getLight()
+        )
+    ) {
+        Column(
+            Modifier.background(getUIKitColors().contentFillColorPrimaryBrush)
         ) {
-            Text("Toggle")
-        }
+            UIKitToggleButton(
+                enabled = true,
+                checked = false,
+                onCheckedChange = {
 
-        UIKitToggleButton(
-            onCheckedChange = {},
-            checked = true
-        ) {
-            Text("Toggle")
-        }
+                },
+                icon = FluentIcons.designIdeas(getUIKitColors().textFillColorPrimaryBrush, layered = true),
+                iconSize = DpSize(32.dp, 32.dp),
+                text = "Designs"
+            )
 
-        UIKitToggleButton(
-            onCheckedChange = {},
-            checked = false,
-            enabled = false,
-        ) {
-            Text("Toggle")
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            UIKitToggleButton(
+                enabled = true,
+                checked = true,
+                onCheckedChange = {
+
+                },
+                icon = FluentIcons.designIdeas(UIKitColors.getDark().textFillColorPrimaryBrush, layered = true),
+                iconSize = DpSize(32.dp, 32.dp),
+                text = "Designs"
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            UIKitToggleButton(
+                enabled = false,
+                checked = true,
+                onCheckedChange = {
+
+                },
+                icon = FluentIcons.designIdeas(getUIKitColors().textFillColorPrimaryBrush, layered = true),
+                iconSize = DpSize(32.dp, 32.dp),
+                text = "Designs"
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            UIKitToggleButton(
+                enabled = false,
+                checked = false,
+                onCheckedChange = {
+
+                },
+                icon = FluentIcons.designIdeas(getUIKitColors().textFillColorPrimaryBrush, layered = true),
+                iconSize = DpSize(32.dp, 32.dp),
+                text = "Designs"
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
         }
     }
 }
@@ -189,7 +232,7 @@ fun UIKitToggleButton(
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
     enabled: Boolean = true,
     onCheckedChange: (Boolean) -> Unit,
-    iconSize: Dp = icon.defaultWidth,
+    iconSize: DpSize = DpSize(icon.defaultWidth, icon.defaultHeight),
 ) = UIKitToggleButton(
     modifier = modifier,
     checked = checked,
@@ -228,7 +271,7 @@ fun UIKitToggleButton(
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
     enabled: Boolean = true,
     onCheckedChange: (Boolean) -> Unit,
-    iconSize: Dp = icon.defaultWidth,
+    iconSize: DpSize = DpSize(icon.defaultWidth, icon.defaultHeight),
     iconColor: Color = Color.Unspecified,
     iconColorChecked: Color = Color.Unspecified,
     textStyle: TextStyle = getUIKitTypography().body

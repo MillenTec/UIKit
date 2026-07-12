@@ -11,9 +11,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.input.UIKitButton
 import com.millentec.compose.uikit.component.input.UIKitButtonColors
-import com.millentec.compose.uikit.component.input.UIKitToggleButton
+import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.toggleMultiple
@@ -91,12 +93,12 @@ fun Controls() {
 
             Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
-            UIKitToggleButton(
+            UIKitToggleSwitch(
+                size = DpSize(64.dp, 32.dp),
                 checked = enabled.value,
                 onCheckedChange = {
                     enabled.value = it
-                },
-                text = "Switch"
+                }
             )
         }
     }

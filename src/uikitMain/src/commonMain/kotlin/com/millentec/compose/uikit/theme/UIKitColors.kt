@@ -18,6 +18,8 @@ data class UIKitColors(
 
     val contentFillColorTertiaryBrush: Color = Color(0xFFE8E8ED),
 
+    val contentFillColorFourthBrush: Color = Color(0xFF666668),
+
     val contentFillColorBrushDisabled: Color = Color(0xFFEFEFF2),
 
     /**
@@ -69,7 +71,8 @@ data class UIKitColors(
             contentFillColorPrimaryBrush = Color(0xFF151517),
             contentFillColorSecondaryBrush = Color(0xFF1D1D1F),
             contentFillColorTertiaryBrush = Color(0xFF353537),
-            contentFillColorBrushDisabled = Color(0xFF111113),
+            contentFillColorFourthBrush = Color(0xFF7D7D7F),
+            contentFillColorBrushDisabled = Color(0xFF2A2A2C),
             textFillColorPrimaryBrush = Color(0xFFF5F5F7),
             textFillColorPrimaryBrushReversed = Color(0xFF1D1D1F),
             textFillColorSecondaryBrush = Color(0xFF86868B),
