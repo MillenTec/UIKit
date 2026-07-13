@@ -8,15 +8,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.component.input.UIKitButton
-import com.millentec.compose.uikit.component.input.UIKitButtonColors
-import com.millentec.compose.uikit.component.input.UIKitSlider
-import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
+import com.millentec.compose.uikit.component.input.*
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.toggleMultiple
@@ -94,7 +92,7 @@ fun Controls() {
 
             Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
-            val value = remember { mutableStateOf(10f) }
+            val value = remember { mutableStateOf(30f) }
             UIKitSlider(
                 value = value.value,
                 onValueChange = {
@@ -102,7 +100,7 @@ fun Controls() {
                     println(it)
                 },
                 enabled = enabled.value,
-                valueRange = 0f..100f,
+                valueRange = 30f..100f,
                 tickStep = 20f,
                 adsorbedOntoTick = true
             )
@@ -125,7 +123,7 @@ fun Controls() {
                     println(it)
                 },
                 enabled = enabled.value,
-                valueRange = 0f..100f,
+                valueRange = 10f..100f,
                 hasTick = false,
                 adsorbedOntoTick = false
             )
@@ -137,6 +135,47 @@ fun Controls() {
                 style = getUIKitTypography().body,
                 color = getUIKitColors().textFillColorPrimaryBrush,
             )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            val selected = remember { mutableStateOf(false) }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                UIKitRadioButton(
+                    selected = selected.value,
+                    onClick = { selected.value = !selected.value },
+                    enabled = enabled.value,
+                )
+
+                Spacer(Modifier.width(getUIKitLayout().smallSpacing))
+
+                Text(
+                    text = selected.value.toString(),
+                    style = getUIKitTypography().body,
+                    color = getUIKitColors().textFillColorPrimaryBrush,
+                )
+            }
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                UIKitRadioButton(
+                    selected = !selected.value,
+                    onClick = { selected.value = !selected.value },
+                    enabled = enabled.value,
+                )
+
+                Spacer(Modifier.width(getUIKitLayout().smallSpacing))
+
+                Text(
+                    text = selected.value.toString(),
+                    style = getUIKitTypography().body,
+                    color = getUIKitColors().textFillColorPrimaryBrush,
+                )
+            }
 
             Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
