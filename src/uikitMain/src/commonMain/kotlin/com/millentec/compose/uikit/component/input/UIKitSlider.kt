@@ -137,6 +137,7 @@ fun UIKitBasicSlider(
     ) }
 
     val offsetCurrent by rememberUpdatedState(offset)
+    val maxWidthCurrent by rememberUpdatedState(maxWidth)
 
     val offsetIncludedDrag = remember { mutableStateOf(offset) }
 
@@ -185,8 +186,6 @@ fun UIKitBasicSlider(
         }
     }
 
-    val offsetDiff = remember { mutableStateOf(0f) }
-
     decoration(
         Modifier.pointerInput(Unit) {
             detectTapGestures(
@@ -224,7 +223,6 @@ fun UIKitBasicSlider(
                         thumbPressed.value = true
                     },
                     onDrag = { change, offset ->
-                        offsetDiff.value += offset.x
                         if (adsorptionEnable && adsorptionPointsSorted.value != null) {
                             offsetIncludedDrag.value += with(density) { offset.x }.toDp()
                             val arr = adsorptionPointsSorted.value ?: throw NullPointerException("Adsorption points (shorted) is null.")
@@ -255,14 +253,13 @@ fun UIKitBasicSlider(
                             }
                         } else {
                             val newOffset = offsetCurrent + with(density) { offset.x }.toDp()
-                            val coercedOffset = newOffset.coerceIn(0.dp..maxWidth)
+                            val coercedOffset = newOffset.coerceIn(0.dp..maxWidthCurrent)
                             onOffsetChange(coercedOffset, ThumbDrag)
                         }
                     },
                     onDragEnd = {
                         thumbPressed.value = false
                         isDragging.value = false
-                        offsetDiff.value = 0f
                     },
                     onDragCancel = {
                         thumbPressed.value = false
@@ -292,12 +289,14 @@ fun UIKitSlider(
             .padding(end = thumbSize.width),
         contentAlignment = Alignment.CenterStart,
     ) {
+        val maxWidthCurrent by rememberUpdatedState(maxWidth)
+
         fun toOffset(value: Float): Dp {
-            return value / maxValue * maxWidth
+            return value / maxValue * maxWidthCurrent
         }
 
         fun toValue(offset: Dp): Float {
-            return offset / maxWidth * maxValue
+            return offset / maxWidthCurrent * maxValue
         }
 
         val density = LocalDensity.current
@@ -343,14 +342,14 @@ fun UIKitSlider(
         ) }
 
         val adsorptionPoints = remember { mutableStateListOf<Dp>() }
-        LaunchedEffect(maxWidth, currentTickStep, maxValue) {
+        LaunchedEffect(maxWidthCurrent, currentTickStep, maxValue) {
             adsorptionPoints.clear()
             val times = floor(maxValue / tickStep).toInt()
             repeat(times) {
                 adsorptionPoints.add(toOffset(it * tickStep))
             }
-            if (adsorptionPoints[adsorptionPoints.size -1] != maxWidth) {
-                adsorptionPoints.add(maxWidth)
+            if (adsorptionPoints[adsorptionPoints.size -1] != maxWidthCurrent) {
+                adsorptionPoints.add(maxWidthCurrent)
             }
         }
 
@@ -402,9 +401,13 @@ fun UIKitSlider(
             }
         }
 
+        LaunchedEffect(maxWidthCurrent) {
+            thumbOffsetAnimated.snapTo(toOffset(value))
+        }
+
         UIKitBasicSlider(
             offset = currentOffset.value,
-            maxWidth = maxWidth,
+            maxWidth = maxWidthCurrent,
             onOffsetChange = { offset: Dp, type: UIKitSliderChangeType ->
                 valueChangeType.value = type
                 onValueChange(toValue(offset))

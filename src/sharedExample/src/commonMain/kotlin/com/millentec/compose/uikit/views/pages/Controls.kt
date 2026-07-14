@@ -3,6 +3,7 @@
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -10,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
@@ -20,6 +22,7 @@ import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.toggleMultiple
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
+import com.millentec.compose.uikit.theme.getUIKitShapes
 import com.millentec.compose.uikit.theme.getUIKitTypography
 
 @Composable
@@ -133,6 +136,38 @@ fun Controls() {
                 style = getUIKitTypography().body,
                 color = getUIKitColors().textFillColorPrimaryBrush,
             )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            val uikitColors = getUIKitColors()
+            val color = remember { mutableStateOf(uikitColors.highlightColorPrimaryBrush.toHsv()) }
+            UIKitHSVColorPicker(
+                enabled = enabled.value,
+                onColorChange = {
+                    color.value = it
+                }
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(getUIKitShapes().basicRounded))
+                        .size(80.dp, 35.dp)
+                        .background(color.value.getColor())
+                )
+
+                Spacer(Modifier.width(getUIKitLayout().smallSpacing))
+
+                Text(
+                    text = color.value.getColor().value.toString(16),
+                    style = getUIKitTypography().body,
+                    color = getUIKitColors().textFillColorPrimaryBrush,
+                )
+            }
 
             Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
