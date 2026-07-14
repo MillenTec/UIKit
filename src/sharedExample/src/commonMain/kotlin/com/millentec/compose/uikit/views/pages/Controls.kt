@@ -92,15 +92,15 @@ fun Controls() {
 
             Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
-            val value = remember { mutableStateOf(20f) }
+            val value = remember { mutableStateOf(3f) }
             UIKitSlider(
                 value = value.value,
                 onValueChange = {
                     value.value = it
                 },
                 enabled = enabled.value,
-                maxValue = 100f,
-                tickStep = 20f,
+                maxValue = 103f,
+                tickStep = 5f,
                 adsorbedOntoTick = true
             )
 

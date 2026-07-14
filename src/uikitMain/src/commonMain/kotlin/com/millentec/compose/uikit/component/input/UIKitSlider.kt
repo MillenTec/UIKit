@@ -147,8 +147,6 @@ fun UIKitBasicSlider(
     // 在非动画的时机将偏移强制对其到吸附点
     LaunchedEffect(offset, adsorptionPointsSorted.value, isAnimating) {
         if (adsorptionEnable && adsorptionPointsSorted.value != null && !isAnimating) {
-            println("adsorptionPoints: $adsorptionPoints")
-            println("adsorptionPointsSorted: ${adsorptionPointsSorted.value}")
             val closestPoint = adsorptionPointsSorted.value?.withIndex()?.minByOrNull { (index, num) ->
                 abs(offset.value - num.value)
             }
@@ -187,6 +185,8 @@ fun UIKitBasicSlider(
         }
     }
 
+    val offsetDiff = remember { mutableStateOf(0f) }
+
     decoration(
         Modifier.pointerInput(Unit) {
             detectTapGestures(
@@ -224,6 +224,7 @@ fun UIKitBasicSlider(
                         thumbPressed.value = true
                     },
                     onDrag = { change, offset ->
+                        offsetDiff.value += offset.x
                         if (adsorptionEnable && adsorptionPointsSorted.value != null) {
                             offsetIncludedDrag.value += with(density) { offset.x }.toDp()
                             val arr = adsorptionPointsSorted.value ?: throw NullPointerException("Adsorption points (shorted) is null.")
@@ -261,6 +262,7 @@ fun UIKitBasicSlider(
                     onDragEnd = {
                         thumbPressed.value = false
                         isDragging.value = false
+                        offsetDiff.value = 0f
                     },
                     onDragCancel = {
                         thumbPressed.value = false
@@ -301,7 +303,6 @@ fun UIKitSlider(
         val density = LocalDensity.current
         val uikitAnimate = getUIKitAnimate()
         val valueChangeType = remember { mutableStateOf<UIKitSliderChangeType?>(null) }
-        val isAnimating = remember { mutableStateOf(false) }
         val currentTickStep = rememberUpdatedState(tickStep)
 
         val thumbColorAnimated by animateColorAsState(
@@ -337,6 +338,10 @@ fun UIKitSlider(
             )
         }
 
+        val currentOffset = remember(value) { mutableStateOf(
+            toOffset(value)
+        ) }
+
         val adsorptionPoints = remember { mutableStateListOf<Dp>() }
         LaunchedEffect(maxWidth, currentTickStep, maxValue) {
             adsorptionPoints.clear()
@@ -352,7 +357,6 @@ fun UIKitSlider(
         LaunchedEffect(value) {
             when(valueChangeType.value) {
                 TrackTap -> {
-                    isAnimating.value = true
                     thumbOffsetAnimated.animateTo(
                         targetValue = toOffset(value),
                         animationSpec = tween(
@@ -361,14 +365,12 @@ fun UIKitSlider(
                         )
                     )
                     valueChangeType.value = null
-                    isAnimating.value = false
                 }
                 ThumbDrag -> {
                     thumbOffsetAnimated.snapTo(toOffset(value))
                     valueChangeType.value = null
                 }
                 DragAdsorption -> {
-                    isAnimating.value = true
                     thumbOffsetAnimated.animateTo(
                         targetValue = toOffset(value),
                         animationSpec = tween(
@@ -377,10 +379,8 @@ fun UIKitSlider(
                         )
                     )
                     valueChangeType.value = null
-                    isAnimating.value = false
                 }
                 Jump -> {
-                    isAnimating.value = true
                     thumbOffsetAnimated.animateTo(
                         targetValue = toOffset(value),
                         animationSpec = tween(
@@ -389,10 +389,8 @@ fun UIKitSlider(
                         )
                     )
                     valueChangeType.value = null
-                    isAnimating.value = false
                 }
                 null -> {
-                    isAnimating.value = true
                     thumbOffsetAnimated.animateTo(
                         targetValue = toOffset(value),
                         animationSpec = tween(
@@ -400,13 +398,12 @@ fun UIKitSlider(
                             easing = FastOutSlowInEasing
                         )
                     )
-                    isAnimating.value = false
                 }
             }
         }
 
         UIKitBasicSlider(
-            offset = thumbOffsetAnimated.value,
+            offset = currentOffset.value,
             maxWidth = maxWidth,
             onOffsetChange = { offset: Dp, type: UIKitSliderChangeType ->
                 valueChangeType.value = type
@@ -422,7 +419,7 @@ fun UIKitSlider(
             onDragEnd = {},
             adsorptionEnable = adsorbedOntoTick,
             adsorptionPoints = adsorptionPoints,
-            isAnimating = isAnimating.value
+            isAnimating = thumbOffsetAnimated.isRunning
         ) { trackInteraction: Modifier, thumbInteraction: Modifier ->
             if (hasTick) {
                 Canvas(
