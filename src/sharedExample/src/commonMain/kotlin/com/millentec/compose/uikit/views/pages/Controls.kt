@@ -140,7 +140,7 @@ fun Controls() {
             Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
             val uikitColors = getUIKitColors()
-            val color = remember { mutableStateOf(uikitColors.highlightColorPrimaryBrush.toHsv()) }
+            val color = remember { mutableStateOf(Color.White.toHsv()) }
             UIKitHSVColorPicker(
                 enabled = enabled.value,
                 onColorChange = {
