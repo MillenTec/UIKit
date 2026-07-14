@@ -1,5 +1,6 @@
 ﻿package com.millentec.compose.uikit.component.input
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -277,7 +278,6 @@ fun UIKitAlphaSlider(
     ) {
         val density = LocalDensity.current
         val uikitAnimate = getUIKitAnimate()
-        val uiKitTheme = getUIKitTheme()
         val value = value.coerceIn(0f..1f)
         val valueChangeType = remember { mutableStateOf<UIKitSliderChangeType?>(null) }
 
@@ -291,6 +291,11 @@ fun UIKitAlphaSlider(
             return offset / maxWidthCurrent * 1f
         }
 
+        val colorAnimated by animateColorAsState(
+            targetValue = if (enabled) color else getUIKitColors().lineFillColorDisabled,
+            animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
+        )
+
         val thumbPressed = remember { mutableStateOf(false) }
         val thumbScaleAnimated by animateFloatAsState(
             targetValue = if (thumbPressed.value) 1.2f else 1f,
@@ -303,16 +308,6 @@ fun UIKitAlphaSlider(
                 typeConverter = Dp.VectorConverter,
             )
         }
-
-        val valueAnimated by animateFloatAsState(
-            targetValue = if (enabled) 1f else 0.8f,
-            animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
-        )
-
-        val saturationAnimated by animateFloatAsState(
-            targetValue = if (enabled) 1f else 0f,
-            animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
-        )
 
         LaunchedEffect(value) {
             when(valueChangeType.value) {
@@ -394,8 +389,8 @@ fun UIKitAlphaSlider(
                 drawLine(
                     brush = Brush.horizontalGradient(
                         colors = listOf(
-                            color.copy(0f),
-                            color.copy(1f),
+                            colorAnimated.copy(0f),
+                            colorAnimated.copy(1f),
                         )
                     ),
                     strokeWidth = (lineWidth * density.density).value,
@@ -503,6 +498,11 @@ fun UIKitSVPlane(
 
         val currentSV = remember(offsetAnimated.value) { mutableStateOf(toValue(offsetAnimated.value)) }
 
+        val panelEndSaturationAnimated by animateFloatAsState(
+            targetValue = if (enabled) 1f else 0f,
+            animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
+        )
+
         Canvas(
             modifier = Modifier
                 .offset(
@@ -557,7 +557,7 @@ fun UIKitSVPlane(
             for (y in 0 until height.toInt()) {
                 val brightness = 1f - y / height
                 val startColor = Color.hsv(hue, 0f, brightness)
-                val endColor = Color.hsv(hue, 1f, brightness)
+                val endColor = Color.hsv(hue, panelEndSaturationAnimated, brightness)
 
                 drawRect(
                     brush = Brush.linearGradient(
@@ -577,22 +577,29 @@ fun UIKitSVPlane(
                 .fillMaxSize()
                 .aspectRatio(1f)
         ) {
+            val thumbSaturationAnimated by animateFloatAsState(
+                targetValue = if (enabled) currentSV.value.saturation else 0f,
+                animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
+            )
+
             Box(
                 modifier = Modifier
                     .offset(
                         x = offsetAnimated.value.x,
                         y = offsetAnimated.value.y
                     )
-                    .dropShadow(
-                        shadow = UIKitShadowMaterial.getShadow(),
-                        shape = RoundedCornerShape(getUIKitShapes().circular)
-                    )
+                    .then(if (shadowEnabled) {
+                        Modifier.dropShadow(
+                            shadow = UIKitShadowMaterial.getShadow(),
+                            shape = RoundedCornerShape(getUIKitShapes().circular)
+                        )
+                    } else Modifier)
                     .clip(RoundedCornerShape(getUIKitShapes().circular))
                     .size(thumbSize)
                     .background(
                         Color.hsv(
                             hue = hue,
-                            saturation = currentSV.value.saturation,
+                            saturation = thumbSaturationAnimated,
                             value = currentSV.value.value
                         )
                     )
@@ -720,6 +727,7 @@ fun UIKitHSVColorPicker(
             Spacer(modifier = Modifier.height(getUIKitLayout().mediumSpacing))
 
             UIKitAlphaSlider(
+                enabled = enabled,
                 value = alpha.value,
                 color = Color.hsv(
                     hue = hue.value,

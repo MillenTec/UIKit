@@ -119,7 +119,7 @@ fun UIKitRadioButton(
                     shape = RoundedCornerShape(getUIKitShapes().circular)
                 )
                 .uikitClickable(
-                    enabled = enabled,
+                    enabled = enabled && !selected,
                     onClick = onClick,
                     indicationEnabled = isDesktopOS(),
                     indication = null
@@ -129,11 +129,11 @@ fun UIKitRadioButton(
                 visible = selected,
                 enter = scaleIn(
                     initialScale = 0f,
-                    animationSpec = tween(getUIKitAnimate().transformFastDurationMillis, easing = FastOutSlowInEasing)
+                    animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = FastOutSlowInEasing)
                 ),
                 exit = scaleOut(
                     targetScale = 0f,
-                    animationSpec = tween(getUIKitAnimate().transformFastDurationMillis, easing = FastOutSlowInEasing)
+                    animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = FastOutSlowInEasing)
                 )
             ) {
                 val colorAnimated by animateColorAsState(
