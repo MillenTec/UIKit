@@ -95,15 +95,15 @@ fun Controls() {
 
             Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
-            val value = remember { mutableStateOf(3f) }
+            val value = remember { mutableStateOf(20f) }
             UIKitSlider(
                 value = value.value,
                 onValueChange = {
                     value.value = it
                 },
                 enabled = enabled.value,
-                maxValue = 103f,
-                tickStep = 5f,
+                maxValue = 100f,
+                tickStep = 10f,
                 adsorbedOntoTick = true
             )
 
@@ -142,6 +142,8 @@ fun Controls() {
             val uikitColors = getUIKitColors()
             val color = remember { mutableStateOf(Color.White.toHsv()) }
             UIKitHSVColorPicker(
+                modifier = Modifier
+                    .sizeIn(maxWidth = 500.dp),
                 enabled = enabled.value,
                 onColorChange = {
                     color.value = it
@@ -219,6 +221,8 @@ fun Controls() {
                     enabled.value = it
                 }
             )
+
+            Spacer(Modifier.height(getUIKitLayout().x4Spacing))
         }
     }
 }
