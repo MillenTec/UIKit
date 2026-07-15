@@ -577,10 +577,30 @@ fun UIKitSVPlane(
                 .fillMaxSize()
                 .aspectRatio(1f)
         ) {
-            val thumbSaturationAnimated by animateFloatAsState(
-                targetValue = if (enabled) currentSV.value.saturation else 0f,
-                animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
-            )
+            val thumbSaturationAnimated = remember {
+                Animatable(
+                    initialValue = saturation,
+                    typeConverter = Float.VectorConverter
+                )
+            }
+
+            LaunchedEffect(enabled) {
+                if (enabled) {
+                    thumbSaturationAnimated.animateTo(
+                        targetValue = saturationCurrent,
+                        animationSpec = tween(uikitAnimate.transformRegularDurationMillis, easing = LinearEasing)
+                    )
+                } else {
+                    thumbSaturationAnimated.animateTo(
+                        targetValue = 0f,
+                        animationSpec = tween(uikitAnimate.transformRegularDurationMillis, easing = LinearEasing)
+                    )
+                }
+            }
+
+            LaunchedEffect(saturationCurrent) {
+                thumbSaturationAnimated.snapTo(saturationCurrent)
+            }
 
             Box(
                 modifier = Modifier
@@ -599,7 +619,7 @@ fun UIKitSVPlane(
                     .background(
                         Color.hsv(
                             hue = hue,
-                            saturation = thumbSaturationAnimated,
+                            saturation = thumbSaturationAnimated.value,
                             value = currentSV.value.value
                         )
                     )
@@ -621,6 +641,7 @@ fun UIKitHSVColorPicker(
     onColorChange: (UIKitHSVColor) -> Unit,
     hasColorPreviewBox: Boolean = true,
     hasAlphaSlider: Boolean = true,
+    colorPreviewBoxBackground: Color = getUIKitColors().contentFillColorPrimaryBrush
 ) {
     Column(
         modifier = modifier,
@@ -701,6 +722,7 @@ fun UIKitHSVColorPicker(
                             svPlaneSize.value.height.dp / LocalDensity.current.density - svPlaneThumbSize,
                         )
                         .width(48.dp)
+                        .background(colorPreviewBoxBackground)
                         .background(
                             Color.hsv(
                                 hue = hue.value,
