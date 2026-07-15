@@ -75,7 +75,7 @@ fun MainViewVerticalLayoutPreview() {
 
     val acrylicMaterialsState = rememberAcrylicMaterialsState()
 
-    Box(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .background(getUIKitColors().contentFillColorPrimaryBrush)
@@ -83,6 +83,10 @@ fun MainViewVerticalLayoutPreview() {
 
         BackHandler(hasHistoryPages) {
             nav.goBack()
+        }
+
+        LaunchedEffect(maxWidth, maxHeight) {
+            acrylicMaterialsState.invalidate()
         }
 
         Box(

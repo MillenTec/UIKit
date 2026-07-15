@@ -20,6 +20,14 @@ class AcrylicMaterialsState {
     internal constructor(sky: Sky) {
         _sky = sky
     }
+
+    fun invalidate() {
+        _sky.invalidate()
+    }
+
+    fun invalidate(durationMillis: Long) {
+        _sky.invalidate(durationMillis)
+    }
 }
 
 @Composable
