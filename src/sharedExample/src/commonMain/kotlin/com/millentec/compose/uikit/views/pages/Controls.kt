@@ -88,7 +88,7 @@ fun Controls() {
                 text = "Button",
                 onClick = {},
                 colors = UIKitButtonColors.default().copy(
-                    background = getUIKitColors().highlightColorLightBrush,
+                    background = getUIKitColors().highlightColorFourthBrush,
                     content = getUIKitColors().textFillColorPrimaryBrush
                 )
             )

@@ -1,5 +1,6 @@
 ﻿package com.millentec.compose.uikit.icons.fluenticons.filled.dp20
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -8,8 +9,8 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 
 fun FluentIcons.Filled.designIdeas(
-    primaryColor: Color,
-    secondaryColor: Color,
+    primary: Brush,
+    secondary: Brush,
 ): ImageVector {
     val imageVector: ImageVector = ImageVector.Builder(
         name = "DesignIdeas",
@@ -18,7 +19,7 @@ fun FluentIcons.Filled.designIdeas(
         viewportWidth = 20f,
         viewportHeight = 20f
     ).apply {
-        path(fill = SolidColor(primaryColor)) {
+        path(fill = primary) {
             moveTo(4.581f, 2.125f)
             curveTo(4.747f, 2.272f, 4.796f, 2.51f, 4.704f, 2.71f)
             curveTo(4.703f, 2.712f, 4.701f, 2.717f, 4.7f, 2.723f)
@@ -60,7 +61,7 @@ fun FluentIcons.Filled.designIdeas(
             curveTo(2.233f, 8.688f, 2.272f, 8.545f, 2.32f, 8.405f)
             curveTo(2.79f, 8.778f, 3.363f, 9f, 4f, 9f)
         }
-        path(fill = SolidColor(secondaryColor)) {
+        path(fill = secondary) {
             moveTo(9f, 13f)
             curveTo(8.285f, 13f, 7.604f, 12.85f, 6.989f, 12.579f)
             curveTo(7.003f, 12.224f, 7.01f, 11.854f, 7.01f, 11.471f)
@@ -104,12 +105,12 @@ fun FluentIcons.Filled.designIdeas(
 }
 
 fun FluentIcons.Filled.designIdeas(): ImageVector {
-    return designIdeas(Color(0xFF212121), Color(0xFF212122))
+    return designIdeas(SolidColor(Color(0xFF1D1D1F)), SolidColor(Color(0xFF212122)))
 }
 
 fun FluentIcons.Filled.designIdeas(
-    color: Color = Color(0xFF212121),
+    color: Color,
     layered: Boolean = false
 ): ImageVector {
-    return designIdeas(color, if (layered) color.copy(0.6f) else color)
+    return designIdeas(SolidColor(color), if (layered) SolidColor(color.copy(0.6f)) else SolidColor(color))
 }

@@ -19,7 +19,7 @@ val FluentIcons.Home: ImageVector
             viewportWidth = 20f,
             viewportHeight = 20f
         ).apply {
-            path(fill = SolidColor(Color(0xFF212121))) {
+            path(fill = SolidColor(Color(0xFF1D1D1F))) {
                 moveTo(8.998f, 2.388f)
                 curveTo(9.568f, 1.876f, 10.432f, 1.876f, 11.002f, 2.388f)
                 lineTo(16.503f, 7.33f)

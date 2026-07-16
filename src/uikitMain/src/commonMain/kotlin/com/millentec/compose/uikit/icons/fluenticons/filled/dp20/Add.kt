@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.icons.fluenticons.regular.dp20
+﻿package com.millentec.compose.uikit.icons.fluenticons.filled.dp20
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 
-val FluentIcons.Add: ImageVector
+val FluentIcons.Filled.Add: ImageVector
     get() {
         if (_Add != null) {
             return _Add!!
@@ -20,23 +20,23 @@ val FluentIcons.Add: ImageVector
             viewportHeight = 20f
         ).apply {
             path(fill = SolidColor(Color(0xFF1D1D1F))) {
-                moveTo(10f, 2.5f)
-                curveTo(10.276f, 2.5f, 10.5f, 2.724f, 10.5f, 3f)
-                verticalLineTo(9.5f)
+                moveTo(10f, 2.25f)
+                curveTo(10.414f, 2.25f, 10.75f, 2.586f, 10.75f, 3f)
+                verticalLineTo(9.25f)
                 horizontalLineTo(17f)
-                curveTo(17.276f, 9.5f, 17.5f, 9.724f, 17.5f, 10f)
-                curveTo(17.5f, 10.276f, 17.276f, 10.5f, 17f, 10.5f)
-                horizontalLineTo(10.5f)
+                curveTo(17.414f, 9.25f, 17.75f, 9.586f, 17.75f, 10f)
+                curveTo(17.75f, 10.414f, 17.414f, 10.75f, 17f, 10.75f)
+                horizontalLineTo(10.75f)
                 verticalLineTo(17f)
-                curveTo(10.5f, 17.276f, 10.276f, 17.5f, 10f, 17.5f)
-                curveTo(9.724f, 17.5f, 9.5f, 17.276f, 9.5f, 17f)
-                verticalLineTo(10.5f)
+                curveTo(10.75f, 17.414f, 10.414f, 17.75f, 10f, 17.75f)
+                curveTo(9.586f, 17.75f, 9.25f, 17.414f, 9.25f, 17f)
+                verticalLineTo(10.75f)
                 horizontalLineTo(3f)
-                curveTo(2.724f, 10.5f, 2.5f, 10.276f, 2.5f, 10f)
-                curveTo(2.5f, 9.724f, 2.724f, 9.5f, 3f, 9.5f)
-                horizontalLineTo(9.5f)
+                curveTo(2.586f, 10.75f, 2.25f, 10.414f, 2.25f, 10f)
+                curveTo(2.25f, 9.586f, 2.586f, 9.25f, 3f, 9.25f)
+                horizontalLineTo(9.25f)
                 verticalLineTo(3f)
-                curveTo(9.5f, 2.724f, 9.724f, 2.5f, 10f, 2.5f)
+                curveTo(9.25f, 2.586f, 9.586f, 2.25f, 10f, 2.25f)
                 close()
             }
         }.build()

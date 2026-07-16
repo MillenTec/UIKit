@@ -1,5 +1,6 @@
 ﻿package com.millentec.compose.uikit.icons.fluenticons.regular.dp20
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -8,8 +9,8 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 
 fun FluentIcons.designIdeas(
-    primaryColor: Color,
-    secondaryColor: Color,
+    primary: Brush,
+    secondary: Brush,
 ): ImageVector {
     val imageVector: ImageVector = ImageVector.Builder(
         name = "DesignIdeas",
@@ -18,7 +19,7 @@ fun FluentIcons.designIdeas(
         viewportWidth = 20f,
         viewportHeight = 20f
     ).apply {
-        path(fill = SolidColor(primaryColor)) {
+        path(fill = primary) {
             moveTo(4.704f, 2.71f)
             curveTo(4.796f, 2.51f, 4.747f, 2.272f, 4.581f, 2.125f)
             curveTo(4.411f, 1.975f, 4.161f, 1.958f, 3.973f, 2.084f)
@@ -88,7 +89,7 @@ fun FluentIcons.designIdeas(
             curveTo(3.371f, 15.632f, 3f, 14.213f, 3f, 11.5f)
             curveTo(3f, 10.743f, 3.002f, 9.803f, 3.175f, 9.055f)
         }
-        path(fill = SolidColor(secondaryColor)) {
+        path(fill = secondary) {
             moveTo(9f, 13f)
             curveTo(8.285f, 13f, 7.604f, 12.85f, 6.989f, 12.579f)
             curveTo(7.003f, 12.224f, 7.01f, 11.854f, 7.01f, 11.471f)
@@ -132,12 +133,12 @@ fun FluentIcons.designIdeas(
 }
 
 fun FluentIcons.designIdeas(): ImageVector {
-    return designIdeas(Color(0xFF212121), Color(0xFF212122))
+    return designIdeas(SolidColor(Color(0xFF1D1D1F)), SolidColor(Color(0xFF212122)))
 }
 
 fun FluentIcons.designIdeas(
-    color: Color = Color(0xFF212121),
+    color: Color,
     layered: Boolean = false
 ): ImageVector {
-    return designIdeas(color, if (layered) color.copy(0.6f) else color)
+    return designIdeas(SolidColor(color), if (layered) SolidColor(color.copy(0.6f)) else SolidColor(color))
 }
