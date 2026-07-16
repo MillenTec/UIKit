@@ -5,6 +5,19 @@ plugins {
     alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    `maven-publish`
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "com.millentec.uikit"
+            artifactId = "uikit"
+            version = "0.0.1-dev"
+
+            from(components["kotlin"])
+        }
+    }
 }
 
 kotlin {
