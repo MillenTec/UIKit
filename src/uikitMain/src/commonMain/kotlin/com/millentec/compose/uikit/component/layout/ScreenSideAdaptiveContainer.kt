@@ -189,8 +189,7 @@ fun ScreenSideAdaptiveContainer(
                         shadow = UIKitShadowMaterial.getShadow()
                     ) else Modifier)
                 .clip(RoundedCornerShape(state.cornerRadius))
-                .background(if (acrylicEffectEnabled && acrylicState != null)
-                    Color.Transparent else background)
+                .background(background)
                 .then(if (state.fillWidth) Modifier.fillMaxWidth() else Modifier.width(state.width))
                 .then(if (state.fillHeight) Modifier.fillMaxHeight() else Modifier.height(state.height))
                 .then(if (acrylicEffectEnabled && acrylicState != null) Modifier.acrylicMaterial(

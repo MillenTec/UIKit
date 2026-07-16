@@ -42,11 +42,35 @@ data class UIKitColors(
 
     val highlightColorPrimaryBrush: Color = Color(0xFF0071E3),
 
-    val highlightColorSecondaryBrush: Color = Color(0xAA0071E3),
+    val highlightColorSecondaryBrush: Color = highlightColorPrimaryBrush.copy(0.75f),
 
-    val highlightColorTertiaryBrush: Color = Color(0x6C0071E3),
+    val highlightColorTertiaryBrush: Color = highlightColorPrimaryBrush.copy(0.6f),
 
-    val highlightColorLightBrush: Color = Color(0x4C0071E3),
+    val highlightColorFourthBrush: Color = highlightColorPrimaryBrush.copy(0.45f),
+
+    val successGreenColorPrimaryBrush: Color = Color(0xFF34C759),
+
+    val successGreenColorSecondaryBrush: Color = successGreenColorPrimaryBrush.copy(0.75f),
+
+    val successGreenColorTertiaryBrush: Color = successGreenColorPrimaryBrush.copy(0.6f),
+
+    val successGreenColorFourthBrush: Color = successGreenColorPrimaryBrush.copy(0.45f),
+
+    val warningYellowColorPrimaryBrush: Color = Color(0xFFFFCC00),
+
+    val warningYellowColorSecondaryBrush: Color = warningYellowColorPrimaryBrush.copy(0.75f),
+
+    val warningYellowColorTertiaryBrush: Color = warningYellowColorPrimaryBrush.copy(0.6f),
+
+    val warningYellowColorFourthBrush: Color = warningYellowColorPrimaryBrush.copy(0.45f),
+
+    val errorRedColorPrimaryBrush: Color = Color(0xFFFF383C),
+
+    val errorRedColorSecondaryBrush: Color = errorRedColorPrimaryBrush.copy(0.75f),
+
+    val errorRedColorTertiaryBrush: Color = errorRedColorPrimaryBrush.copy(0.6f),
+
+    val errorRedColorFourthBrush: Color = errorRedColorPrimaryBrush.copy(0.45f),
 
     val pointerHoverInteractionColor: Color = Color(0x2CB9B9BB),
 
@@ -80,9 +104,9 @@ data class UIKitColors(
             lineFillColorPrimaryBrush = Color(0xFF303032),
             lineFillColorDisabled = Color(0xFF4D4D4F),
             highlightColorPrimaryBrush = Color(0xFF0071E3),
-            highlightColorSecondaryBrush = Color(0xAA0071E3),
-            highlightColorTertiaryBrush = Color(0x6C0071E3),
-            highlightColorLightBrush = Color(0x4C0071E3)
+            successGreenColorPrimaryBrush = Color(0xFF30D158),
+            warningYellowColorPrimaryBrush = Color(0xFFFFD600),
+            errorRedColorPrimaryBrush = Color(0xFFFF4245)
         )
     }
 }

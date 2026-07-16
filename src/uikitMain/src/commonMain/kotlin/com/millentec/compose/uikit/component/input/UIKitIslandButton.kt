@@ -183,7 +183,7 @@ fun UIKitIslandButton(
                             }
                         )
                     } else Modifier)
-                .background(if (acrylicEffectEnabled && acrylicState != null) Color.Transparent else background)
+                .background(background)
                 .then(if (acrylicEffectEnabled && acrylicState != null) Modifier.acrylicMaterial(acrylicState) else Modifier)
         ) {
             Row(
