@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 
 data class UIKitAcrylicMaterial(
-    val radius: Int = 100,
+    val radius: Dp = 40.dp,
     val tint: Color = Color(0x4CF5F5F7),
     val secondaryTint: Color = Color(0x4C1D1D1F),
     val cpuComputationEnabled: Boolean = false,
@@ -37,13 +37,23 @@ data class UIKitShadowMaterial(
 ) {
     companion object {
         @Composable
-        fun getShadow(): Shadow = Shadow(
+        fun getPrimary(): Shadow = Shadow(
             radius = getUIKitMaterials().shadowMaterial.radius,
             spread = getUIKitMaterials().shadowMaterial.spread,
             offset = getUIKitMaterials().shadowMaterial.offset,
             color = getUIKitMaterials().shadowMaterial.color,
             alpha = getUIKitMaterials().shadowMaterial.alpha,
-            blendMode = getUIKitMaterials().shadowMaterial.blendMode,
+            blendMode = getUIKitMaterials().shadowMaterial.blendMode
+        )
+
+        @Composable
+        fun getSecondary(): Shadow = Shadow(
+            radius = getUIKitMaterials().shadowMaterial.radius / 2,
+            spread = getUIKitMaterials().shadowMaterial.spread,
+            offset = getUIKitMaterials().shadowMaterial.offset,
+            color = getUIKitMaterials().shadowMaterial.color,
+            alpha = getUIKitMaterials().shadowMaterial.alpha,
+            blendMode = getUIKitMaterials().shadowMaterial.blendMode
         )
     }
 }

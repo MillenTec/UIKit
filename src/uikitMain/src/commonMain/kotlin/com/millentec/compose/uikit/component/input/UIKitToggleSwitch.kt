@@ -115,7 +115,7 @@ fun UIKitToggleSwitch(
 
         val thumbColorAnimated by animateColorAsState(
             targetValue = if (!enabled) colors.thumbDisabled else if (checked) colors.thumbChecked else colors.thumb,
-            animationSpec = tween(if (enabled) getUIKitAnimate().transformMomentaryDurationMillis else getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
+            animationSpec = tween(if (enabled) getUIKitAnimate().transformFastDurationMillis else getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
         )
 
         val borderColorAnimated by animateColorAsState(

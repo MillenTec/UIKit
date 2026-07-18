@@ -34,7 +34,9 @@ import com.millentec.compose.uikit.views.pages.Settings
 
 @Composable
 @Preview
-fun MainViewVerticalLayoutPreview() {
+fun MainViewVerticalLayout(
+    onClick: () -> Unit = {}
+) {
     val nav = remember {
         UIKitNavigation(
             initialPage = Pages.Home,
@@ -209,7 +211,7 @@ fun MainViewVerticalLayoutPreview() {
         UIKitIslandButton(
             modifier = Modifier
                 .fillMaxSize(),
-            onClicked = {},
+            onClicked = { onClick() },
             items = listOf(
                 {
                     Icon(

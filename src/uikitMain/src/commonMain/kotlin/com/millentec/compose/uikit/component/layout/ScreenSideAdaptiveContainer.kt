@@ -186,7 +186,7 @@ fun ScreenSideAdaptiveContainer(
                 .then(if (shadowEnable && getUIKitMaterials().shadowMaterial.shadowEnable)
                     Modifier.dropShadow(
                         shape = RoundedCornerShape(state.cornerRadius),
-                        shadow = UIKitShadowMaterial.getShadow()
+                        shadow = UIKitShadowMaterial.getSecondary()
                     ) else Modifier)
                 .clip(RoundedCornerShape(state.cornerRadius))
                 .background(background)

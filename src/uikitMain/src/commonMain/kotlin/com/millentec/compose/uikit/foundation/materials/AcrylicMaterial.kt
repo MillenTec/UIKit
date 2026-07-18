@@ -7,6 +7,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import com.millentec.compose.uikit.theme.getUIKitMaterials
 import com.millentec.compose.uikit.theme.getUIKitShapes
 import com.skydoves.cloudy.Sky
@@ -46,16 +48,23 @@ fun Modifier.acrylicMaterial(
     shape = shape,
     sky = state._sky,
     tint = getUIKitMaterials().acrylicMaterial.tint,
-    radius = getUIKitMaterials().acrylicMaterial.radius,
+    radius = (getUIKitMaterials().acrylicMaterial.radius * LocalDensity.current.density).value.toInt(),
     cpuBlurEnabled = getUIKitMaterials().acrylicMaterial.cpuComputationEnabled
 ).then(if (getUIKitMaterials().acrylicMaterial.lightingEffectsEnabled)
-    Modifier.border(
+    this.border(
         width = getUIKitMaterials().acrylicMaterial.edgeHighlightThickness,
         brush = getUIKitMaterials().acrylicMaterial.edgeHighlightColor,
         shape = RoundedCornerShape(getUIKitShapes().circular)
-    ) else Modifier)
+    ) else this)
 
 @Composable
 fun Modifier.acrylicMaterialSource(
     state: AcrylicMaterialsState
-) = Modifier.sky(state._sky)
+) = this.sky(state._sky)
+
+@Composable
+fun Modifier.selfBlur(
+    radius: Dp,
+) = this.cloudy(
+    radius = (radius * LocalDensity.current.density).value.toInt()
+)

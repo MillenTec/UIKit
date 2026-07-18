@@ -500,7 +500,7 @@ fun UIKitSlider(
                         scaleY = thumbScaleAnimated,
                     )
                     .dropShadow(
-                        shadow = UIKitShadowMaterial.getShadow(),
+                        shadow = UIKitShadowMaterial.getSecondary(),
                         shape = RoundedCornerShape(getUIKitShapes().circular)
                     )
                     .clip(RoundedCornerShape(getUIKitShapes().circular))
