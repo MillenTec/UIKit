@@ -2,16 +2,18 @@
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.BackHandler
-import com.millentec.compose.uikit.component.input.UIKitIslandButton
 import com.millentec.compose.uikit.component.input.UIKitNavigationDock
 import com.millentec.compose.uikit.component.input.UIKitNavigationItem
 import com.millentec.compose.uikit.component.layout.ScreenSideAdaptiveContainerState
@@ -21,59 +23,26 @@ import com.millentec.compose.uikit.foundation.LayoutPosition
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialsState
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
-import com.millentec.compose.uikit.navigation.UIKitNavigation
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Add
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Home
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.toggleMultiple
 import com.millentec.compose.uikit.theme.AppTheme
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
 import com.millentec.compose.uikit.theme.getUIKitShapes
-import com.millentec.compose.uikit.views.pages.Controls
-import com.millentec.compose.uikit.views.pages.Designs
-import com.millentec.compose.uikit.views.pages.Home
-import com.millentec.compose.uikit.views.pages.Settings
+import com.millentec.compose.uikit.viewmodels.MainViewModel
+import com.millentec.compose.uikit.views.pages.*
 
 @Composable
 @Preview
-fun MainViewVerticalLayout(
-    onClick: () -> Unit = {}
-) {
-    val nav = remember {
-        UIKitNavigation(
-            initialPage = Pages.Home,
-            homePage = Pages.Home
-        )
-    }
+fun MainViewVerticalLayout() {
+    val nav = MainViewModel.navigation
 
     val page by nav.page.collectAsState()
     val navAnimate by nav.pageSwitchAnimate.collectAsState()
     val hasHistoryPages by nav.hasHistoryPages.collectAsState()
     val acrylicEnabled by AppTheme.useAcrylic.collectAsState()
-
-    val items = remember {
-        mutableStateListOf<@Composable BoxScope.() -> Unit>(
-            {
-                Icon(
-                    imageVector = FluentIcons.Home,
-                    contentDescription = null,
-                    tint = getUIKitColors().textFillColorPrimaryBrush
-                )
-            },
-            {
-                Icon(
-                    imageVector = FluentIcons.Add,
-                    contentDescription = null,
-                    tint = getUIKitColors().textFillColorPrimaryBrush
-                )
-            },
-            {
-                Icon(
-                    imageVector = FluentIcons.designIdeas(),
-                    contentDescription = null,
-                    tint = getUIKitColors().textFillColorPrimaryBrush
-                )
-            }
-        )
-    }
 
     val acrylicMaterialsState = rememberAcrylicMaterialsState()
 
@@ -87,7 +56,7 @@ fun MainViewVerticalLayout(
             nav.goBack()
         }
 
-        LaunchedEffect(maxWidth, maxHeight) {
+        LaunchedEffect(maxWidth, maxHeight, page) {
             acrylicMaterialsState.invalidate()
         }
 
@@ -100,30 +69,11 @@ fun MainViewVerticalLayout(
                 transitionSpec = { navAnimate }
             ) {
                 when (it) {
-                    Pages.Home -> Home(
-                        onAdd = {
-                            items.add(
-                                {
-                                    Icon(
-                                        imageVector = FluentIcons.Apps,
-                                        contentDescription = null,
-                                        tint = getUIKitColors().textFillColorPrimaryBrush
-                                    )
-                                }
-                            )
-                        },
-                        onRemove = {
-                            items.removeAt(items.size - 1)
-                        },
-                        onChange = {
-                            val item0 = items[0]
-                            items[0] = items[1]
-                            items[1] = item0
-                        }
-                    )
+                    Pages.Home -> Home()
                     Pages.Controls -> Controls()
                     Pages.Design -> Designs()
                     Pages.Settings -> Settings()
+                    Pages.Icons -> IconsGallery()
                 }
             }
         }
@@ -151,6 +101,7 @@ fun MainViewVerticalLayout(
         UIKitNavigationDock(
             modifier = Modifier
                 .fillMaxSize(),
+            visible = MainViewModel.navigationDockVisible.collectAsState().value,
             mainIslandState = mainIslandState,
             independentIslandState = independentIslandState,
             acrylicEffectEnabled = acrylicEnabled,
@@ -185,55 +136,6 @@ fun MainViewVerticalLayout(
                 )
             },
             maxWidth = 600.dp
-        )
-
-        UIKitIslandButton(
-            modifier = Modifier
-                .fillMaxSize(),
-            onClicked = {},
-            items = items,
-            state = rememberScreenSideAdaptiveContainerState(
-                position = LayoutPosition.TopRight,
-                fillWidth = false,
-                fillHeight = false,
-                minMargin = independentIslandState.margins.calculateEndPadding(LocalLayoutDirection.current),
-                maxMargin = independentIslandState.margins.calculateEndPadding(LocalLayoutDirection.current)
-            ),
-            acrylicEffectEnabled = acrylicEnabled,
-            acrylicState = acrylicMaterialsState,
-            shadowEnable = acrylicEnabled,
-            dividerColor = if (AppTheme.theme.collectAsState().value == AppTheme.themeLight) {
-                getUIKitColors().lineFillColorPrimaryBrush.copy(alpha = 0.75f)
-            } else Color(0x4C000000),
-            maxWidth = 200.dp
-        )
-
-        UIKitIslandButton(
-            modifier = Modifier
-                .fillMaxSize(),
-            onClicked = { onClick() },
-            items = listOf(
-                {
-                    Icon(
-                        imageVector = FluentIcons.Apps,
-                        contentDescription = null,
-                        tint = getUIKitColors().textFillColorPrimaryBrush
-                    )
-                }
-            ),
-            state = rememberScreenSideAdaptiveContainerState(
-                position = LayoutPosition.TopLeft,
-                fillWidth = false,
-                fillHeight = false,
-                minMargin = mainIslandState.margins.calculateStartPadding(LocalLayoutDirection.current),
-                maxMargin = mainIslandState.margins.calculateStartPadding(LocalLayoutDirection.current)
-            ),
-            acrylicEffectEnabled = acrylicEnabled,
-            acrylicState = acrylicMaterialsState,
-            shadowEnable = acrylicEnabled,
-            dividerColor = if (AppTheme.theme.collectAsState().value == AppTheme.themeLight) {
-                getUIKitColors().lineFillColorPrimaryBrush.copy(alpha = 0.75f)
-            } else Color(0x4C000000)
         )
     }
 }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -24,10 +25,16 @@ import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
 import com.millentec.compose.uikit.theme.getUIKitShapes
 import com.millentec.compose.uikit.theme.getUIKitTypography
+import com.millentec.compose.uikit.viewmodels.MainViewModel
 
 @Composable
 @Preview
 fun Controls() {
+
+    LaunchedEffect(Unit) {
+        MainViewModel.navigationDockVisible(true)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()

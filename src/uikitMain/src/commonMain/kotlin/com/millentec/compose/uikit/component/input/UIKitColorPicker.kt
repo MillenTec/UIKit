@@ -34,7 +34,7 @@ import kotlin.math.min
 private fun Preview() {
     Column {
         UIKitHSVColorPicker(
-            initialColor = Color.White.toHsv(),
+            color = Color.White.toHsv(),
             onColorChange = {},
         )
     }
@@ -62,7 +62,7 @@ fun Color.toHsv(): UIKitHSVColor {
 
     val finalH = if (h < 0) h + 360f else h
 
-    return UIKitHSVColor(finalH, s, max)
+    return UIKitHSVColor(finalH, s, max, this.alpha)
 }
 
 data class UIKitColorSV(
@@ -637,7 +637,7 @@ fun UIKitSVPlane(
 fun UIKitHSVColorPicker(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    initialColor: UIKitHSVColor = Color.White.toHsv(),
+    color: UIKitHSVColor = Color.White.toHsv(),
     onColorChange: (UIKitHSVColor) -> Unit,
     hasColorPreviewBox: Boolean = true,
     hasAlphaSlider: Boolean = true,
@@ -648,13 +648,22 @@ fun UIKitHSVColorPicker(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         val uiKitAnimate = getUIKitAnimate()
-        val hue = remember { mutableStateOf(initialColor.hue) }
+        val hue = remember { mutableStateOf(color.hue) }
         val svPlaneThumbSize = 12.dp
         val colorSv = remember { mutableStateOf(UIKitColorSV(
-            initialColor.saturation,
-            initialColor.value,
+            color.saturation,
+            color.value,
         )) }
         val alpha = remember { mutableStateOf(1f) }
+
+        LaunchedEffect(color) {
+            hue.value = color.hue
+            colorSv.value = UIKitColorSV(
+                color.saturation,
+                color.value,
+            )
+            alpha.value = color.alpha
+        }
 
         LaunchedEffect(hue.value, colorSv.value, alpha.value) {
             onColorChange(UIKitHSVColor(

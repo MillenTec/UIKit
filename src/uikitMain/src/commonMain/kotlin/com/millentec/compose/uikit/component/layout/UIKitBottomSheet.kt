@@ -3,9 +3,8 @@
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,10 +29,7 @@ import com.millentec.compose.uikit.foundation.uikitSwipeable
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Checkmark
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Dismiss
-import com.millentec.compose.uikit.theme.getUIKitAnimate
-import com.millentec.compose.uikit.theme.getUIKitColors
-import com.millentec.compose.uikit.theme.getUIKitLayout
-import com.millentec.compose.uikit.theme.getUIKitShapes
+import com.millentec.compose.uikit.theme.*
 import com.skydoves.cloudy.cloudy
 import kotlinx.coroutines.coroutineScope
 import kotlin.math.abs
@@ -44,18 +40,25 @@ private fun Preview() {
     UIKitBottomSheet(
         modifier = Modifier
             .fillMaxSize(),
-        expanded = true,
-        onExpandedChange = {},
+        state = UIKitBottomSheetState(
+            true, {}
+        ),
         leftButton = FluentIcons.Dismiss,
-        rightButton = FluentIcons.Checkmark
+        rightButton = FluentIcons.Checkmark,
+        title = "Sheet"
     ) {
         Spacer(Modifier.height(500.dp))
     }
 }
 
-class UIKitBottomSheetState {
+class UIKitBottomSheetState(
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit
+) {
     val offset = mutableStateOf<Dp?>(null)
     val size = mutableStateOf<IntSize?>(null)
+    val expanded = mutableStateOf(expanded)
+    val onExpandedChange = mutableStateOf(onExpandedChange)
 }
 
 @Composable
@@ -106,9 +109,7 @@ fun Modifier.uikitBottomSheetCollaborativeAnimation(
 @Composable
 fun UIKitBottomSheet(
     modifier: Modifier = Modifier,
-    expanded: Boolean,
-    onExpandedChange: (Boolean) -> Unit,
-    state: UIKitBottomSheetState = UIKitBottomSheetState(),
+    state: UIKitBottomSheetState,
     background: Color = getUIKitColors().contentFillColorPrimaryBrush,
     cornerRadius: Dp = getUIKitShapes().largeRounded,
     maxWidth: Dp = (-1).dp,
@@ -129,6 +130,8 @@ fun UIKitBottomSheet(
     onLeftButtonClick: () -> Unit = {},
     onRightButtonClick: () -> Unit = {},
     stripColor: Color = getUIKitColors().contentFillColorTertiaryBrush,
+    stripVisible: Boolean = true,
+    title: String? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
     BoxWithConstraints {
@@ -138,7 +141,7 @@ fun UIKitBottomSheet(
         val isRender = remember(content) { mutableStateOf(true) }
         val isOffsetChangeWithAnimate = remember { mutableStateOf(false) }
         val containerSize = remember { mutableStateOf(IntSize.Zero) }
-        val containerOffset = remember(content) { mutableStateOf(if (expanded) 0.dp else this@BoxWithConstraints.maxHeight) }
+        val containerOffset = remember(content) { mutableStateOf(if (state.expanded.value) 0.dp else this@BoxWithConstraints.maxHeight) }
         val containerOffsetAnimated = remember {
             Animatable(
                 initialValue = containerOffset.value,
@@ -150,8 +153,8 @@ fun UIKitBottomSheet(
             state.size.value = containerSize.value
         }
 
-        LaunchedEffect(expanded, containerSize.value.height) {
-            if (expanded) {
+        LaunchedEffect(state.expanded.value, containerSize.value.height) {
+            if (state.expanded.value) {
                 isOffsetChangeWithAnimate.value = true
                 containerOffset.value = 0.dp
             } else {
@@ -173,7 +176,7 @@ fun UIKitBottomSheet(
                         if (abs(containerOffset.value.value - containerOffsetAnimated.value.value) >= containerSize.value.height / densityDpi) {
                             uiKitAnimate.motionMediumDurationMillis
                         } else uiKitAnimate.motionFastDurationMillis,
-                        easing = if (expanded || containerOffsetAnimated.value == 0.dp) FastOutSlowInEasing else LinearOutSlowInEasing
+                        easing = if (state.expanded.value || containerOffsetAnimated.value == 0.dp) FastOutSlowInEasing else LinearOutSlowInEasing
                     )
                 )
                 isOffsetChangeWithAnimate.value = false
@@ -208,7 +211,6 @@ fun UIKitBottomSheet(
                         )
                         .background(background)
                         .onSizeChanged {
-                            println(it)
                             if (it.height != 0)
                                 containerSize.value = it
                         }
@@ -225,7 +227,7 @@ fun UIKitBottomSheet(
                                 },
                                 onDragEnd = {
                                     if (containerOffset.value > (containerSize.value.height / densityDpi).dp / 2) {
-                                        onExpandedChange(false)
+                                        state.onExpandedChange.value(false)
                                     } else {
                                         isOffsetChangeWithAnimate.value = true
                                         containerOffset.value = 0.dp
@@ -236,9 +238,8 @@ fun UIKitBottomSheet(
                                     containerOffset.value = 0.dp
                                 },
                                 onSwipeDown = {
-                                    println("swipe down")
                                     isOffsetChangeWithAnimate.value = true
-                                    onExpandedChange(false)
+                                    state.onExpandedChange.value(false)
                                 }
                             ),
                         contentAlignment = Alignment.TopCenter
@@ -248,13 +249,25 @@ fun UIKitBottomSheet(
                                 .padding(getUIKitLayout().basicSpacing),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(getUIKitShapes().circular))
-                                    .height(4.dp)
-                                    .fillMaxWidth(0.3f)
-                                    .background(stripColor)
-                            )
+                            if (stripVisible) {
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(getUIKitShapes().circular))
+                                        .height(4.dp)
+                                        .fillMaxWidth(0.3f)
+                                        .background(stripColor)
+                                )
+                            }
+
+                            if (title != null) {
+                                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                                Text(
+                                    text = title,
+                                    style = getUIKitTypography().body,
+                                    color = getUIKitColors().textFillColorSecondaryBrush
+                                )
+                            }
                         }
 
                         Row(
@@ -290,8 +303,7 @@ fun UIKitBottomSheet(
 
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .verticalScroll(rememberScrollState()),
+                            .fillMaxWidth(),
                         content = content
                     )
                 }

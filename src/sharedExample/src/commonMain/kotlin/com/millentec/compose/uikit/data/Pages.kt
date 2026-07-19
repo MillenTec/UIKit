@@ -4,5 +4,7 @@ enum class Pages {
     Home,
     Controls,
     Design,
-    Settings
+    Settings,
+
+    Icons
 }
