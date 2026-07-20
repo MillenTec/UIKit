@@ -17,6 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import com.millentec.compose.uikit.component.info.UIKitInfoCard
+import com.millentec.compose.uikit.component.info.UIKitInfoCardType
+import com.millentec.compose.uikit.component.info.UIKitInfoCardType.*
 import com.millentec.compose.uikit.component.input.*
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
@@ -227,6 +230,54 @@ fun Controls() {
                 onCheckedChange = {
                     enabled.value = it
                 }
+            )
+
+            UIKitInfoCard(
+                modifier = Modifier.fillMaxWidth(),
+                clickable = true,
+                type = Info,
+                title = "Info",
+                body = "This the body."
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            UIKitInfoCard(
+                modifier = Modifier.fillMaxWidth(),
+                clickable = true,
+                type = HighlightInfo,
+                title = "Highlight Info",
+                body = "This the body."
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            UIKitInfoCard(
+                modifier = Modifier.fillMaxWidth(),
+                clickable = true,
+                type = Success,
+                title = "Success",
+                body = "This the body."
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            UIKitInfoCard(
+                modifier = Modifier.fillMaxWidth(),
+                clickable = true,
+                type = Warning,
+                title = "Warning",
+                body = "This the body."
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            UIKitInfoCard(
+                modifier = Modifier.fillMaxWidth(),
+                clickable = true,
+                type = UIKitInfoCardType.Error,
+                title = "Error",
+                body = "This the body."
             )
 
             Spacer(Modifier.height(getUIKitLayout().x4Spacing))
