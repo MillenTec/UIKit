@@ -12,7 +12,7 @@ fun FluentIcons.addCircle(
     primary: Brush,
     secondary: Brush,
 ): ImageVector {
-    val imageVector: ImageVector = ImageVector.Builder(
+    return ImageVector.Builder(
         name = "AddCircle",
         defaultWidth = 20.dp,
         defaultHeight = 20.dp,
@@ -54,8 +54,6 @@ fun FluentIcons.addCircle(
             close()
         }
     }.build()
-
-    return imageVector
 }
 
 fun FluentIcons.addCircle(): ImageVector {

@@ -184,7 +184,7 @@ private fun OptionsWindow(
                 tintColorPickerExpanded.value = !tintColorPickerExpanded.value
             },
             title = "Tint Color",
-            icon = FluentIcons.wand(getUIKitColors().textFillColorSecondaryBrush, true),
+            icon = FluentIcons.PaintBrush,
         ) {
             UIKitHSVColorPicker(
                 color = tintColor.value,
@@ -265,7 +265,7 @@ private fun OptionsWindow(
                 backgroundColorPickerExpanded.value = !backgroundColorPickerExpanded.value
             },
             title = "Background Color",
-            icon = FluentIcons.wand(getUIKitColors().textFillColorSecondaryBrush, true),
+            icon = FluentIcons.PaintBucket,
         ) {
             UIKitHSVColorPicker(
                 color = backgroundColor.value,

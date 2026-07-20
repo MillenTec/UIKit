@@ -15,7 +15,7 @@ fun FluentIcons.layerDiagonalSparkle(
     starPrimary: Brush,
     starSecondary: Brush
 ): ImageVector {
-    val imageVector: ImageVector = ImageVector.Builder(
+    return ImageVector.Builder(
         name = "LayerDiagonalSparkle",
         defaultWidth = 20.dp,
         defaultHeight = 20.dp,
@@ -157,8 +157,6 @@ fun FluentIcons.layerDiagonalSparkle(
             close()
         }
     }.build()
-
-    return imageVector
 }
 
 fun FluentIcons.layerDiagonalSparkle(): ImageVector {

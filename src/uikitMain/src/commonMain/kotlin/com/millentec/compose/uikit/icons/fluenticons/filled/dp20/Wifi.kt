@@ -14,7 +14,7 @@ fun FluentIcons.Filled.wifi(
     tertiary: Brush,
     fourth: Brush
 ): ImageVector {
-    val imageVector: ImageVector = ImageVector.Builder(
+    return ImageVector.Builder(
         name = "Wifi",
         defaultWidth = 20.dp,
         defaultHeight = 20.dp,
@@ -72,8 +72,6 @@ fun FluentIcons.Filled.wifi(
             close()
         }
     }.build()
-
-    return imageVector
 }
 
 fun FluentIcons.Filled.wifi(): ImageVector {

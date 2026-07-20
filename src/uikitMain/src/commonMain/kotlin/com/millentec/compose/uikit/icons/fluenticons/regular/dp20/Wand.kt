@@ -12,7 +12,7 @@ fun FluentIcons.wand(
     primary: Brush,
     secondary: Brush
 ): ImageVector {
-    val imageVector: ImageVector = ImageVector.Builder(
+    return ImageVector.Builder(
         name = "Wand",
         defaultWidth = 20.dp,
         defaultHeight = 20.dp,
@@ -100,8 +100,6 @@ fun FluentIcons.wand(
             close()
         }
     }.build()
-
-    return imageVector
 }
 
 fun FluentIcons.wand(): ImageVector {

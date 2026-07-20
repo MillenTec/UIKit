@@ -13,7 +13,7 @@ fun FluentIcons.Filled.toggleMultiple(
     secondary: Brush,
     includeThumb: Boolean
 ): ImageVector {
-    val imageVector: ImageVector = ImageVector.Builder(
+    return ImageVector.Builder(
         name = "ToggleMultiple",
         defaultWidth = 20.dp,
         defaultHeight = 20.dp,
@@ -67,8 +67,6 @@ fun FluentIcons.Filled.toggleMultiple(
             }
         }
     }.build()
-
-    return imageVector
 }
 
 fun FluentIcons.Filled.toggleMultiple(): ImageVector {

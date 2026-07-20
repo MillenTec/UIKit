@@ -42,35 +42,35 @@ data class UIKitColors(
 
     val highlightColorPrimaryBrush: Color = Color(0xFF0071E3),
 
-    val highlightColorSecondaryBrush: Color = highlightColorPrimaryBrush.copy(0.75f),
+    val highlightColorSecondaryBrush: Color = highlightColorPrimaryBrush.copy(0.6f),
 
-    val highlightColorTertiaryBrush: Color = highlightColorPrimaryBrush.copy(0.6f),
+    val highlightColorTertiaryBrush: Color = highlightColorPrimaryBrush.copy(0.3f),
 
-    val highlightColorFourthBrush: Color = highlightColorPrimaryBrush.copy(0.45f),
+    val highlightColorFourthBrush: Color = highlightColorPrimaryBrush.copy(0.15f),
 
     val successGreenColorPrimaryBrush: Color = Color(0xFF34C759),
 
-    val successGreenColorSecondaryBrush: Color = successGreenColorPrimaryBrush.copy(0.75f),
+    val successGreenColorSecondaryBrush: Color = successGreenColorPrimaryBrush.copy(0.6f),
 
-    val successGreenColorTertiaryBrush: Color = successGreenColorPrimaryBrush.copy(0.6f),
+    val successGreenColorTertiaryBrush: Color = successGreenColorPrimaryBrush.copy(0.3f),
 
-    val successGreenColorFourthBrush: Color = successGreenColorPrimaryBrush.copy(0.45f),
+    val successGreenColorFourthBrush: Color = successGreenColorPrimaryBrush.copy(0.15f),
 
     val warningYellowColorPrimaryBrush: Color = Color(0xFFFFCC00),
 
-    val warningYellowColorSecondaryBrush: Color = warningYellowColorPrimaryBrush.copy(0.75f),
+    val warningYellowColorSecondaryBrush: Color = warningYellowColorPrimaryBrush.copy(0.6f),
 
-    val warningYellowColorTertiaryBrush: Color = warningYellowColorPrimaryBrush.copy(0.6f),
+    val warningYellowColorTertiaryBrush: Color = warningYellowColorPrimaryBrush.copy(0.3f),
 
-    val warningYellowColorFourthBrush: Color = warningYellowColorPrimaryBrush.copy(0.45f),
+    val warningYellowColorFourthBrush: Color = warningYellowColorPrimaryBrush.copy(0.15f),
 
     val errorRedColorPrimaryBrush: Color = Color(0xFFFF383C),
 
-    val errorRedColorSecondaryBrush: Color = errorRedColorPrimaryBrush.copy(0.75f),
+    val errorRedColorSecondaryBrush: Color = errorRedColorPrimaryBrush.copy(0.6f),
 
-    val errorRedColorTertiaryBrush: Color = errorRedColorPrimaryBrush.copy(0.6f),
+    val errorRedColorTertiaryBrush: Color = errorRedColorPrimaryBrush.copy(0.3f),
 
-    val errorRedColorFourthBrush: Color = errorRedColorPrimaryBrush.copy(0.45f),
+    val errorRedColorFourthBrush: Color = errorRedColorPrimaryBrush.copy(0.15f),
 
     val pointerHoverInteractionColor: Color = Color(0x2CB9B9BB),
 

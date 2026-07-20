@@ -12,7 +12,7 @@ fun FluentIcons.Filled.designIdeas(
     primary: Brush,
     secondary: Brush,
 ): ImageVector {
-    val imageVector: ImageVector = ImageVector.Builder(
+    return ImageVector.Builder(
         name = "DesignIdeas",
         defaultWidth = 20.dp,
         defaultHeight = 20.dp,
@@ -100,8 +100,6 @@ fun FluentIcons.Filled.designIdeas(
             close()
         }
     }.build()
-
-    return imageVector
 }
 
 fun FluentIcons.Filled.designIdeas(): ImageVector {

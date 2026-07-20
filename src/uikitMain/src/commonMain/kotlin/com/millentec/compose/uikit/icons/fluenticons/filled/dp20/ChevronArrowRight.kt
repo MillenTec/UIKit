@@ -19,7 +19,7 @@ val FluentIcons.Filled.ChevronArrowRight: ImageVector
             viewportWidth = 20f,
             viewportHeight = 20f
         ).apply {
-            path(fill = SolidColor(Color(0xFF212121))) {
+            path(fill = SolidColor(Color(0xFF1D1D1F))) {
                 moveTo(7.733f, 4.207f)
                 curveTo(8.033f, 3.921f, 8.507f, 3.933f, 8.793f, 4.233f)
                 lineTo(13.794f, 9.483f)

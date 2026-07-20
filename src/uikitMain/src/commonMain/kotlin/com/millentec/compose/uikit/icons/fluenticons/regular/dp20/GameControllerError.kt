@@ -12,7 +12,7 @@ fun FluentIcons.gameControllerError(
     primary: Brush,
     secondary: Brush,
 ): ImageVector {
-    val imageVector = ImageVector.Builder(
+    return ImageVector.Builder(
         name = "GameControllerError",
         defaultWidth = 20.dp,
         defaultHeight = 20.dp,
@@ -90,8 +90,6 @@ fun FluentIcons.gameControllerError(
             close()
         }
     }.build()
-
-    return imageVector
 }
 
 fun FluentIcons.gameControllerError(): ImageVector {

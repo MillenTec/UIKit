@@ -12,7 +12,7 @@ fun FluentIcons.warning(
     primary: Brush,
     secondary: Brush,
 ): ImageVector {
-    val imageVector: ImageVector = ImageVector.Builder(
+    return ImageVector.Builder(
         name = "Warning",
         defaultWidth = 20.dp,
         defaultHeight = 20.dp,
@@ -54,8 +54,6 @@ fun FluentIcons.warning(
             close()
         }
     }.build()
-
-    return imageVector
 }
 
 fun FluentIcons.warning(): ImageVector {

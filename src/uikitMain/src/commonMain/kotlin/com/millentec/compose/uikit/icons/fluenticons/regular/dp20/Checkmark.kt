@@ -19,7 +19,7 @@ val FluentIcons.Checkmark: ImageVector
             viewportWidth = 20f,
             viewportHeight = 20f
         ).apply {
-            path(fill = SolidColor(Color(0xFF212121))) {
+            path(fill = SolidColor(Color(0xFF1D1D1F))) {
                 moveTo(3.374f, 10.168f)
                 curveTo(3.19f, 9.961f, 2.874f, 9.943f, 2.668f, 10.126f)
                 curveTo(2.461f, 10.31f, 2.443f, 10.626f, 2.626f, 10.832f)

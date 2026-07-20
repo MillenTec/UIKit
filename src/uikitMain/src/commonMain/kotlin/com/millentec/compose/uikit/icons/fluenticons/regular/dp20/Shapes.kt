@@ -12,7 +12,7 @@ fun FluentIcons.shapes(
     primary: Brush,
     secondary: Brush
 ): ImageVector {
-    val imageVector: ImageVector = ImageVector.Builder(
+    return ImageVector.Builder(
         name = "Shapes",
         defaultWidth = 20.dp,
         defaultHeight = 20.dp,
@@ -54,8 +54,6 @@ fun FluentIcons.shapes(
             close()
         }
     }.build()
-
-    return imageVector
 }
 
 fun FluentIcons.shapes(): ImageVector {

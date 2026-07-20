@@ -13,7 +13,7 @@ fun FluentIcons.Filled.layerDiagonal(
     secondary: Brush,
     tertiary: Brush,
 ): ImageVector {
-    val imageVector: ImageVector = ImageVector.Builder(
+    return ImageVector.Builder(
         name = "LayerDiagonal",
         defaultWidth = 20.dp,
         defaultHeight = 20.dp,
@@ -59,8 +59,6 @@ fun FluentIcons.Filled.layerDiagonal(
             close()
         }
     }.build()
-
-    return imageVector
 }
 
 fun FluentIcons.Filled.layerDiagonal(): ImageVector {
