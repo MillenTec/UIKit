@@ -275,11 +275,11 @@ fun UIKitSlider(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     value: Float,
-    onValueChange: (Float) -> Unit,
+    onValueChange: (Float, UIKitSliderChangeType) -> Unit,
     lineWidth: Dp = if (isDesktopOS()) 5.dp else 8.dp,
     thumbSize: DpSize = if (isDesktopOS()) DpSize(18.dp, 18.dp) else DpSize(32.dp, 24.dp),
     maxValue: Float = 1f,
-    hasTick: Boolean = true,
+    hasTick: Boolean = false,
     tickStep: Float = 0.1f,
     adsorbedOntoTick: Boolean = hasTick,
     colors: UIKitSliderColors = UIKitSliderColors.default()
@@ -410,7 +410,7 @@ fun UIKitSlider(
             maxWidth = maxWidthCurrent,
             onOffsetChange = { offset: Dp, type: UIKitSliderChangeType ->
                 valueChangeType.value = type
-                onValueChange(toValue(offset))
+                onValueChange(toValue(offset), type)
             },
             onThumbPressed = {
                 thumbPressed.value = true
@@ -509,3 +509,32 @@ fun UIKitSlider(
         }
     }
 }
+
+@Composable
+fun UIKitSlider(
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    value: Float,
+    onValueChange: (Float) -> Unit,
+    lineWidth: Dp = if (isDesktopOS()) 5.dp else 8.dp,
+    thumbSize: DpSize = if (isDesktopOS()) DpSize(18.dp, 18.dp) else DpSize(32.dp, 24.dp),
+    maxValue: Float = 1f,
+    hasTick: Boolean = true,
+    tickStep: Float = 0.1f,
+    adsorbedOntoTick: Boolean = hasTick,
+    colors: UIKitSliderColors = UIKitSliderColors.default()
+) = UIKitSlider(
+    modifier = modifier,
+    enabled = enabled,
+    value = value,
+    onValueChange = { value, type ->
+        onValueChange(value)
+    },
+    lineWidth = lineWidth,
+    thumbSize = thumbSize,
+    maxValue = maxValue,
+    hasTick = hasTick,
+    tickStep = tickStep,
+    adsorbedOntoTick = adsorbedOntoTick,
+    colors = colors
+)

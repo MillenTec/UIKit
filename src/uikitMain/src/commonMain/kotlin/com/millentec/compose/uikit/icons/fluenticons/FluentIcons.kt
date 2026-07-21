@@ -2,4 +2,5 @@
 
 object FluentIcons {
     object Filled
+    object Animatable
 }
