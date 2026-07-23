@@ -14,7 +14,7 @@ import com.millentec.compose.uikit.theme.getUIKitColors
 @Composable
 @Preview
 private fun Preview() {
-    FluentIcons.AnimatableIcons.Download(
+    FluentIcons.AnimatableIcons.Upload(
         modifier = Modifier.size(50.dp),
         progress = 0.5f,
         state = Running
@@ -22,7 +22,7 @@ private fun Preview() {
 }
 
 @Composable
-fun FluentIcons.AnimatableIcons.Download(
+fun FluentIcons.AnimatableIcons.Upload(
     modifier: Modifier = Modifier.size(20.dp),
     progress: Float,
     state: UIKitArrowCircleAnimateState = Running,
@@ -36,10 +36,10 @@ fun FluentIcons.AnimatableIcons.Download(
     tint = tint,
     resetProgressOnError = resetProgressOnError,
     lineWidth = lineWidth,
-    rotate = 0f
+    rotate = 180f
 )
 @Composable
-fun FluentIcons.AnimatableIcons.Download(
+fun FluentIcons.AnimatableIcons.Upload(
     modifier: Modifier = Modifier.size(20.dp),
     progress: Float,
     state: UIKitArrowCircleAnimateState = Running,
@@ -51,5 +51,5 @@ fun FluentIcons.AnimatableIcons.Download(
     state = state,
     resetProgressOnError = resetProgressOnError,
     lineWidth = lineWidth,
-    rotate = 0f
+    rotate = 180f
 )

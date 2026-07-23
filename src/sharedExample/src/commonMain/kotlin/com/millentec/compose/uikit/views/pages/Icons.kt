@@ -19,13 +19,11 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
@@ -38,15 +36,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
+import com.millentec.compose.uikit.BackHandler
 import com.millentec.compose.uikit.IconGalleryList
 import com.millentec.compose.uikit.component.input.*
 import com.millentec.compose.uikit.component.layout.*
+import com.millentec.compose.uikit.foundation.LayoutPosition
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.mapTo
+import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
+import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialsState
 import com.millentec.compose.uikit.foundation.uikitClickable
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.animatable.ArrowCircle
 import com.millentec.compose.uikit.icons.fluenticons.animatable.Download
-import com.millentec.compose.uikit.icons.fluenticons.animatable.UIKitDownloadState
+import com.millentec.compose.uikit.icons.fluenticons.animatable.UIKitArrowCircleAnimateState
+import com.millentec.compose.uikit.icons.fluenticons.animatable.Upload
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.icons.fluenticons.resizeable.shapes
 import com.millentec.compose.uikit.theme.*
@@ -561,6 +565,7 @@ private fun IconItem(
 @Preview
 fun IconsGallery() {
     val uikitTheme = getUIKitTheme()
+    val acrylicMaterialsState = rememberAcrylicMaterialsState()
     val optionsState = remember { OptionState(
         initialTint = uikitTheme.colors.textFillColorPrimaryBrush,
         initialBackground = uikitTheme.colors.contentFillColorSecondaryBrush
@@ -589,29 +594,29 @@ fun IconsGallery() {
     LaunchedEffect(checkedIconIndex.value) {
         optionsState.extendedOptions.value = null
         optionsState.iconPreview.value = if (checkedIconIndex.value == null) null else {
-            if ((checkedIconIndex.value ?: return@LaunchedEffect) < iconLists.value.regularIconsList.size) {
-                {
-                    BoxWithConstraints {
-                        Icon(
-                            modifier = Modifier
-                                .size(maxWidth * 0.6f),
-                            imageVector = iconLists.value.regularIconsList.getOrNull(checkedIconIndex.value ?: return@BoxWithConstraints) ?: return@BoxWithConstraints,
-                            contentDescription = null,
-                            tint = optionsState.tintColor.value,
-                        )
-                    }
-                }
+            val icon = if ((checkedIconIndex.value ?: return@LaunchedEffect) < iconLists.value.regularIconsList.size) {
+                iconLists.value.regularIconsList.getOrNull(checkedIconIndex.value ?: return@LaunchedEffect) ?: return@LaunchedEffect
             } else {
-                {
-                    BoxWithConstraints {
-                        Icon(
-                            modifier = Modifier
-                                .size(maxWidth * 0.6f),
-                            imageVector = iconLists.value.filledIconsList.getOrNull((checkedIconIndex.value ?: return@BoxWithConstraints) - iconLists.value.regularIconsList.size) ?: return@BoxWithConstraints,
-                            contentDescription = null,
-                            tint = optionsState.tintColor.value,
-                        )
-                    }
+                iconLists.value.filledIconsList.getOrNull((checkedIconIndex.value ?: return@LaunchedEffect) - iconLists.value.regularIconsList.size) ?: return@LaunchedEffect
+            }
+            optionsState.iconInfo.value = IconInfo(
+                iconName = icon.name,
+                iconSize = "${icon.defaultWidth.value.toString().removeSuffix(".0")} x ${icon.defaultHeight.value.toString().removeSuffix(".0")}",
+            );
+            {
+                BoxWithConstraints {
+                    Icon(
+                        modifier = Modifier
+                            .size(maxWidth * 0.6f),
+                        // 为保证能够被重组故需如此
+                        imageVector = if ((checkedIconIndex.value ?: return@BoxWithConstraints) < iconLists.value.regularIconsList.size) {
+                            iconLists.value.regularIconsList.getOrNull(checkedIconIndex.value ?: return@BoxWithConstraints) ?: return@BoxWithConstraints
+                        } else {
+                            iconLists.value.filledIconsList.getOrNull((checkedIconIndex.value ?: return@BoxWithConstraints) - iconLists.value.regularIconsList.size) ?: return@BoxWithConstraints
+                        },
+                        contentDescription = null,
+                        tint = optionsState.tintColor.value,
+                    )
                 }
             }
         }
@@ -632,7 +637,8 @@ fun IconsGallery() {
             Row {
                 LazyVerticalGrid(
                     modifier = Modifier
-                        .weight(1f),
+                        .weight(1f)
+                        .acrylicMaterialSource(acrylicMaterialsState),
                     columns = GridCells.Adaptive(minSize = 128.dp),
                     contentPadding = PaddingValues(
                         horizontal = getUIKitLayout().x4Spacing
@@ -674,6 +680,7 @@ fun IconsGallery() {
                             title = icon?.name ?: "Unknown",
                             onClick = {
                                 checkedIconIndex.value = it
+                                if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetState.expanded.value = true
                             },
                             background = optionsState.backgroundColor.value
                         ) {
@@ -710,6 +717,7 @@ fun IconsGallery() {
                             title = icon?.name ?: "Unknown",
                             onClick = {
                                 checkedIconIndex.value = it + iconLists.value.regularIconsList.size
+                                if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetState.expanded.value = true
                             },
                             background = optionsState.backgroundColor.value
                         ) {
@@ -760,6 +768,7 @@ fun IconsGallery() {
                                     iconName = item?.name ?: "Unknown",
                                     iconSize = item?.size ?: "Unknown",
                                 )
+                                if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetState.expanded.value = true
                             },
                             background = optionsState.backgroundColor.value
                         ) {
@@ -828,6 +837,33 @@ fun IconsGallery() {
                     }
                 }
             }
+
+            if (this@BoxWithConstraints.maxWidth <= 1024.dp) {
+                ScreenSideAdaptiveContainer(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    state = rememberScreenSideAdaptiveContainerState(
+                        position = LayoutPosition.BottomRight,
+                        expectHeight = getUIKitLayout().interactiveHotspot,
+                        expectWidth = getUIKitLayout().interactiveHotspot,
+                        fillWidth = false,
+                        fillHeight = false,
+                    ),
+                    acrylicEffectEnabled = true,
+                    acrylicState = acrylicMaterialsState,
+                    onClick = {
+                        bottomSheetState.expanded.value = true
+                    }
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .fillMaxSize(0.6f),
+                        imageVector = FluentIcons.options(getUIKitColors().textFillColorPrimaryBrush, true),
+                        contentDescription = "Options",
+                        tint = getUIKitColors().textFillColorPrimaryBrush
+                    )
+                }
+            }
         }
 
         UIKitBottomSheet(
@@ -841,6 +877,10 @@ fun IconsGallery() {
             OptionsWindow(
                 optionsState
             )
+        }
+
+        BackHandler(bottomSheetState.expanded.value) {
+            bottomSheetState.expanded.value = false
         }
     }
 }
@@ -864,6 +904,76 @@ private open class AnimatableIconItem(
 
     @Composable
     open fun ExtendedOptions() {}
+
+    @Composable
+    open fun CommonSlider(
+        state: MutableState<Float>,
+        iconStart: @Composable BoxScope.() -> Unit = {},
+        iconEnd: @Composable BoxScope.() -> Unit = {},
+        maxValue: Float = 1f,
+    ) {
+        val uikitTheme = getUIKitTheme()
+        val isAnimatedChange = remember { mutableStateOf(false) }
+        val value = remember { mutableStateOf(state.value) }
+        val valueAnimated = remember { Animatable(
+            initialValue = value.value,
+            typeConverter = Float.VectorConverter,
+        ) }
+
+        LaunchedEffect(value.value) {
+            if (isAnimatedChange.value) {
+                valueAnimated.animateTo(
+                    targetValue = value.value,
+                    animationSpec = tween(
+                        uikitTheme.animate.motionRegularDurationMillis,
+                        easing = FastOutSlowInEasing
+                    )
+                )
+            } else {
+                valueAnimated.snapTo(value.value)
+            }
+        }
+
+        LaunchedEffect(valueAnimated.value) {
+            state.value = valueAnimated.value
+        }
+
+        Row(
+            modifier = Modifier
+                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                .fillMaxWidth()
+                .background(getUIKitColors().contentFillColorSecondaryBrush)
+                .padding(getUIKitLayout().basicSpacing)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(22.dp),
+                contentAlignment = Alignment.Center,
+                content = iconStart
+            )
+            Spacer(Modifier.width(getUIKitLayout().smallSpacing))
+
+            UIKitSlider(
+                modifier = Modifier
+                    .weight(1f),
+                value = value.value,
+                maxValue = maxValue,
+                onValueChange = { v, type ->
+                    isAnimatedChange.value = type != UIKitSliderChangeType.ThumbDrag
+                    value.value = v
+                },
+            )
+
+            Spacer(Modifier.width(getUIKitLayout().smallSpacing))
+
+            Box(
+                modifier = Modifier
+                    .size(22.dp),
+                contentAlignment = Alignment.Center,
+                content = iconEnd
+            )
+        }
+    }
 
     @Composable
     open fun ProgressSlider() {
@@ -1109,12 +1219,13 @@ private data class StateSelectorItem(
 private fun makeAnimatableIconList(
     providedOptionsState: OptionState
 ) = listOf<AnimatableIconItem>(
-    object: AnimatableIconItem(
-        name = "Download",
+    object : AnimatableIconItem(
+        name = "ArrowCircle",
         size = "20 x 20",
         initialGeneralOptionsState = providedOptionsState
     ) {
         val resetProgressOnError = mutableStateOf(true)
+        val angle = mutableStateOf(0f)
         val autoTint = mutableStateOf(true)
 
         @Composable
@@ -1122,47 +1233,86 @@ private fun makeAnimatableIconList(
             Column {
                 StateSelector(
                     states = listOf(
-                        StateSelectorItem("Downloading") {
-                            FluentIcons.AnimatableIcons.Download(
+                        StateSelectorItem("Running") {
+                            FluentIcons.AnimatableIcons.ArrowCircle(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = progressProperty.value,
-                                state = UIKitDownloadState.Downloading,
+                                state = UIKitArrowCircleAnimateState.Running,
                                 resetProgressOnError = resetProgressOnError.value,
-                                lineWidth = lineWidthProperty.value
+                                lineWidth = lineWidthProperty.value,
+                                rotate = angle.value
                             )
                         },
                         StateSelectorItem("Stopped") {
-                            FluentIcons.AnimatableIcons.Download(
+                            FluentIcons.AnimatableIcons.ArrowCircle(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = progressProperty.value,
-                                state = UIKitDownloadState.Stopped,
+                                state = UIKitArrowCircleAnimateState.Stopped,
                                 resetProgressOnError = resetProgressOnError.value,
-                                lineWidth = lineWidthProperty.value
+                                lineWidth = lineWidthProperty.value,
+                                rotate = angle.value
                             )
                         },
                         StateSelectorItem("Error") {
-                            FluentIcons.AnimatableIcons.Download(
+                            FluentIcons.AnimatableIcons.ArrowCircle(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = if (resetProgressOnError.value) 0f else progressProperty.value,
-                                state = UIKitDownloadState.Error,
-                                lineWidth = lineWidthProperty.value
+                                state = UIKitArrowCircleAnimateState.Error,
+                                lineWidth = lineWidthProperty.value,
+                                rotate = angle.value
                             )
                         },
                         StateSelectorItem("Success") {
-                            FluentIcons.AnimatableIcons.Download(
+                            FluentIcons.AnimatableIcons.ArrowCircle(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = progressProperty.value,
-                                state = UIKitDownloadState.Success,
+                                state = UIKitArrowCircleAnimateState.Success,
                                 resetProgressOnError = resetProgressOnError.value,
-                                lineWidth = lineWidthProperty.value
+                                lineWidth = lineWidthProperty.value,
+                                rotate = angle.value
                             )
                         },
                     )
                 )
+
+                CommonSlider(
+                    state = angle,
+                    iconStart = {
+                        Icon(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .rotate(0f),
+                            imageVector = FluentIcons.arrowCircleDown(getUIKitColors().textFillColorPrimaryBrush, true),
+                            contentDescription = "Angle",
+                            tint = getUIKitColors().textFillColorPrimaryBrush,
+                        )
+                    },
+                    iconEnd = {
+                        Icon(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .rotate(225f),
+                            imageVector = FluentIcons.arrowCircleDown(getUIKitColors().textFillColorPrimaryBrush, true),
+                            contentDescription = "Angle",
+                            tint = getUIKitColors().textFillColorPrimaryBrush,
+                        )
+                    },
+                    maxValue = 360f,
+                )
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                ProgressSlider()
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                LineWidthSlider()
 
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
@@ -1186,13 +1336,96 @@ private fun makeAnimatableIconList(
                     onClick = {
                         autoTint.value = !autoTint.value
                     },
-                    icon = FluentIcons.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
+                    icon = FluentIcons.PaintBrush
                 ) {
                     UIKitToggleSwitch(
                         checked = autoTint.value,
                         onCheckedChange = { autoTint.value = it },
                     )
                 }
+            }
+        }
+
+        @Composable
+        override fun IconContent(modifier: Modifier) {
+            if (autoTint.value) {
+                FluentIcons.AnimatableIcons.ArrowCircle(
+                    modifier = modifier,
+                    progress = progressProperty.value,
+                    state = UIKitArrowCircleAnimateState.entries[stateProperty.value],
+                    resetProgressOnError = resetProgressOnError.value,
+                    lineWidth = lineWidthProperty.value,
+                    rotate = angle.value
+                )
+            } else {
+                FluentIcons.AnimatableIcons.ArrowCircle(
+                    modifier = modifier,
+                    progress = progressProperty.value,
+                    state = UIKitArrowCircleAnimateState.entries[stateProperty.value],
+                    resetProgressOnError = resetProgressOnError.value,
+                    lineWidth = lineWidthProperty.value,
+                    tint = generalOptionsStateProperty.tintColor.value,
+                    rotate = angle.value
+                )
+            }
+        }
+    },
+    object: AnimatableIconItem(
+        name = "Download",
+        size = "20 x 20",
+        initialGeneralOptionsState = providedOptionsState
+    ) {
+        val resetProgressOnError = mutableStateOf(true)
+        val autoTint = mutableStateOf(true)
+
+        @Composable
+        override fun ExtendedOptions() {
+            Column {
+                StateSelector(
+                    states = listOf(
+                        StateSelectorItem("Running") {
+                            FluentIcons.AnimatableIcons.Download(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                progress = progressProperty.value,
+                                state = UIKitArrowCircleAnimateState.Running,
+                                resetProgressOnError = resetProgressOnError.value,
+                                lineWidth = lineWidthProperty.value
+                            )
+                        },
+                        StateSelectorItem("Stopped") {
+                            FluentIcons.AnimatableIcons.Download(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                progress = progressProperty.value,
+                                state = UIKitArrowCircleAnimateState.Stopped,
+                                resetProgressOnError = resetProgressOnError.value,
+                                lineWidth = lineWidthProperty.value
+                            )
+                        },
+                        StateSelectorItem("Error") {
+                            FluentIcons.AnimatableIcons.Download(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                progress = if (resetProgressOnError.value) 0f else progressProperty.value,
+                                state = UIKitArrowCircleAnimateState.Error,
+                                lineWidth = lineWidthProperty.value
+                            )
+                        },
+                        StateSelectorItem("Success") {
+                            FluentIcons.AnimatableIcons.Download(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                progress = progressProperty.value,
+                                state = UIKitArrowCircleAnimateState.Success,
+                                resetProgressOnError = resetProgressOnError.value,
+                                lineWidth = lineWidthProperty.value
+                            )
+                        },
+                    )
+                )
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
@@ -1201,6 +1434,36 @@ private fun makeAnimatableIconList(
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
                 LineWidthSlider()
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                UIKitSettingCard(
+                    title = "Reset Progress On Error",
+                    onClick = {
+                        resetProgressOnError.value = !resetProgressOnError.value
+                    },
+                    icon = FluentIcons.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
+                ) {
+                    UIKitToggleSwitch(
+                        checked = resetProgressOnError.value,
+                        onCheckedChange = { resetProgressOnError.value = it },
+                    )
+                }
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                UIKitSettingCard(
+                    title = "Auto Tint",
+                    onClick = {
+                        autoTint.value = !autoTint.value
+                    },
+                    icon = FluentIcons.PaintBrush
+                ) {
+                    UIKitToggleSwitch(
+                        checked = autoTint.value,
+                        onCheckedChange = { autoTint.value = it },
+                    )
+                }
             }
         }
 
@@ -1210,7 +1473,7 @@ private fun makeAnimatableIconList(
                 FluentIcons.AnimatableIcons.Download(
                     modifier = modifier,
                     progress = progressProperty.value,
-                    state = UIKitDownloadState.entries[stateProperty.value],
+                    state = UIKitArrowCircleAnimateState.entries[stateProperty.value],
                     resetProgressOnError = resetProgressOnError.value,
                     lineWidth = lineWidthProperty.value
                 )
@@ -1218,10 +1481,129 @@ private fun makeAnimatableIconList(
                 FluentIcons.AnimatableIcons.Download(
                     modifier = modifier,
                     progress = progressProperty.value,
-                    state = UIKitDownloadState.entries[stateProperty.value],
+                    state = UIKitArrowCircleAnimateState.entries[stateProperty.value],
                     resetProgressOnError = resetProgressOnError.value,
                     lineWidth = lineWidthProperty.value,
-                    tint = generalOptionsStateProperty.tintColor.value
+                    tint = generalOptionsStateProperty.tintColor.value,
+                )
+            }
+        }
+    },
+    object : AnimatableIconItem(
+        name = "Upload",
+        size = "20 x 20",
+        initialGeneralOptionsState = providedOptionsState
+    ) {
+        val resetProgressOnError = mutableStateOf(true)
+        val autoTint = mutableStateOf(true)
+
+        @Composable
+        override fun ExtendedOptions() {
+            Column {
+                StateSelector(
+                    states = listOf(
+                        StateSelectorItem("Running") {
+                            FluentIcons.AnimatableIcons.Upload(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                progress = progressProperty.value,
+                                state = UIKitArrowCircleAnimateState.Running,
+                                resetProgressOnError = resetProgressOnError.value,
+                                lineWidth = lineWidthProperty.value
+                            )
+                        },
+                        StateSelectorItem("Stopped") {
+                            FluentIcons.AnimatableIcons.Upload(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                progress = progressProperty.value,
+                                state = UIKitArrowCircleAnimateState.Stopped,
+                                resetProgressOnError = resetProgressOnError.value,
+                                lineWidth = lineWidthProperty.value
+                            )
+                        },
+                        StateSelectorItem("Error") {
+                            FluentIcons.AnimatableIcons.Upload(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                progress = if (resetProgressOnError.value) 0f else progressProperty.value,
+                                state = UIKitArrowCircleAnimateState.Error,
+                                lineWidth = lineWidthProperty.value
+                            )
+                        },
+                        StateSelectorItem("Success") {
+                            FluentIcons.AnimatableIcons.Upload(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                progress = progressProperty.value,
+                                state = UIKitArrowCircleAnimateState.Success,
+                                resetProgressOnError = resetProgressOnError.value,
+                                lineWidth = lineWidthProperty.value
+                            )
+                        },
+                    )
+                )
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                ProgressSlider()
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                LineWidthSlider()
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                UIKitSettingCard(
+                    title = "Reset Progress On Error",
+                    onClick = {
+                        resetProgressOnError.value = !resetProgressOnError.value
+                    },
+                    icon = FluentIcons.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
+                ) {
+                    UIKitToggleSwitch(
+                        checked = resetProgressOnError.value,
+                        onCheckedChange = { resetProgressOnError.value = it },
+                    )
+                }
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                UIKitSettingCard(
+                    title = "Auto Tint",
+                    onClick = {
+                        autoTint.value = !autoTint.value
+                    },
+                    icon = FluentIcons.PaintBrush
+                ) {
+                    UIKitToggleSwitch(
+                        checked = autoTint.value,
+                        onCheckedChange = { autoTint.value = it },
+                    )
+                }
+            }
+        }
+
+        @Composable
+        override fun IconContent(modifier: Modifier) {
+            if (autoTint.value) {
+                FluentIcons.AnimatableIcons.Upload(
+                    modifier = modifier,
+                    progress = progressProperty.value,
+                    state = UIKitArrowCircleAnimateState.entries[stateProperty.value],
+                    resetProgressOnError = resetProgressOnError.value,
+                    lineWidth = lineWidthProperty.value
+                )
+            } else {
+                FluentIcons.AnimatableIcons.Upload(
+                    modifier = modifier,
+                    progress = progressProperty.value,
+                    state = UIKitArrowCircleAnimateState.entries[stateProperty.value],
+                    resetProgressOnError = resetProgressOnError.value,
+                    lineWidth = lineWidthProperty.value,
+                    tint = generalOptionsStateProperty.tintColor.value,
                 )
             }
         }

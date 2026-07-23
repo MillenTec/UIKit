@@ -1,9 +1,5 @@
 ﻿package com.millentec.compose.uikit.views.pages
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.VectorConverter
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -25,10 +21,7 @@ import com.millentec.compose.uikit.component.info.UIKitInfoCard
 import com.millentec.compose.uikit.component.info.UIKitInfoCardType
 import com.millentec.compose.uikit.component.info.UIKitInfoCardType.*
 import com.millentec.compose.uikit.component.input.*
-import com.millentec.compose.uikit.component.input.UIKitSliderChangeType.*
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
-import com.millentec.compose.uikit.icons.fluenticons.animatable.Download
-import com.millentec.compose.uikit.icons.fluenticons.animatable.UIKitDownloadState
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.toggleMultiple
 import com.millentec.compose.uikit.theme.*
@@ -284,123 +277,6 @@ fun Controls() {
                 type = UIKitInfoCardType.Error,
                 title = "Error",
                 body = "This the body."
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            val downloadIconValue = remember { mutableStateOf(0f) }
-            val isAnimatedChange = remember { mutableStateOf(false) }
-            val downloadIconValueAnimated = remember { Animatable(
-                initialValue = downloadIconValue.value,
-                typeConverter = Float.VectorConverter
-            ) }
-            val downloadIconLineWidth = remember { mutableStateOf(1.dp) }
-
-            LaunchedEffect(downloadIconValue.value) {
-                if (isAnimatedChange.value) {
-                    downloadIconValueAnimated.animateTo(
-                        targetValue = downloadIconValue.value,
-                        animationSpec = tween(uikitAnimate.motionFastDurationMillis, easing = FastOutSlowInEasing)
-                    )
-                    isAnimatedChange.value = false
-                } else {
-                    downloadIconValueAnimated.snapTo(downloadIconValue.value)
-                }
-            }
-
-            val downloadIconState = remember { mutableStateOf(UIKitDownloadState.Downloading) }
-
-            FluentIcons.AnimatableIcons.Download(
-                progress = downloadIconValueAnimated.value,
-                modifier = Modifier.size(100.dp),
-                state = downloadIconState.value,
-                lineWidth = downloadIconLineWidth.value,
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            UIKitSlider(
-                value = downloadIconValue.value,
-                onValueChange = { value, type ->
-                    when(type) {
-                        TrackTap -> {
-                            isAnimatedChange.value = true
-                        }
-                        ThumbDrag -> {
-                            isAnimatedChange.value = false
-                        }
-                        DragAdsorption -> {
-                            isAnimatedChange.value = true
-                        }
-                        Jump -> {
-                            isAnimatedChange.value = true
-                        }
-                    }
-                    downloadIconValue.value = value
-                },
-                maxValue = 1f,
-                hasTick = false
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            UIKitSlider(
-                value = downloadIconLineWidth.value.value,
-                onValueChange = { value, type ->
-                    when(type) {
-                        TrackTap -> {
-                            isAnimatedChange.value = true
-                        }
-                        ThumbDrag -> {
-                            isAnimatedChange.value = false
-                        }
-                        DragAdsorption -> {
-                            isAnimatedChange.value = true
-                        }
-                        Jump -> {
-                            isAnimatedChange.value = true
-                        }
-                    }
-                    downloadIconLineWidth.value = value.dp
-                },
-                maxValue = 3f,
-                hasTick = false
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            UIKitButton(
-                text = "Download",
-                onClick = {
-                    downloadIconState.value = UIKitDownloadState.Downloading
-                }
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            UIKitButton(
-                text = "Stop",
-                onClick = {
-                    downloadIconState.value = UIKitDownloadState.Stopped
-                }
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            UIKitButton(
-                text = "Error",
-                onClick = {
-                    downloadIconState.value = UIKitDownloadState.Error
-                }
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            UIKitButton(
-                text = "Success",
-                onClick = {
-                    downloadIconState.value = UIKitDownloadState.Success
-                }
             )
 
             Spacer(Modifier.height(getUIKitLayout().x4Spacing))

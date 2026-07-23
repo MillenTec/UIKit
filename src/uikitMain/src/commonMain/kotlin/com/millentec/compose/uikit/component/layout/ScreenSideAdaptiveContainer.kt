@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,8 +18,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.LayoutPosition
 import com.millentec.compose.uikit.foundation.LayoutPosition.*
+import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
+import com.millentec.compose.uikit.foundation.uikitClickable
 import com.millentec.compose.uikit.getScreenCornerRadius
 import com.millentec.compose.uikit.theme.*
 
@@ -168,19 +171,21 @@ fun rememberScreenSideAdaptiveContainerState(
 
 @Composable
 fun ScreenSideAdaptiveContainer(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxSize(),
     state: ScreenSideAdaptiveContainerState,
+    clickable: Boolean = true,
+    onClick: () -> Unit,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialsState? = null,
     shadowEnable: Boolean = true,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable BoxScope.() -> Unit
 ) {
     Box(
         modifier = modifier,
         contentAlignment = state.alignment
     ) {
-        Column(
+        Box(
             modifier = Modifier
                 .padding(state.margins)
                 .then(if (shadowEnable && getUIKitMaterials().shadowMaterial.shadowEnable)
@@ -194,8 +199,35 @@ fun ScreenSideAdaptiveContainer(
                 .then(if (state.fillHeight) Modifier.fillMaxHeight() else Modifier.height(state.height))
                 .then(if (acrylicEffectEnabled && acrylicState != null) Modifier.acrylicMaterial(
                     state = acrylicState
-                ) else Modifier),
+                ) else Modifier)
+                .uikitClickable(
+                    onClick = onClick,
+                    enabled = clickable,
+                    indication = if (isDesktopOS()) null else ripple()
+                ),
+            contentAlignment = Alignment.Center,
             content = content
         )
     }
 }
+
+@Composable
+fun ScreenSideAdaptiveContainer(
+    modifier: Modifier = Modifier.fillMaxSize(),
+    state: ScreenSideAdaptiveContainerState,
+    background: Color = getUIKitColors().contentFillColorSecondaryBrush,
+    acrylicEffectEnabled: Boolean = true,
+    acrylicState: AcrylicMaterialsState? = null,
+    shadowEnable: Boolean = true,
+    content: @Composable BoxScope.() -> Unit
+) = ScreenSideAdaptiveContainer(
+    modifier = modifier,
+    state = state,
+    clickable = false,
+    onClick = {},
+    background = background,
+    acrylicEffectEnabled = acrylicEffectEnabled,
+    acrylicState = acrylicState,
+    shadowEnable = shadowEnable,
+    content = content
+)
