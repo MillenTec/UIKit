@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 @Composable
 @Preview
 private fun Preview() {
-    FluentIcons.Animatable.Download(
+    FluentIcons.AnimatableIcons.Download(
         modifier = Modifier.size(50.dp),
         progress = 0.5f,
         state = UIKitDownloadState.Downloading
@@ -40,18 +40,19 @@ private fun Preview() {
 
 enum class UIKitDownloadState {
     Downloading,
-    Success,
     Stopped,
-    Error
+    Error,
+    Success,
 }
 
 @Composable
-fun FluentIcons.Animatable.Download(
+fun FluentIcons.AnimatableIcons.Download(
     modifier: Modifier = Modifier.size(20.dp),
     progress: Float,
     state: UIKitDownloadState = Downloading,
     tint: Color = getUIKitColors().textFillColorPrimaryBrush,
-    resetProgressOnError: Boolean = true
+    resetProgressOnError: Boolean = true,
+    lineWidth: Dp = 1.dp
 ) {
     val uikitAnimate = getUIKitAnimate()
     val defaultSize = DpSize(20.dp, 20.dp)
@@ -281,7 +282,7 @@ fun FluentIcons.Animatable.Download(
                         path = trimmedPath,
                         color = tint,
                         style = Stroke(
-                            width = 1.dp.toPx(),
+                            width = lineWidth.toPx(),
                             cap = StrokeCap.Round,
                             join = StrokeJoin.Round
                         )
@@ -291,7 +292,7 @@ fun FluentIcons.Animatable.Download(
                         path = trimmedPath1,
                         color = tint,
                         style = Stroke(
-                            width = 1.dp.toPx(),
+                            width = lineWidth.toPx(),
                             cap = StrokeCap.Round,
                             join = StrokeJoin.Round
                         )
@@ -324,7 +325,7 @@ fun FluentIcons.Animatable.Download(
                         path = trimmedPath,
                         color = tint,
                         style = Stroke(
-                            width = 1.dp.toPx(),
+                            width = lineWidth.toPx(),
                             cap = StrokeCap.Round,
                             join = StrokeJoin.Round
                         )
@@ -337,10 +338,10 @@ fun FluentIcons.Animatable.Download(
                 path = Path().apply {
                     addOval(
                         oval = Rect(
-                            size = Size(14.dp.toPx(), 14.dp.toPx()),
+                            size = Size((16.dp - lineWidth * 2).toPx(), (16.dp - lineWidth * 2).toPx()),
                             offset = Offset(
-                                x = size.height / 2 - 14.dp.toPx() / 2,
-                                y = size.width / 2 - 14.dp.toPx() / 2
+                                x = size.height / 2 - (16.dp - lineWidth * 2).toPx() / 2,
+                                y = size.width / 2 - (16.dp - lineWidth * 2).toPx() / 2
                             )
                         )
                     )
@@ -362,7 +363,7 @@ fun FluentIcons.Animatable.Download(
                             ),
                             pointMode = PointMode.Polygon,
                             color = tint,
-                            strokeWidth = 1.dp.toPx(),
+                            strokeWidth = lineWidth.toPx(),
                             cap = StrokeCap.Round,
                         )
 
@@ -370,7 +371,7 @@ fun FluentIcons.Animatable.Download(
                             color = tint,
                             start = Offset(10.dp.toPx(), 13.5.dp.toPx()),
                             end = Offset(10.dp.toPx(), 6.5.dp.toPx()),
-                            strokeWidth = 1.dp.toPx(),
+                            strokeWidth = lineWidth.toPx(),
                             cap = StrokeCap.Round
                         )
                     }
@@ -392,7 +393,7 @@ fun FluentIcons.Animatable.Download(
                         height = 15.dp.toPx()
                     ),
                     style = Stroke(
-                        width = 1.dp.toPx(),
+                        width = lineWidth.toPx(),
                         cap = StrokeCap.Round
                     )
                 )
@@ -407,7 +408,7 @@ fun FluentIcons.Animatable.Download(
                         height = 15.dp.toPx()
                     ),
                     style = Stroke(
-                        width = 1.dp.toPx(),
+                        width = lineWidth.toPx(),
                         cap = StrokeCap.Round
                     )
                 )
@@ -417,11 +418,12 @@ fun FluentIcons.Animatable.Download(
 }
 
 @Composable
-fun FluentIcons.Animatable.Download(
+fun FluentIcons.AnimatableIcons.Download(
     modifier: Modifier = Modifier.size(20.dp),
     progress: Float,
     state: UIKitDownloadState = Downloading,
     resetProgressOnError: Boolean = true,
+    lineWidth: Dp = 1.dp
 ) {
     val tintAnimated by animateColorAsState(
         targetValue = when(state) {
@@ -448,5 +450,6 @@ fun FluentIcons.Animatable.Download(
         state = state,
         tint = tintAnimated,
         resetProgressOnError = resetProgressOnError,
+        lineWidth = lineWidth
     )
 }

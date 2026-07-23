@@ -1,17 +1,20 @@
 ﻿package com.millentec.compose.uikit.views.pages
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -23,516 +26,672 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
-import com.millentec.compose.uikit.BackHandler
 import com.millentec.compose.uikit.IconGalleryList
-import com.millentec.compose.uikit.component.input.UIKitHSVColorPicker
-import com.millentec.compose.uikit.component.input.UIKitIslandButton
-import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
-import com.millentec.compose.uikit.component.input.toHsv
+import com.millentec.compose.uikit.component.input.*
 import com.millentec.compose.uikit.component.layout.*
-import com.millentec.compose.uikit.data.Pages
-import com.millentec.compose.uikit.foundation.LayoutPosition
 import com.millentec.compose.uikit.foundation.isDesktopOS
-import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
-import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialsState
+import com.millentec.compose.uikit.foundation.mapTo
 import com.millentec.compose.uikit.foundation.uikitClickable
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.animatable.Download
+import com.millentec.compose.uikit.icons.fluenticons.animatable.UIKitDownloadState
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
+import com.millentec.compose.uikit.icons.fluenticons.resizeable.shapes
 import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.viewmodels.MainViewModel
 import kotlin.math.ceil
 import kotlin.math.floor
 
-@Composable
-@Preview
-private fun OptionsWindow(
-    onTintColorChange: (Color) -> Unit = {},
-    onBackgroundColorChange: (Color) -> Unit = {},
-    onLayeredChange: (Boolean) -> Unit = {},
-    checkedIcon: ImageVector? = null,
-    initialTintColor: Color = getUIKitColors().textFillColorPrimaryBrush,
-    initialBackgroundColor: Color = getUIKitColors().contentFillColorSecondaryBrush,
+private data class IconInfo(
+    val iconName: String,
+    val iconSize: String,
+)
+
+private class OptionState(
+    initialTint: Color,
+    initialBackground: Color,
     initialLayered: Boolean = false
 ) {
-    val tintColor = remember { mutableStateOf(initialTintColor.toHsv()) }
+    val tintColor = mutableStateOf(initialTint)
+    val backgroundColor = mutableStateOf(initialBackground)
+    val isLayered = mutableStateOf(initialLayered)
+    val iconPreview = mutableStateOf<(@Composable BoxScope.() -> Unit)?>(null)
+    val extendedOptions = mutableStateOf<(@Composable ColumnScope.() -> Unit)?>(null)
+    val iconInfo = mutableStateOf<IconInfo?>(null)
+}
 
-    LaunchedEffect(tintColor.value) {
-        onTintColorChange(tintColor.value.getColor())
+@Composable
+@Preview
+private fun OptionsWindowPreview() {
+    val optionState = OptionState(
+        initialTint = getUIKitColors().textFillColorPrimaryBrush,
+        initialBackground = getUIKitColors().contentFillColorSecondaryBrush
+    )
+
+    optionState.iconPreview.value = {
+        BoxWithConstraints {
+            Icon(
+                modifier = Modifier
+                    .size(maxWidth * 0.6f),
+                imageVector = FluentIcons.Symbols,
+                contentDescription = null,
+                tint = optionState.tintColor.value,
+            )
+        }
     }
 
-    val backgroundColor = remember { mutableStateOf(initialBackgroundColor.toHsv()) }
+    optionState.iconInfo.value = IconInfo(
+        iconName = "Symbols",
+        iconSize = "20 x 20"
+    )
 
-    LaunchedEffect(backgroundColor.value) {
-        onBackgroundColorChange(backgroundColor.value.getColor())
+    OptionsWindow(
+        optionState
+    )
+}
+
+private data class OptionalColorInfo(
+    val color: Color,
+    val name: String,
+    val contentColor: Color
+)
+
+@Composable
+private fun OptionsWindow(
+    state: OptionState,
+) {
+    val tintColorPickerExpanded = remember { mutableStateOf(false) }
+    val backgroundColorPickerExpanded = remember { mutableStateOf(false) }
+    
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentPadding = PaddingValues(getUIKitLayout().x2Spacing)
+    ) {
+        item {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateContentSize(
+                        animationSpec = tween(
+                            getUIKitAnimate().motionRegularDurationMillis
+                        )
+                    )
+            ) {
+                AnimatedVisibility(
+                    visible = state.iconPreview.value != null,
+                    enter = fadeIn(animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis)),
+                    exit = fadeOut(animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis))
+                ) {
+                    Column {
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                                .fillMaxWidth()
+                                .background(getUIKitColors().contentFillColorSecondaryBrush)
+                                .padding(getUIKitLayout().mediumSpacing),
+                            contentAlignment = Alignment.Center,
+                            content = state.iconPreview.value ?: {}
+                        )
+
+                        Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+                    }
+                }
+            }
+        }
+
+        item {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateContentSize(
+                        animationSpec = tween(
+                            getUIKitAnimate().motionRegularDurationMillis
+                        )
+                    )
+            ) {
+                AnimatedVisibility(
+                    visible = state.iconPreview.value != null,
+                    enter = fadeIn(animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis)),
+                    exit = fadeOut(animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis))
+                ) {
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = "Info",
+                                style = getUIKitTypography().body,
+                                color = getUIKitColors().textFillColorSecondaryBrush
+                            )
+
+                            Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+
+                            HorizontalDivider(
+                                thickness = 1.dp,
+                                color = getUIKitColors().lineFillColorPrimaryBrush
+                            )
+                        }
+
+                        Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+                    }
+                }
+            }
+        }
+
+        item {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateContentSize(
+                        animationSpec = tween(
+                            getUIKitAnimate().motionRegularDurationMillis
+                        )
+                    )
+            ) {
+                AnimatedVisibility(
+                    visible = state.iconPreview.value != null,
+                    enter = fadeIn(animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis)),
+                    exit = fadeOut(animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis))
+                ) {
+                    Column {
+                        UIKitSettingCard(
+                            icon = FluentIcons.Tag,
+                            title = "Name",
+                            onClick = {}
+                        ) {
+                            Text(
+                                text = state.iconInfo.value?.iconName ?: "Unknown",
+                                style = getUIKitTypography().body,
+                                color = getUIKitColors().textFillColorSecondaryBrush
+                            )
+                        }
+
+                        Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+                    }
+                }
+            }
+        }
+
+        item {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateContentSize(
+                        animationSpec = tween(
+                            getUIKitAnimate().motionRegularDurationMillis
+                        )
+                    )
+            ) {
+                AnimatedVisibility(
+                    visible = state.iconPreview.value != null,
+                    enter = fadeIn(animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis)),
+                    exit = fadeOut(animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis))
+                ) {
+                    Column {
+                        UIKitSettingCard(
+                            icon = FluentIcons.Resize,
+                            title = "Size",
+                            onClick = {}
+                        ) {
+                            Text(
+                                text = state.iconInfo.value?.iconSize ?: "Unknown",
+                                style = getUIKitTypography().body,
+                                color = getUIKitColors().textFillColorSecondaryBrush
+                            )
+                        }
+
+                        Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+                    }
+                }
+            }
+        }
+
+        item {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateContentSize(
+                        animationSpec = tween(
+                            getUIKitAnimate().motionRegularDurationMillis
+                        )
+                    )
+            ) {
+                AnimatedVisibility(
+                    visible = state.extendedOptions.value != null,
+                    enter = fadeIn(animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis)),
+                    exit = fadeOut(animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis))
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "Extension",
+                            style = getUIKitTypography().body,
+                            color = getUIKitColors().textFillColorSecondaryBrush
+                        )
+
+                        Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+
+                        HorizontalDivider(
+                            thickness = 1.dp,
+                            color = getUIKitColors().lineFillColorPrimaryBrush
+                        )
+                    }
+
+                    Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+                }
+            }
+        }
+
+        item {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateContentSize(
+                        animationSpec = tween(
+                            getUIKitAnimate().motionRegularDurationMillis
+                        )
+                    )
+            ) {
+                AnimatedVisibility(
+                    visible = state.extendedOptions.value != null,
+                    enter = fadeIn(animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis)),
+                    exit = fadeOut(animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis))
+                ) {
+                    Column(
+                        content = state.extendedOptions.value ?: {}
+                    )
+                }
+            }
+        }
+
+        item {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "General",
+                    style = getUIKitTypography().body,
+                    color = getUIKitColors().textFillColorSecondaryBrush
+                )
+
+                Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = getUIKitColors().lineFillColorPrimaryBrush
+                )
+            }
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+        }
+
+        item {
+            UIKitSettingCard(
+                icon = FluentIcons.layerDiagonal(getUIKitColors().textFillColorPrimaryBrush, true),
+                title = "Layered Icon",
+                onClick = {
+                    state.isLayered.value = !state.isLayered.value
+                }
+            ) {
+                UIKitToggleSwitch(
+                    checked = state.isLayered.value,
+                    onCheckedChange = {
+                        state.isLayered.value = it
+                    }
+                )
+            }
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+        }
+        
+        item {
+            UIKitSettingsExpander(
+                expanded = tintColorPickerExpanded.value,
+                onClick = {
+                    tintColorPickerExpanded.value = !tintColorPickerExpanded.value
+                },
+                title = "Tint Color",
+                icon = FluentIcons.PaintBrush
+            ) {
+                UIKitHSVColorPicker(
+                    color = state.tintColor.value.toHsv(),
+                    onColorChange = {
+                        state.tintColor.value = it.getColor()
+                    }
+                )
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                val itemHeight = 48.dp
+
+                val optionalColor = listOf(
+                    OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrush, "Primary", getUIKitColors().contentFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrushReversed, "Reversed", getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().highlightColorPrimaryBrush, "Highlight", UIKitColors.getDark().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().successGreenColorPrimaryBrush, "Success", getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().warningYellowColorPrimaryBrush, "Warning", getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().errorRedColorPrimaryBrush, "Error", UIKitColors.getDark().textFillColorPrimaryBrush),
+                )
+
+                BoxWithConstraints {
+                    LazyVerticalGrid(
+                        modifier = Modifier
+                            .height(
+                                (ceil(optionalColor.size / floor(maxWidth / 128.dp)) * itemHeight) + getUIKitLayout().smallSpacing * ceil(optionalColor.size / floor(maxWidth / 128.dp)) * 2
+                            ),
+                        columns = GridCells.Adaptive(128.dp),
+                        userScrollEnabled = false
+                    ) {
+                        items(optionalColor.size) {
+                            Box(
+                                modifier = Modifier
+                                    .padding(getUIKitLayout().smallSpacing)
+                                    .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                                    .height(itemHeight)
+                                    .background(optionalColor[it].color)
+                                    .uikitClickable(
+                                        onClick = {
+                                            state.tintColor.value = optionalColor[it].color
+                                        },
+                                        indication = if (isDesktopOS()) null else ripple()
+                                    ),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Text(
+                                    text = optionalColor[it].name,
+                                    style = getUIKitTypography().body,
+                                    color = optionalColor[it].contentColor,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+        }
+
+        item {
+            UIKitSettingsExpander(
+                expanded = backgroundColorPickerExpanded.value,
+                onClick = {
+                    backgroundColorPickerExpanded.value = !backgroundColorPickerExpanded.value
+                },
+                title = "Background Color",
+                icon = FluentIcons.PaintBucket
+            ) {
+                UIKitHSVColorPicker(
+                    color = state.backgroundColor.value.toHsv(),
+                    onColorChange = {
+                        state.backgroundColor.value = it.getColor()
+                    }
+                )
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                val itemHeight = 48.dp
+
+                val optionalColor = listOf(
+                    OptionalColorInfo(getUIKitColors().contentFillColorPrimaryBrush, "Primary", getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().contentFillColorSecondaryBrush, "Secondary", getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().highlightColorFourthBrush, "Highlight", getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().successGreenColorFourthBrush, "Success", getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().warningYellowColorFourthBrush, "Warning", getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().errorRedColorFourthBrush, "Error", getUIKitColors().textFillColorPrimaryBrush),
+                )
+
+                BoxWithConstraints {
+                    LazyVerticalGrid(
+                        modifier = Modifier
+                            .height(
+                                (ceil(optionalColor.size / floor(maxWidth / 128.dp)) * itemHeight) + getUIKitLayout().smallSpacing * ceil(optionalColor.size / floor(maxWidth / 128.dp)) * 2
+                            ),
+                        columns = GridCells.Adaptive(128.dp),
+                        userScrollEnabled = false
+                    ) {
+                        items(optionalColor.size) {
+                            Box(
+                                modifier = Modifier
+                                    .padding(getUIKitLayout().smallSpacing)
+                                    .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                                    .height(itemHeight)
+                                    .background(optionalColor[it].color)
+                                    .uikitClickable(
+                                        onClick = {
+                                            state.backgroundColor.value = optionalColor[it].color
+                                        },
+                                        indication = if (isDesktopOS()) null else ripple()
+                                    ),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Text(
+                                    text = optionalColor[it].name,
+                                    style = getUIKitTypography().body,
+                                    color = optionalColor[it].contentColor,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+        }
     }
+}
 
+@Composable
+@Preview
+private fun IconItemPreview() {
+    Box(
+        modifier = Modifier
+            .size(128.dp)
+    ) {
+        IconItem(
+            title = "Icon",
+            onClick = {},
+            background = getUIKitColors().contentFillColorSecondaryBrush,
+        ) {
+            Icon(
+                modifier = Modifier
+                    .fillMaxSize(),
+                imageVector = FluentIcons.Tag,
+                contentDescription = null,
+                tint = getUIKitColors().textFillColorPrimaryBrush
+            )
+        }
+    }
+}
+
+@Composable
+private fun IconItem(
+    title: String,
+    onClick: () -> Unit,
+    background: Color,
+    content: @Composable () -> Unit,
+) {
     Column(
         modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(
-                horizontal = getUIKitLayout().x2Spacing,
-                vertical = if (isDesktopOS()) 0.dp else getUIKitLayout().x2Spacing
+            .aspectRatio(1f)
+            .padding(getUIKitLayout().smallSpacing)
+            .clip(RoundedCornerShape(getUIKitShapes().mediumRounded))
+            .background(background)
+            .uikitClickable(
+                onClick = onClick,
+                indication = if (isDesktopOS()) null else ripple()
             )
+            .padding(getUIKitLayout().mediumSpacing),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val layered = remember { mutableStateOf(initialLayered) }
-
-        LaunchedEffect(layered.value) {
-            onLayeredChange(layered.value)
-        }
-
-        Column(
+        Box(
             modifier = Modifier
-                .animateContentSize(
-                    animationSpec = tween(getUIKitAnimate().motionRegularDurationMillis, easing = FastOutSlowInEasing),
-                )
-                .fillMaxWidth()
+                .weight(1f)
         ) {
-            AnimatedVisibility(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                visible = checkedIcon != null,
-            ) {
-                Column {
-                    if (checkedIcon == null) return@AnimatedVisibility
-
-                    BoxWithConstraints(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
-                            .fillMaxWidth()
-                            .background(getUIKitColors().contentFillColorSecondaryBrush)
-                            .padding(getUIKitLayout().mediumSpacing),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .size(maxWidth * 0.6f),
-                            imageVector = checkedIcon,
-                            contentDescription = null,
-                            tint = tintColor.value.getColor()
-                        )
-                    }
-
-                    Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-                    UIKitSettingCard(
-                        onClick = {},
-                        title = "Name",
-                        icon = FluentIcons.Tag
-                    ) {
-                        Text(
-                            text = checkedIcon.name,
-                            style = getUIKitTypography().body,
-                            color = getUIKitColors().textFillColorSecondaryBrush
-                        )
-                    }
-
-                    Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-                    UIKitSettingCard(
-                        onClick = {},
-                        title = "Size",
-                        icon = FluentIcons.Resize
-                    ) {
-                        Text(
-                            text = "${
-                                checkedIcon.defaultWidth.value.toString().removeSuffix(".0")
-                            } x ${checkedIcon.defaultHeight.value.toString().removeSuffix(".0")}",
-                            style = getUIKitTypography().body,
-                            color = getUIKitColors().textFillColorSecondaryBrush
-                        )
-                    }
-
-                    Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-                    HorizontalDivider(
-                        thickness = 1.dp,
-                        color = getUIKitColors().lineFillColorPrimaryBrush
-                    )
-                    Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-                }
-            }
+            content()
         }
 
-        UIKitSettingCard(
-            onClick = {
-                layered.value = !layered.value
-            },
-            title = "Layered Icons",
-            icon = FluentIcons.layerDiagonal(getUIKitColors().textFillColorPrimaryBrush, true),
-            iconColor = Color.Unspecified
-        ) {
-            UIKitToggleSwitch(
-                checked = layered.value,
-                onCheckedChange = {
-                    layered.value = it
-                }
-            )
-        }
+        Spacer(Modifier.height(getUIKitLayout().smallSpacing))
 
-        Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-        val tintColorPickerExpanded = remember { mutableStateOf(false) }
-        UIKitSettingsExpander(
-            expanded = tintColorPickerExpanded.value,
-            onClick = {
-                tintColorPickerExpanded.value = !tintColorPickerExpanded.value
-            },
-            title = "Tint Color",
-            icon = FluentIcons.PaintBrush,
-        ) {
-            UIKitHSVColorPicker(
-                color = tintColor.value,
-                onColorChange = {
-                    tintColor.value = it
-                }
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            val optionalColors = listOf(
-                getUIKitColors().textFillColorPrimaryBrush,
-                getUIKitColors().textFillColorPrimaryBrushReversed,
-                getUIKitColors().highlightColorPrimaryBrush,
-                getUIKitColors().successGreenColorPrimaryBrush,
-                getUIKitColors().warningYellowColorPrimaryBrush,
-                getUIKitColors().errorRedColorPrimaryBrush
-            )
-
-            BoxWithConstraints {
-                val minSize = 128.dp
-                val itemHeight = 48.dp
-                val columnCount = floor(maxWidth / minSize)
-                val rowCount = ceil(optionalColors.size / columnCount)
-                val height = rowCount * itemHeight + getUIKitLayout().smallSpacing * rowCount * 2
-
-                LazyVerticalGrid(
-                    modifier = Modifier
-                        .height(height),
-                    columns = GridCells.Adaptive(minSize = minSize),
-                    userScrollEnabled = false
-                ) {
-                    items(optionalColors.size) { index ->
-                        Box(
-                            modifier = Modifier
-                                .padding(getUIKitLayout().smallSpacing)
-                                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
-                                .height(48.dp)
-                                .background(optionalColors[index])
-                                .uikitClickable(
-                                    onClick = {
-                                        tintColor.value = optionalColors[index].toHsv()
-                                    },
-                                    indication = if (isDesktopOS()) null else ripple()
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = when (index) {
-                                    0 -> "Primary"
-                                    1 -> "Reversed"
-                                    2 -> "Highlight"
-                                    3 -> "Success"
-                                    4 -> "Warning"
-                                    5 -> "Error"
-                                    else -> "Unknown"
-                                },
-                                style = getUIKitTypography().body,
-                                color = when (index) {
-                                    0 -> getUIKitColors().textFillColorPrimaryBrushReversed
-                                    2 -> getUIKitColors().textFillColorPrimaryBrushReversed
-                                    5 -> getUIKitColors().textFillColorPrimaryBrushReversed
-                                    else -> getUIKitColors().textFillColorPrimaryBrush
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-        Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-        val backgroundColorPickerExpanded = remember { mutableStateOf(false) }
-        UIKitSettingsExpander(
-            expanded = backgroundColorPickerExpanded.value,
-            onClick = {
-                backgroundColorPickerExpanded.value = !backgroundColorPickerExpanded.value
-            },
-            title = "Background Color",
-            icon = FluentIcons.PaintBucket,
-        ) {
-            UIKitHSVColorPicker(
-                color = backgroundColor.value,
-                onColorChange = {
-                    backgroundColor.value = it
-                }
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            val optionalColors = listOf(
-                getUIKitColors().contentFillColorPrimaryBrush,
-                getUIKitColors().contentFillColorSecondaryBrush,
-                getUIKitColors().contentFillColorTertiaryBrush,
-                getUIKitColors().contentFillColorFourthBrush,
-                getUIKitColors().highlightColorPrimaryBrush,
-                getUIKitColors().highlightColorSecondaryBrush,
-                getUIKitColors().highlightColorTertiaryBrush,
-                getUIKitColors().highlightColorFourthBrush,
-                getUIKitColors().successGreenColorPrimaryBrush,
-                getUIKitColors().successGreenColorSecondaryBrush,
-                getUIKitColors().successGreenColorTertiaryBrush,
-                getUIKitColors().successGreenColorFourthBrush,
-                getUIKitColors().warningYellowColorPrimaryBrush,
-                getUIKitColors().warningYellowColorSecondaryBrush,
-                getUIKitColors().warningYellowColorTertiaryBrush,
-                getUIKitColors().warningYellowColorFourthBrush,
-                getUIKitColors().errorRedColorPrimaryBrush,
-                getUIKitColors().errorRedColorSecondaryBrush,
-                getUIKitColors().errorRedColorTertiaryBrush,
-                getUIKitColors().errorRedColorFourthBrush,
-            )
-
-            BoxWithConstraints {
-                val minSize = 128.dp
-                val itemHeight = 48.dp
-                val columnCount = floor(maxWidth / minSize)
-                val rowCount = ceil(optionalColors.size / columnCount)
-                val height = rowCount * itemHeight + getUIKitLayout().smallSpacing * rowCount * 2
-
-                LazyVerticalGrid(
-                    modifier = Modifier
-                        .height(height),
-                    columns = GridCells.Adaptive(minSize = minSize),
-                    userScrollEnabled = false
-                ) {
-                    items(optionalColors.size) { index ->
-                        Box(
-                            modifier = Modifier
-                                .padding(getUIKitLayout().smallSpacing)
-                                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
-                                .height(48.dp)
-                                .background(optionalColors[index])
-                                .uikitClickable(
-                                    onClick = {
-                                        backgroundColor.value = optionalColors[index].toHsv()
-                                    },
-                                    indication = if (isDesktopOS()) null else ripple()
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = when (index) {
-                                    0 -> "Primary"
-                                    1 -> "Secondary"
-                                    2 -> "Tertiary"
-                                    3 -> "Fourth"
-                                    4 -> "Highlight P"
-                                    5 -> "Highlight S"
-                                    6 -> "Highlight T"
-                                    7 -> "Highlight F"
-                                    8 -> "Success P"
-                                    9 -> "Success S"
-                                    10 -> "Success T"
-                                    11 -> "Success F"
-                                    12 -> "Warning P"
-                                    13 -> "Warning S"
-                                    14 -> "Warning T"
-                                    15 -> "Warning F"
-                                    16 -> "Error P"
-                                    17 -> "Error S"
-                                    18 -> "Error T"
-                                    19 -> "Error F"
-                                    else -> "Unknown"
-                                },
-                                style = getUIKitTypography().body,
-                                color = when (index) {
-                                    3 -> getUIKitColors().textFillColorPrimaryBrushReversed
-                                    4 -> getUIKitColors().textFillColorPrimaryBrushReversed
-                                    16 -> getUIKitColors().textFillColorPrimaryBrushReversed
-                                    else -> getUIKitColors().textFillColorPrimaryBrush
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-        Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
+        Text(
+            text = title,
+            style = getUIKitTypography().body,
+            color = getUIKitColors().textFillColorPrimaryBrush,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 
 @Composable
 @Preview
 fun IconsGallery() {
-    BoxWithConstraints {
-        LaunchedEffect(Unit) {
-            MainViewModel.navigationDockVisible(false)
-        }
+    val uikitTheme = getUIKitTheme()
+    val optionsState = remember { OptionState(
+        initialTint = uikitTheme.colors.textFillColorPrimaryBrush,
+        initialBackground = uikitTheme.colors.contentFillColorSecondaryBrush
+    ) }
+    val iconLists = remember { mutableStateOf(IconGalleryList(
+        optionsState.tintColor.value,
+        optionsState.isLayered.value
+    )) }
+    val checkedIconIndex = remember { mutableStateOf<Int?>(null) }
+    val bottomSheetState = remember { UIKitBottomSheetState(
+        expanded = false
+    ) }
+    val animatableIconList = makeAnimatableIconList(optionsState)
 
-        val uiKitColors = getUIKitColors()
+    LaunchedEffect(Unit) {
+        MainViewModel.navigationDockVisible(false)
+    }
 
-        val primaryColor = remember { mutableStateOf(uiKitColors.textFillColorPrimaryBrush) }
-        val layered = remember { mutableStateOf(false) }
+    LaunchedEffect(optionsState.isLayered.value, optionsState.tintColor.value) {
+        iconLists.value = IconGalleryList(
+            optionsState.tintColor.value,
+            optionsState.isLayered.value
+        )
+    }
 
-        val iconGalleryList = remember {
-            mutableStateOf(
-                IconGalleryList(
-                    primaryColor.value,
-                    layered.value
-                )
-            )
-        }
-
-        LaunchedEffect(primaryColor.value, layered.value) {
-            iconGalleryList.value = IconGalleryList(
-                primaryColor.value,
-                layered.value
-            )
-        }
-
-        val backgroundColor = remember { mutableStateOf(uiKitColors.contentFillColorSecondaryBrush) }
-        val acrylicMaterialsState = rememberAcrylicMaterialsState()
-        val bottomSheetExpanded = remember { mutableStateOf(false) }
-        val checkedIconIndex = remember { mutableStateOf<Int?>(null) }
-        val checkedIcon = remember { mutableStateOf<ImageVector?>(null) }
-        val bottomSheetState = remember {
-            UIKitBottomSheetState(
-                expanded = bottomSheetExpanded.value,
-                onExpandedChange = {
-                    bottomSheetExpanded.value = it
+    LaunchedEffect(checkedIconIndex.value) {
+        optionsState.extendedOptions.value = null
+        optionsState.iconPreview.value = if (checkedIconIndex.value == null) null else {
+            if ((checkedIconIndex.value ?: return@LaunchedEffect) < iconLists.value.regularIconsList.size) {
+                {
+                    BoxWithConstraints {
+                        Icon(
+                            modifier = Modifier
+                                .size(maxWidth * 0.6f),
+                            imageVector = iconLists.value.regularIconsList.getOrNull(checkedIconIndex.value ?: return@BoxWithConstraints) ?: return@BoxWithConstraints,
+                            contentDescription = null,
+                            tint = optionsState.tintColor.value,
+                        )
+                    }
                 }
-            )
-        }
-
-        LaunchedEffect(checkedIconIndex.value, primaryColor.value, layered.value) {
-            if ((checkedIconIndex.value ?: return@LaunchedEffect) < iconGalleryList.value.regularIconsList.size) {
-                checkedIcon.value = IconGalleryList(
-                    primaryColor.value,
-                    layered.value
-                ).regularIconsList.getOrNull(checkedIconIndex.value ?: return@LaunchedEffect)
             } else {
-                checkedIcon.value = IconGalleryList(
-                    primaryColor.value,
-                    layered.value
-                ).filledIconsList.getOrNull(
-                    (checkedIconIndex.value ?: return@LaunchedEffect) - iconGalleryList.value.regularIconsList.size
-                )
+                {
+                    BoxWithConstraints {
+                        Icon(
+                            modifier = Modifier
+                                .size(maxWidth * 0.6f),
+                            imageVector = iconLists.value.filledIconsList.getOrNull((checkedIconIndex.value ?: return@BoxWithConstraints) - iconLists.value.regularIconsList.size) ?: return@BoxWithConstraints,
+                            contentDescription = null,
+                            tint = optionsState.tintColor.value,
+                        )
+                    }
+                }
             }
         }
+    }
 
+    BoxWithConstraints {
         Box(
             modifier = Modifier
+                .fillMaxSize()
+                .background(getUIKitColors().contentFillColorPrimaryBrush)
                 .uikitBottomSheetCollaborativeAnimation(
                     state = bottomSheetState,
                     onClick = {
-                        bottomSheetExpanded.value = false
+                        bottomSheetState.expanded.value = false
                     }
                 )
         ) {
-            val maxWith = remember { mutableStateOf(this@BoxWithConstraints.maxWidth) }
-            val maxHeight = remember { mutableStateOf(this@BoxWithConstraints.maxHeight) }
-
-            LaunchedEffect(this@BoxWithConstraints.maxWidth, this@BoxWithConstraints.maxHeight) {
-                maxWith.value = this@BoxWithConstraints.maxWidth
-                maxHeight.value = this@BoxWithConstraints.maxHeight
-            }
-
             Row {
                 LazyVerticalGrid(
                     modifier = Modifier
-                        .weight(1f)
-                        .background(getUIKitColors().contentFillColorPrimaryBrush)
-                        .acrylicMaterialSource(acrylicMaterialsState),
-                    columns = GridCells.Adaptive(128.dp),
+                        .weight(1f),
+                    columns = GridCells.Adaptive(minSize = 128.dp),
                     contentPadding = PaddingValues(
-                        top = getUIKitLayout().x6Spacing + (WindowInsets.safeDrawing.getTop(LocalDensity.current).dp / LocalDensity.current.density),
-                        bottom = getUIKitLayout().x4Spacing,
-                        start = getUIKitLayout().x4Spacing,
-                        end = getUIKitLayout().x4Spacing
+                        horizontal = getUIKitLayout().x4Spacing
                     )
                 ) {
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        Text(
-                            text = "Fluent Icons",
-                            style = getUIKitTypography().largeTitle,
-                            color = getUIKitColors().textFillColorPrimaryBrush
-                        )
+                        Column(
+                            modifier = Modifier
+                                .safeDrawingPadding()
+                        ) {
+                            Spacer(Modifier.height(getUIKitLayout().x6Spacing))
+
+                            Text(
+                                text = "Icons Gallery",
+                                style = getUIKitTypography().largeTitle,
+                                color = getUIKitColors().textFillColorPrimaryBrush
+                            )
+
+                            Spacer(Modifier.height(getUIKitLayout().x4Spacing))
+                        }
                     }
 
                     item(span = { GridItemSpan(maxLineSpan) }) {
                         Column {
-                            Spacer(Modifier.height(getUIKitLayout().x4Spacing))
-
                             Text(
                                 text = "Regular Icons",
                                 style = getUIKitTypography().subtitle,
                                 color = getUIKitColors().textFillColorSecondaryBrush
                             )
 
-                            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+                            Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
                         }
                     }
 
-                    items(iconGalleryList.value.regularIconsList.size) { index ->
-                        val icon = iconGalleryList.value.regularIconsList.getOrNull(index)
+                    items(iconLists.value.regularIconsList.size) {
+                        val icon = iconLists.value.regularIconsList.getOrNull(it)
 
-                        Column(
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .padding(getUIKitLayout().smallSpacing)
-                                .clip(RoundedCornerShape(getUIKitShapes().mediumRounded))
-                                .background(backgroundColor.value)
-                                .uikitClickable(
-                                    onClick = {
-                                        checkedIconIndex.value = index
-                                        if (maxWith.value < 1024.dp) {
-                                            bottomSheetExpanded.value = true
-                                        }
-                                    },
-                                    indication = if (isDesktopOS()) null else ripple()
-                                )
-                                .padding(getUIKitLayout().mediumSpacing),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        IconItem(
+                            title = icon?.name ?: "Unknown",
+                            onClick = {
+                                checkedIconIndex.value = it
+                            },
+                            background = optionsState.backgroundColor.value
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .weight(1f)
-                            ) {
-                                if (icon != null) {
-                                    Icon(
-                                        modifier = Modifier
-                                            .fillMaxSize(),
-                                        imageVector = icon,
-                                        contentDescription = null,
-                                        tint = primaryColor.value
-                                    )
-                                }
+                            if (icon != null) {
+                                Icon(
+                                    modifier = Modifier
+                                        .fillMaxSize(),
+                                    imageVector = icon,
+                                    contentDescription = icon.name,
+                                    tint = optionsState.tintColor.value
+                                )
                             }
-
-                            Spacer(Modifier.height(getUIKitLayout().smallSpacing))
-
-                            Text(
-                                text = icon?.name ?: "Unknown",
-                                style = getUIKitTypography().body,
-                                color = getUIKitColors().textFillColorPrimaryBrush,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
                         }
                     }
 
                     item(span = { GridItemSpan(maxLineSpan) }) {
                         Column {
-                            Spacer(Modifier.height(getUIKitLayout().x4Spacing))
+                            Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
 
                             Text(
                                 text = "Filled Icons",
@@ -540,241 +699,537 @@ fun IconsGallery() {
                                 color = getUIKitColors().textFillColorSecondaryBrush
                             )
 
-                            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+                            Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
                         }
                     }
 
-                    items(iconGalleryList.value.filledIconsList.size) { index ->
-                        val icon = iconGalleryList.value.filledIconsList.getOrNull(index)
+                    items(iconLists.value.filledIconsList.size) {
+                        val icon = iconLists.value.filledIconsList.getOrNull(it)
 
-                        Column(
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .padding(getUIKitLayout().smallSpacing)
-                                .clip(RoundedCornerShape(getUIKitShapes().mediumRounded))
-                                .background(backgroundColor.value)
-                                .uikitClickable(
-                                    onClick = {
-                                        checkedIconIndex.value = index + iconGalleryList.value.regularIconsList.size
-                                        if (maxWith.value < 1024.dp) {
-                                            bottomSheetExpanded.value = true
-                                        }
-                                    },
-                                    indication = if (isDesktopOS()) null else ripple()
-                                )
-                                .padding(getUIKitLayout().mediumSpacing),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        IconItem(
+                            title = icon?.name ?: "Unknown",
+                            onClick = {
+                                checkedIconIndex.value = it + iconLists.value.regularIconsList.size
+                            },
+                            background = optionsState.backgroundColor.value
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .weight(1f)
-                            ) {
-                                if (icon != null) {
-                                    Icon(
-                                        modifier = Modifier
-                                            .fillMaxSize(),
-                                        imageVector = icon,
-                                        contentDescription = null,
-                                        tint = primaryColor.value
-                                    )
-                                }
+                            if (icon != null) {
+                                Icon(
+                                    modifier = Modifier
+                                        .fillMaxSize(),
+                                    imageVector = icon,
+                                    contentDescription = icon.name,
+                                    tint = optionsState.tintColor.value
+                                )
                             }
+                        }
+                    }
 
-                            Spacer(Modifier.height(getUIKitLayout().smallSpacing))
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Column {
+                            Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
 
                             Text(
-                                text = icon?.name ?: "Unknown",
-                                style = getUIKitTypography().body,
-                                color = getUIKitColors().textFillColorPrimaryBrush,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                text = "Animatable Icons",
+                                style = getUIKitTypography().subtitle,
+                                color = getUIKitColors().textFillColorSecondaryBrush
+                            )
+
+                            Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
+                        }
+                    }
+
+                    items(animatableIconList.size) {
+                        val item = animatableIconList.getOrNull(it)
+
+                        IconItem(
+                            title = item?.name ?: "Unknown",
+                            onClick = {
+                                optionsState.iconPreview.value = {
+                                    BoxWithConstraints {
+                                        item?.IconContent(
+                                            modifier = Modifier
+                                                .size(maxWidth * 0.6f)
+                                        )
+                                    }
+                                }
+                                optionsState.extendedOptions.value = {
+                                    item?.ExtendedOptions()
+                                }
+                                optionsState.iconInfo.value = IconInfo(
+                                    iconName = item?.name ?: "Unknown",
+                                    iconSize = item?.size ?: "Unknown",
+                                )
+                            },
+                            background = optionsState.backgroundColor.value
+                        ) {
+                            item?.IconContent(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .aspectRatio(1f)
                             )
                         }
+                    }
+
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Spacer(Modifier.height(getUIKitLayout().x4Spacing))
                     }
                 }
 
                 AnimatedVisibility(
-                    visible = maxWith.value >= 1024.dp,
+                    visible = this@BoxWithConstraints.maxWidth >= 1024.dp,
                     enter = slideInHorizontally(
-                        initialOffsetX = {
-                            it
-                        },
-                        animationSpec = tween(getUIKitAnimate().motionFastDurationMillis, easing = FastOutSlowInEasing)
-                    ),
+                        animationSpec = tween(
+                            getUIKitAnimate().motionRegularDurationMillis,
+                            easing = FastOutSlowInEasing
+                        )
+                    ) {
+                        it
+                    },
                     exit = slideOutHorizontally(
-                        targetOffsetX = {
-                            it
-                        },
-                        animationSpec = tween(getUIKitAnimate().motionFastDurationMillis, easing = FastOutSlowInEasing)
-                    )
+                        animationSpec = tween(
+                            getUIKitAnimate().motionRegularDurationMillis,
+                            easing = FastOutSlowInEasing
+                        )
+                    ) {
+                        it
+                    }
                 ) {
                     Column(
                         modifier = Modifier
-                            .width(360.dp)
+                            .width(420.dp)
                             .fillMaxHeight()
-                            .background(getUIKitColors().contentFillColorPrimaryBrush)
                     ) {
-                        Spacer(
-                            Modifier.height(
-                                getUIKitLayout().x6Spacing + (WindowInsets.safeDrawing.getTop(
-                                    LocalDensity.current
-                                ).dp / LocalDensity.current.density)
-                            )
-                        )
+                        Spacer(Modifier.height(getUIKitLayout().x6Spacing + (WindowInsets.safeDrawing.getTop(LocalDensity.current) / LocalDensity.current.density).dp))
 
                         Row(
-                            modifier = Modifier
-                                .padding(
-                                    horizontal = getUIKitLayout().x2Spacing,
-                                ),
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Icon(
                                 modifier = Modifier
-                                    .size(28.dp),
+                                    .size(41.dp),
                                 imageVector = FluentIcons.options(getUIKitColors().textFillColorPrimaryBrush, true),
-                                contentDescription = null,
+                                contentDescription = "Options",
                                 tint = getUIKitColors().textFillColorPrimaryBrush
                             )
 
-                            Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+                            Spacer(Modifier.width(getUIKitLayout().mediumSpacing))
 
                             Text(
-                                text = "Options",
-                                style = getUIKitTypography().subtitle,
+                                text = "Icons Gallery",
+                                style = getUIKitTypography().largeTitle,
                                 color = getUIKitColors().textFillColorPrimaryBrush
                             )
                         }
 
-                        Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
                         OptionsWindow(
-                            onTintColorChange = {
-                                primaryColor.value = it
-                            },
-                            onLayeredChange = {
-                                layered.value = it
-                            },
-                            onBackgroundColorChange = {
-                                backgroundColor.value = it
-                            },
-                            checkedIcon = checkedIcon.value,
-                            initialLayered = layered.value,
-                            initialTintColor = primaryColor.value,
-                            initialBackgroundColor = backgroundColor.value,
+                            optionsState
                         )
                     }
                 }
             }
-
-            UIKitIslandButton(
-                modifier = Modifier
-                    .fillMaxSize(),
-                position = LayoutPosition.TopLeft,
-                onClicked = {
-                    when (it) {
-                        0 -> {
-                            MainViewModel.navigation.goBack()
-                        }
-
-                        1 -> {
-                            MainViewModel.navigation.switchPage(Pages.Home)
-                        }
-                    }
-                },
-                items = listOf(
-                    {
-                        Icon(
-                            imageVector = FluentIcons.ChevronArrowLeft,
-                            contentDescription = null,
-                            tint = getUIKitColors().textFillColorPrimaryBrush
-                        )
-                    },
-                    {
-                        Icon(
-                            imageVector = FluentIcons.Home,
-                            contentDescription = null,
-                            tint = getUIKitColors().textFillColorPrimaryBrush
-                        )
-                    }
-                ),
-                acrylicEffectEnabled = true,
-                acrylicState = acrylicMaterialsState
-            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.TopEnd
-            ) {
-                AnimatedVisibility(
-                    visible = maxWith.value < 1024.dp,
-                    enter = scaleIn(
-                        animationSpec = spring(
-                            dampingRatio = getUIKitAnimate().standardSpringDampingRatio,
-                            stiffness = getUIKitAnimate().standardSpringStiffness
-                        )
-                    ),
-                    exit = scaleOut(
-                        animationSpec = spring(
-                            dampingRatio = getUIKitAnimate().standardSpringDampingRatio,
-                            stiffness = getUIKitAnimate().standardSpringStiffness
-                        )
-                    )
-                ) {
-                    UIKitIslandButton(
-                        position = LayoutPosition.TopRight,
-                        onClicked = {
-                            bottomSheetExpanded.value = true
-                        },
-                        items = listOf(
-                            {
-                                Icon(
-                                    imageVector = FluentIcons.options(),
-                                    contentDescription = null,
-                                    tint = getUIKitColors().textFillColorPrimaryBrush
-                                )
-                            }
-                        ),
-                        acrylicEffectEnabled = true,
-                        acrylicState = acrylicMaterialsState
-                    )
-                }
-            }
-        }
-
-        BackHandler(bottomSheetState.expanded.value) {
-            bottomSheetExpanded.value = false
-        }
-
-        LaunchedEffect(bottomSheetExpanded.value) {
-            bottomSheetState.expanded.value = bottomSheetExpanded.value
         }
 
         UIKitBottomSheet(
             modifier = Modifier
                 .fillMaxSize(),
             state = bottomSheetState,
-            title = "Options",
-            maxHeight = maxHeight * 0.8f,
-            minHeight = maxHeight * 0.8f
+            maxHeight = this@BoxWithConstraints.maxHeight * 0.8f,
+            minHeight = this@BoxWithConstraints.maxHeight * 0.8f,
+            title = "Options"
         ) {
             OptionsWindow(
-                onTintColorChange = {
-                    primaryColor.value = it
-                },
-                onLayeredChange = {
-                    layered.value = it
-                },
-                onBackgroundColorChange = {
-                    backgroundColor.value = it
-                },
-                checkedIcon = checkedIcon.value,
-                initialLayered = layered.value,
-                initialTintColor = primaryColor.value,
-                initialBackgroundColor = backgroundColor.value,
+                optionsState
             )
         }
     }
+}
+
+private open class AnimatableIconItem(
+    val name: String,
+    val size: String,
+    initialProgress: Float = 0f,
+    initialLineWidth: Dp = 1.dp,
+    initialState: Int = 0,
+    initialGeneralOptionsState: OptionState,
+) {
+    // 几个属性, 故在基类中定义使用
+    val progressProperty = mutableStateOf(initialProgress)
+    val lineWidthProperty = mutableStateOf(initialLineWidth)
+    val stateProperty = mutableStateOf(initialState)
+    val generalOptionsStateProperty = initialGeneralOptionsState
+
+    @Composable
+    open fun IconContent(modifier: Modifier = Modifier) {}
+
+    @Composable
+    open fun ExtendedOptions() {}
+
+    @Composable
+    open fun ProgressSlider() {
+        val uikitTheme = getUIKitTheme()
+        val isAnimatedChange = remember { mutableStateOf(false) }
+        val progress = remember { mutableStateOf(progressProperty.value) }
+        val progressAnimated = remember { Animatable(
+            initialValue = progress.value,
+            typeConverter = Float.VectorConverter,
+        ) }
+
+        LaunchedEffect(progress.value) {
+            if (isAnimatedChange.value) {
+                progressAnimated.animateTo(
+                    targetValue = progress.value,
+                    animationSpec = tween(
+                        uikitTheme.animate.motionRegularDurationMillis,
+                        easing = FastOutSlowInEasing
+                    )
+                )
+            } else {
+                progressAnimated.snapTo(progress.value)
+            }
+        }
+
+        LaunchedEffect(progressAnimated.value) {
+            progressProperty.value = progressAnimated.value
+        }
+
+        @Composable
+        fun arc(progress: Float) {
+            Canvas(
+                modifier = Modifier
+                    .size(22.dp)
+                    .aspectRatio(1f)
+            ) {
+                scale(
+                    scale = size.width / 20.dp.toPx()
+                ) {
+                    translate(
+                        top = size.height / 2 - 15.dp.toPx() / 2,
+                        left = size.width / 2 - 15.dp.toPx() / 2
+                    ) {
+                        drawArc(
+                            color = uikitTheme.colors.textFillColorPrimaryBrush.copy(0.3f),
+                            startAngle = -90f,
+                            sweepAngle = 360f,
+                            useCenter = false,
+                            size = Size(
+                                width = 15.dp.toPx(),
+                                height = 15.dp.toPx()
+                            ),
+                            style = Stroke(
+                                width = 1.dp.toPx(),
+                                cap = StrokeCap.Round
+                            )
+                        )
+
+                        drawArc(
+                            color = uikitTheme.colors.textFillColorPrimaryBrush,
+                            startAngle = -90f,
+                            sweepAngle = progress.coerceIn(0f..1f) * 360f,
+                            useCenter = false,
+                            size = Size(
+                                width = 15.dp.toPx(),
+                                height = 15.dp.toPx()
+                            ),
+                            style = Stroke(
+                                width = 1.dp.toPx(),
+                                cap = StrokeCap.Round
+                            )
+                        )
+                    }
+                }
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                .fillMaxWidth()
+                .background(getUIKitColors().contentFillColorSecondaryBrush)
+                .padding(getUIKitLayout().basicSpacing)
+        ) {
+            arc(0.2f)
+            
+            Spacer(Modifier.width(getUIKitLayout().smallSpacing))
+
+            UIKitSlider(
+                modifier = Modifier
+                    .weight(1f),
+                value = progress.value,
+                onValueChange = { value, type ->
+                    isAnimatedChange.value = type != UIKitSliderChangeType.ThumbDrag
+                    progress.value = value
+                },
+            )
+
+            Spacer(Modifier.width(getUIKitLayout().smallSpacing))
+
+            arc(0.8f)
+        }
+    }
+
+    @Composable
+    open fun LineWidthSlider() {
+        val uikitTheme = getUIKitTheme()
+        val isAnimatedChange = remember { mutableStateOf(false) }
+        val lineWidth = remember { mutableStateOf(lineWidthProperty.value) }
+        val lineWidthAnimated = remember { Animatable(
+            initialValue = lineWidth.value,
+            typeConverter = Dp.VectorConverter,
+        ) }
+
+        LaunchedEffect(lineWidth.value) {
+            if (isAnimatedChange.value) {
+                lineWidthAnimated.animateTo(
+                    targetValue = lineWidth.value,
+                    animationSpec = tween(
+                        uikitTheme.animate.motionRegularDurationMillis,
+                        easing = FastOutSlowInEasing
+                    )
+                )
+            } else {
+                lineWidthAnimated.snapTo(lineWidth.value)
+            }
+        }
+
+        LaunchedEffect(lineWidthAnimated.value) {
+            lineWidthProperty.value = lineWidthAnimated.value
+        }
+
+        Row(
+            modifier = Modifier
+                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                .fillMaxWidth()
+                .background(getUIKitColors().contentFillColorSecondaryBrush)
+                .padding(getUIKitLayout().basicSpacing)
+        ) {
+            Icon(
+                modifier = Modifier
+                    .size(22.dp),
+                imageVector = FluentIcons.ResizableIcons.shapes(getUIKitColors().textFillColorPrimaryBrush, true, 0.5f),
+                contentDescription = "Thin",
+                tint = getUIKitColors().textFillColorPrimaryBrush,
+            )
+
+            Spacer(Modifier.width(getUIKitLayout().smallSpacing))
+
+            UIKitSlider(
+                modifier = Modifier
+                    .weight(1f),
+                value = lineWidth.value.value.mapTo(
+                    from = 0.5f..3f,
+                    to = 0f..1f
+                ).toFloat(),
+                hasTick = true,
+                tickStep = 0.2f,
+                adsorbedOntoTick = false,
+                maxValue = 1f,
+                onValueChange = { value, type ->
+                    val valueDp = value.mapTo(
+                        from = 0f..1f,
+                        to = 0.5f..3f
+                    ).dp
+
+                    isAnimatedChange.value = type != UIKitSliderChangeType.ThumbDrag
+                    lineWidth.value = valueDp
+                },
+            )
+
+            Spacer(Modifier.width(getUIKitLayout().smallSpacing))
+
+            Icon(
+                modifier = Modifier
+                    .size(22.dp),
+                imageVector = FluentIcons.ResizableIcons.shapes(getUIKitColors().textFillColorPrimaryBrush, true, 1.5f),
+                contentDescription = "Thin",
+                tint = getUIKitColors().textFillColorPrimaryBrush,
+            )
+        }
+    }
+
+    @Composable
+    open fun StateSelector(
+        states: List<StateSelectorItem>,
+        itemWidth: Dp = 148.dp
+    ) {
+        Row(
+            modifier = Modifier
+                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState())
+        ) {
+            states.forEachIndexed { index, item ->
+                Column(
+                    modifier = Modifier
+                        .padding(
+                            top = getUIKitLayout().basicSpacing,
+                            bottom = getUIKitLayout().basicSpacing,
+                            end = if (index == states.size - 1) 0.dp else getUIKitLayout().basicSpacing,
+                        )
+                        .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                        .width(itemWidth)
+                        .background(getUIKitColors().contentFillColorSecondaryBrush)
+                        .uikitClickable(
+                            onClick = {
+                                stateProperty.value = index
+                            },
+                            indication = if (isDesktopOS()) null else ripple()
+                        )
+                        .padding(getUIKitLayout().mediumSpacing),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f),
+                        contentAlignment = Alignment.Center,
+                        content = item.statePreview
+                    )
+
+                    Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                    Text(
+                        text = item.state,
+                        style = getUIKitTypography().body,
+                        color = getUIKitColors().textFillColorPrimaryBrush,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            }
+        }
+    }
+}
+
+private data class StateSelectorItem(
+    val state: String,
+    val statePreview: @Composable BoxScope.() -> Unit
+)
+
+private fun makeAnimatableIconList(
+    providedOptionsState: OptionState
+) = listOf<AnimatableIconItem>(
+    object: AnimatableIconItem(
+        name = "Download",
+        size = "20 x 20",
+        initialGeneralOptionsState = providedOptionsState
+    ) {
+        val resetProgressOnError = mutableStateOf(true)
+        val autoTint = mutableStateOf(true)
+
+        @Composable
+        override fun ExtendedOptions() {
+            Column {
+                StateSelector(
+                    states = listOf(
+                        StateSelectorItem("Downloading") {
+                            FluentIcons.AnimatableIcons.Download(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                progress = progressProperty.value,
+                                state = UIKitDownloadState.Downloading,
+                                resetProgressOnError = resetProgressOnError.value,
+                                lineWidth = lineWidthProperty.value
+                            )
+                        },
+                        StateSelectorItem("Stopped") {
+                            FluentIcons.AnimatableIcons.Download(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                progress = progressProperty.value,
+                                state = UIKitDownloadState.Stopped,
+                                resetProgressOnError = resetProgressOnError.value,
+                                lineWidth = lineWidthProperty.value
+                            )
+                        },
+                        StateSelectorItem("Error") {
+                            FluentIcons.AnimatableIcons.Download(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                progress = if (resetProgressOnError.value) 0f else progressProperty.value,
+                                state = UIKitDownloadState.Error,
+                                lineWidth = lineWidthProperty.value
+                            )
+                        },
+                        StateSelectorItem("Success") {
+                            FluentIcons.AnimatableIcons.Download(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                progress = progressProperty.value,
+                                state = UIKitDownloadState.Success,
+                                resetProgressOnError = resetProgressOnError.value,
+                                lineWidth = lineWidthProperty.value
+                            )
+                        },
+                    )
+                )
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                UIKitSettingCard(
+                    title = "Reset Progress On Error",
+                    onClick = {
+                        resetProgressOnError.value = !resetProgressOnError.value
+                    },
+                    icon = FluentIcons.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
+                ) {
+                    UIKitToggleSwitch(
+                        checked = resetProgressOnError.value,
+                        onCheckedChange = { resetProgressOnError.value = it },
+                    )
+                }
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                UIKitSettingCard(
+                    title = "Auto Tint",
+                    onClick = {
+                        autoTint.value = !autoTint.value
+                    },
+                    icon = FluentIcons.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
+                ) {
+                    UIKitToggleSwitch(
+                        checked = autoTint.value,
+                        onCheckedChange = { autoTint.value = it },
+                    )
+                }
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                ProgressSlider()
+
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                LineWidthSlider()
+            }
+        }
+
+        @Composable
+        override fun IconContent(modifier: Modifier) {
+            if (autoTint.value) {
+                FluentIcons.AnimatableIcons.Download(
+                    modifier = modifier,
+                    progress = progressProperty.value,
+                    state = UIKitDownloadState.entries[stateProperty.value],
+                    resetProgressOnError = resetProgressOnError.value,
+                    lineWidth = lineWidthProperty.value
+                )
+            } else {
+                FluentIcons.AnimatableIcons.Download(
+                    modifier = modifier,
+                    progress = progressProperty.value,
+                    state = UIKitDownloadState.entries[stateProperty.value],
+                    resetProgressOnError = resetProgressOnError.value,
+                    lineWidth = lineWidthProperty.value,
+                    tint = generalOptionsStateProperty.tintColor.value
+                )
+            }
+        }
+    }
+)
+
+@Composable
+@Preview
+private fun DownloadIconExtendedOptionsPreview() {
+    makeAnimatableIconList(OptionState(Color.Unspecified, Color.Unspecified))[0].ExtendedOptions()
 }

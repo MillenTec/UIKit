@@ -294,6 +294,7 @@ fun Controls() {
                 initialValue = downloadIconValue.value,
                 typeConverter = Float.VectorConverter
             ) }
+            val downloadIconLineWidth = remember { mutableStateOf(1.dp) }
 
             LaunchedEffect(downloadIconValue.value) {
                 if (isAnimatedChange.value) {
@@ -309,10 +310,11 @@ fun Controls() {
 
             val downloadIconState = remember { mutableStateOf(UIKitDownloadState.Downloading) }
 
-            FluentIcons.Animatable.Download(
+            FluentIcons.AnimatableIcons.Download(
                 progress = downloadIconValueAnimated.value,
                 modifier = Modifier.size(100.dp),
-                state = downloadIconState.value
+                state = downloadIconState.value,
+                lineWidth = downloadIconLineWidth.value,
             )
 
             Spacer(Modifier.height(getUIKitLayout().basicSpacing))
@@ -337,6 +339,31 @@ fun Controls() {
                     downloadIconValue.value = value
                 },
                 maxValue = 1f,
+                hasTick = false
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            UIKitSlider(
+                value = downloadIconLineWidth.value.value,
+                onValueChange = { value, type ->
+                    when(type) {
+                        TrackTap -> {
+                            isAnimatedChange.value = true
+                        }
+                        ThumbDrag -> {
+                            isAnimatedChange.value = false
+                        }
+                        DragAdsorption -> {
+                            isAnimatedChange.value = true
+                        }
+                        Jump -> {
+                            isAnimatedChange.value = true
+                        }
+                    }
+                    downloadIconLineWidth.value = value.dp
+                },
+                maxValue = 3f,
                 hasTick = false
             )
 

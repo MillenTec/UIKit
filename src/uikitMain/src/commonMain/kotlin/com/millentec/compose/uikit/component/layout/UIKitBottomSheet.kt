@@ -53,12 +53,15 @@ private fun Preview() {
 
 class UIKitBottomSheetState(
     expanded: Boolean,
-    onExpandedChange: (Boolean) -> Unit
+    onExpandedChange: (Boolean) -> Unit = {}
 ) {
     val offset = mutableStateOf<Dp?>(null)
     val size = mutableStateOf<IntSize?>(null)
     val expanded = mutableStateOf(expanded)
-    val onExpandedChange = mutableStateOf(onExpandedChange)
+    val onExpandedChange = mutableStateOf<(Boolean) -> Unit>({
+        this.expanded.value = it
+        onExpandedChange(it)
+    })
 }
 
 @Composable
