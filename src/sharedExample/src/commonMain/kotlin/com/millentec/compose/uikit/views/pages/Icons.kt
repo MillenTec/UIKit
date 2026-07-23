@@ -573,7 +573,7 @@ fun IconsGallery() {
     val bottomSheetState = remember { UIKitBottomSheetState(
         expanded = false
     ) }
-    val animatableIconList = makeAnimatableIconList(optionsState)
+    val animatableIconList = remember { makeAnimatableIconList(optionsState) }
 
     LaunchedEffect(Unit) {
         MainViewModel.navigationDockVisible(false)
