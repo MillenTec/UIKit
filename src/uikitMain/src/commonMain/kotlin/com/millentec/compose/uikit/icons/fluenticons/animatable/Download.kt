@@ -23,7 +23,7 @@ private fun Preview() {
 
 @Composable
 fun FluentIcons.AnimatableIcons.Download(
-    modifier: Modifier = Modifier.size(20.dp),
+    modifier: Modifier = Modifier,
     progress: Float,
     state: UIKitArrowCircleAnimateState = Running,
     tint: Color = getUIKitColors().textFillColorPrimaryBrush,
@@ -40,7 +40,7 @@ fun FluentIcons.AnimatableIcons.Download(
 )
 @Composable
 fun FluentIcons.AnimatableIcons.Download(
-    modifier: Modifier = Modifier.size(20.dp),
+    modifier: Modifier = Modifier,
     progress: Float,
     state: UIKitArrowCircleAnimateState = Running,
     resetProgressOnError: Boolean = true,

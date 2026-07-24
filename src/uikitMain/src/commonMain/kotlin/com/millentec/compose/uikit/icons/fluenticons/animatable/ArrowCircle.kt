@@ -3,7 +3,6 @@
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,7 +33,7 @@ enum class UIKitArrowCircleAnimateState {
 
 @Composable
 fun FluentIcons.AnimatableIcons.ArrowCircle(
-    modifier: Modifier = Modifier.size(20.dp),
+    modifier: Modifier = Modifier,
     progress: Float = 0f,
     state: UIKitArrowCircleAnimateState = Running,
     tint: Color = getUIKitColors().textFillColorPrimaryBrush,
@@ -411,7 +410,7 @@ fun FluentIcons.AnimatableIcons.ArrowCircle(
 
 @Composable
 fun FluentIcons.AnimatableIcons.ArrowCircle(
-    modifier: Modifier = Modifier.size(20.dp),
+    modifier: Modifier = Modifier,
     progress: Float = 0f,
     state: UIKitArrowCircleAnimateState = Running,
     resetProgressOnError: Boolean = true,
@@ -423,7 +422,7 @@ fun FluentIcons.AnimatableIcons.ArrowCircle(
             Running -> getUIKitColors().highlightColorPrimaryBrush
             Success -> getUIKitColors().successGreenColorPrimaryBrush
             Stopped -> getUIKitColors().warningYellowColorPrimaryBrush
-            UIKitArrowCircleAnimateState.Error -> getUIKitColors().errorRedColorPrimaryBrush
+            Error -> getUIKitColors().errorRedColorPrimaryBrush
         },
         animationSpec = tween(
             getUIKitAnimate().transformRegularDurationMillis,
@@ -432,7 +431,7 @@ fun FluentIcons.AnimatableIcons.ArrowCircle(
                 Running -> 0
                 Success -> getUIKitAnimate().motionFastDurationMillis
                 Stopped -> 0
-                UIKitArrowCircleAnimateState.Error -> getUIKitAnimate().motionFastDurationMillis
+                Error -> getUIKitAnimate().motionFastDurationMillis
             }
         )
     )
