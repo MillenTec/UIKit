@@ -16,6 +16,7 @@ regularList?.forEach {
         regularString += "        $str\n"
     } else {
         val str = "FluentIcons.${it.nameWithoutExtension},"
+        println(str)
         regularString += "        $str\n"
     }
 }
@@ -35,6 +36,7 @@ filledList?.forEach {
         filledString += "        $str\n"
     } else {
         val str = "FluentIcons.Filled.${it.nameWithoutExtension},"
+        println(str)
         filledString += "        $str\n"
     }
 }
