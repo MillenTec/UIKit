@@ -19,7 +19,7 @@ val FluentIcons.Filled.Accessibility: ImageVector
             viewportWidth = 20f,
             viewportHeight = 20f
         ).apply {
-            path(fill = SolidColor(Color(0xFF212121))) {
+            path(fill = SolidColor(Color(0xFF1D1D1F))) {
                 moveTo(10f, 6f)
                 curveTo(11.105f, 6f, 12f, 5.105f, 12f, 4f)
                 curveTo(12f, 2.895f, 11.105f, 2f, 10f, 2f)

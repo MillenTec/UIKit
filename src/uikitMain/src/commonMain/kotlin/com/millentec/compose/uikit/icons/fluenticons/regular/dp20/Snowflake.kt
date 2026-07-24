@@ -19,7 +19,7 @@ val FluentIcons.Snowflake: ImageVector
             viewportWidth = 20f,
             viewportHeight = 20f
         ).apply {
-            path(fill = SolidColor(Color(0xFF212121))) {
+            path(fill = SolidColor(Color(0xFF1D1D1F))) {
                 moveTo(10f, 2f)
                 curveTo(10.276f, 2f, 10.5f, 2.224f, 10.5f, 2.5f)
                 verticalLineTo(5.543f)

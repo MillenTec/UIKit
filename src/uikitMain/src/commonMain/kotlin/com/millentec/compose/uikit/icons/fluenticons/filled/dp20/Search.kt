@@ -19,7 +19,7 @@ val FluentIcons.Filled.Search: ImageVector
             viewportWidth = 20f,
             viewportHeight = 20f
         ).apply {
-            path(fill = SolidColor(Color(0xFF212121))) {
+            path(fill = SolidColor(Color(0xFF1D1D1F))) {
                 moveTo(13.535f, 14.596f)
                 curveTo(12.427f, 15.475f, 11.025f, 16f, 9.5f, 16f)
                 curveTo(5.91f, 16f, 3f, 13.09f, 3f, 9.5f)

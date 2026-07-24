@@ -19,7 +19,7 @@ val FluentIcons.Earth: ImageVector
             viewportWidth = 20f,
             viewportHeight = 20f
         ).apply {
-            path(fill = SolidColor(Color(0xFF212121))) {
+            path(fill = SolidColor(Color(0xFF1D1D1F))) {
                 moveTo(2f, 10f)
                 curveTo(2f, 5.582f, 5.582f, 2f, 10f, 2f)
                 curveTo(14.419f, 2f, 18f, 5.582f, 18f, 10f)

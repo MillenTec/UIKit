@@ -20,7 +20,7 @@ val FluentIcons.Filled.SunnyHigh: ImageVector
             viewportWidth = 20f,
             viewportHeight = 20f
         ).apply {
-            path(fill = SolidColor(Color(0xFF212121))) {
+            path(fill = SolidColor(Color(0xFF1D1D1F))) {
                 moveTo(9.5f, 3.5f)
                 lineTo(9.5f, 2.5f)
                 curveTo(9.5f, 2.224f, 9.724f, 2f, 10f, 2f)

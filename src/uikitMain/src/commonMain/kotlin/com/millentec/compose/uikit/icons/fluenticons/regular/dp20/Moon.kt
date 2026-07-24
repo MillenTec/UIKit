@@ -19,7 +19,7 @@ val FluentIcons.Moon: ImageVector
             viewportWidth = 20f,
             viewportHeight = 20f
         ).apply {
-            path(fill = SolidColor(Color(0xFF212121))) {
+            path(fill = SolidColor(Color(0xFF1D1D1F))) {
                 moveTo(15.493f, 13.497f)
                 curveTo(13.565f, 16.836f, 9.296f, 17.98f, 5.957f, 16.052f)
                 curveTo(5.2f, 15.615f, 4.545f, 15.052f, 4.01f, 14.389f)

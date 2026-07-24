@@ -19,7 +19,7 @@ val FluentIcons.TemperatureDegreeCelsius: ImageVector
             viewportWidth = 20f,
             viewportHeight = 20f
         ).apply {
-            path(fill = SolidColor(Color(0xFF212121))) {
+            path(fill = SolidColor(Color(0xFF1D1D1F))) {
                 moveTo(3f, 6.5f)
                 curveTo(3f, 5.672f, 3.672f, 5f, 4.5f, 5f)
                 curveTo(5.328f, 5f, 6f, 5.672f, 6f, 6.5f)

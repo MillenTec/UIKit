@@ -19,7 +19,7 @@ val FluentIcons.Windy: ImageVector
             viewportWidth = 20f,
             viewportHeight = 20f
         ).apply {
-            path(fill = SolidColor(Color(0xFF212121))) {
+            path(fill = SolidColor(Color(0xFF1D1D1F))) {
                 moveTo(6.568f, 6.111f)
                 curveTo(6.872f, 4.593f, 8.204f, 3.5f, 9.752f, 3.5f)
                 curveTo(11.546f, 3.5f, 13f, 4.956f, 13f, 6.749f)

@@ -19,7 +19,7 @@ val FluentIcons.Mail: ImageVector
             viewportWidth = 20f,
             viewportHeight = 20f
         ).apply {
-            path(fill = SolidColor(Color(0xFF212121))) {
+            path(fill = SolidColor(Color(0xFF1D1D1F))) {
                 moveTo(15.5f, 4f)
                 curveTo(16.881f, 4f, 18f, 5.119f, 18f, 6.5f)
                 verticalLineTo(14.5f)

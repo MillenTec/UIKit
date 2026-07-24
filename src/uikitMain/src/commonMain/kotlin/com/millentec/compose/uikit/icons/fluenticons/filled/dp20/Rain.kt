@@ -19,7 +19,7 @@ val FluentIcons.Filled.Rain: ImageVector
             viewportWidth = 20f,
             viewportHeight = 20f
         ).apply {
-            path(fill = SolidColor(Color(0xFF212121))) {
+            path(fill = SolidColor(Color(0xFF1D1D1F))) {
                 moveTo(10.015f, 4.018f)
                 curveTo(12.48f, 4.018f, 13.878f, 5.591f, 14.081f, 7.492f)
                 lineTo(14.143f, 7.492f)
