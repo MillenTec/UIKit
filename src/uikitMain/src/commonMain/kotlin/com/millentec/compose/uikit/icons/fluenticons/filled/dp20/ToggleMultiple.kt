@@ -11,7 +11,6 @@ import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 fun FluentIcons.Filled.toggleMultiple(
     primary: Brush,
     secondary: Brush,
-    includeThumb: Boolean
 ): ImageVector {
     return ImageVector.Builder(
         name = "ToggleMultiple",
@@ -35,8 +34,6 @@ fun FluentIcons.Filled.toggleMultiple(
             reflectiveCurveToRelative(1.5f, 0.7f, 1.5f, 1.5f)
             reflectiveCurveToRelative(-0.7f, 1.5f, -1.5f, 1.5f)
             close()
-        }
-        path(fill = primary) {
             moveTo(13.5f, 11f)
             horizontalLineToRelative(-7f)
             curveToRelative(-1.9f, 0f, -3.5f, 1.6f, -3.5f, 3.5f)
@@ -52,30 +49,34 @@ fun FluentIcons.Filled.toggleMultiple(
             reflectiveCurveToRelative(-0.7f, 1.5f, -1.5f, 1.5f)
             close()
         }
-        if (includeThumb) {
-            path(fill = secondary,) {
-                moveTo(13.5f, 14.5f)
-                moveToRelative(-1.5f, 0f)
-                arcToRelative(1.5f, 1.5f, 0f, isMoreThanHalf = true, isPositiveArc = true, 3f, 0f)
-                arcToRelative(1.5f, 1.5f, 0f, isMoreThanHalf = true, isPositiveArc = true, -3f, 0f)
-            }
-            path(fill = secondary,) {
-                moveTo(6.5f, 5.5f)
-                moveToRelative(-1.5f, 0f)
-                arcToRelative(1.5f, 1.5f, 0f, isMoreThanHalf = true, isPositiveArc = true, 3f, 0f)
-                arcToRelative(1.5f, 1.5f, 0f, isMoreThanHalf = true, isPositiveArc = true, -3f, 0f)
-            }
+        path(fill = secondary) {
+            moveTo(13.5f, 14.5f)
+            moveToRelative(-1.5f, 0f)
+            arcToRelative(1.5f, 1.5f, 0f, isMoreThanHalf = true, isPositiveArc = true, 3f, 0f)
+            arcToRelative(1.5f, 1.5f, 0f, isMoreThanHalf = true, isPositiveArc = true, -3f, 0f)
+            close()
+            moveTo(6.5f, 5.5f)
+            moveToRelative(-1.5f, 0f)
+            arcToRelative(1.5f, 1.5f, 0f, isMoreThanHalf = true, isPositiveArc = true, 3f, 0f)
+            arcToRelative(1.5f, 1.5f, 0f, isMoreThanHalf = true, isPositiveArc = true, -3f, 0f)
+            close()
         }
     }.build()
 }
 
 fun FluentIcons.Filled.toggleMultiple(): ImageVector {
-    return toggleMultiple(SolidColor(Color(0xFF1D1D1F)), SolidColor(Color.Transparent), false)
+    return toggleMultiple(
+        SolidColor(Color(0xFF1D1D1F)),
+        SolidColor(Color(0x001D1D1F)),
+    )
 }
 
 fun FluentIcons.Filled.toggleMultiple(
     color: Color,
     layered: Boolean = false
 ): ImageVector {
-    return toggleMultiple(SolidColor(color), if (layered) SolidColor(color.copy(0.3f)) else SolidColor(color), layered)
+    return toggleMultiple(
+        if (layered) SolidColor(color.copy(0.3f)) else SolidColor(color),
+        if (layered) SolidColor(color) else SolidColor(color.copy(0f))
+    )
 }
