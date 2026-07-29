@@ -8,13 +8,13 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 
-val FluentIcons.Filled.SunnyLow: ImageVector
+val FluentIcons.Filled.WeatherSunnyLow: ImageVector
     get() {
         if (_SunnyLow != null) {
             return _SunnyLow!!
         }
         _SunnyLow = ImageVector.Builder(
-            name = "SunnyLow",
+            name = "WeatherSunnyLow",
             defaultWidth = 20.dp,
             defaultHeight = 20.dp,
             viewportWidth = 20f,

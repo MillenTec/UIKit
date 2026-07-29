@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.icons.fluenticons.filled.dp20
+﻿package com.millentec.compose.uikit.icons.fluenticons.regular.dp20
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -7,13 +7,13 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 
-val FluentIcons.Filled.RainSnow: ImageVector
+val FluentIcons.WeatherRainSnow: ImageVector
     get() {
         if (_RainSnow != null) {
             return _RainSnow!!
         }
         _RainSnow = ImageVector.Builder(
-            name = "RainSnow",
+            name = "WeatherRainSnow",
             defaultWidth = 20.dp,
             defaultHeight = 20.dp,
             viewportWidth = 20f,
@@ -63,6 +63,19 @@ val FluentIcons.Filled.RainSnow: ImageVector
                 curveTo(14f, 14.776f, 13.776f, 15f, 13.5f, 15f)
                 curveTo(13.224f, 15f, 13f, 14.776f, 13f, 14.5f)
                 curveTo(13f, 14.224f, 13.224f, 14f, 13.5f, 14f)
+                close()
+                moveTo(10f, 5f)
+                curveTo(8.351f, 5f, 6.913f, 6.27f, 6.913f, 8.025f)
+                curveTo(6.913f, 8.303f, 6.659f, 8.521f, 6.368f, 8.521f)
+                lineTo(5.818f, 8.521f)
+                curveTo(4.814f, 8.521f, 4f, 9.3f, 4f, 10.261f)
+                curveTo(4f, 11.221f, 4.814f, 12f, 5.818f, 12f)
+                horizontalLineTo(14.182f)
+                curveTo(15.186f, 12f, 16f, 11.221f, 16f, 10.261f)
+                curveTo(16f, 9.3f, 15.186f, 8.521f, 14.182f, 8.521f)
+                lineTo(13.632f, 8.521f)
+                curveTo(13.341f, 8.521f, 13.087f, 8.303f, 13.087f, 8.025f)
+                curveTo(13.087f, 6.248f, 11.649f, 5f, 10f, 5f)
                 close()
             }
         }.build()

@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.icons.fluenticons.filled.dp20
+﻿package com.millentec.compose.uikit.icons.fluenticons.regular.dp20
 
 
 import androidx.compose.ui.graphics.Brush
@@ -9,22 +9,30 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 
-fun FluentIcons.Filled.sunny(
+fun FluentIcons.weatherSunny(
     primary: Brush,
     secondary: Brush
 ): ImageVector {
     return ImageVector.Builder(
-        name = "Sunny",
+        name = "WeatherSunny",
         defaultWidth = 20.dp,
         defaultHeight = 20.dp,
         viewportWidth = 20f,
         viewportHeight = 20f
     ).apply {
         path(fill = primary) {
-            moveTo(10f, 10f)
-            moveToRelative(-4f, 0f)
-            arcToRelative(4f, 4f, 0f, isMoreThanHalf = true, isPositiveArc = true, 8f, 0f)
-            arcToRelative(4f, 4f, 0f, isMoreThanHalf = true, isPositiveArc = true, -8f, 0f)
+            moveTo(10f, 6f)
+            curveToRelative(-2.21f, 0f, -4f, 1.79f, -4f, 4f)
+            reflectiveCurveToRelative(1.79f, 4f, 4f, 4f)
+            reflectiveCurveToRelative(4f, -1.79f, 4f, -4f)
+            reflectiveCurveToRelative(-1.79f, -4f, -4f, -4f)
+            close()
+            moveTo(10f, 13f)
+            curveToRelative(-1.66f, 0f, -3f, -1.34f, -3f, -3f)
+            reflectiveCurveToRelative(1.34f, -3f, 3f, -3f)
+            reflectiveCurveToRelative(3f, 1.34f, 3f, 3f)
+            reflectiveCurveToRelative(-1.34f, 3f, -3f, 3f)
+            close()
         }
         path(fill = secondary) {
             moveTo(10f, 2f)
@@ -95,18 +103,18 @@ fun FluentIcons.Filled.sunny(
     }.build()
 }
 
-fun FluentIcons.Filled.sunny(): ImageVector {
-    return sunny(
+fun FluentIcons.weatherSunny(): ImageVector {
+    return weatherSunny(
         SolidColor(Color(0xFF1D1D1F)),
         SolidColor(Color(0xFF1D1D1F))
     )
 }
 
-fun FluentIcons.Filled.sunny(
+fun FluentIcons.weatherSunny(
     color: Color,
     layered: Boolean = false
 ): ImageVector {
-    return sunny(
+    return weatherSunny(
         SolidColor(color),
         if (layered) SolidColor(color.copy(0.6f)) else SolidColor(color),
     )

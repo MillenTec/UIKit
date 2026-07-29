@@ -9,12 +9,12 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 
-fun FluentIcons.Filled.cloudyNight(
+fun FluentIcons.Filled.weatherCloudyNight(
     primary: Brush,
     secondary: Brush
 ): ImageVector {
     return ImageVector.Builder(
-        name = "CloudyNight",
+        name = "WeatherCloudyNight",
         defaultWidth = 20.dp,
         defaultHeight = 20.dp,
         viewportWidth = 20f,
@@ -53,18 +53,18 @@ fun FluentIcons.Filled.cloudyNight(
     }.build()
 }
 
-fun FluentIcons.Filled.cloudyNight(): ImageVector {
-    return cloudyNight(
+fun FluentIcons.Filled.weatherCloudyNight(): ImageVector {
+    return weatherCloudyNight(
         SolidColor(Color(0xFF1D1D1F)),
         SolidColor(Color(0xFF1D1D1F))
     )
 }
 
-fun FluentIcons.Filled.cloudyNight(
+fun FluentIcons.Filled.weatherCloudyNight(
     color: Color,
     layered: Boolean = false
 ): ImageVector {
-    return cloudyNight(
+    return weatherCloudyNight(
         SolidColor(color),
         if (layered) SolidColor(color.copy(0.6f)) else SolidColor(color),
     )

@@ -7,13 +7,13 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 
-val FluentIcons.Filled.Snowflake: ImageVector
+val FluentIcons.Filled.WeatherSnowflake: ImageVector
     get() {
         if (_Snowflake != null) {
             return _Snowflake!!
         }
         _Snowflake = ImageVector.Builder(
-            name = "Snowflake",
+            name = "WeatherSnowflake",
             defaultWidth = 20.dp,
             defaultHeight = 20.dp,
             viewportWidth = 20f,

@@ -7,46 +7,55 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 
-val FluentIcons.Rain: ImageVector
+val FluentIcons.WeatherSnow: ImageVector
     get() {
-        if (_Rain != null) {
-            return _Rain!!
+        if (_Snow != null) {
+            return _Snow!!
         }
-        _Rain = ImageVector.Builder(
-            name = "Rain",
+        _Snow = ImageVector.Builder(
+            name = "WeatherSnow",
             defaultWidth = 20.dp,
             defaultHeight = 20.dp,
             viewportWidth = 20f,
             viewportHeight = 20f
         ).apply {
             path(fill = SolidColor(Color(0xFF1D1D1F))) {
+                moveTo(8.5f, 15f)
+                curveTo(8.776f, 15f, 9f, 15.224f, 9f, 15.5f)
+                curveTo(9f, 15.776f, 8.776f, 16f, 8.5f, 16f)
+                curveTo(8.224f, 16f, 8f, 15.776f, 8f, 15.5f)
+                curveTo(8f, 15.224f, 8.224f, 15f, 8.5f, 15f)
+                close()
+                moveTo(11.5f, 15f)
+                curveTo(11.776f, 15f, 12f, 15.224f, 12f, 15.5f)
+                curveTo(12f, 15.776f, 11.776f, 16f, 11.5f, 16f)
+                curveTo(11.224f, 16f, 11f, 15.776f, 11f, 15.5f)
+                curveTo(11f, 15.224f, 11.224f, 15f, 11.5f, 15f)
+                close()
+                moveTo(7f, 14f)
+                curveTo(7.276f, 14f, 7.5f, 14.224f, 7.5f, 14.5f)
+                curveTo(7.5f, 14.776f, 7.276f, 15f, 7f, 15f)
+                curveTo(6.724f, 15f, 6.5f, 14.776f, 6.5f, 14.5f)
+                curveTo(6.5f, 14.224f, 6.724f, 14f, 7f, 14f)
+                close()
+                moveTo(10f, 14f)
+                curveTo(10.276f, 14f, 10.5f, 14.224f, 10.5f, 14.5f)
+                curveTo(10.5f, 14.776f, 10.276f, 15f, 10f, 15f)
+                curveTo(9.724f, 15f, 9.5f, 14.776f, 9.5f, 14.5f)
+                curveTo(9.5f, 14.224f, 9.724f, 14f, 10f, 14f)
+                close()
+                moveTo(13f, 14f)
+                curveTo(13.276f, 14f, 13.5f, 14.224f, 13.5f, 14.5f)
+                curveTo(13.5f, 14.776f, 13.276f, 15f, 13f, 15f)
+                curveTo(12.724f, 15f, 12.5f, 14.776f, 12.5f, 14.5f)
+                curveTo(12.5f, 14.224f, 12.724f, 14f, 13f, 14f)
+                close()
                 moveTo(10f, 4f)
                 curveTo(12.465f, 4f, 13.863f, 5.574f, 14.066f, 7.474f)
                 lineTo(14.128f, 7.474f)
                 curveTo(15.714f, 7.474f, 17f, 8.711f, 17f, 10.237f)
                 curveTo(17f, 11.763f, 15.714f, 13f, 14.128f, 13f)
-                lineTo(13.425f, 12.999f)
-                lineTo(13.412f, 13.033f)
-                lineTo(11.929f, 15.737f)
-                curveTo(11.797f, 15.979f, 11.493f, 16.069f, 11.251f, 15.936f)
-                curveTo(11.035f, 15.819f, 10.941f, 15.566f, 11.015f, 15.341f)
-                lineTo(11.051f, 15.258f)
-                lineTo(12.29f, 12.999f)
-                horizontalLineTo(10.437f)
-                lineTo(10.423f, 13.033f)
-                lineTo(8.94f, 15.737f)
-                curveTo(8.808f, 15.979f, 8.505f, 16.069f, 8.262f, 15.936f)
-                curveTo(8.047f, 15.819f, 7.952f, 15.566f, 8.026f, 15.341f)
-                lineTo(8.062f, 15.258f)
-                lineTo(9.301f, 12.999f)
-                horizontalLineTo(7.432f)
-                lineTo(5.94f, 15.737f)
-                curveTo(5.823f, 15.952f, 5.57f, 16.047f, 5.345f, 15.972f)
-                lineTo(5.262f, 15.936f)
-                curveTo(5.046f, 15.819f, 4.952f, 15.566f, 5.026f, 15.341f)
-                lineTo(5.062f, 15.258f)
-                lineTo(6.293f, 12.999f)
-                lineTo(5.872f, 13f)
+                horizontalLineTo(5.872f)
                 curveTo(4.286f, 13f, 3f, 11.763f, 3f, 10.237f)
                 curveTo(3f, 8.768f, 4.192f, 7.566f, 5.697f, 7.479f)
                 lineTo(5.934f, 7.474f)
@@ -68,8 +77,8 @@ val FluentIcons.Rain: ImageVector
             }
         }.build()
 
-        return _Rain!!
+        return _Snow!!
     }
 
 @Suppress("ObjectPropertyName")
-private var _Rain: ImageVector? = null
+private var _Snow: ImageVector? = null

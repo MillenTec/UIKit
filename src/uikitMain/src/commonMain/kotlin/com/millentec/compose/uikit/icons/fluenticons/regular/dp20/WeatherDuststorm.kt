@@ -9,12 +9,12 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 
-fun FluentIcons.duststorm(
+fun FluentIcons.weatherDuststorm(
     primary: Brush,
     secondary: Brush
 ): ImageVector {
     return ImageVector.Builder(
-        name = "Duststorm",
+        name = "WeatherDuststorm",
         defaultWidth = 20.dp,
         defaultHeight = 20.dp,
         viewportWidth = 20f,
@@ -104,18 +104,18 @@ fun FluentIcons.duststorm(
     }.build()
 }
 
-fun FluentIcons.duststorm(): ImageVector {
-    return duststorm(
+fun FluentIcons.weatherDuststorm(): ImageVector {
+    return weatherDuststorm(
         SolidColor(Color(0xFF1D1D1F)),
         SolidColor(Color(0xFF1D1D1F))
     )
 }
 
-fun FluentIcons.duststorm(
+fun FluentIcons.weatherDuststorm(
     color: Color,
     layered: Boolean = false
 ): ImageVector {
-    return duststorm(
+    return weatherDuststorm(
         SolidColor(color),
         if (layered) SolidColor(color.copy(0.6f)) else SolidColor(color),
     )

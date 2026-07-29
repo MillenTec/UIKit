@@ -9,12 +9,12 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 
-fun FluentIcons.Filled.blowingSnow(
+fun FluentIcons.Filled.weatherBlowingSnow(
     primary: Brush,
     secondary: Brush
 ): ImageVector {
     return ImageVector.Builder(
-        name = "BlowingSnow",
+        name = "WeatherBlowingSnow",
         defaultWidth = 20.dp,
         defaultHeight = 20.dp,
         viewportWidth = 20f,
@@ -90,18 +90,18 @@ fun FluentIcons.Filled.blowingSnow(
     }.build()
 }
 
-fun FluentIcons.Filled.blowingSnow(): ImageVector {
-    return blowingSnow(
+fun FluentIcons.Filled.weatherBlowingSnow(): ImageVector {
+    return weatherBlowingSnow(
         SolidColor(Color(0xFF1D1D1F)),
         SolidColor(Color(0xFF1D1D1F))
     )
 }
 
-fun FluentIcons.Filled.blowingSnow(
+fun FluentIcons.Filled.weatherBlowingSnow(
     color: Color,
     layered: Boolean = false
 ): ImageVector {
-    return blowingSnow(
+    return weatherBlowingSnow(
         SolidColor(color),
         if (layered) SolidColor(color.copy(0.6f)) else SolidColor(color),
     )

@@ -7,13 +7,13 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 
-val FluentIcons.Filled.Windy: ImageVector
+val FluentIcons.Filled.WeatherWindy: ImageVector
     get() {
         if (_Windy != null) {
             return _Windy!!
         }
         _Windy = ImageVector.Builder(
-            name = "Windy",
+            name = "WeatherWindy",
             defaultWidth = 20.dp,
             defaultHeight = 20.dp,
             viewportWidth = 20f,
