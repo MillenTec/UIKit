@@ -64,8 +64,8 @@ private data class IconInfo(
 )
 
 private class OptionState(
-    initialTint: Color,
-    initialBackground: Color,
+    initialTint: UIKitHSVColor,
+    initialBackground: UIKitHSVColor,
     initialLayered: Boolean = false
 ) {
     val tintColor = mutableStateOf(initialTint)
@@ -80,8 +80,8 @@ private class OptionState(
 @Preview
 private fun OptionsWindowPreview() {
     val optionState = OptionState(
-        initialTint = getUIKitColors().textFillColorPrimaryBrush,
-        initialBackground = getUIKitColors().contentFillColorSecondaryBrush
+        initialTint = getUIKitColors().textFillColorPrimaryBrush.toHsv(),
+        initialBackground = getUIKitColors().contentFillColorSecondaryBrush.toHsv()
     )
 
     optionState.iconPreview.value = {
@@ -91,7 +91,7 @@ private fun OptionsWindowPreview() {
                     .size(maxWidth * 0.6f),
                 imageVector = FluentIcons.Symbols,
                 contentDescription = null,
-                tint = optionState.tintColor.value,
+                tint = optionState.tintColor.value.getColor(),
             )
         }
     }
@@ -372,9 +372,9 @@ private fun OptionsWindow(
                 icon = FluentIcons.PaintBrush
             ) {
                 UIKitHSVColorPicker(
-                    color = state.tintColor.value.toHsv(),
+                    color = state.tintColor.value,
                     onColorChange = {
-                        state.tintColor.value = it.getColor()
+                        state.tintColor.value = it
                     }
                 )
 
@@ -409,7 +409,7 @@ private fun OptionsWindow(
                                     .background(optionalColor[it].color)
                                     .uikitClickable(
                                         onClick = {
-                                            state.tintColor.value = optionalColor[it].color
+                                            state.tintColor.value = optionalColor[it].color.toHsv()
                                         },
                                         indication = if (isDesktopOS()) null else ripple()
                                     ),
@@ -439,9 +439,9 @@ private fun OptionsWindow(
                 icon = FluentIcons.PaintBucket
             ) {
                 UIKitHSVColorPicker(
-                    color = state.backgroundColor.value.toHsv(),
+                    color = state.backgroundColor.value,
                     onColorChange = {
-                        state.backgroundColor.value = it.getColor()
+                        state.backgroundColor.value = it
                     }
                 )
 
@@ -476,7 +476,7 @@ private fun OptionsWindow(
                                     .background(optionalColor[it].color)
                                     .uikitClickable(
                                         onClick = {
-                                            state.backgroundColor.value = optionalColor[it].color
+                                            state.backgroundColor.value = optionalColor[it].color.toHsv()
                                         },
                                         indication = if (isDesktopOS()) null else ripple()
                                     ),
@@ -567,11 +567,11 @@ fun IconsGallery() {
     val uikitTheme = getUIKitTheme()
     val acrylicMaterialsState = rememberAcrylicMaterialsState()
     val optionsState = remember { OptionState(
-        initialTint = uikitTheme.colors.textFillColorPrimaryBrush,
-        initialBackground = uikitTheme.colors.contentFillColorSecondaryBrush
+        initialTint = uikitTheme.colors.textFillColorPrimaryBrush.toHsv(),
+        initialBackground = uikitTheme.colors.contentFillColorSecondaryBrush.toHsv()
     ) }
     val iconLists = remember { mutableStateOf(IconGalleryList(
-        optionsState.tintColor.value,
+        optionsState.tintColor.value.getColor(),
         optionsState.isLayered.value
     )) }
     val checkedIconIndex = remember { mutableStateOf<Int?>(null) }
@@ -586,7 +586,7 @@ fun IconsGallery() {
 
     LaunchedEffect(optionsState.isLayered.value, optionsState.tintColor.value) {
         iconLists.value = IconGalleryList(
-            optionsState.tintColor.value,
+            optionsState.tintColor.value.getColor(),
             optionsState.isLayered.value
         )
     }
@@ -615,7 +615,7 @@ fun IconsGallery() {
                             iconLists.value.filledIconsList.getOrNull((checkedIconIndex.value ?: return@BoxWithConstraints) - iconLists.value.regularIconsList.size) ?: return@BoxWithConstraints
                         },
                         contentDescription = null,
-                        tint = optionsState.tintColor.value,
+                        tint = optionsState.tintColor.value.getColor(),
                     )
                 }
             }
@@ -682,7 +682,7 @@ fun IconsGallery() {
                                 checkedIconIndex.value = it
                                 if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetState.expanded.value = true
                             },
-                            background = optionsState.backgroundColor.value
+                            background = optionsState.backgroundColor.value.getColor()
                         ) {
                             if (icon != null) {
                                 Icon(
@@ -690,7 +690,7 @@ fun IconsGallery() {
                                         .fillMaxSize(),
                                     imageVector = icon,
                                     contentDescription = icon.name,
-                                    tint = optionsState.tintColor.value
+                                    tint = optionsState.tintColor.value.getColor()
                                 )
                             }
                         }
@@ -719,7 +719,7 @@ fun IconsGallery() {
                                 checkedIconIndex.value = it + iconLists.value.regularIconsList.size
                                 if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetState.expanded.value = true
                             },
-                            background = optionsState.backgroundColor.value
+                            background = optionsState.backgroundColor.value.getColor()
                         ) {
                             if (icon != null) {
                                 Icon(
@@ -727,7 +727,7 @@ fun IconsGallery() {
                                         .fillMaxSize(),
                                     imageVector = icon,
                                     contentDescription = icon.name,
-                                    tint = optionsState.tintColor.value
+                                    tint = optionsState.tintColor.value.getColor()
                                 )
                             }
                         }
@@ -770,7 +770,7 @@ fun IconsGallery() {
                                 )
                                 if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetState.expanded.value = true
                             },
-                            background = optionsState.backgroundColor.value
+                            background = optionsState.backgroundColor.value.getColor()
                         ) {
                             item?.IconContent(
                                 modifier = Modifier
@@ -1364,7 +1364,7 @@ private fun makeAnimatableIconList(
                     state = UIKitArrowCircleAnimateState.entries[stateProperty.value],
                     resetProgressOnError = resetProgressOnError.value,
                     lineWidth = lineWidthProperty.value,
-                    tint = generalOptionsStateProperty.tintColor.value,
+                    tint = generalOptionsStateProperty.tintColor.value.getColor(),
                     rotate = angle.value
                 )
             }
@@ -1484,7 +1484,7 @@ private fun makeAnimatableIconList(
                     state = UIKitArrowCircleAnimateState.entries[stateProperty.value],
                     resetProgressOnError = resetProgressOnError.value,
                     lineWidth = lineWidthProperty.value,
-                    tint = generalOptionsStateProperty.tintColor.value,
+                    tint = generalOptionsStateProperty.tintColor.value.getColor(),
                 )
             }
         }
@@ -1603,7 +1603,7 @@ private fun makeAnimatableIconList(
                     state = UIKitArrowCircleAnimateState.entries[stateProperty.value],
                     resetProgressOnError = resetProgressOnError.value,
                     lineWidth = lineWidthProperty.value,
-                    tint = generalOptionsStateProperty.tintColor.value,
+                    tint = generalOptionsStateProperty.tintColor.value.getColor(),
                 )
             }
         }
@@ -1613,5 +1613,5 @@ private fun makeAnimatableIconList(
 @Composable
 @Preview
 private fun DownloadIconExtendedOptionsPreview() {
-    makeAnimatableIconList(OptionState(Color.Unspecified, Color.Unspecified))[0].ExtendedOptions()
+    makeAnimatableIconList(OptionState(Color.Unspecified.toHsv(), Color.Unspecified.toHsv()))[0].ExtendedOptions()
 }
