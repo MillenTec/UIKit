@@ -9,12 +9,12 @@ data class UIKitColors(
     /**
      * 一般可用于应用程序的窗口背景颜色
      */
-    val contentFillColorPrimaryBrush: Color = Color(0xFFFFFFFF),
+    val contentFillColorPrimaryBrush: Color = Color(0xFFF5F5F7),
 
     /**
      * 一般用于卡片等容器背景颜色
      */
-    val contentFillColorSecondaryBrush: Color = Color(0xFFF5F5F7),
+    val contentFillColorSecondaryBrush: Color = Color(0xFFFFFFFF),
 
     val contentFillColorTertiaryBrush: Color = Color(0xFFE8E8ED),
 
@@ -72,9 +72,9 @@ data class UIKitColors(
 
     val errorRedColorFourthBrush: Color = errorRedColorPrimaryBrush.copy(0.15f),
 
-    val pointerHoverInteractionColor: Color = Color(0x2CB9B9BB),
+    val pointerHoverInteractionColor: Color = Color(0x0F000000),
 
-    val pointerTapInteractionColor: Color = Color(0x2C6E6E73)
+    val pointerTapInteractionColor: Color = Color(0x1F000000)
 ) {
 
     /**
@@ -106,7 +106,9 @@ data class UIKitColors(
             highlightColorPrimaryBrush = Color(0xFF0071E3),
             successGreenColorPrimaryBrush = Color(0xFF30D158),
             warningYellowColorPrimaryBrush = Color(0xFFFFD600),
-            errorRedColorPrimaryBrush = Color(0xFFFF4245)
+            errorRedColorPrimaryBrush = Color(0xFFFF4245),
+            pointerHoverInteractionColor = Color(0x0FFFFFFF),
+            pointerTapInteractionColor = Color(0x1FFFFFFF),
         )
     }
 }

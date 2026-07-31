@@ -3,7 +3,6 @@
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Indication
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.HoverInteraction
 import androidx.compose.foundation.interaction.InteractionSource
@@ -13,8 +12,11 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import com.millentec.compose.uikit.component.input.toHsv
 import com.millentec.compose.uikit.theme.getUIKitAnimate
 import com.millentec.compose.uikit.theme.getUIKitColors
 
@@ -72,30 +74,39 @@ fun Modifier.uikitClickable(
         val isHovered by interactionSource.collectIsHoveredAsState()
         val isPressed by interactionSource.collectIsPressedAsState()
 
-        val targetBackground = when {
+        val targetColor = when {
             isPressed -> getUIKitColors().pointerTapInteractionColor
             isHovered -> getUIKitColors().pointerHoverInteractionColor
             else -> getUIKitColors().pointerHoverInteractionColor.copy(0f)
         }
 
-        val animatedBackground by animateColorAsState(
-            targetValue = targetBackground,
+        val animatedColor by animateColorAsState(
+            targetValue = targetColor,
             animationSpec = tween(
                 durationMillis = if (isHovered && !isPressed)
                     getUIKitAnimate().transformRegularDurationMillis
-                else getUIKitAnimate().transformFastDurationMillis
+                else getUIKitAnimate().transformMomentaryDurationMillis
             )
         )
 
         return this
+            .clip(shape)
             .clickable(
                 enabled = enabled,
                 onClick = onClick,
                 interactionSource = interactionSource,
                 indication = null,
             )
-            .clip(shape)
-            .background(animatedBackground)
+            .drawWithContent {
+                drawContent()
+                drawRect(
+                    color = animatedColor,
+                    blendMode = if (animatedColor.toHsv().value >= 0.5f)
+                        BlendMode.Lighten
+                    else
+                        BlendMode.Darken
+                )
+            }
     } else {
         return this
             .clip(shape)

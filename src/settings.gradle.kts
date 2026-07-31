@@ -11,6 +11,9 @@ pluginManagement {
             }
         }
         mavenCentral()
+        maven("https://maven.aliyun.com/repository/public/")
+        maven("https://maven.aliyun.com/repository/gradle-plugin/")
+        maven("https://maven.aliyun.com/repository/google/")
         gradlePluginPortal()
     }
 }
@@ -25,6 +28,9 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        maven("https://maven.aliyun.com/repository/public/")
+        maven("https://maven.aliyun.com/repository/gradle-plugin/")
+        maven("https://maven.aliyun.com/repository/google/")
     }
 }
 
