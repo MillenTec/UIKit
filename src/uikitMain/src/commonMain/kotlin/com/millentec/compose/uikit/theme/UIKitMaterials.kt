@@ -32,10 +32,13 @@ data class UIKitShadowMaterial(
     val spread: Dp = 1.dp,
     val offset: DpOffset = DpOffset.Zero,
     val color: Color = Color(0xFF000000),
-    val alpha: Float = 0.1f,
+    val alpha: Float = 0.05f,
     val blendMode: BlendMode = BlendMode.Darken
 ) {
     companion object {
+        /**
+         * Primary 阴影主要为装饰服务, 可用于卡片等控件上以实现层次感
+         */
         @Composable
         fun getPrimary(): Shadow = Shadow(
             radius = getUIKitMaterials().shadowMaterial.radius,
@@ -46,13 +49,16 @@ data class UIKitShadowMaterial(
             blendMode = getUIKitMaterials().shadowMaterial.blendMode
         )
 
+        /**
+         * Marginal 边缘阴影主要为 UI 可读性服务, 用于颜色与背景对比度不高的控件中以明确边缘
+         */
         @Composable
-        fun getSecondary(): Shadow = Shadow(
+        fun getMarginal(): Shadow = Shadow(
             radius = getUIKitMaterials().shadowMaterial.radius / 2,
             spread = getUIKitMaterials().shadowMaterial.spread,
             offset = getUIKitMaterials().shadowMaterial.offset,
             color = getUIKitMaterials().shadowMaterial.color,
-            alpha = getUIKitMaterials().shadowMaterial.alpha,
+            alpha = getUIKitMaterials().shadowMaterial.alpha * 2,
             blendMode = getUIKitMaterials().shadowMaterial.blendMode
         )
     }

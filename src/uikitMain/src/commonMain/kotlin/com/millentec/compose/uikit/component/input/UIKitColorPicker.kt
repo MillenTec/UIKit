@@ -244,7 +244,7 @@ fun UIKitHueSlider(
                         scaleY = thumbScaleAnimated,
                     )
                     .dropShadow(
-                        shadow = UIKitShadowMaterial.getSecondary(),
+                        shadow = UIKitShadowMaterial.getMarginal(),
                         shape = RoundedCornerShape(getUIKitShapes().circular)
                     )
                     .clip(RoundedCornerShape(getUIKitShapes().circular))
@@ -415,7 +415,7 @@ fun UIKitAlphaSlider(
                         scaleY = thumbScaleAnimated,
                     )
                     .dropShadow(
-                        shadow = UIKitShadowMaterial.getSecondary(),
+                        shadow = UIKitShadowMaterial.getMarginal(),
                         shape = RoundedCornerShape(getUIKitShapes().circular)
                     )
                     .clip(RoundedCornerShape(getUIKitShapes().circular))
@@ -545,7 +545,7 @@ fun UIKitSVPlane(
                             )
                         } else Modifier)
                 .dropShadow(
-                    shadow = UIKitShadowMaterial.getSecondary(),
+                    shadow = UIKitShadowMaterial.getMarginal(),
                     shape = RoundedCornerShape(cornerRadius)
                 )
                 .clip(RoundedCornerShape(cornerRadius))
@@ -610,7 +610,7 @@ fun UIKitSVPlane(
                     )
                     .then(if (shadowEnabled) {
                         Modifier.dropShadow(
-                            shadow = UIKitShadowMaterial.getSecondary(),
+                            shadow = UIKitShadowMaterial.getMarginal(),
                             shape = RoundedCornerShape(getUIKitShapes().circular)
                         )
                     } else Modifier)
@@ -723,7 +723,7 @@ fun UIKitHSVColorPicker(
                             top = svPlaneThumbSize / 2
                         )
                         .dropShadow(
-                            shadow = UIKitShadowMaterial.getSecondary(),
+                            shadow = UIKitShadowMaterial.getMarginal(),
                             shape = RoundedCornerShape(getUIKitShapes().regularRounded)
                         )
                         .clip(RoundedCornerShape(getUIKitShapes().regularRounded))

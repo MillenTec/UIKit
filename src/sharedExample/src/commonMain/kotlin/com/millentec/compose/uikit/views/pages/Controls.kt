@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
@@ -277,6 +278,32 @@ fun Controls() {
                 type = UIKitInfoCardType.Error,
                 title = "Error",
                 body = "This the body."
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+            Box(
+                modifier = Modifier
+                    .size(100.dp)
+                    .dropShadow(
+                        shape = RoundedCornerShape(getUIKitShapes().regularRounded),
+                        shadow = UIKitShadowMaterial.getPrimary()
+                    )
+                    .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                    .background(getUIKitColors().contentFillColorPrimaryBrush)
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().x2Spacing))
+
+            Box(
+                modifier = Modifier
+                    .size(100.dp)
+                    .dropShadow(
+                        shape = RoundedCornerShape(getUIKitShapes().regularRounded),
+                        shadow = UIKitShadowMaterial.getMarginal()
+                    )
+                    .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                    .background(getUIKitColors().contentFillColorPrimaryBrush)
             )
 
             Spacer(Modifier.height(getUIKitLayout().x4Spacing))

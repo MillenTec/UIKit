@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -26,10 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.ChevronArrowDown
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Wheelchair
-import com.millentec.compose.uikit.theme.getUIKitAnimate
-import com.millentec.compose.uikit.theme.getUIKitColors
-import com.millentec.compose.uikit.theme.getUIKitLayout
-import com.millentec.compose.uikit.theme.getUIKitShapes
+import com.millentec.compose.uikit.theme.*
 
 @Composable
 @Preview
@@ -57,6 +55,7 @@ fun UIKitSettingsExpander(
     title: String,
     description: String? = null,
     cornerRadius: Dp = getUIKitShapes().regularRounded,
+    shadowEnabled: Boolean = false,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
     content: @Composable ColumnScope.() -> Unit
@@ -68,6 +67,12 @@ fun UIKitSettingsExpander(
     ) {
         Column(
             modifier = Modifier
+                .then(if (shadowEnabled) {
+                    Modifier.dropShadow(
+                        shape = RoundedCornerShape(cornerRadius),
+                        shadow = UIKitShadowMaterial.getPrimary()
+                    )
+                } else Modifier)
                 .clip(RoundedCornerShape(cornerRadius))
                 .background(background)
                 .animateContentSize(
@@ -88,6 +93,7 @@ fun UIKitSettingsExpander(
                 cornerRadius = cornerRadius,
                 background = background,
                 contentPadding = contentPadding,
+                shadowEnabled = false
             ) {
                 Icon(
                     modifier = Modifier

@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,10 +22,7 @@ import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Apps
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.ChevronArrowRight
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Tools
-import com.millentec.compose.uikit.theme.getUIKitColors
-import com.millentec.compose.uikit.theme.getUIKitLayout
-import com.millentec.compose.uikit.theme.getUIKitShapes
-import com.millentec.compose.uikit.theme.getUIKitTypography
+import com.millentec.compose.uikit.theme.*
 
 @Composable
 @Preview
@@ -64,6 +62,7 @@ fun UIKitSettingCard(
     cornerRadius: Dp = getUIKitShapes().regularRounded,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
+    shadowEnabled: Boolean = false,
     content: @Composable BoxScope.() -> Unit = {
         Icon(
             modifier = Modifier
@@ -81,6 +80,12 @@ fun UIKitSettingCard(
     ) {
         Row(
             modifier = Modifier
+                .then(if (shadowEnabled) {
+                    Modifier.dropShadow(
+                        shape = RoundedCornerShape(cornerRadius),
+                        shadow = UIKitShadowMaterial.getPrimary()
+                    )
+                } else Modifier)
                 .clip(RoundedCornerShape(cornerRadius))
                 .fillMaxWidth()
                 .background(background)
@@ -140,6 +145,7 @@ fun UIKitSettingCard(
     cornerRadius: Dp = getUIKitShapes().regularRounded,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
+    shadowEnabled: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
 ) {
     Box(
@@ -148,6 +154,12 @@ fun UIKitSettingCard(
     ) {
         Column(
             modifier = Modifier
+                .then(if (shadowEnabled) {
+                    Modifier.dropShadow(
+                        shape = RoundedCornerShape(cornerRadius),
+                        shadow = UIKitShadowMaterial.getPrimary()
+                    )
+                } else Modifier)
                 .clip(RoundedCornerShape(cornerRadius))
                 .fillMaxWidth()
                 .background(background)
