@@ -184,9 +184,7 @@ fun UIKitButton(
     iconSize: DpSize = DpSize(icon.defaultWidth, icon.defaultHeight),
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(getUIKitShapes().circular),
-    colors: UIKitButtonColors = UIKitButtonColors.default(
-        content = Color.Unspecified
-    ),
+    colors: UIKitButtonColors = UIKitButtonColors.default(),
     hasBorder: Boolean = false,
     borderWidth: Dp = 1.dp,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
@@ -229,7 +227,7 @@ fun UIKitButton(
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
     enabled: Boolean = true,
     onClick: () -> Unit,
-    iconColor: Color = Color.Unspecified,
+    iconColor: Color = colors.content,
     textStyle: TextStyle = getUIKitTypography().body
 ) = UIKitButton(
     modifier = modifier,

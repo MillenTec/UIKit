@@ -224,9 +224,7 @@ fun UIKitToggleButton(
     checked: Boolean,
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(getUIKitShapes().circular),
-    colors: UIKitToggleButtonColors = UIKitToggleButtonColors.default(
-        content = Color.Unspecified
-    ),
+    colors: UIKitToggleButtonColors = UIKitToggleButtonColors.default(),
     hasBorder: Boolean = false,
     borderWidth: Dp = 1.dp,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
@@ -272,8 +270,8 @@ fun UIKitToggleButton(
     enabled: Boolean = true,
     onCheckedChange: (Boolean) -> Unit,
     iconSize: DpSize = DpSize(icon.defaultWidth, icon.defaultHeight),
-    iconColor: Color = Color.Unspecified,
-    iconColorChecked: Color = Color.Unspecified,
+    iconColor: Color = colors.contentChecked,
+    iconColorChecked: Color = colors.content,
     textStyle: TextStyle = getUIKitTypography().body
 ) = UIKitToggleButton(
     modifier = modifier,

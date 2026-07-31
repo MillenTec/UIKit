@@ -26,7 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import com.millentec.compose.uikit.component.input.UIKitSliderChangeType.*
 import com.millentec.compose.uikit.foundation.isDesktopOS
-import com.millentec.compose.uikit.theme.*
+import com.millentec.compose.uikit.theme.UIKitShadowMaterial
+import com.millentec.compose.uikit.theme.getUIKitAnimate
+import com.millentec.compose.uikit.theme.getUIKitColors
+import com.millentec.compose.uikit.theme.getUIKitShapes
 import kotlin.math.abs
 import kotlin.math.floor
 
@@ -70,7 +73,7 @@ data class UIKitSliderColors(
     companion object {
         @Composable
         fun default(
-            thumb: Color = UIKitColors.getLight().contentFillColorPrimaryBrush,
+            thumb: Color = Color.White,
             thumbDisabled: Color = getUIKitColors().contentFillColorBrushDisabled,
             activeTrack: Color = getUIKitColors().highlightColorPrimaryBrush,
             inactiveTrack: Color = getUIKitColors().contentFillColorTertiaryBrush,

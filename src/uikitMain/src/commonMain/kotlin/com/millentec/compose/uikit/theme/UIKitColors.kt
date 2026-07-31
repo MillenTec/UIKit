@@ -110,5 +110,12 @@ data class UIKitColors(
             pointerHoverInteractionColor = Color(0x0FFFFFFF),
             pointerTapInteractionColor = Color(0x1FFFFFFF),
         )
+
+        val White = Color(0xFFF5F5F7)
+        val Black = Color(0xFF151517)
+        val Blue = Color(0xFF0071E3)
+        val Green = Color(0xFF34C759)
+        val Yellow = Color(0xFFFFCC00)
+        val Red = Color(0xFFFF383C)
     }
 }

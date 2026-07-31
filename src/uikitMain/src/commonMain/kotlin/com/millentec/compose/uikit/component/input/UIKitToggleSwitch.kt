@@ -78,7 +78,7 @@ data class UIKitToggleSwitchColors(
             borderChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
             thumb: Color = getUIKitColors().contentFillColorFourthBrush,
             thumbDisabled: Color = getUIKitColors().lineFillColorDisabled,
-            thumbChecked: Color = UIKitColors.getDark().textFillColorPrimaryBrush
+            thumbChecked: Color = UIKitColors.White
         ) = UIKitToggleSwitchColors(
             background = background,
             backgroundDisabled = backgroundDisabled,
