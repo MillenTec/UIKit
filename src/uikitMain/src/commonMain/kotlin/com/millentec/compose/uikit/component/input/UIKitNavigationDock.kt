@@ -1,10 +1,7 @@
 ﻿package com.millentec.compose.uikit.component.input
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -30,6 +27,7 @@ import com.millentec.compose.uikit.component.layout.ScreenSideAdaptiveContainer
 import com.millentec.compose.uikit.component.layout.ScreenSideAdaptiveContainerState
 import com.millentec.compose.uikit.component.layout.rememberScreenSideAdaptiveContainerState
 import com.millentec.compose.uikit.foundation.LayoutPosition
+import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
 import com.millentec.compose.uikit.theme.*
 import kotlinx.coroutines.launch
@@ -39,31 +37,34 @@ import kotlin.math.sqrt
 @Preview
 @Composable
 private fun Preview(){
-    UIKitNavigationDock(
+    Column(
         modifier = Modifier
-            .fillMaxSize(),
-        checkedIndex = 2,
-        onChecked = { },
-        independentButtonPosition = LayoutPosition.Right,
-        items = listOf(
-            UIKitNavigationItem(
-                "Option 0"
+            .fillMaxSize()
+    ) {
+        UIKitNavigationDock(
+            checkedIndex = 2,
+            onChecked = { },
+            independentButtonPosition = LayoutPosition.Right,
+            items = listOf(
+                UIKitNavigationItem(
+                    "Option 0"
+                ),
+                UIKitNavigationItem(
+                    "Option 1"
+                ),
+                UIKitNavigationItem(
+                    "Option 2"
+                ),
+                UIKitNavigationItem(
+                    "Option 3"
+                )
             ),
-            UIKitNavigationItem(
-                "Option 1"
-            ),
-            UIKitNavigationItem(
-                "Option 2"
-            ),
-            UIKitNavigationItem(
-                "Option 3"
-            )
-        ),
-        hasIndependentButton = true,
-        independentButtonContent = {
-            Text("Button")
-        },
-    )
+            hasIndependentButton = true,
+            independentButtonContent = {
+                Text("Button")
+            },
+        )
+    }
 }
 
 data class UIKitNavigationItem(
@@ -84,13 +85,12 @@ fun UIKitNavigationDock(
     independentButtonContent: @Composable BoxScope.() -> Unit = {},
     onIndependentButtonClick: () -> Unit = {},
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
-    indicatorBackground: Color = getUIKitColors().contentFillColorPrimaryBrush,
+    indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.3f),
     contentColor: Color = getUIKitColors().textFillColorPrimaryBrush,
     contentColorChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialsState? = null,
     shadowEnable: Boolean = true,
-    visible: Boolean = true,
     maxWidth: Dp = (-1).dp
 ) {
     val mainIslandState: ScreenSideAdaptiveContainerState = rememberScreenSideAdaptiveContainerState(
@@ -142,7 +142,6 @@ fun UIKitNavigationDock(
         acrylicEffectEnabled = acrylicEffectEnabled,
         acrylicState = acrylicState,
         shadowEnable = shadowEnable,
-        visible = visible,
         maxWidth = maxWidth
     )
 }
@@ -159,7 +158,7 @@ fun UIKitNavigationDock(
     independentButtonPosition: LayoutPosition = LayoutPosition.Right,
     onIndependentButtonClick: () -> Unit = {},
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
-    indicatorBackground: Color = getUIKitColors().contentFillColorPrimaryBrush,
+    indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.3f),
     contentColor: Color = getUIKitColors().textFillColorPrimaryBrush,
     contentColorChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
     mainIslandState: ScreenSideAdaptiveContainerState,
@@ -167,134 +166,107 @@ fun UIKitNavigationDock(
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialsState? = null,
     shadowEnable: Boolean = true,
-    visible: Boolean = true,
     maxWidth: Dp = (-1).dp
 ) {
     Box(
         modifier = modifier,
         contentAlignment = Alignment.BottomCenter
     ) {
-        AnimatedVisibility(
-            visible = visible,
-            enter = slideInVertically(
-                animationSpec = spring(
-                    dampingRatio = getUIKitAnimate().standardSpringDampingRatio,
-                    stiffness = getUIKitAnimate().standardSpringStiffness
-                )
-            ) {
-                it
-            },
-            exit = slideOutVertically(
-                animationSpec = tween(getUIKitAnimate().motionFastDurationMillis, easing = FastOutSlowInEasing)
-            ) {
-                it
-            }
+        Row(
+            modifier = Modifier
+                .then(
+                    if (maxWidth == (-1).dp)
+                        Modifier.fillMaxWidth()
+                    else Modifier.width(maxWidth)
+                ),
+            horizontalArrangement = Arrangement.Center
         ) {
-            Row(
-                modifier = Modifier
-                    .then(
-                        if (maxWidth == (-1).dp)
-                            Modifier.fillMaxWidth()
-                        else Modifier.width(maxWidth)
-                    ),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                val independentIsland = @Composable {
-                    if (hasIndependentButton) {
-                        val pressed = remember { mutableStateOf(false) }
-                        val scaleAnimated by animateFloatAsState(
-                            targetValue = if (pressed.value) 0.90f else 1f,
-                            animationSpec = tween(
-                                getUIKitAnimate().transformRegularDurationMillis,
-                                easing = FastOutSlowInEasing
-                            )
-                        )
+            @Composable
+            fun independentIsland() {
+                if (hasIndependentButton) {
+                    // 优先保证其高度与主岛一致且为正圆, 优先级高于屏幕同步
+                    val state = independentIslandState.copy(
+                        height = mainIslandState.height,
+                        width = mainIslandState.height,
+                    )
 
-                        // 优先保证其高度与主岛一致且为正圆, 优先级高于屏幕同步
-                        val state = independentIslandState.copy(
-                            height = mainIslandState.height,
-                            width = mainIslandState.height,
-                        )
-
-                        ScreenSideAdaptiveContainer(
+                    ScreenSideAdaptiveContainer(
+                        onClick = {
+                            onIndependentButtonClick()
+                        },
+                        indication = null,
+                        interaction = UIKitInteraction.DarkenWithScale,
+                        state = state,
+                        background = background,
+                        acrylicEffectEnabled = acrylicEffectEnabled,
+                        acrylicState = acrylicState,
+                        shadowEnable = shadowEnable
+                    ) {
+                        Box(
                             modifier = Modifier
-                                .background(Color.Transparent)
-                                .graphicsLayer(
-                                    scaleX = scaleAnimated,
-                                    scaleY = scaleAnimated
-                                )
-                                .pointerInput(Unit) {
-                                    detectTapGestures(
-                                        onPress = {
-                                            pressed.value = true
-                                            tryAwaitRelease()
-                                            pressed.value = false
-                                        },
-                                        onTap = {
-                                            onIndependentButtonClick()
-                                        }
-                                    )
-                                },
-                            state = state,
-                            background = background,
-                            acrylicEffectEnabled = acrylicEffectEnabled,
-                            acrylicState = acrylicState,
-                            shadowEnable = shadowEnable
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(getUIKitLayout().smallSpacing)
-                                    .fillMaxSize(),
-                                contentAlignment = Alignment.Center,
-                                content = independentButtonContent
-                            )
-                        }
+                                .padding(getUIKitLayout().smallSpacing)
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center,
+                            content = independentButtonContent
+                        )
                     }
                 }
+            }
 
-                if (independentButtonPosition == LayoutPosition.Left && hasIndependentButton) {
-                    independentIsland()
-                    Spacer(Modifier.width(islandMargin))
-                }
+            if (independentButtonPosition == LayoutPosition.Left && hasIndependentButton) {
+                independentIsland()
+                Spacer(Modifier.width(islandMargin))
+            }
 
-                ScreenSideAdaptiveContainer(
-                    modifier = Modifier
-                        .weight(1f),
-                    state = mainIslandState,
-                    background = background,
-                    acrylicEffectEnabled = acrylicEffectEnabled,
-                    acrylicState = acrylicState,
-                    shadowEnable = shadowEnable
-                ) {
-                    BoxWithConstraints {
-                        val itemWidth = (this.maxWidth - getUIKitLayout().smallSpacing * 2) / items.size
-                        val targetOffset = itemWidth * checkedIndex
-                        val draggingOffset = remember { mutableStateOf(0.dp) }
-                        val isDragging = remember { mutableStateOf(false) }
-                        val currentOffset = targetOffset + draggingOffset.value
-                        val densityDpi = LocalDensity.current.density
-                        val targetIndicatorScale = remember { mutableStateOf(1f) }
-                        val scope = rememberCoroutineScope()
-                        val overDragOffset = remember { mutableStateOf(0.dp) }
+            ScreenSideAdaptiveContainer(
+                modifier = Modifier
+                    .weight(1f),
+                state = mainIslandState,
+                background = background,
+                acrylicEffectEnabled = acrylicEffectEnabled,
+                acrylicState = acrylicState,
+                shadowEnable = shadowEnable
+            ) {
+                BoxWithConstraints {
+                    val itemWidth = (this.maxWidth - getUIKitLayout().smallSpacing * 2) / items.size
+                    val targetOffset = itemWidth * checkedIndex
+                    val draggingOffset = remember { mutableStateOf(0.dp) }
+                    val isDragging = remember { mutableStateOf(false) }
+                    val currentOffset = targetOffset + draggingOffset.value
+                    val densityDpi = LocalDensity.current.density
+                    val targetIndicatorScale = remember { mutableStateOf(1f) }
+                    val scope = rememberCoroutineScope()
+                    val overDragOffset = remember { mutableStateOf(0.dp) }
 
-                        val currentCheckedIndex by rememberUpdatedState(checkedIndex)
-                        val itemCount by rememberUpdatedState(items.size)
-                        val currentItemWidth by rememberUpdatedState(itemWidth)
-                        val currentOverDragOffset by rememberUpdatedState(overDragOffset)
+                    val currentCheckedIndex by rememberUpdatedState(checkedIndex)
+                    val itemCount by rememberUpdatedState(items.size)
+                    val currentItemWidth by rememberUpdatedState(itemWidth)
+                    val currentOverDragOffset by rememberUpdatedState(overDragOffset)
 
-                        val offsetAnimated = remember { Animatable(currentOffset, Dp.VectorConverter) }
-                        val indicatorScaleAnimated = remember { Animatable(1f, Float.VectorConverter) }
+                    val offsetAnimated = remember { Animatable(currentOffset, Dp.VectorConverter) }
+                    val indicatorScaleAnimated = remember { Animatable(1f, Float.VectorConverter) }
 
-                        LaunchedEffect(targetIndicatorScale.value) {
-                            indicatorScaleAnimated.snapTo(targetIndicatorScale.value)
+                    LaunchedEffect(targetIndicatorScale.value) {
+                        indicatorScaleAnimated.snapTo(targetIndicatorScale.value)
+                    }
+
+                    val uiKitAnimate = getUIKitAnimate()
+                    LaunchedEffect(checkedIndex) {
+                        if (isDragging.value) {
+                            offsetAnimated.snapTo(currentOffset)
+                            return@LaunchedEffect
                         }
+                        offsetAnimated.animateTo(
+                            currentOffset,
+                            animationSpec = spring(
+                                dampingRatio = uiKitAnimate.standardSpringDampingRatio,
+                                stiffness = uiKitAnimate.standardSpringStiffness
+                            )
+                        )
+                    }
 
-                        val uiKitAnimate = getUIKitAnimate()
-                        LaunchedEffect(checkedIndex) {
-                            if (isDragging.value) {
-                                offsetAnimated.snapTo(currentOffset)
-                                return@LaunchedEffect
-                            }
+                    LaunchedEffect(draggingOffset.value) {
+                        if (draggingOffset.value == 0.dp && !isDragging.value) {
                             offsetAnimated.animateTo(
                                 currentOffset,
                                 animationSpec = spring(
@@ -302,218 +274,203 @@ fun UIKitNavigationDock(
                                     stiffness = uiKitAnimate.standardSpringStiffness
                                 )
                             )
+                            return@LaunchedEffect
                         }
+                        offsetAnimated.snapTo(currentOffset)
+                    }
 
-                        LaunchedEffect(draggingOffset.value) {
-                            if (draggingOffset.value == 0.dp && !isDragging.value) {
-                                offsetAnimated.animateTo(
-                                    currentOffset,
-                                    animationSpec = spring(
-                                        dampingRatio = uiKitAnimate.standardSpringDampingRatio,
-                                        stiffness = uiKitAnimate.standardSpringStiffness
-                                    )
-                                )
-                                return@LaunchedEffect
-                            }
-                            offsetAnimated.snapTo(currentOffset)
-                        }
+                    LaunchedEffect(this.maxWidth) {
+                        offsetAnimated.snapTo(currentOffset)
+                    }
 
-                        LaunchedEffect(this.maxWidth) {
-                            offsetAnimated.snapTo(currentOffset)
-                        }
+                    Box(
+                        modifier = Modifier
+                            .offset(offsetAnimated.value)
+                            .padding(getUIKitLayout().smallSpacing)
+                            .graphicsLayer(
+                                scaleX = indicatorScaleAnimated.value,
+                                translationX = if (checkedIndex == itemCount - 1) ((itemWidth * (1f - indicatorScaleAnimated.value)).value * densityDpi) / 2
+                                else -(((itemWidth * (1f - indicatorScaleAnimated.value)).value * densityDpi) / 2)
+                            )
+                            .clip(RoundedCornerShape(mainIslandState.cornerRadius - getUIKitLayout().smallSpacing))
+                            .fillMaxHeight()
+                            .width(itemWidth)
+                            .background(indicatorBackground)
+                            .pointerInput(Unit) {
+                                detectDragGestures(
+                                    onDragStart = {
+                                        isDragging.value = true
+                                    },
+                                    onDrag = { change, offset ->
+                                        val newOffset = draggingOffset.value + (offset.x / densityDpi).dp
+                                        val maxOverDragScale = 0.8f
+                                        val maxOverDragOffset = 100.dp
 
-                        Box(
-                            modifier = Modifier
-                                .offset(offsetAnimated.value)
-                                .padding(getUIKitLayout().smallSpacing)
-                                .graphicsLayer(
-                                    scaleX = indicatorScaleAnimated.value,
-                                    translationX = if (checkedIndex == itemCount - 1) ((itemWidth * (1f - indicatorScaleAnimated.value)).value * densityDpi) / 2
-                                    else -(((itemWidth * (1f - indicatorScaleAnimated.value)).value * densityDpi) / 2)
-                                )
-                                .clip(RoundedCornerShape(mainIslandState.cornerRadius - getUIKitLayout().smallSpacing))
-                                .fillMaxHeight()
-                                .width(itemWidth)
-                                .background(
-                                    if (acrylicEffectEnabled && acrylicState != null)
-                                        getUIKitMaterials().acrylicMaterial.secondaryTint else indicatorBackground
-                                )
-                                .pointerInput(Unit) {
-                                    detectDragGestures(
-                                        onDragStart = {
-                                            isDragging.value = true
-                                        },
-                                        onDrag = { change, offset ->
-                                            val newOffset = draggingOffset.value + (offset.x / densityDpi).dp
-                                            val maxOverDragScale = 0.8f
-                                            val maxOverDragOffset = 100.dp
-
-                                            if (currentCheckedIndex == 0 && newOffset < 0.dp) {
-                                                overDragOffset.value = currentOverDragOffset.value + newOffset
-                                                val offset = overDragOffset.value.coerceAtLeast(-maxOverDragOffset)
-                                                val scaleDiff =
-                                                    (1f - maxOverDragScale) * sqrt(abs(offset.value) / maxOverDragOffset.value)
-                                                val resultScale = 1f - scaleDiff
-                                                targetIndicatorScale.value = resultScale
-                                            } else if (currentCheckedIndex == itemCount - 1 && newOffset > 0.dp) {
-                                                overDragOffset.value = currentOverDragOffset.value + newOffset
-                                                val offset = overDragOffset.value.coerceAtMost(maxOverDragOffset)
-                                                val scaleDiff =
-                                                    (1f - maxOverDragScale) * sqrt(abs(offset.value) / maxOverDragOffset.value)
-                                                val resultScale = 1f - scaleDiff
-                                                targetIndicatorScale.value = resultScale
+                                        if (currentCheckedIndex == 0 && newOffset < 0.dp) {
+                                            overDragOffset.value = currentOverDragOffset.value + newOffset
+                                            val offset = overDragOffset.value.coerceAtLeast(-maxOverDragOffset)
+                                            val scaleDiff =
+                                                (1f - maxOverDragScale) * sqrt(abs(offset.value) / maxOverDragOffset.value)
+                                            val resultScale = 1f - scaleDiff
+                                            targetIndicatorScale.value = resultScale
+                                        } else if (currentCheckedIndex == itemCount - 1 && newOffset > 0.dp) {
+                                            overDragOffset.value = currentOverDragOffset.value + newOffset
+                                            val offset = overDragOffset.value.coerceAtMost(maxOverDragOffset)
+                                            val scaleDiff =
+                                                (1f - maxOverDragScale) * sqrt(abs(offset.value) / maxOverDragOffset.value)
+                                            val resultScale = 1f - scaleDiff
+                                            targetIndicatorScale.value = resultScale
+                                        } else {
+                                            if (currentOverDragOffset.value != 0.dp) {
+                                                // 这两者本身不可能出现(除非 overDrag 计算有 Bug), 但仍需防御性编程
+                                                if (newOffset < 0.dp && currentOverDragOffset.value < 0.dp) overDragOffset.value =
+                                                    0.dp
+                                                else if (newOffset > 0.dp && currentOverDragOffset.value > 0.dp) overDragOffset.value =
+                                                    0.dp
+                                                else {
+                                                    overDragOffset.value = currentOverDragOffset.value + newOffset
+                                                    val offset = if (overDragOffset.value > 0.dp)
+                                                        overDragOffset.value.coerceAtMost(maxOverDragOffset)
+                                                    else
+                                                        overDragOffset.value.coerceAtLeast(-maxOverDragOffset)
+                                                    val scaleDiff =
+                                                        (1f - maxOverDragScale) * sqrt(abs(offset.value) / maxOverDragOffset.value)
+                                                    val resultScale = 1f - scaleDiff
+                                                    targetIndicatorScale.value = resultScale
+                                                }
                                             } else {
-                                                if (currentOverDragOffset.value != 0.dp) {
-                                                    // 这两者本身不可能出现(除非 overDrag 计算有 Bug), 但仍需防御性编程
-                                                    if (newOffset < 0.dp && currentOverDragOffset.value < 0.dp) overDragOffset.value =
-                                                        0.dp
-                                                    else if (newOffset > 0.dp && currentOverDragOffset.value > 0.dp) overDragOffset.value =
-                                                        0.dp
-                                                    else {
-                                                        overDragOffset.value = currentOverDragOffset.value + newOffset
-                                                        val offset = if (overDragOffset.value > 0.dp)
-                                                            overDragOffset.value.coerceAtMost(maxOverDragOffset)
-                                                        else
-                                                            overDragOffset.value.coerceAtLeast(-maxOverDragOffset)
-                                                        val scaleDiff =
-                                                            (1f - maxOverDragScale) * sqrt(abs(offset.value) / maxOverDragOffset.value)
-                                                        val resultScale = 1f - scaleDiff
-                                                        targetIndicatorScale.value = resultScale
-                                                    }
-                                                } else {
-                                                    draggingOffset.value = newOffset
-                                                    if (indicatorScaleAnimated.value != 1f) {
-                                                        scope.launch {
-                                                            indicatorScaleAnimated.snapTo(1f)
-                                                        }
+                                                draggingOffset.value = newOffset
+                                                if (indicatorScaleAnimated.value != 1f) {
+                                                    scope.launch {
+                                                        indicatorScaleAnimated.snapTo(1f)
                                                     }
                                                 }
-                                            }
-
-                                            if (draggingOffset.value > currentItemWidth / 2) {
-                                                if (currentCheckedIndex < itemCount - 1) {
-                                                    onChecked(currentCheckedIndex + 1)
-                                                    draggingOffset.value -= currentItemWidth
-                                                } else {
-                                                    draggingOffset.value = currentItemWidth / 2
-                                                }
-                                            } else if (draggingOffset.value < -(currentItemWidth / 2)) {
-                                                if (currentCheckedIndex > 0) {
-                                                    onChecked(currentCheckedIndex - 1)
-                                                    draggingOffset.value += currentItemWidth
-                                                } else {
-                                                    draggingOffset.value = -(currentItemWidth / 2)
-                                                }
-                                            }
-                                        },
-                                        onDragEnd = {
-                                            draggingOffset.value = 0.dp
-                                            overDragOffset.value = 0.dp
-                                            isDragging.value = false
-                                            scope.launch {
-                                                indicatorScaleAnimated.animateTo(
-                                                    1f, animationSpec = spring(
-                                                        dampingRatio = uiKitAnimate.standardSpringDampingRatio,
-                                                        stiffness = uiKitAnimate.standardSpringStiffness
-                                                    )
-                                                )
-                                            }
-                                        },
-                                        onDragCancel = {
-                                            draggingOffset.value = 0.dp
-                                            overDragOffset.value = 0.dp
-                                            isDragging.value = false
-                                            scope.launch {
-                                                indicatorScaleAnimated.animateTo(
-                                                    1f, animationSpec = spring(
-                                                        dampingRatio = uiKitAnimate.standardSpringDampingRatio,
-                                                        stiffness = uiKitAnimate.standardSpringStiffness
-                                                    )
-                                                )
                                             }
                                         }
+
+                                        if (draggingOffset.value > currentItemWidth / 2) {
+                                            if (currentCheckedIndex < itemCount - 1) {
+                                                onChecked(currentCheckedIndex + 1)
+                                                draggingOffset.value -= currentItemWidth
+                                            } else {
+                                                draggingOffset.value = currentItemWidth / 2
+                                            }
+                                        } else if (draggingOffset.value < -(currentItemWidth / 2)) {
+                                            if (currentCheckedIndex > 0) {
+                                                onChecked(currentCheckedIndex - 1)
+                                                draggingOffset.value += currentItemWidth
+                                            } else {
+                                                draggingOffset.value = -(currentItemWidth / 2)
+                                            }
+                                        }
+                                    },
+                                    onDragEnd = {
+                                        draggingOffset.value = 0.dp
+                                        overDragOffset.value = 0.dp
+                                        isDragging.value = false
+                                        scope.launch {
+                                            indicatorScaleAnimated.animateTo(
+                                                1f, animationSpec = spring(
+                                                    dampingRatio = uiKitAnimate.standardSpringDampingRatio,
+                                                    stiffness = uiKitAnimate.standardSpringStiffness
+                                                )
+                                            )
+                                        }
+                                    },
+                                    onDragCancel = {
+                                        draggingOffset.value = 0.dp
+                                        overDragOffset.value = 0.dp
+                                        isDragging.value = false
+                                        scope.launch {
+                                            indicatorScaleAnimated.animateTo(
+                                                1f, animationSpec = spring(
+                                                    dampingRatio = uiKitAnimate.standardSpringDampingRatio,
+                                                    stiffness = uiKitAnimate.standardSpringStiffness
+                                                )
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+                    )
+
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(getUIKitLayout().smallSpacing)
+                    ) {
+                        items.forEachIndexed { index, item ->
+                            val checked = index == checkedIndex
+                            val pressed = remember { mutableStateOf(false) }
+                            val scaleAnimated by animateFloatAsState(
+                                targetValue = if (pressed.value) 0.9f else 1f,
+                                animationSpec = tween(
+                                    getUIKitAnimate().transformRegularDurationMillis,
+                                    easing = FastOutSlowInEasing
+                                )
+                            )
+                            val contentColorAnimated by animateColorAsState(
+                                targetValue = if (checked) contentColorChecked else contentColor,
+                                animationSpec = tween(
+                                    getUIKitAnimate().transformRegularDurationMillis,
+                                    easing = LinearEasing
+                                )
+                            )
+
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .weight(1f)
+                                    .background(Color.Transparent)
+                                    .then(
+                                        if (checked) Modifier else
+                                            Modifier.pointerInput(Unit) {
+                                                detectTapGestures(
+                                                    onPress = {
+                                                        pressed.value = true
+                                                        tryAwaitRelease()
+                                                        pressed.value = false
+                                                    },
+                                                    onTap = {
+                                                        onChecked(index)
+                                                    }
+                                                )
+                                            })  // 将 padding 置于 pointerInput 之后可以最大化可交互面积
+                                    .padding(getUIKitLayout().smallSpacing)
+                                    .graphicsLayer(
+                                        scaleX = scaleAnimated,
+                                        scaleY = scaleAnimated
+                                    ),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                if (item.icon != null) {
+                                    Icon(
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .aspectRatio(item.icon.viewportWidth / item.icon.viewportHeight),
+                                        imageVector = item.icon,
+                                        contentDescription = item.title,
+                                        tint = contentColorAnimated,
                                     )
                                 }
-                        )
-
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(getUIKitLayout().smallSpacing)
-                        ) {
-                            items.forEachIndexed { index, item ->
-                                val checked = index == checkedIndex
-                                val pressed = remember { mutableStateOf(false) }
-                                val scaleAnimated by animateFloatAsState(
-                                    targetValue = if (pressed.value) 0.9f else 1f,
-                                    animationSpec = tween(
-                                        getUIKitAnimate().transformRegularDurationMillis,
-                                        easing = FastOutSlowInEasing
+                                if (item.title != null) {
+                                    Text(
+                                        item.title,
+                                        style = getUIKitTypography().footnote,
+                                        color = contentColorAnimated,
                                     )
-                                )
-                                val contentColorAnimated by animateColorAsState(
-                                    targetValue = if (checked) contentColorChecked else contentColor,
-                                    animationSpec = tween(
-                                        getUIKitAnimate().transformRegularDurationMillis,
-                                        easing = LinearEasing
-                                    )
-                                )
-
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxHeight()
-                                        .weight(1f)
-                                        .background(Color.Transparent)
-                                        .then(
-                                            if (checked) Modifier else
-                                                Modifier.pointerInput(Unit) {
-                                                    detectTapGestures(
-                                                        onPress = {
-                                                            pressed.value = true
-                                                            tryAwaitRelease()
-                                                            pressed.value = false
-                                                        },
-                                                        onTap = {
-                                                            onChecked(index)
-                                                        }
-                                                    )
-                                                })  // 将 padding 置于 pointerInput 之后可以最大化可交互面积
-                                        .padding(getUIKitLayout().smallSpacing)
-                                        .graphicsLayer(
-                                            scaleX = scaleAnimated,
-                                            scaleY = scaleAnimated
-                                        ),
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                ) {
-                                    if (item.icon != null) {
-                                        Icon(
-                                            modifier = Modifier
-                                                .weight(1f)
-                                                .aspectRatio(item.icon.viewportWidth / item.icon.viewportHeight),
-                                            imageVector = item.icon,
-                                            contentDescription = item.title,
-                                            tint = contentColorAnimated,
-                                        )
-                                    }
-                                    if (item.title != null) {
-                                        Text(
-                                            item.title,
-                                            style = getUIKitTypography().footnote,
-                                            color = contentColorAnimated,
-                                        )
-                                    }
                                 }
                             }
                         }
                     }
                 }
+            }
 
-                if (independentButtonPosition == LayoutPosition.Right && hasIndependentButton) {
-                    Spacer(Modifier.width(islandMargin))
-                    independentIsland()
-                }
+            if (independentButtonPosition == LayoutPosition.Right && hasIndependentButton) {
+                Spacer(Modifier.width(islandMargin))
+                independentIsland()
             }
         }
     }

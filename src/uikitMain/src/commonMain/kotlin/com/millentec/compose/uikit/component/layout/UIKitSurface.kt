@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.tooling.preview.Preview
-import com.millentec.compose.uikit.foundation.uikitClickable
+import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.theme.getUIKitColors
 
 @Composable

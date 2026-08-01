@@ -1,15 +1,19 @@
 ﻿package com.millentec.compose.uikit.views
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,10 +31,7 @@ import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Add
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Home
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.toggleMultiple
-import com.millentec.compose.uikit.theme.AppTheme
-import com.millentec.compose.uikit.theme.getUIKitColors
-import com.millentec.compose.uikit.theme.getUIKitLayout
-import com.millentec.compose.uikit.theme.getUIKitShapes
+import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.viewmodels.MainViewModel
 import com.millentec.compose.uikit.views.pages.*
 
@@ -98,44 +99,62 @@ fun MainViewVerticalLayout() {
             fillHeight = false
         )
 
-        UIKitNavigationDock(
+        Column(
             modifier = Modifier
                 .fillMaxSize(),
-            visible = MainViewModel.navigationDockVisible.collectAsState().value,
-            mainIslandState = mainIslandState,
-            independentIslandState = independentIslandState,
-            acrylicEffectEnabled = acrylicEnabled,
-            acrylicState = acrylicMaterialsState,
-            shadowEnable = acrylicEnabled,
-            checkedIndex = page.ordinal,
-            onChecked = {
-                nav.switchPage(Pages.entries[it])
-            },
-            items = listOf(
-                UIKitNavigationItem(
-                    title = "Home",
-                    icon = FluentIcons.Home
-                ),
-                UIKitNavigationItem(
-                    title = "Controls",
-                    icon = FluentIcons.toggleMultiple()
-                ),
-                UIKitNavigationItem(
-                    title = "Designs",
-                    icon = FluentIcons.designIdeas()
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AnimatedVisibility(
+                visible = MainViewModel.navigationDockVisible.collectAsState().value,
+                enter = slideInVertically(
+                    animationSpec = tween(durationMillis = getUIKitAnimate().motionRegularDurationMillis, easing = FastOutSlowInEasing)
+                ) {
+                    it
+                },
+                exit = slideOutVertically(
+                    animationSpec = tween(durationMillis = getUIKitAnimate().motionRegularDurationMillis, easing = FastOutSlowInEasing)
+                ) {
+                    it
+                }
+            ) {
+                UIKitNavigationDock(
+                    mainIslandState = mainIslandState,
+                    independentIslandState = independentIslandState,
+                    acrylicEffectEnabled = acrylicEnabled,
+                    acrylicState = acrylicMaterialsState,
+                    shadowEnable = true,
+                    checkedIndex = page.ordinal,
+                    onChecked = {
+                        nav.switchPage(Pages.entries[it])
+                    },
+                    items = listOf(
+                        UIKitNavigationItem(
+                            title = "Home",
+                            icon = FluentIcons.Home
+                        ),
+                        UIKitNavigationItem(
+                            title = "Controls",
+                            icon = FluentIcons.toggleMultiple()
+                        ),
+                        UIKitNavigationItem(
+                            title = "Designs",
+                            icon = FluentIcons.designIdeas()
+                        )
+                    ),
+                    hasIndependentButton = true,
+                    independentButtonContent = {
+                        Icon(
+                            modifier = Modifier
+                                .fillMaxSize(0.6f),
+                            imageVector = FluentIcons.Add,
+                            contentDescription = null,
+                            tint = getUIKitColors().textFillColorPrimaryBrush
+                        )
+                    },
+                    maxWidth = 600.dp
                 )
-            ),
-            hasIndependentButton = true,
-            independentButtonContent = {
-                Icon(
-                    modifier = Modifier
-                        .fillMaxSize(0.6f),
-                    imageVector = FluentIcons.Add,
-                    contentDescription = null,
-                    tint = getUIKitColors().textFillColorPrimaryBrush
-                )
-            },
-            maxWidth = 600.dp
-        )
+            }
+        }
     }
 }

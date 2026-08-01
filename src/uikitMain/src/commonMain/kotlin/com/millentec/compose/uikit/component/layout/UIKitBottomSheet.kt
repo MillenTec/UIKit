@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.input.UIKitButton
 import com.millentec.compose.uikit.component.input.UIKitButtonColors
-import com.millentec.compose.uikit.foundation.uikitSwipeable
+import com.millentec.compose.uikit.foundation.helper.uikitSwipeable
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Checkmark
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Dismiss

@@ -41,11 +41,11 @@ import com.millentec.compose.uikit.IconGalleryList
 import com.millentec.compose.uikit.component.input.*
 import com.millentec.compose.uikit.component.layout.*
 import com.millentec.compose.uikit.foundation.LayoutPosition
+import com.millentec.compose.uikit.foundation.helper.mapTo
+import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
-import com.millentec.compose.uikit.foundation.mapTo
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialsState
-import com.millentec.compose.uikit.foundation.uikitClickable
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.animatable.ArrowCircle
 import com.millentec.compose.uikit.icons.fluenticons.animatable.Download

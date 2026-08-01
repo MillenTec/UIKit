@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.dp
 data class UIKitAcrylicMaterial(
     val radius: Dp = 40.dp,
     val tint: Color = Color(0x4CF5F5F7),
-    val secondaryTint: Color = Color(0x4C1D1D1F),
     val cpuComputationEnabled: Boolean = false,
 
     val lightingEffectsEnabled: Boolean = true,
@@ -74,7 +73,6 @@ data class UIKitMaterials(
         fun getDark(): UIKitMaterials = UIKitMaterials(
             acrylicMaterial = UIKitAcrylicMaterial(
                 tint = Color(0x4C151517),
-                secondaryTint = Color(0x4CF5F5F7),
                 edgeHighlightColor = Brush.linearGradient(
                     listOf(
                         Color(0x8DFFFFFF),

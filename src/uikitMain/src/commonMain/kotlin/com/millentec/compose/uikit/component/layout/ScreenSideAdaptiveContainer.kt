@@ -1,27 +1,39 @@
 ﻿package com.millentec.compose.uikit.component.layout
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Indication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.millentec.compose.uikit.component.input.toHsv
 import com.millentec.compose.uikit.foundation.LayoutPosition
 import com.millentec.compose.uikit.foundation.LayoutPosition.*
+import com.millentec.compose.uikit.foundation.helper.darken
+import com.millentec.compose.uikit.foundation.helper.lighten
+import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
-import com.millentec.compose.uikit.foundation.uikitClickable
 import com.millentec.compose.uikit.getScreenCornerRadius
 import com.millentec.compose.uikit.theme.*
 
@@ -30,12 +42,41 @@ import com.millentec.compose.uikit.theme.*
 private fun Preview() {
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.End
     ) {
         ScreenSideAdaptiveContainer(
-            modifier = Modifier
-                .fillMaxSize(),
-            state = rememberScreenSideAdaptiveContainerState()
+            onClick = {},
+            indication = null,
+            interaction = 
+                @Composable { isHover, isPress, shape ->
+                    val degreeAnimated by animateFloatAsState(
+                        targetValue = if (isHover.value) 0.05f else 0f,
+                        animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
+                    )
+
+                    val scaleAnimated by animateFloatAsState(
+                        targetValue = if (isPress.value) 0.9f else 1f,
+                        animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = FastOutSlowInEasing)
+                    )
+
+                    this
+                        .clip(shape.value)
+                        .then(if (getUIKitColors().contentFillColorPrimaryBrush.toHsv().value <= 0.5f) {
+                            Modifier.lighten(degreeAnimated)
+                        } else {
+                            Modifier.darken(degreeAnimated)
+                        })
+                        .graphicsLayer(
+                            scaleX = scaleAnimated,
+                            scaleY = scaleAnimated,
+                        )
+                },
+            state = rememberScreenSideAdaptiveContainerState(
+                position = LayoutPosition.BottomRight,
+                fillWidth = false,
+            )
         ) {
             Text(text = "Hello World")
         }
@@ -171,10 +212,12 @@ fun rememberScreenSideAdaptiveContainerState(
 
 @Composable
 fun ScreenSideAdaptiveContainer(
-    modifier: Modifier = Modifier.fillMaxSize(),
+    modifier: Modifier = Modifier,
     state: ScreenSideAdaptiveContainerState,
     clickable: Boolean = true,
     onClick: () -> Unit,
+    indication: Indication? = if (isDesktopOS()) null else ripple(),
+    interaction: (@Composable Modifier.(State<Boolean>, State<Boolean>, State<Shape>) -> Modifier)? = null,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialsState? = null,
@@ -188,23 +231,25 @@ fun ScreenSideAdaptiveContainer(
         Box(
             modifier = Modifier
                 .padding(state.margins)
+                .uikitClickable(
+                    onClick = onClick,
+                    enabled = clickable,
+                    indication = indication,
+                    interaction = interaction,
+                    shape = RoundedCornerShape(state.cornerRadius)
+                )
                 .then(if (shadowEnable && getUIKitMaterials().shadowMaterial.shadowEnable)
                     Modifier.dropShadow(
                         shape = RoundedCornerShape(state.cornerRadius),
                         shadow = UIKitShadowMaterial.getMarginal()
                     ) else Modifier)
-                .clip(RoundedCornerShape(state.cornerRadius))
-                .background(background)
                 .then(if (state.fillWidth) Modifier.fillMaxWidth() else Modifier.width(state.width))
                 .then(if (state.fillHeight) Modifier.fillMaxHeight() else Modifier.height(state.height))
+                .clip(RoundedCornerShape(state.cornerRadius))
+                .background(background)
                 .then(if (acrylicEffectEnabled && acrylicState != null) Modifier.acrylicMaterial(
                     state = acrylicState
-                ) else Modifier)
-                .uikitClickable(
-                    onClick = onClick,
-                    enabled = clickable,
-                    indication = if (isDesktopOS()) null else ripple()
-                ),
+                ) else Modifier),
             contentAlignment = Alignment.Center,
             content = content
         )
@@ -213,7 +258,7 @@ fun ScreenSideAdaptiveContainer(
 
 @Composable
 fun ScreenSideAdaptiveContainer(
-    modifier: Modifier = Modifier.fillMaxSize(),
+    modifier: Modifier = Modifier,
     state: ScreenSideAdaptiveContainerState,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     acrylicEffectEnabled: Boolean = true,

@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.UIKitTheme
 import com.millentec.compose.uikit.component.info.UIKitInfoCardType.*
+import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
-import com.millentec.compose.uikit.foundation.uikitClickable
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.filled.dp20.checkmarkCircle
 import com.millentec.compose.uikit.icons.fluenticons.filled.dp20.dismissCircle
