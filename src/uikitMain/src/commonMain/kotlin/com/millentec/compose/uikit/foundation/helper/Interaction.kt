@@ -19,7 +19,6 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import com.millentec.compose.uikit.component.input.toHsv
 import com.millentec.compose.uikit.theme.getUIKitAnimate
 import com.millentec.compose.uikit.theme.getUIKitColors
 
@@ -58,7 +57,7 @@ fun Modifier.uikitClickable(
     onClick: () -> Unit,
     indicationEnabled: Boolean = true,
     interactionSource: MutableInteractionSource? = null,
-    indication: Indication? = ripple(),
+    indication: Indication? = UIKitInteraction.ripple(),
     shape: Shape = RectangleShape,
     interaction: (@Composable Modifier.(State<Boolean>, State<Boolean>, State<Shape>) -> Modifier)? = null
 ): Modifier {
@@ -73,14 +72,15 @@ fun Modifier.uikitClickable(
 
     if (indicationEnabled) {
         if (interaction == null) {
-            return uikitClickable(
-                enabled = enabled,
-                onClick = onClick,
-                indicationEnabled = indicationEnabled,
-                interactionSource = interactionSource,
-                indication = indication,
-                shape = shape
-            )
+            return clip(shape)
+                .uikitClickable(
+                    enabled = enabled,
+                    onClick = onClick,
+                    indicationEnabled = indicationEnabled,
+                    interactionSource = interactionSource,
+                    indication = indication,
+                    shape = shape
+                )
         }
 
         return interaction(
@@ -112,12 +112,13 @@ fun Modifier.uikitClickable(
     onClick: () -> Unit,
     indicationEnabled: Boolean = true,
     interactionSource: MutableInteractionSource? = null,
-    indication: Indication? = ripple(),
+    indication: Indication? = UIKitInteraction.ripple(),
     shape: Shape = RectangleShape,
 ): Modifier {
     if (indicationEnabled) {
         if (indication != null) {
             return this
+                .clip(shape)
                 .clickable(
                     enabled = enabled,
                     onClick = onClick,
@@ -210,5 +211,10 @@ class UIKitInteraction {
                     )
                 })
         }
+
+        @Composable
+        fun ripple() = ripple(
+            color = getUIKitColors().pointerInteractionBrush
+        )
     }
 }

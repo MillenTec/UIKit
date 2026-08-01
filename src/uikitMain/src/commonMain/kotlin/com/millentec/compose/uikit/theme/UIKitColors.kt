@@ -72,9 +72,11 @@ data class UIKitColors(
 
     val errorRedColorFourthBrush: Color = errorRedColorPrimaryBrush.copy(0.15f),
 
-    val pointerHoverInteractionColor: Color = Color(0x0F000000),
+    val pointerInteractionBrush: Color = Color(0xFF000000),
 
-    val pointerTapInteractionColor: Color = Color(0x1F000000)
+    val pointerHoverInteractionColor: Color = pointerInteractionBrush.copy(0.05f),
+
+    val pointerTapInteractionColor: Color = pointerInteractionBrush.copy(0.1f),
 ) {
 
     /**
@@ -107,8 +109,7 @@ data class UIKitColors(
             successGreenColorPrimaryBrush = Color(0xFF30D158),
             warningYellowColorPrimaryBrush = Color(0xFFFFD600),
             errorRedColorPrimaryBrush = Color(0xFFFF4245),
-            pointerHoverInteractionColor = Color(0x0FFFFFFF),
-            pointerTapInteractionColor = Color(0x1FFFFFFF),
+            pointerInteractionBrush = Color(0xFFFFFFFF),
         )
 
         val White = Color(0xFFF5F5F7)

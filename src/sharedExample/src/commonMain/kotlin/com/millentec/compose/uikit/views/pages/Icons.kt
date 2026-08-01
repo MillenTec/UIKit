@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,10 +37,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import com.millentec.compose.uikit.BackHandler
 import com.millentec.compose.uikit.IconGalleryList
-import com.millentec.compose.uikit.component.input.*
+import com.millentec.compose.uikit.component.input.UIKitHSVColorPicker
+import com.millentec.compose.uikit.component.input.UIKitSlider
+import com.millentec.compose.uikit.component.input.UIKitSliderChangeType
+import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.*
 import com.millentec.compose.uikit.foundation.LayoutPosition
+import com.millentec.compose.uikit.foundation.UIKitHSVColor
+import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.mapTo
+import com.millentec.compose.uikit.foundation.helper.toHsv
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
@@ -411,7 +416,7 @@ private fun OptionsWindow(
                                         onClick = {
                                             state.tintColor.value = optionalColor[it].color.toHsv()
                                         },
-                                        indication = if (isDesktopOS()) null else ripple()
+                                        indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
                                     ),
                                 contentAlignment = Alignment.Center,
                             ) {
@@ -478,7 +483,7 @@ private fun OptionsWindow(
                                         onClick = {
                                             state.backgroundColor.value = optionalColor[it].color.toHsv()
                                         },
-                                        indication = if (isDesktopOS()) null else ripple()
+                                        indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
                                     ),
                                 contentAlignment = Alignment.Center,
                             ) {
@@ -536,7 +541,7 @@ private fun IconItem(
             .background(background)
             .uikitClickable(
                 onClick = onClick,
-                indication = if (isDesktopOS()) null else ripple()
+                indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
             )
             .padding(getUIKitLayout().mediumSpacing),
         verticalArrangement = Arrangement.Center,
@@ -1183,7 +1188,7 @@ private open class AnimatableIconItem(
                             onClick = {
                                 stateProperty.value = index
                             },
-                            indication = if (isDesktopOS()) null else ripple()
+                            indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
                         )
                         .padding(getUIKitLayout().mediumSpacing),
                     horizontalAlignment = Alignment.CenterHorizontally

@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -18,6 +17,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.tooling.preview.Preview
+import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.theme.getUIKitColors
 
@@ -41,7 +41,7 @@ fun UIKitSurface(
     shadow: Shadow? = null,
     border: BorderStroke? = null,
     interactionSource: MutableInteractionSource? = null,
-    indication: Indication? = ripple(),
+    indication: Indication? = UIKitInteraction.ripple(),
     contentAlignment: Alignment = Alignment.Center,
     content: @Composable () -> Unit
 ) {

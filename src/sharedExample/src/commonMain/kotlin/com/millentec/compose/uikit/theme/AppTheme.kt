@@ -10,7 +10,7 @@ object AppTheme {
         materials = UIKitMaterials.getDark()
     )
 
-    private val _theme = MutableStateFlow(themeLight)
+    private val _theme = MutableStateFlow(themeDark)
     val theme = _theme.asStateFlow()
 
     private val _useAcrylic = MutableStateFlow(true)

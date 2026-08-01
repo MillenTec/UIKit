@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -24,6 +23,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.UIKitTheme
 import com.millentec.compose.uikit.component.layout.UIKitSurface
+import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
@@ -171,7 +171,7 @@ fun UIKitToggleButton(
         color = backgroundColorAnimated.value,
         enabled = enabled,
         onClick = { onCheckedChange(!checked) },
-        indication = if (isDesktopOS()) null else ripple()
+        indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
     ) {
         Box(
             modifier = Modifier

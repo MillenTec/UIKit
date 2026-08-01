@@ -16,18 +16,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.colorspace.ColorSpaces
-import androidx.compose.ui.graphics.colorspace.Rgb
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
+import com.millentec.compose.uikit.foundation.UIKitHSVColor
+import com.millentec.compose.uikit.foundation.helper.toHsv
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.theme.*
-import kotlin.math.max
-import kotlin.math.min
 
 @Composable
 @Preview
@@ -40,46 +41,10 @@ private fun Preview() {
     }
 }
 
-fun Color.toHsv(): UIKitHSVColor {
-    val argb = this.toArgb()
-
-    val r = ((argb shr 16) and 0xFF) / 255f
-    val g = ((argb shr 8) and 0xFF) / 255f
-    val b = (argb and 0xFF) / 255f
-
-    val max = max(r, max(g, b))
-    val min = min(r, min(g, b))
-    val delta = max - min
-
-    val s = if (max == 0f) 0f else delta / max
-
-    val h = when {
-        delta == 0f -> 0f
-        max == r -> 60f * (((g - b) / delta) % 6)
-        max == g -> 60f * (((b - r) / delta) + 2)
-        else -> 60f * (((r - g) / delta) + 4)
-    }
-
-    val finalH = if (h < 0) h + 360f else h
-
-    return UIKitHSVColor(finalH, s, max, this.alpha)
-}
-
 data class UIKitColorSV(
     val saturation: Float,
     val value: Float,
 )
-
-data class UIKitHSVColor(
-    val hue: Float,
-    val saturation: Float,
-    val value: Float,
-    val alpha: Float = 1f,
-) {
-    fun getColor(colorSpace: Rgb = ColorSpaces.Srgb): Color {
-        return Color.hsv(hue, saturation, value, alpha, colorSpace)
-    }
-}
 
 @Composable
 fun UIKitHueSlider(
@@ -666,12 +631,14 @@ fun UIKitHSVColorPicker(
         }
 
         LaunchedEffect(hue.value, colorSv.value, alpha.value) {
-            onColorChange(UIKitHSVColor(
-                hue = hue.value,
-                saturation = colorSv.value.saturation,
-                value = colorSv.value.value,
-                alpha = alpha.value
-            ))
+            onColorChange(
+                UIKitHSVColor(
+                    hue = hue.value,
+                    saturation = colorSv.value.saturation,
+                    value = colorSv.value.value,
+                    alpha = alpha.value
+                )
+            )
         }
 
         val svPlaneSize = remember { mutableStateOf(IntSize.Zero) }

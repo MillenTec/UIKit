@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,6 +15,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
@@ -92,7 +92,7 @@ fun UIKitSettingCard(
                 .uikitClickable(
                     onClick = onClick,
                     enabled = enabled,
-                    indication = if (isDesktopOS()) null else ripple()
+                    indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
                 )
                 .padding(contentPadding),
             verticalAlignment = Alignment.CenterVertically,

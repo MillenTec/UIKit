@@ -9,7 +9,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -25,12 +24,9 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.component.input.toHsv
 import com.millentec.compose.uikit.foundation.LayoutPosition
 import com.millentec.compose.uikit.foundation.LayoutPosition.*
-import com.millentec.compose.uikit.foundation.helper.darken
-import com.millentec.compose.uikit.foundation.helper.lighten
-import com.millentec.compose.uikit.foundation.helper.uikitClickable
+import com.millentec.compose.uikit.foundation.helper.*
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
@@ -216,7 +212,7 @@ fun ScreenSideAdaptiveContainer(
     state: ScreenSideAdaptiveContainerState,
     clickable: Boolean = true,
     onClick: () -> Unit,
-    indication: Indication? = if (isDesktopOS()) null else ripple(),
+    indication: Indication? = if (isDesktopOS()) null else UIKitInteraction.ripple(),
     interaction: (@Composable Modifier.(State<Boolean>, State<Boolean>, State<Shape>) -> Modifier)? = null,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     acrylicEffectEnabled: Boolean = true,
@@ -231,6 +227,11 @@ fun ScreenSideAdaptiveContainer(
         Box(
             modifier = Modifier
                 .padding(state.margins)
+                .then(if (shadowEnable && getUIKitMaterials().shadowMaterial.shadowEnable)
+                    Modifier.dropShadow(
+                        shape = RoundedCornerShape(state.cornerRadius),
+                        shadow = UIKitShadowMaterial.getMarginal()
+                    ) else Modifier)
                 .uikitClickable(
                     onClick = onClick,
                     enabled = clickable,
@@ -238,11 +239,6 @@ fun ScreenSideAdaptiveContainer(
                     interaction = interaction,
                     shape = RoundedCornerShape(state.cornerRadius)
                 )
-                .then(if (shadowEnable && getUIKitMaterials().shadowMaterial.shadowEnable)
-                    Modifier.dropShadow(
-                        shape = RoundedCornerShape(state.cornerRadius),
-                        shadow = UIKitShadowMaterial.getMarginal()
-                    ) else Modifier)
                 .then(if (state.fillWidth) Modifier.fillMaxWidth() else Modifier.width(state.width))
                 .then(if (state.fillHeight) Modifier.fillMaxHeight() else Modifier.height(state.height))
                 .clip(RoundedCornerShape(state.cornerRadius))
