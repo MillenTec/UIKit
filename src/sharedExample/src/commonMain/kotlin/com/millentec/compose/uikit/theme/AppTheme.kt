@@ -17,8 +17,11 @@ object AppTheme {
     val useAcrylic = _useAcrylic.asStateFlow()
 
     fun dark(isDark: Boolean) {
-        if (isDark) _theme.value = themeDark
-        else _theme.value = themeLight
+        if (isDark) {
+            _theme.value = themeDark
+        } else {
+            _theme.value = themeLight
+        }
     }
 
     fun enableAcrylic(enabled: Boolean) {

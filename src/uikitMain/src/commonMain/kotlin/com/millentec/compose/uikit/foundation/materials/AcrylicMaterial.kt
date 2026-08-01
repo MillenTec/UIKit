@@ -1,7 +1,6 @@
 ﻿package com.millentec.compose.uikit.foundation.materials
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -11,7 +10,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import com.millentec.compose.uikit.theme.getUIKitMaterials
-import com.millentec.compose.uikit.theme.getUIKitShapes
 import com.skydoves.cloudy.Sky
 import com.skydoves.cloudy.cloudy
 import com.skydoves.cloudy.rememberSky
@@ -58,7 +56,7 @@ fun Modifier.acrylicMaterial(
     this.border(
         width = getUIKitMaterials().acrylicMaterial.edgeHighlightThickness,
         brush = getUIKitMaterials().acrylicMaterial.edgeHighlightColor,
-        shape = RoundedCornerShape(getUIKitShapes().circular)
+        shape = shape
     ) else this)
 
 @Composable

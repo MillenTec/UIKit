@@ -244,7 +244,8 @@ fun ScreenSideAdaptiveContainer(
                 .clip(RoundedCornerShape(state.cornerRadius))
                 .background(background)
                 .then(if (acrylicEffectEnabled && acrylicState != null) Modifier.acrylicMaterial(
-                    state = acrylicState
+                    state = acrylicState,
+                    shape = RoundedCornerShape(state.cornerRadius)
                 ) else Modifier),
             contentAlignment = Alignment.Center,
             content = content
