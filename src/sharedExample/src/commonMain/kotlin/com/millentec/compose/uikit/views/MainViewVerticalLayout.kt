@@ -40,6 +40,9 @@ import com.millentec.compose.uikit.views.pages.*
 @Preview
 fun MainViewVerticalLayout() {
     val nav = MainViewModel.navigation
+    val uiKitTheme = getUIKitTheme()
+    val layoutDirection = LocalLayoutDirection.current
+    val density = LocalDensity.current
 
     val page by nav.page.collectAsState()
     val navAnimate by nav.pageSwitchAnimate.collectAsState()
@@ -193,14 +196,17 @@ fun MainViewVerticalLayout() {
                     },
                     acrylicMaterialsState = acrylicMaterialsState,
                     alignment = Alignment.BottomEnd,
-                    offset = DpOffset(
-                        y = -(independentIslandState.margins.calculateBottomPadding()
-                                + independentIslandState.height
-                                + getUIKitLayout().mediumSpacing),
-                        x = (if (!(dockGloballyPosition.value?.isAttached ?: false)) 0.dp else -((dockGloballyPosition.value?.positionInRoot()?.x ?: 0f) / LocalDensity.current.density).dp)
-                                - independentIslandState.margins.calculateEndPadding(
-                            LocalLayoutDirection.current)
-                    )
+                    appearPosition = Alignment.BottomEnd,
+                    offset = { _, _ ->
+                        DpOffset(
+                            y = -(independentIslandState.margins.calculateBottomPadding()
+                                    + independentIslandState.height
+                                    + uiKitTheme.layout.mediumSpacing),
+                            x = (if (!(dockGloballyPosition.value?.isAttached ?: false)) 0.dp else -((dockGloballyPosition.value?.positionInRoot()?.x ?: 0f) / density.density).dp)
+                                    - independentIslandState.margins.calculateEndPadding(
+                                layoutDirection)
+                        )
+                    }
                 )
             }
         }

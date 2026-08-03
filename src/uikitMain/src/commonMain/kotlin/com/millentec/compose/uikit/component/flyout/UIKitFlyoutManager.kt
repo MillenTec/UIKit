@@ -3,8 +3,13 @@
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 
+internal open class UIKitFlyoutHost {
+    @Composable
+    open fun Content() {}
+}
+
 internal class UIKitFlyoutManager {
-    val flyouts = mutableStateListOf<Pair<Int, @Composable () -> Unit>>()
+    val flyouts = mutableStateListOf<Pair<Int, UIKitFlyoutHost>>()
 
     private var flyoutId = -1
 
@@ -12,7 +17,7 @@ internal class UIKitFlyoutManager {
         flyouts.clear()
     }
 
-    fun add(content: @Composable () -> Unit): Int {
+    fun add(content: UIKitFlyoutHost): Int {
         flyoutId++
         flyouts.add(Pair(flyoutId, content))
         return flyoutId

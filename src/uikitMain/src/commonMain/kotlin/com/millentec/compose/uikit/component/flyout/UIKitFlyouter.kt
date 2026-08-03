@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 
-internal val LocalFlyouts = compositionLocalOf<UIKitFlyoutManager> { error("Not UIKitFlyoutManager provided.") }
+internal val LocalFlyouts = compositionLocalOf { UIKitFlyoutManager() }
 
 @Composable
 fun UIKitFlyouter(
@@ -21,8 +21,11 @@ fun UIKitFlyouter(
             content()
 
             LocalFlyouts.current.flyouts.forEach {
-                key(it.first) {
-                    it.second()
+                val id = it.first
+                val host = it.second
+
+                key(id) {
+                    host.Content()
                 }
             }
         }

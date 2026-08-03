@@ -6,10 +6,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
+import com.millentec.compose.uikit.component.input.UIKitDropdownButton
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialsState
 import com.millentec.compose.uikit.theme.getUIKitColors
@@ -65,6 +68,50 @@ fun Home() {
                     style = getUIKitTypography().largeTitle,
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
+
+                Spacer(modifier = Modifier.height(getUIKitLayout().mediumSpacing))
+
+                Box() {
+                    val expanded = remember { mutableStateOf(false) }
+                    UIKitDropdownButton(
+                        expanded = expanded.value,
+                        onButtonClick = {
+                            expanded.value = !expanded.value
+                        },
+                        onClick = {},
+                        items = listOf(
+                            {
+                                Text(
+                                    text = "Item 1",
+                                    style = getUIKitTypography().body,
+                                    color = getUIKitColors().textFillColorPrimaryBrush
+                                )
+                            },
+                            {
+                                Text(
+                                    text = "Item 2",
+                                    style = getUIKitTypography().body,
+                                    color = getUIKitColors().textFillColorPrimaryBrush
+                                )
+                            },
+                            {
+                                Text(
+                                    text = "Item 3",
+                                    style = getUIKitTypography().body,
+                                    color = getUIKitColors().textFillColorPrimaryBrush
+                                )
+                            }
+                        ),
+                        onDismissRequest = { expanded.value = false },
+                        acrylicMaterialsState = acrylicMaterialsState
+                    ) {
+                        Text(
+                            text = "Button",
+                            style = getUIKitTypography().body,
+                            color = getUIKitColors().textFillColorPrimaryBrush
+                        )
+                    }
+                }
             }
         }
     }
