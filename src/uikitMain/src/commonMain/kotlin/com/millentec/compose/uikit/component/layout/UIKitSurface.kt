@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +43,7 @@ fun UIKitSurface(
     border: BorderStroke? = null,
     interactionSource: MutableInteractionSource? = null,
     indication: Indication? = UIKitInteraction.ripple(),
+    interaction: (@Composable Modifier.(State<Boolean>, State<Boolean>, State<Shape>) -> Modifier)? = null,
     contentAlignment: Alignment = Alignment.Center,
     content: @Composable () -> Unit
 ) {
@@ -55,7 +57,8 @@ fun UIKitSurface(
                 enabled = enabled,
                 onClick = onClick,
                 interactionSource = interactionSource,
-                indication = indication
+                indication = indication,
+                interaction = interaction
             ),
         propagateMinConstraints = true
     ) {

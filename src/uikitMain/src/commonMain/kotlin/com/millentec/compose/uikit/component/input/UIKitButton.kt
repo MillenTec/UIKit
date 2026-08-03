@@ -3,13 +3,17 @@
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Indication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,7 +27,6 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.UIKitTheme
 import com.millentec.compose.uikit.component.layout.UIKitSurface
-import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
@@ -105,6 +108,9 @@ fun UIKitButton(
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
     enabled: Boolean = true,
     onClick: () -> Unit,
+    interactionSource: MutableInteractionSource? = null,
+    indication: Indication? = if (isDesktopOS()) null else ripple(),
+    interaction: (@Composable Modifier.(State<Boolean>, State<Boolean>, State<Shape>) -> Modifier)? = null,
     content: @Composable BoxScope.() -> Unit
 ) {
     val backgroundColorAnimated = animateColorAsState(
@@ -133,7 +139,9 @@ fun UIKitButton(
         color = backgroundColorAnimated.value,
         enabled = enabled,
         onClick = onClick,
-        indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
+        interactionSource = interactionSource,
+        indication = indication,
+        interaction = interaction
     ) {
         Box(
             modifier = Modifier

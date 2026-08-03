@@ -12,9 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
+import com.millentec.compose.uikit.LocalAcrylicMaterialsState
 import com.millentec.compose.uikit.component.input.UIKitDropdownButton
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
-import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialsState
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
 import com.millentec.compose.uikit.theme.getUIKitTypography
@@ -36,12 +36,11 @@ fun Home() {
             .fillMaxSize()
             .background(getUIKitColors().contentFillColorPrimaryBrush)
     ) {
-        val acrylicMaterialsState = rememberAcrylicMaterialsState()
-
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
         ) {
+            val acrylicMaterialsState = LocalAcrylicMaterialsState.current
 
             LaunchedEffect(maxWidth, maxHeight) {
                 acrylicMaterialsState.invalidate()
@@ -71,7 +70,7 @@ fun Home() {
 
                 Spacer(modifier = Modifier.height(getUIKitLayout().mediumSpacing))
 
-                Box() {
+                Box {
                     val expanded = remember { mutableStateOf(false) }
                     UIKitDropdownButton(
                         expanded = expanded.value,

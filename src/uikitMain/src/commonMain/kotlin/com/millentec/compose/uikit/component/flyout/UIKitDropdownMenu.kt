@@ -1,26 +1,24 @@
 ﻿package com.millentec.compose.uikit.component.flyout
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.shrinkOut
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
@@ -78,138 +76,87 @@ fun UIKitDropdownMenu(
     appearPosition: Alignment = Alignment.BottomEnd,
     acrylicEffectEnabled: Boolean = true,
     acrylicMaterialsState: AcrylicMaterialsState? = null,
+    acrylicMaterial: UIKitAcrylicMaterial = getUIKitMaterials().acrylicMaterial,
     shadowEnabled: Boolean = true,
 ) {
-    val contentSize = remember { mutableStateOf(IntSize.Zero) }
-    val expandedWithoutAnimate = remember { mutableStateOf(expanded) }
-
-    LaunchedEffect(expanded) {
-        if (expanded)
-            expandedWithoutAnimate.value = true
-    }
-
     UIKitPopup(
+        modifier = Modifier
+            .then(if (shadowEnabled) {
+                Modifier.dropShadow(
+                    shape = RoundedCornerShape(cornerRadius),
+                    shadow = UIKitShadowMaterial.getMarginal()
+                )
+            } else Modifier)
+            .clip(RoundedCornerShape(cornerRadius)),
         alignment = alignment,
-        offset = { root, content ->
-            offset(root, contentSize.value)
-        },
+        offset = offset,
+        animateAlignment = appearPosition,
+        visible = expanded,
+        enter = expandIn(
+            expandFrom = appearPosition,
+            animationSpec = spring(
+                stiffness = getUIKitAnimate().standardSpringStiffness * 2,
+                visibilityThreshold = IntSize.VisibilityThreshold
+            ),
+            initialSize = {
+                when (appearPosition) {
+                    Alignment.TopCenter, Alignment.BottomCenter -> {
+                        IntSize(width = it.width, height = 0)
+                    }
+
+                    Alignment.CenterStart, Alignment.CenterEnd -> {
+                        IntSize(width = 0, height = it.height)
+                    }
+
+                    else -> IntSize.Zero
+                }
+            }
+        ),
+        exit = shrinkOut(
+            shrinkTowards = appearPosition,
+            animationSpec = spring(
+                stiffness = getUIKitAnimate().standardSpringStiffness * 2,
+                visibilityThreshold = IntSize.VisibilityThreshold
+            ),
+            targetSize = {
+                when (appearPosition) {
+                    Alignment.TopCenter, Alignment.BottomCenter -> {
+                        IntSize(width = it.width, height = 0)
+                    }
+
+                    Alignment.CenterStart, Alignment.CenterEnd -> {
+                        IntSize(width = 0, height = it.height)
+                    }
+
+                    else -> IntSize.Zero
+                }
+            }
+        ),
         onDismissRequest = onDismissRequest,
         dismissOnClickOutside = expanded,
     ) {
-        Box(
-            modifier = Modifier
+        VerticalItemLayout(
+            modifier = modifier
                 .then(
-                    if (contentSize.value != IntSize.Zero && expandedWithoutAnimate.value) {
-                        println("contentSize: ${contentSize.value}")
-                        Modifier.size(
-                            width = (contentSize.value.width / LocalDensity.current.density).dp,
-                            height = (contentSize.value.height / LocalDensity.current.density).dp
+                    if (acrylicEffectEnabled && acrylicMaterialsState != null) {
+                        Modifier.acrylicMaterial(
+                            state = acrylicMaterialsState,
+                            shape = RoundedCornerShape(cornerRadius),
+                            acrylicMaterial = acrylicMaterial
                         )
                     } else Modifier
                 ),
-            contentAlignment = appearPosition
-        ) {
-            val transition = updateTransition(expanded, label = "Dropdown Menu Animation")
-
-            LaunchedEffect(transition.isRunning) {
-                if (!transition.isRunning && !expanded) {
-                    expandedWithoutAnimate.value
-                }
-            }
-
-            transition.AnimatedVisibility(
-                visible = {
-                    it
-                },
-                modifier = modifier
-                    .background(background, RoundedCornerShape(cornerRadius))
-                    .then(
-                        if (shadowEnabled) {
-                            Modifier.dropShadow(
-                                shape = RoundedCornerShape(cornerRadius),
-                                shadow = UIKitShadowMaterial.getMarginal()
-                            )
-                        } else Modifier
-                    )
-                    .then(
-                        if (acrylicEffectEnabled && acrylicMaterialsState != null && getUIKitMaterials().acrylicMaterial.lightingEffectsEnabled) {
-                            Modifier.border(
-                                width = getUIKitMaterials().acrylicMaterial.edgeHighlightThickness,
-                                brush = getUIKitMaterials().acrylicMaterial.edgeHighlightColor,
-                                shape = RoundedCornerShape(cornerRadius)
-                            )
-                        } else Modifier
-                    )
-                    .clip(RoundedCornerShape(cornerRadius)),
-                enter = expandIn(
-                    expandFrom = appearPosition,
-                    animationSpec = spring(
-                        stiffness = getUIKitAnimate().standardSpringStiffness * 2,
-                        visibilityThreshold = IntSize.VisibilityThreshold
-                    ),
-                    initialSize = {
-                        when (appearPosition) {
-                            Alignment.TopCenter, Alignment.BottomCenter -> {
-                                IntSize(width = it.width, height = 0)
-                            }
-
-                            Alignment.CenterStart, Alignment.CenterEnd -> {
-                                IntSize(width = 0, height = it.height)
-                            }
-
-                            else -> IntSize.Zero
-                        }
-                    }
-                ),
-                exit = shrinkOut(
-                    shrinkTowards = appearPosition,
-                    animationSpec = spring(
-                        stiffness = getUIKitAnimate().standardSpringStiffness * 2,
-                        visibilityThreshold = IntSize.VisibilityThreshold
-                    ),
-                    targetSize = {
-                        when (appearPosition) {
-                            Alignment.TopCenter, Alignment.BottomCenter -> {
-                                IntSize(width = it.width, height = 0)
-                            }
-
-                            Alignment.CenterStart, Alignment.CenterEnd -> {
-                                IntSize(width = 0, height = it.height)
-                            }
-
-                            else -> IntSize.Zero
-                        }
-                    }
-                )
-            ) {
-                VerticalItemLayout(
-                    modifier = Modifier
-                        .then(
-                            if (acrylicEffectEnabled && acrylicMaterialsState != null) {
-                                Modifier.acrylicMaterial(
-                                    state = acrylicMaterialsState,
-                                    shape = RoundedCornerShape(cornerRadius),
-                                    highlightEnabled = false
-                                )
-                            } else Modifier
-                        )
-                        .onGloballyPositioned {
-                            if (contentSize.value != it.size && it.isAttached)
-                                contentSize.value = it.size
-                        },
-                    maxLength = maxLength,
-                    minWidth = minWidth,
-                    items = items,
-                    background = if (acrylicEffectEnabled && acrylicMaterialsState != null) background.copy(0f) else background,
-                    cornerRadius = cornerRadius,
-                    contentPadding = contentPadding,
-                    itemSpacing = itemSpacing,
-                    hasDividers = hasDividers,
-                    dividerColor = dividerColor,
-                    onClick = onClick
-                )
-            }
-        }
+            maxLength = maxLength,
+            minWidth = minWidth,
+            items = items,
+            background = if (acrylicEffectEnabled && acrylicMaterialsState != null) background.copy(0f) else background,
+            cornerRadius = cornerRadius,
+            contentPadding = contentPadding,
+            itemSpacing = itemSpacing,
+            hasDividers = hasDividers,
+            dividerColor = dividerColor,
+            onClick = onClick
+        )
     }
 }
 
@@ -284,6 +231,74 @@ fun UIKitDropdownMenu(
         onDismissRequest = onDismissRequest,
         appearPosition = appearPosition,
         acrylicEffectEnabled = acrylicEffectEnabled,
-        acrylicMaterialsState = acrylicMaterialsState
+        acrylicMaterialsState = acrylicMaterialsState,
+        acrylicMaterial = getUIKitMaterials().acrylicMaterial.copy(
+            tint = getUIKitMaterials().acrylicMaterial.tint.copy(0.6f),
+            lightingEffectsEnabled = false
+        )
+    )
+}
+
+@Composable
+fun UIKitDropdownMenu(
+    modifier: Modifier = Modifier,
+    expanded: Boolean,
+    maxLength: Dp = (-1).dp,
+    minWidth: Dp = 200.dp,
+    items: List<String>,
+    textStyle: TextStyle = getUIKitTypography().body,
+    textColor: Color = getUIKitColors().textFillColorPrimaryBrush,
+    background: Color = getUIKitColors().contentFillColorSecondaryBrush,
+    cornerRadius: Dp = getUIKitShapes().regularRounded,
+    contentPadding: PaddingValues = PaddingValues(getUIKitLayout().smallSpacing),
+    itemSpacing: Dp = getUIKitLayout().smallSpacing,
+    hasDividers: Boolean = true,
+    dividerColor: Color = getUIKitColors().lineFillColorPrimaryBrush,
+    onClick: (Int) -> Unit,
+    alignment: Alignment = Alignment.Center,
+    offset: (IntSize, IntSize) -> DpOffset = { rootSize, contentSize -> DpOffset.Zero },
+    onDismissRequest: (() -> Unit)? = null,
+    appearPosition: Alignment = Alignment.BottomEnd,
+    acrylicEffectEnabled: Boolean = true,
+    acrylicMaterialsState: AcrylicMaterialsState? = null
+) {
+    val itemList = remember { mutableStateListOf<@Composable BoxScope.() -> Unit>() }
+
+    LaunchedEffect(items) {
+        itemList.clear()
+        items.forEach {
+            itemList.add @Composable {
+                Text(
+                    text = it,
+                    style = textStyle,
+                    color = textColor,
+                )
+            }
+        }
+    }
+
+    UIKitDropdownMenu(
+        modifier = modifier,
+        expanded = expanded,
+        maxLength = maxLength,
+        minWidth = minWidth,
+        items = itemList,
+        background = background,
+        cornerRadius = cornerRadius,
+        contentPadding = contentPadding,
+        itemSpacing = itemSpacing,
+        hasDividers = hasDividers,
+        dividerColor = dividerColor,
+        onClick = onClick,
+        alignment = alignment,
+        offset = offset,
+        onDismissRequest = onDismissRequest,
+        appearPosition = appearPosition,
+        acrylicEffectEnabled = acrylicEffectEnabled,
+        acrylicMaterialsState = acrylicMaterialsState,
+        acrylicMaterial = getUIKitMaterials().acrylicMaterial.copy(
+            tint = getUIKitMaterials().acrylicMaterial.tint.copy(0.6f),
+            lightingEffectsEnabled = false
+        )
     )
 }
