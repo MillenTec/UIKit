@@ -22,10 +22,10 @@ fun UIKitFlyouter(
 
             LocalFlyouts.current.flyouts.forEach {
                 val id = it.first
-                val host = it.second
+                val slot = it.second
 
                 key(id) {
-                    host.Content()
+                    slot.Content()
                 }
             }
         }

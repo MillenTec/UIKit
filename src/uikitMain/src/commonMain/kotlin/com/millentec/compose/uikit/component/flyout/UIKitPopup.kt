@@ -84,7 +84,7 @@ fun UIKitPopup(
 
     LaunchedEffect(enabled) {
         if (enabled) {
-            id.value = flyoutManager.add(object : UIKitFlyoutHost() {
+            id.value = flyoutManager.add(object : UIKitFlyoutSlot() {
                 @Composable
                 override fun Content() {
                     Box(
@@ -171,7 +171,7 @@ fun UIKitPopup(
 
     LaunchedEffect(enabled) {
         if (enabled) {
-            id.value = flyoutManager.add(object : UIKitFlyoutHost() {
+            id.value = flyoutManager.add(object : UIKitFlyoutSlot() {
                 @Composable
                 override fun Content() {
                     Box(

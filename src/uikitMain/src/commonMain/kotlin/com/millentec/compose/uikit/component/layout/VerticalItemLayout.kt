@@ -8,39 +8,30 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
-import com.millentec.compose.uikit.foundation.helper.uikitClickable
-import com.millentec.compose.uikit.foundation.isDesktopOS
+import com.millentec.compose.uikit.foundation.layout.UIKitDropdownMenuItem
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Settings
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Text
-import com.millentec.compose.uikit.theme.*
+import com.millentec.compose.uikit.theme.getUIKitAnimate
+import com.millentec.compose.uikit.theme.getUIKitColors
+import com.millentec.compose.uikit.theme.getUIKitLayout
+import com.millentec.compose.uikit.theme.getUIKitShapes
 
 @Composable
 @Preview
 private fun Preview() {
     VerticalItemLayout(
-        onClick = {},
-        items = listOf<Pair<String, ImageVector?>>(
-            Pair("Item 1", FluentIcons.Accessibility),
-            Pair("Item 2", FluentIcons.Text),
-            Pair("Item 3", FluentIcons.Settings),
+        items = listOf(
+            UIKitDropdownMenuItem.textWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {}),
+            UIKitDropdownMenuItem.text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush),
+            UIKitDropdownMenuItem.icon(FluentIcons.Text, onClick = {}),
         )
     )
 }
@@ -50,14 +41,10 @@ fun VerticalItemLayout(
     modifier: Modifier = Modifier,
     maxLength: Dp = (-1).dp,
     minWidth: Dp = 200.dp,
-    items: List<@Composable BoxScope.() -> Unit>,
+    items: List<UIKitDropdownMenuItem>,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     cornerRadius: Dp = getUIKitShapes().regularRounded,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().smallSpacing),
-    itemSpacing: Dp = getUIKitLayout().smallSpacing,
-    hasDividers: Boolean = true,
-    dividerColor: Color = getUIKitColors().lineFillColorPrimaryBrush,
-    onClick: (Int) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -75,93 +62,11 @@ fun VerticalItemLayout(
             ),
     ) {
         items.forEachIndexed { index, item ->
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(maxOf(contentPadding.calculateTopPadding(), getUIKitShapes().basicRounded)))
-                    .fillMaxWidth()
-                    .uikitClickable(
-                        onClick = { onClick(index) },
-                        indication = if (isDesktopOS()) null else UIKitInteraction.ripple(),
-                    )
-                    .padding(contentPadding),
-                content = item
-            )
+            item.Content()
 
             if (index != items.size - 1) {
-                Box(
-                    modifier = Modifier
-                        .height(itemSpacing),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (hasDividers) {
-                        HorizontalDivider(
-                            thickness = 1.dp,
-                            color = dividerColor
-                        )
-                    }
-                }
+                Spacer(Modifier.height(contentPadding.calculateTopPadding()))
             }
         }
     }
-}
-
-@Composable
-fun VerticalItemLayout(
-    modifier: Modifier = Modifier,
-    maxLength: Dp = (-1).dp,
-    minWidth: Dp = 200.dp,
-    items: List<Pair<String, ImageVector?>>,
-    iconTint: Color = getUIKitColors().textFillColorPrimaryBrush,
-    background: Color = getUIKitColors().contentFillColorSecondaryBrush,
-    cornerRadius: Dp = getUIKitShapes().regularRounded,
-    contentPadding: PaddingValues = PaddingValues(getUIKitLayout().smallSpacing),
-    itemSpacing: Dp = getUIKitLayout().smallSpacing,
-    hasDividers: Boolean = true,
-    dividerColor: Color = getUIKitColors().lineFillColorPrimaryBrush,
-    onClick: (Int) -> Unit
-) {
-    val itemList = remember { mutableStateListOf<@Composable BoxScope.() -> Unit>() }
-
-    LaunchedEffect(items) {
-        itemList.clear()
-        items.forEach {
-            itemList.add @Composable {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    it.second?.let { icon ->
-                        Icon(
-                            modifier = Modifier
-                                .size(getUIKitTypography().body.lineHeight.value.dp),
-                            imageVector = icon,
-                            contentDescription = null,
-                            tint = iconTint,
-                        )
-
-                        Spacer(Modifier.width(getUIKitLayout().basicSpacing))
-                    }
-
-                    Text(
-                        text = it.first,
-                        style = getUIKitTypography().body,
-                        color = getUIKitColors().textFillColorPrimaryBrush,
-                    )
-                }
-            }
-        }
-    }
-
-    VerticalItemLayout(
-        modifier = modifier,
-        maxLength = maxLength,
-        minWidth = minWidth,
-        items = itemList,
-        background = background,
-        cornerRadius = cornerRadius,
-        contentPadding = contentPadding,
-        itemSpacing = itemSpacing,
-        hasDividers = hasDividers,
-        dividerColor = dividerColor,
-        onClick = onClick
-    )
 }

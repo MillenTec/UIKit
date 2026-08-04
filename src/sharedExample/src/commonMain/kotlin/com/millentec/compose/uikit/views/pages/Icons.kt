@@ -821,7 +821,7 @@ fun IconsGallery() {
                         ) {
                             Icon(
                                 modifier = Modifier
-                                    .size(41.dp),
+                                    .size(getUIKitTypography().largeTitle.lineHeight.value.dp),
                                 imageVector = FluentIcons.options(getUIKitColors().textFillColorPrimaryBrush, true),
                                 contentDescription = "Options",
                                 tint = getUIKitColors().textFillColorPrimaryBrush
@@ -952,7 +952,7 @@ private open class AnimatableIconItem(
         ) {
             Box(
                 modifier = Modifier
-                    .size(22.dp),
+                    .size(getUIKitTypography().body.lineHeight.value.dp),
                 contentAlignment = Alignment.Center,
                 content = iconStart
             )
@@ -973,7 +973,7 @@ private open class AnimatableIconItem(
 
             Box(
                 modifier = Modifier
-                    .size(22.dp),
+                    .size(getUIKitTypography().body.lineHeight.value.dp),
                 contentAlignment = Alignment.Center,
                 content = iconEnd
             )
@@ -1012,7 +1012,7 @@ private open class AnimatableIconItem(
         fun arc(progress: Float) {
             Canvas(
                 modifier = Modifier
-                    .size(22.dp)
+                    .size(getUIKitTypography().body.lineHeight.value.dp)
                     .aspectRatio(1f)
             ) {
                 scale(
@@ -1120,7 +1120,7 @@ private open class AnimatableIconItem(
         ) {
             Icon(
                 modifier = Modifier
-                    .size(22.dp),
+                    .size(getUIKitTypography().body.lineHeight.value.dp),
                 imageVector = FluentIcons.ResizableIcons.shapes(getUIKitColors().textFillColorPrimaryBrush, true, 0.5f),
                 contentDescription = "Thin",
                 tint = getUIKitColors().textFillColorPrimaryBrush,
@@ -1154,7 +1154,7 @@ private open class AnimatableIconItem(
 
             Icon(
                 modifier = Modifier
-                    .size(22.dp),
+                    .size(getUIKitTypography().body.lineHeight.value.dp),
                 imageVector = FluentIcons.ResizableIcons.shapes(getUIKitColors().textFillColorPrimaryBrush, true, 1.5f),
                 contentDescription = "Thin",
                 tint = getUIKitColors().textFillColorPrimaryBrush,

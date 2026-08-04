@@ -167,7 +167,7 @@ fun UIKitInfoCard(
                     if (icon != null) {
                         Icon(
                             modifier = Modifier
-                                .size(22.dp),
+                                .size(getUIKitTypography().body.lineHeight.value.dp),
                             imageVector = icon,
                             contentDescription = type.name,
                             tint = iconColor
@@ -187,7 +187,7 @@ fun UIKitInfoCard(
                     Spacer(Modifier.height(getUIKitLayout().smallSpacing))
 
                     Row {
-                        Spacer(Modifier.width(22.dp + getUIKitLayout().basicSpacing))
+                        Spacer(Modifier.width(getUIKitTypography().body.lineHeight.value.dp + getUIKitLayout().basicSpacing))
                         Box(
                             content = body
                         )
@@ -208,7 +208,7 @@ fun UIKitInfoCard(
                                 )
                             )
                             .size(
-                                (contentPadding.calculateTopPadding() - getUIKitLayout().basicSpacing) * 2 + 22.dp
+                                (contentPadding.calculateTopPadding() - getUIKitLayout().basicSpacing) * 2 + getUIKitTypography().body.lineHeight.value.dp
                             )
                             .uikitClickable(
                                 onClick = onClose,

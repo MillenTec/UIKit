@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
@@ -26,7 +25,11 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.flyout.UIKitDropdownMenu
 import com.millentec.compose.uikit.component.flyout.UIKitFlyouter
+import com.millentec.compose.uikit.foundation.layout.UIKitDropdownMenuItem
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Text
 import com.millentec.compose.uikit.theme.*
 
 @Composable
@@ -40,11 +43,10 @@ private fun Preview() {
             UIKitDropdownButton(
                 expanded = true,
                 onButtonClick = {},
-                onClick = {},
                 items = listOf(
-                    "Item 0",
-                    "Item 1",
-                    "Item 2",
+                    UIKitDropdownMenuItem.textWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {}),
+                    UIKitDropdownMenuItem.text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush),
+                    UIKitDropdownMenuItem.icon(FluentIcons.Text, onClick = {}),
                 ),
                 onDismissRequest = {},
             ) {
@@ -115,11 +117,10 @@ fun UIKitDropdownButton(
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
     enabled: Boolean = true,
     onButtonClick: () -> Unit,
-    onClick: (Int) -> Unit,
     acrylicEffectEnabled: Boolean = true,
     acrylicMaterialsState: AcrylicMaterialsState? = null,
     acrylicMaterial: UIKitAcrylicMaterial = getUIKitMaterials().acrylicMaterial,
-    items: List<@Composable BoxScope.() -> Unit>,
+    items: List<UIKitDropdownMenuItem>,
     content: @Composable BoxScope.() -> Unit
 ) {
     val uiKitTheme = getUIKitTheme()
@@ -166,8 +167,6 @@ fun UIKitDropdownButton(
             } else Modifier),
         expanded = expanded,
         items = items,
-        onClick = onClick,
-        dividerColor = colors.menuDivider,
         acrylicEffectEnabled = acrylicEffectEnabled,
         acrylicMaterialsState = acrylicMaterialsState,
         acrylicMaterial = acrylicMaterial,
@@ -188,104 +187,6 @@ fun UIKitDropdownButton(
                         if (rootSize.value.height -(position.value.y + buttonSize.value.height + (uiKitTheme.layout.mediumSpacing * densityDpi).value) >= contentSize.value.height)
                             ((buttonSize.value.height / densityDpi).dp + uiKitTheme.layout.mediumSpacing)
                             else (-(contentSize.value.height / densityDpi).dp - uiKitTheme.layout.mediumSpacing)
-                )
-            )
-        },
-        onDismissRequest = onDismissRequest,
-    )
-}
-
-@Composable
-fun UIKitDropdownButton(
-    modifier: Modifier = Modifier,
-    expanded: Boolean,
-    buttonShape: Shape = RoundedCornerShape(getUIKitShapes().circular),
-    menuCornerRadius: Dp = getUIKitShapes().regularRounded,
-    menuMaxLength: Dp = 360.dp,
-    menuMinWidth: Dp = 200.dp,
-    onDismissRequest: (() -> Unit)? = null,
-    colors: UIKitDropdownButtonColors = UIKitDropdownButtonColors.default(),
-    hasBorder: Boolean = false,
-    borderWidth: Dp = 1.dp,
-    contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
-    enabled: Boolean = true,
-    onButtonClick: () -> Unit,
-    onClick: (Int) -> Unit,
-    acrylicEffectEnabled: Boolean = true,
-    acrylicMaterialsState: AcrylicMaterialsState? = null,
-    items: List<String>,
-    textStyle: TextStyle = getUIKitTypography().body,
-    content: @Composable BoxScope.() -> Unit
-) {
-    val uiKitTheme = getUIKitTheme()
-
-    val position = remember { mutableStateOf(Offset.Zero) }
-    val buttonSize = remember { mutableStateOf(IntSize.Zero) }
-    val contentSize = remember { mutableStateOf(IntSize.Zero) }
-    val densityDpi = LocalDensity.current.density
-    val rootSize = remember { mutableStateOf(IntSize.Zero) }
-
-    UIKitButton(
-        modifier = modifier
-            .onGloballyPositioned {
-                if (it.isAttached) {
-                    position.value = it.positionInRoot()
-                    buttonSize.value = it.size
-                }
-            },
-        shape = buttonShape,
-        colors = UIKitButtonColors(
-            background = colors.background,
-            backgroundDisabled = colors.backgroundDisabled,
-            content = colors.content,
-            contentDisabled = colors.contentDisabled,
-            border = colors.border,
-            borderDisabled = colors.borderDisabled,
-        ),
-        hasBorder = hasBorder,
-        borderWidth = borderWidth,
-        contentPadding = contentPadding,
-        enabled = enabled,
-        onClick = onButtonClick,
-        content = content
-    )
-
-    UIKitDropdownMenu(
-        modifier = Modifier
-            .then(if (hasBorder) {
-                Modifier.border(
-                    width = 1.dp,
-                    color = colors.menuBorder,
-                    shape = RoundedCornerShape(menuCornerRadius)
-                )
-            } else Modifier),
-        expanded = expanded,
-        items = items,
-        textStyle = textStyle,
-        textColor = colors.menuContent,
-        onClick = onClick,
-        dividerColor = colors.menuDivider,
-        acrylicEffectEnabled = acrylicEffectEnabled,
-        acrylicMaterialsState = acrylicMaterialsState,
-        cornerRadius = menuCornerRadius,
-        maxLength = menuMaxLength,
-        minWidth = menuMinWidth,
-        alignment = Alignment.TopStart,
-        appearPosition = if (rootSize.value.height -(position.value.y + buttonSize.value.height + (uiKitTheme.layout.mediumSpacing * densityDpi).value) >= contentSize.value.height)
-            Alignment.TopCenter
-        else Alignment.BottomCenter,
-        offset = { root, content ->
-            rootSize.value = root
-            contentSize.value = content
-            DpOffset(
-                // 优先位于按钮的右侧, 若右侧空间不足移至左侧
-                x = (position.value.x / densityDpi).dp - (if (rootSize.value.width - position.value.x >= contentSize.value.width) 0.dp
-                else ((contentSize.value.width - buttonSize.value.width) / densityDpi).dp),
-                // 优先位于按钮下方, 若下方空间不足则移至上方
-                y = (position.value.y / densityDpi).dp + (
-                        if (rootSize.value.height -(position.value.y + buttonSize.value.height + (uiKitTheme.layout.mediumSpacing * densityDpi).value) >= contentSize.value.height)
-                            ((buttonSize.value.height / densityDpi).dp + uiKitTheme.layout.mediumSpacing)
-                        else (-(contentSize.value.height / densityDpi).dp - uiKitTheme.layout.mediumSpacing)
                 )
             )
         },

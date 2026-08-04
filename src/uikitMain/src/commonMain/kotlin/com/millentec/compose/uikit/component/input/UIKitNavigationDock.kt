@@ -1,21 +1,17 @@
 ﻿package com.millentec.compose.uikit.component.input
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,9 +23,17 @@ import com.millentec.compose.uikit.component.layout.ScreenSideAdaptiveContainer
 import com.millentec.compose.uikit.component.layout.ScreenSideAdaptiveContainerState
 import com.millentec.compose.uikit.component.layout.rememberScreenSideAdaptiveContainerState
 import com.millentec.compose.uikit.foundation.LayoutPosition
-import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
+import com.millentec.compose.uikit.foundation.layout.UIKitNavigationDockItem
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
-import com.millentec.compose.uikit.theme.*
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Alert
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Settings
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Text
+import com.millentec.compose.uikit.theme.getUIKitAnimate
+import com.millentec.compose.uikit.theme.getUIKitColors
+import com.millentec.compose.uikit.theme.getUIKitLayout
+import com.millentec.compose.uikit.theme.getUIKitShapes
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -42,35 +46,17 @@ private fun Preview(){
             .fillMaxSize()
     ) {
         UIKitNavigationDock(
-            checkedIndex = 2,
+            checkedIndex = 1,
             onChecked = { },
-            independentButtonPosition = LayoutPosition.Right,
             items = listOf(
-                UIKitNavigationItem(
-                    "Option 0"
-                ),
-                UIKitNavigationItem(
-                    "Option 1"
-                ),
-                UIKitNavigationItem(
-                    "Option 2"
-                ),
-                UIKitNavigationItem(
-                    "Option 3"
-                )
+                UIKitNavigationDockItem.createByStringWithIcon("Text", FluentIcons.Text),
+                UIKitNavigationDockItem.createByStringWithIcon("Accessibility", FluentIcons.Accessibility),
+                UIKitNavigationDockItem.createByStringWithIcon("Settings", FluentIcons.Settings),
+                UIKitNavigationDockItem.createByStringWithIcon("Alert", FluentIcons.Alert)
             ),
-            hasIndependentButton = true,
-            independentButtonContent = {
-                Text("Button")
-            },
         )
     }
 }
-
-data class UIKitNavigationItem(
-    val title: String? = null,
-    val icon: ImageVector? = null
-)
 
 @Composable
 fun UIKitNavigationDock(
@@ -79,66 +65,33 @@ fun UIKitNavigationDock(
     minMargin: Dp = getUIKitLayout().mediumSpacing,
     checkedIndex: Int,
     onChecked: (Int) -> Unit,
-    items: List<UIKitNavigationItem>,
-    hasIndependentButton: Boolean = false,
-    independentButtonPosition: LayoutPosition = LayoutPosition.Right,
-    independentButtonContent: @Composable BoxScope.() -> Unit = {},
-    onIndependentButtonClick: () -> Unit = {},
+    items: List<UIKitNavigationDockItem>,
+    position: LayoutPosition = LayoutPosition.Bottom,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.3f),
-    contentColor: Color = getUIKitColors().textFillColorPrimaryBrush,
-    contentColorChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialsState? = null,
     shadowEnable: Boolean = true,
     maxWidth: Dp = (-1).dp
 ) {
-    val mainIslandState: ScreenSideAdaptiveContainerState = rememberScreenSideAdaptiveContainerState(
+    val state: ScreenSideAdaptiveContainerState = rememberScreenSideAdaptiveContainerState(
         expectHeight = minHeight,
         expectWidth = minHeight,
         minMargin = minMargin,
         fallbackCornerRadius = getUIKitShapes().circular,
-        position = if (hasIndependentButton) {
-            when (independentButtonPosition) {
-                LayoutPosition.Right -> LayoutPosition.BottomLeft
-                LayoutPosition.Left -> LayoutPosition.BottomRight
-                else -> throw UnsupportedOperationException("NavigationDock: Can only keep the independent button from being on the left or right side.")
-            }
-        } else LayoutPosition.Bottom,
+        position = position,
         fillHeight = false,
         fillWidth = true
     )
 
-    val independentIslandState = rememberScreenSideAdaptiveContainerState(
-        expectHeight = minHeight,
-        expectWidth = minHeight,
-        minMargin = minMargin,
-        fallbackCornerRadius = getUIKitShapes().circular,
-        position = when (independentButtonPosition) {
-            LayoutPosition.Right -> LayoutPosition.BottomRight
-            LayoutPosition.Left -> LayoutPosition.BottomLeft
-            else -> throw UnsupportedOperationException("NavigationDock: Can only keep the independent button from being on the left or right side.")
-        },
-        fillWidth = false,
-        fillHeight = false
-    )
-
     UIKitNavigationDock(
         modifier = modifier,
-        islandMargin = minMargin,
         checkedIndex = checkedIndex,
         onChecked = onChecked,
         items = items,
-        hasIndependentButton = hasIndependentButton,
-        independentButtonContent = independentButtonContent,
-        independentButtonPosition = independentButtonPosition,
-        onIndependentButtonClick = onIndependentButtonClick,
         background = background,
         indicatorBackground = indicatorBackground,
-        contentColor = contentColor,
-        contentColorChecked = contentColorChecked,
-        mainIslandState = mainIslandState,
-        independentIslandState = independentIslandState,
+        state = state,
         acrylicEffectEnabled = acrylicEffectEnabled,
         acrylicState = acrylicState,
         shadowEnable = shadowEnable,
@@ -149,25 +102,18 @@ fun UIKitNavigationDock(
 @Composable
 fun UIKitNavigationDock(
     modifier: Modifier = Modifier,
-    islandMargin: Dp = getUIKitLayout().mediumSpacing,
     checkedIndex: Int,
     onChecked: (Int) -> Unit,
-    items: List<UIKitNavigationItem>,
-    hasIndependentButton: Boolean = false,
-    independentButtonContent: @Composable BoxScope.() -> Unit = {},
-    independentButtonPosition: LayoutPosition = LayoutPosition.Right,
-    onIndependentButtonClick: () -> Unit = {},
+    items: List<UIKitNavigationDockItem>,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.3f),
-    contentColor: Color = getUIKitColors().textFillColorPrimaryBrush,
-    contentColorChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
-    mainIslandState: ScreenSideAdaptiveContainerState,
-    independentIslandState: ScreenSideAdaptiveContainerState,
+    state: ScreenSideAdaptiveContainerState,
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialsState? = null,
     shadowEnable: Boolean = true,
     maxWidth: Dp = (-1).dp
 ) {
+
     Box(
         modifier = modifier,
         contentAlignment = Alignment.BottomCenter
@@ -181,47 +127,10 @@ fun UIKitNavigationDock(
                 ),
             horizontalArrangement = Arrangement.Center
         ) {
-            @Composable
-            fun independentIsland() {
-                if (hasIndependentButton) {
-                    // 优先保证其高度与主岛一致且为正圆, 优先级高于屏幕同步
-                    val state = independentIslandState.copy(
-                        height = mainIslandState.height,
-                        width = mainIslandState.height,
-                    )
-
-                    ScreenSideAdaptiveContainer(
-                        onClick = {
-                            onIndependentButtonClick()
-                        },
-                        indication = null,
-                        interaction = UIKitInteraction.DarkenWithScale,
-                        state = state,
-                        background = background,
-                        acrylicEffectEnabled = acrylicEffectEnabled,
-                        acrylicState = acrylicState,
-                        shadowEnable = shadowEnable
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .padding(getUIKitLayout().smallSpacing)
-                                .fillMaxSize(),
-                            contentAlignment = Alignment.Center,
-                            content = independentButtonContent
-                        )
-                    }
-                }
-            }
-
-            if (independentButtonPosition == LayoutPosition.Left && hasIndependentButton) {
-                independentIsland()
-                Spacer(Modifier.width(islandMargin))
-            }
-
             ScreenSideAdaptiveContainer(
                 modifier = Modifier
                     .weight(1f),
-                state = mainIslandState,
+                state = state,
                 background = background,
                 acrylicEffectEnabled = acrylicEffectEnabled,
                 acrylicState = acrylicState,
@@ -292,7 +201,7 @@ fun UIKitNavigationDock(
                                 translationX = if (checkedIndex == itemCount - 1) ((itemWidth * (1f - indicatorScaleAnimated.value)).value * densityDpi) / 2
                                 else -(((itemWidth * (1f - indicatorScaleAnimated.value)).value * densityDpi) / 2)
                             )
-                            .clip(RoundedCornerShape(mainIslandState.cornerRadius - getUIKitLayout().smallSpacing))
+                            .clip(RoundedCornerShape(state.cornerRadius - getUIKitLayout().smallSpacing))
                             .fillMaxHeight()
                             .width(itemWidth)
                             .background(indicatorBackground)
@@ -410,13 +319,10 @@ fun UIKitNavigationDock(
                                     easing = FastOutSlowInEasing
                                 )
                             )
-                            val contentColorAnimated by animateColorAsState(
-                                targetValue = if (checked) contentColorChecked else contentColor,
-                                animationSpec = tween(
-                                    getUIKitAnimate().transformRegularDurationMillis,
-                                    easing = LinearEasing
-                                )
-                            )
+
+                            LaunchedEffect(checked) {
+                                item.isChecked.value = checked
+                            }
 
                             Column(
                                 modifier = Modifier
@@ -445,32 +351,11 @@ fun UIKitNavigationDock(
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
-                                if (item.icon != null) {
-                                    Icon(
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .aspectRatio(item.icon.viewportWidth / item.icon.viewportHeight),
-                                        imageVector = item.icon,
-                                        contentDescription = item.title,
-                                        tint = contentColorAnimated,
-                                    )
-                                }
-                                if (item.title != null) {
-                                    Text(
-                                        item.title,
-                                        style = getUIKitTypography().footnote,
-                                        color = contentColorAnimated,
-                                    )
-                                }
+                                item.Content()
                             }
                         }
                     }
                 }
-            }
-
-            if (independentButtonPosition == LayoutPosition.Right && hasIndependentButton) {
-                Spacer(Modifier.width(islandMargin))
-                independentIsland()
             }
         }
     }

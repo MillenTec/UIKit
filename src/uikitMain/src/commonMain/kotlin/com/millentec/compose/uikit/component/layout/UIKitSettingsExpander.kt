@@ -97,7 +97,7 @@ fun UIKitSettingsExpander(
             ) {
                 Icon(
                     modifier = Modifier
-                        .size(22.dp)
+                        .size(getUIKitTypography().body.lineHeight.value.dp)
                         .rotate(iconRotateAnimated),
                     imageVector = FluentIcons.ChevronArrowDown,
                     contentDescription = null,

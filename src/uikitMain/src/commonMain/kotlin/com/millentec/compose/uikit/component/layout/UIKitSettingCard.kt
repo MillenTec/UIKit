@@ -66,7 +66,7 @@ fun UIKitSettingCard(
     content: @Composable BoxScope.() -> Unit = {
         Icon(
             modifier = Modifier
-                .size(22.dp),
+                .size(getUIKitTypography().body.lineHeight.value.dp),
             imageVector = FluentIcons.ChevronArrowRight,
             contentDescription = null,
             tint = getUIKitColors().textFillColorPrimaryBrush
@@ -100,7 +100,7 @@ fun UIKitSettingCard(
             if (icon != null) {
                 Icon(
                     modifier = Modifier
-                        .size(22.dp),
+                        .size(getUIKitTypography().body.lineHeight.value.dp),
                     imageVector = icon,
                     contentDescription = icon.name,
                     tint = iconColor
@@ -171,7 +171,7 @@ fun UIKitSettingCard(
                 if (icon != null) {
                     Icon(
                         modifier = Modifier
-                            .size(22.dp),
+                            .size(getUIKitTypography().body.lineHeight.value.dp),
                         imageVector = icon,
                         contentDescription = icon.name,
                         tint = iconColor

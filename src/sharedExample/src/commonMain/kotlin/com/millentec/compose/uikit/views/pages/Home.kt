@@ -14,6 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.LocalAcrylicMaterialsState
 import com.millentec.compose.uikit.component.input.UIKitDropdownButton
+import com.millentec.compose.uikit.foundation.layout.UIKitDropdownMenuItem
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
@@ -77,29 +78,12 @@ fun Home() {
                         onButtonClick = {
                             expanded.value = !expanded.value
                         },
-                        onClick = {},
                         items = listOf(
-                            {
-                                Text(
-                                    text = "Item 1",
-                                    style = getUIKitTypography().body,
-                                    color = getUIKitColors().textFillColorPrimaryBrush
-                                )
-                            },
-                            {
-                                Text(
-                                    text = "Item 2",
-                                    style = getUIKitTypography().body,
-                                    color = getUIKitColors().textFillColorPrimaryBrush
-                                )
-                            },
-                            {
-                                Text(
-                                    text = "Item 3",
-                                    style = getUIKitTypography().body,
-                                    color = getUIKitColors().textFillColorPrimaryBrush
-                                )
-                            }
+                            UIKitDropdownMenuItem.text("Item 0", onClick = {}),
+                            UIKitDropdownMenuItem.divider(),
+                            UIKitDropdownMenuItem.text("Item 1", onClick = {}),
+                            UIKitDropdownMenuItem.divider(),
+                            UIKitDropdownMenuItem.text("Item 2", onClick = {}),
                         ),
                         onDismissRequest = { expanded.value = false },
                         acrylicMaterialsState = acrylicMaterialsState
