@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.foundation.layout.UIKitDropdownMenuItem
+import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Text
@@ -29,9 +29,9 @@ import com.millentec.compose.uikit.theme.getUIKitShapes
 private fun Preview() {
     VerticalItemLayout(
         items = listOf(
-            UIKitDropdownMenuItem.textWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {}),
-            UIKitDropdownMenuItem.text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush),
-            UIKitDropdownMenuItem.icon(FluentIcons.Text, onClick = {}),
+            UIKitMenuItem.textWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {}),
+            UIKitMenuItem.text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush),
+            UIKitMenuItem.icon(FluentIcons.Text, onClick = {}),
         )
     )
 }
@@ -41,7 +41,7 @@ fun VerticalItemLayout(
     modifier: Modifier = Modifier,
     maxLength: Dp = (-1).dp,
     minWidth: Dp = 200.dp,
-    items: List<UIKitDropdownMenuItem>,
+    items: List<UIKitMenuItem>,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     cornerRadius: Dp = getUIKitShapes().regularRounded,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().smallSpacing),

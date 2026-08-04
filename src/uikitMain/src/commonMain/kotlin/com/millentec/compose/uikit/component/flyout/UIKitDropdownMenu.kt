@@ -9,18 +9,24 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.layout.VerticalItemLayout
-import com.millentec.compose.uikit.foundation.layout.UIKitDropdownMenuItem
+import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
@@ -40,9 +46,9 @@ private fun Preview() {
             UIKitDropdownMenu(
                 expanded = true,
                 items = listOf(
-                    UIKitDropdownMenuItem.textWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {}),
-                    UIKitDropdownMenuItem.text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush),
-                    UIKitDropdownMenuItem.icon(FluentIcons.Text, onClick = {}),
+                    UIKitMenuItem.textWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {}),
+                    UIKitMenuItem.text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush),
+                    UIKitMenuItem.icon(FluentIcons.Text, onClick = {}),
                 ),
                 onDismissRequest = {}
             )
@@ -56,7 +62,7 @@ fun UIKitDropdownMenu(
     expanded: Boolean,
     maxLength: Dp = (-1).dp,
     minWidth: Dp = 200.dp,
-    items: List<UIKitDropdownMenuItem>,
+    items: List<UIKitMenuItem>,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     cornerRadius: Dp = getUIKitShapes().regularRounded,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().smallSpacing),
@@ -69,6 +75,12 @@ fun UIKitDropdownMenu(
     acrylicMaterial: UIKitAcrylicMaterial = getUIKitMaterials().acrylicMaterial,
     shadowEnabled: Boolean = true,
 ) {
+    val positionOnRoot = remember { mutableStateOf(Offset.Zero) }
+
+    LaunchedEffect(positionOnRoot.value) {
+        acrylicMaterialsState?.invalidate()
+    }
+
     UIKitPopup(
         modifier = Modifier
             .then(if (shadowEnabled) {
@@ -77,7 +89,11 @@ fun UIKitDropdownMenu(
                     shadow = UIKitShadowMaterial.getMarginal()
                 )
             } else Modifier)
-            .clip(RoundedCornerShape(cornerRadius)),
+            .clip(RoundedCornerShape(cornerRadius))
+            .onGloballyPositioned {
+                if (it.isAttached)
+                    positionOnRoot.value = it.positionInRoot()
+            },
         alignment = alignment,
         offset = offset,
         animateAlignment = appearPosition,

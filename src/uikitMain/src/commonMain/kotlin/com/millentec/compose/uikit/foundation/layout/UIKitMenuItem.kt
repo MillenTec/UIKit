@@ -23,7 +23,7 @@ import com.millentec.compose.uikit.theme.getUIKitLayout
 import com.millentec.compose.uikit.theme.getUIKitShapes
 import com.millentec.compose.uikit.theme.getUIKitTypography
 
-open class UIKitDropdownMenuItem: UIKitItem() {
+open class UIKitMenuItem: UIKitItem() {
     companion object {
         fun text(
             text: String,
@@ -33,8 +33,8 @@ open class UIKitDropdownMenuItem: UIKitItem() {
             contentPadding: PaddingValues? = null,
             background: Color? = null,
             cornerRadius: Dp? = null,
-        ): UIKitDropdownMenuItem {
-            return object : UIKitDropdownMenuItem() {
+        ): UIKitMenuItem {
+            return object : UIKitMenuItem() {
                 @Composable
                 override fun Content() {
                     Column(
@@ -70,8 +70,8 @@ open class UIKitDropdownMenuItem: UIKitItem() {
             contentPadding: PaddingValues? = null,
             background: Color? = null,
             cornerRadius: Dp? = null,
-        ): UIKitDropdownMenuItem {
-            return object : UIKitDropdownMenuItem() {
+        ): UIKitMenuItem {
+            return object : UIKitMenuItem() {
                 @Composable
                 override fun Content() {
                     Column(
@@ -110,8 +110,8 @@ open class UIKitDropdownMenuItem: UIKitItem() {
             contentPadding: PaddingValues? = null,
             background: Color? = null,
             cornerRadius: Dp? = null,
-        ): UIKitDropdownMenuItem {
-            return object : UIKitDropdownMenuItem() {
+        ): UIKitMenuItem {
+            return object : UIKitMenuItem() {
                 @Composable
                 override fun Content() {
                     Row(
@@ -153,8 +153,8 @@ open class UIKitDropdownMenuItem: UIKitItem() {
             color: Color? = null,
             width: Dp = 1.dp,
             spacing: Dp? = null,
-        ): UIKitDropdownMenuItem {
-            return object : UIKitDropdownMenuItem() {
+        ): UIKitMenuItem {
+            return object : UIKitMenuItem() {
                 @Composable
                 override fun Content() {
                     Row(

@@ -1,7 +1,7 @@
 ﻿package com.millentec.compose.uikit.component.flyout
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -152,8 +152,13 @@ fun UIKitPopup(
     content: @Composable () -> Unit
 ) {
     val id = remember { mutableStateOf(0) }
+    val added = remember { mutableStateOf(false) }
     val flyoutManager = LocalFlyouts.current
-    val currentAnimateState = remember { mutableStateOf(visible) }
+    /*
+     * 先前无进入动画的 Bug 是由于 Popup 被创建时 Transition 才被创建, 此时的 state 被认为为初始值故不播放动画
+     * 现在将 TranslationState 放在外部储存, 确保不被重复创建
+     */
+    val transitionState = remember { MutableTransitionState(initialState = false) }
 
     // 内容 Composition 位于 Lambda 内, 仅在 enabled 改变时才整体更新, 故其无法接收形参, 需封装为 State
     val alignmentCurrent by rememberUpdatedState(alignment)
@@ -170,17 +175,19 @@ fun UIKitPopup(
     val rootSize = remember { mutableStateOf(IntSize.Zero) }
     val contentSize = remember { mutableStateOf(IntSize.Zero) }
 
-    LaunchedEffect(visibleCurrent, currentAnimateState.value) {
-        if (visibleCurrent) {
+    LaunchedEffect(visibleCurrent) {
+        // 需防止重复添加
+        if (visibleCurrent && !added.value) {
+            added.value = true
             id.value = flyoutManager.add(object : UIKitFlyoutSlot() {
                 @Composable
                 override fun Content() {
+                    transitionState.targetState = visibleCurrent
+
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .onSizeChanged {
-                                rootSize.value = it
-                            }
+                            .onSizeChanged { rootSize.value = it }
                             .then(if (dismissOnClickOutsideCurrent) {
                                 Modifier.pointerInput(Unit) {
                                     awaitEachGesture {
@@ -211,44 +218,39 @@ fun UIKitPopup(
                                 ),
                             contentAlignment = animateAlignmentCurrent
                         ) {
-                            val transition = updateTransition(targetState = visibleCurrent)
-
-                            transition.AnimatedVisibility(
+                            AnimatedVisibility(
+                                visibleState = transitionState,
                                 modifier = modifierCurrent,
-                                visible = { it },
                                 enter = enterCurrent,
                                 exit = exitCurrent,
                             ) {
                                 Box(
                                     modifier = Modifier
-                                        .pointerInput(Unit) {
-                                            awaitEachGesture {
-                                                awaitFirstDown().consume()
-                                            }
-                                        }
-                                        .onGloballyPositioned {
-                                            contentSize.value = it.size
-                                        }
+                                        .pointerInput(Unit) { awaitEachGesture { awaitFirstDown().consume() } }
+                                        .onGloballyPositioned { contentSize.value = it.size }
                                 ) {
                                     contentCurrent()
                                 }
-                            }
-
-                            LaunchedEffect(transition.currentState) {
-                                currentAnimateState.value = transition.currentState
                             }
                         }
                     }
                 }
             })
-        } else if(!currentAnimateState.value) {
+        }
+    }
+
+    // 在 Transaction 中 currentState 在动画后变化
+    LaunchedEffect(transitionState.currentState) {
+        if (!visibleCurrent && !transitionState.currentState && added.value) {
             flyoutManager.remove(id.value)
+            id.value = 0
+            added.value = false
         }
     }
 
     DisposableEffect(Unit) {
         onDispose {
-            flyoutManager.remove(id.value)
+            if (added.value) flyoutManager.remove(id.value)
         }
     }
 }

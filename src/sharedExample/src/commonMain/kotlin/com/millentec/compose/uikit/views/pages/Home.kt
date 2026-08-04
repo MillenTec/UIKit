@@ -14,8 +14,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.LocalAcrylicMaterialsState
 import com.millentec.compose.uikit.component.input.UIKitDropdownButton
-import com.millentec.compose.uikit.foundation.layout.UIKitDropdownMenuItem
+import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Attach
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.BranchFork
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
 import com.millentec.compose.uikit.theme.getUIKitTypography
@@ -79,11 +83,11 @@ fun Home() {
                             expanded.value = !expanded.value
                         },
                         items = listOf(
-                            UIKitDropdownMenuItem.text("Item 0", onClick = {}),
-                            UIKitDropdownMenuItem.divider(),
-                            UIKitDropdownMenuItem.text("Item 1", onClick = {}),
-                            UIKitDropdownMenuItem.divider(),
-                            UIKitDropdownMenuItem.text("Item 2", onClick = {}),
+                            UIKitMenuItem.textWithIcon(FluentIcons.Accessibility, "Item 0", onClick = {}),
+                            UIKitMenuItem.divider(),
+                            UIKitMenuItem.textWithIcon(FluentIcons.BranchFork, "Item 1", onClick = {}),
+                            UIKitMenuItem.divider(),
+                            UIKitMenuItem.textWithIcon(FluentIcons.Attach, "Item 2", onClick = {}),
                         ),
                         onDismissRequest = { expanded.value = false },
                         acrylicMaterialsState = acrylicMaterialsState

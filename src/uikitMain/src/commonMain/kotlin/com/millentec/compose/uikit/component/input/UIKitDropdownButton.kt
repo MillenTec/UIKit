@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.flyout.UIKitDropdownMenu
 import com.millentec.compose.uikit.component.flyout.UIKitFlyouter
-import com.millentec.compose.uikit.foundation.layout.UIKitDropdownMenuItem
+import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
@@ -44,9 +44,9 @@ private fun Preview() {
                 expanded = true,
                 onButtonClick = {},
                 items = listOf(
-                    UIKitDropdownMenuItem.textWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {}),
-                    UIKitDropdownMenuItem.text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush),
-                    UIKitDropdownMenuItem.icon(FluentIcons.Text, onClick = {}),
+                    UIKitMenuItem.textWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {}),
+                    UIKitMenuItem.text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush),
+                    UIKitMenuItem.icon(FluentIcons.Text, onClick = {}),
                 ),
                 onDismissRequest = {},
             ) {
@@ -112,15 +112,19 @@ fun UIKitDropdownButton(
     menuMinWidth: Dp = 200.dp,
     onDismissRequest: (() -> Unit)? = null,
     colors: UIKitDropdownButtonColors = UIKitDropdownButtonColors.default(),
-    hasBorder: Boolean = false,
+    buttonHasBorder: Boolean = false,
+    hasBorder: Boolean = true,
     borderWidth: Dp = 1.dp,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
     enabled: Boolean = true,
     onButtonClick: () -> Unit,
     acrylicEffectEnabled: Boolean = true,
     acrylicMaterialsState: AcrylicMaterialsState? = null,
-    acrylicMaterial: UIKitAcrylicMaterial = getUIKitMaterials().acrylicMaterial,
-    items: List<UIKitDropdownMenuItem>,
+    acrylicMaterial: UIKitAcrylicMaterial = getUIKitMaterials().acrylicMaterial.copy(
+        tint = getUIKitMaterials().acrylicMaterial.tint.copy(0.6f),
+        lightingEffectsEnabled = false
+    ),
+    items: List<UIKitMenuItem>,
     content: @Composable BoxScope.() -> Unit
 ) {
     val uiKitTheme = getUIKitTheme()
@@ -148,7 +152,7 @@ fun UIKitDropdownButton(
             border = colors.border,
             borderDisabled = colors.borderDisabled,
         ),
-        hasBorder = hasBorder,
+        hasBorder = buttonHasBorder,
         borderWidth = borderWidth,
         contentPadding = contentPadding,
         enabled = enabled,
