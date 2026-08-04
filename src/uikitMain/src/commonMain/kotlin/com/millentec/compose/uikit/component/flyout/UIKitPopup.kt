@@ -1,6 +1,7 @@
 ﻿package com.millentec.compose.uikit.component.flyout
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -140,7 +141,6 @@ fun UIKitPopup(
 @Composable
 fun UIKitPopup(
     modifier: Modifier = Modifier,
-    enabled: Boolean = true,
     visible: Boolean,
     enter: EnterTransition = fadeIn(),
     exit: ExitTransition = fadeOut(),
@@ -153,6 +153,7 @@ fun UIKitPopup(
 ) {
     val id = remember { mutableStateOf(0) }
     val flyoutManager = LocalFlyouts.current
+    val currentAnimateState = remember { mutableStateOf(visible) }
 
     // 内容 Composition 位于 Lambda 内, 仅在 enabled 改变时才整体更新, 故其无法接收形参, 需封装为 State
     val alignmentCurrent by rememberUpdatedState(alignment)
@@ -169,8 +170,8 @@ fun UIKitPopup(
     val rootSize = remember { mutableStateOf(IntSize.Zero) }
     val contentSize = remember { mutableStateOf(IntSize.Zero) }
 
-    LaunchedEffect(enabled) {
-        if (enabled) {
+    LaunchedEffect(visibleCurrent, currentAnimateState.value) {
+        if (visibleCurrent) {
             id.value = flyoutManager.add(object : UIKitFlyoutSlot() {
                 @Composable
                 override fun Content() {
@@ -210,9 +211,11 @@ fun UIKitPopup(
                                 ),
                             contentAlignment = animateAlignmentCurrent
                         ) {
-                            AnimatedVisibility(
+                            val transition = updateTransition(targetState = visibleCurrent)
+
+                            transition.AnimatedVisibility(
                                 modifier = modifierCurrent,
-                                visible = visibleCurrent,
+                                visible = { it },
                                 enter = enterCurrent,
                                 exit = exitCurrent,
                             ) {
@@ -230,16 +233,20 @@ fun UIKitPopup(
                                     contentCurrent()
                                 }
                             }
+
+                            LaunchedEffect(transition.currentState) {
+                                currentAnimateState.value = transition.currentState
+                            }
                         }
                     }
                 }
             })
-        } else {
+        } else if(!currentAnimateState.value) {
             flyoutManager.remove(id.value)
         }
     }
 
-    DisposableEffect(enabled) {
+    DisposableEffect(Unit) {
         onDispose {
             flyoutManager.remove(id.value)
         }
