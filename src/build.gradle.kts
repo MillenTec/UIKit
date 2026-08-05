@@ -1,3 +1,6 @@
+import com.github.jk1.license.filter.LicenseBundleNormalizer
+import com.github.jk1.license.render.JsonReportRenderer
+
 plugins {
     // this is necessary to avoid the plugins to be loaded multiple times
     // in each subproject's classloader
@@ -7,4 +10,19 @@ plugins {
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinJvm) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
+    id("com.github.jk1.dependency-license-report") version "3.1.4"
+}
+
+licenseReport {
+    outputDir = "$projectDir/build/reports/licenses"
+    filters = arrayOf(LicenseBundleNormalizer())
+    configurations = arrayOf(
+        "commonMainMetadataRuntimeClasspath",
+        "androidReleaseRuntimeClasspath",
+        "jvmRuntimeClasspath"
+    )
+    excludeOwnGroup = true
+    allowedLicensesFile = file("$projectDir/licenses-allowed.json")
+    renderers = arrayOf(JsonReportRenderer("notices.json"))
+    excludeOwnGroup = true
 }
