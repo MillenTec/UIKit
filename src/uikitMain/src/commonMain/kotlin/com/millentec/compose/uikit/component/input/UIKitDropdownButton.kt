@@ -3,10 +3,7 @@
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -14,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
@@ -27,36 +23,13 @@ import com.millentec.compose.uikit.component.flyout.UIKitDropdownMenu
 import com.millentec.compose.uikit.component.flyout.UIKitFlyouter
 import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
-import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Text
 import com.millentec.compose.uikit.theme.*
 
 @Composable
 @Preview
 private fun Preview() {
     UIKitFlyouter {
-        Box(
-            Modifier.fillMaxSize(),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            UIKitDropdownButton(
-                expanded = true,
-                onButtonClick = {},
-                items = listOf(
-                    UIKitMenuItem.textWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {}),
-                    UIKitMenuItem.text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush),
-                    UIKitMenuItem.icon(FluentIcons.Text, onClick = {}),
-                ),
-                onDismissRequest = {},
-            ) {
-                Text(
-                    text = "Button",
-                    style = getUIKitTypography().body,
-                    color = getUIKitColors().textFillColorPrimaryBrush
-                )
-            }
-        }
+
     }
 }
 
@@ -106,18 +79,14 @@ data class UIKitDropdownButtonColors(
 fun UIKitDropdownButton(
     modifier: Modifier = Modifier,
     expanded: Boolean,
-    buttonShape: Shape = RoundedCornerShape(getUIKitShapes().circular),
-    menuCornerRadius: Dp = getUIKitShapes().regularRounded,
-    menuMaxLength: Dp = 360.dp,
-    menuMinWidth: Dp = 200.dp,
+    cornerRadius: Dp = getUIKitShapes().regularRounded,
+    maxLength: Dp = 360.dp,
+    minWidth: Dp = 200.dp,
     onDismissRequest: (() -> Unit)? = null,
     colors: UIKitDropdownButtonColors = UIKitDropdownButtonColors.default(),
-    buttonHasBorder: Boolean = false,
     hasBorder: Boolean = true,
     borderWidth: Dp = 1.dp,
-    contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
-    enabled: Boolean = true,
-    onButtonClick: () -> Unit,
+    appearPosition: Alignment? = null,
     acrylicEffectEnabled: Boolean = true,
     acrylicMaterialsState: AcrylicMaterialsState? = null,
     acrylicMaterial: UIKitAcrylicMaterial = getUIKitMaterials().acrylicMaterial.copy(
@@ -125,7 +94,7 @@ fun UIKitDropdownButton(
         lightingEffectsEnabled = false
     ),
     items: List<UIKitMenuItem>,
-    content: @Composable BoxScope.() -> Unit
+    clickableContent: @Composable BoxScope.() -> Unit
 ) {
     val uiKitTheme = getUIKitTheme()
 
@@ -135,7 +104,7 @@ fun UIKitDropdownButton(
     val densityDpi = LocalDensity.current.density
     val rootSize = remember { mutableStateOf(IntSize.Zero) }
 
-    UIKitButton(
+    Box(
         modifier = modifier
             .onGloballyPositioned {
                 if (it.isAttached) {
@@ -143,30 +112,16 @@ fun UIKitDropdownButton(
                     buttonSize.value = it.size
                 }
             },
-        shape = buttonShape,
-        colors = UIKitButtonColors(
-            background = colors.background,
-            backgroundDisabled = colors.backgroundDisabled,
-            content = colors.content,
-            contentDisabled = colors.contentDisabled,
-            border = colors.border,
-            borderDisabled = colors.borderDisabled,
-        ),
-        hasBorder = buttonHasBorder,
-        borderWidth = borderWidth,
-        contentPadding = contentPadding,
-        enabled = enabled,
-        onClick = onButtonClick,
-        content = content
+        content = clickableContent
     )
 
     UIKitDropdownMenu(
         modifier = Modifier
             .then(if (hasBorder) {
                 Modifier.border(
-                    width = 1.dp,
+                    width = borderWidth,
                     color = colors.menuBorder,
-                    shape = RoundedCornerShape(menuCornerRadius)
+                    shape = RoundedCornerShape(cornerRadius)
                 )
             } else Modifier),
         expanded = expanded,
@@ -174,13 +129,13 @@ fun UIKitDropdownButton(
         acrylicEffectEnabled = acrylicEffectEnabled,
         acrylicMaterialsState = acrylicMaterialsState,
         acrylicMaterial = acrylicMaterial,
-        cornerRadius = menuCornerRadius,
-        maxLength = menuMaxLength,
-        minWidth = menuMinWidth,
+        cornerRadius = cornerRadius,
+        maxLength = maxLength,
+        minWidth = minWidth,
         alignment = Alignment.TopStart,
-        appearPosition = if (rootSize.value.height -(position.value.y + buttonSize.value.height + (uiKitTheme.layout.mediumSpacing * densityDpi).value) >= contentSize.value.height)
+        appearPosition = appearPosition ?: (if (rootSize.value.height -(position.value.y + buttonSize.value.height + (uiKitTheme.layout.mediumSpacing * densityDpi).value) >= contentSize.value.height)
             Alignment.TopCenter
-        else Alignment.BottomCenter,
+        else Alignment.BottomCenter),
         offset = { root, content ->
             rootSize.value = root
             contentSize.value = content

@@ -56,7 +56,6 @@ import com.millentec.compose.uikit.icons.fluenticons.animatable.*
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.icons.fluenticons.resizeable.shapes
 import com.millentec.compose.uikit.theme.*
-import com.millentec.compose.uikit.viewmodels.MainViewModel
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -586,10 +585,6 @@ fun IconsGallery() {
     ) }
     val animatableIconList = remember { makeAnimatableIconList(optionsState) }
 
-    LaunchedEffect(Unit) {
-        MainViewModel.navigationDockVisible(false)
-    }
-
     LaunchedEffect(optionsState.isLayered.value, optionsState.tintColor.value) {
         iconLists.value = IconGalleryList(
             optionsState.tintColor.value.getColor(),
@@ -655,7 +650,7 @@ fun IconsGallery() {
                             modifier = Modifier
                                 .safeDrawingPadding()
                         ) {
-                            Spacer(Modifier.height(getUIKitLayout().x6Spacing))
+                            Spacer(Modifier.height(getUIKitLayout().x4Spacing))
 
                             Text(
                                 text = "Icons Gallery",
@@ -663,7 +658,7 @@ fun IconsGallery() {
                                 color = getUIKitColors().textFillColorPrimaryBrush
                             )
 
-                            Spacer(Modifier.height(getUIKitLayout().x4Spacing))
+                            Spacer(Modifier.height(getUIKitLayout().x2Spacing))
                         }
                     }
 

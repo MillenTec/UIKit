@@ -17,7 +17,7 @@ import com.millentec.compose.uikit.theme.getUIKitTypography
 
 @Composable
 @Preview
-fun Settings() {
+fun License() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -36,7 +36,7 @@ fun Settings() {
                 )
         ) {
             Text(
-                text = "Settings",
+                text = "License",
                 style = getUIKitTypography().largeTitle,
                 color = getUIKitColors().textFillColorPrimaryBrush
             )

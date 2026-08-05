@@ -7,7 +7,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,17 +26,11 @@ import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.toggleMultiple
 import com.millentec.compose.uikit.theme.*
-import com.millentec.compose.uikit.viewmodels.MainViewModel
 
 @Composable
 @Preview
 fun Controls() {
     val uikitAnimate = getUIKitAnimate()
-
-    LaunchedEffect(Unit) {
-        MainViewModel.navigationDockVisible(true)
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,7 +41,12 @@ fun Controls() {
             modifier = Modifier
                 .fillMaxSize()
                 .safeDrawingPadding()
-                .padding(getUIKitLayout().x4Spacing, getUIKitLayout().x6Spacing)
+                .padding(
+                    start = getUIKitLayout().x4Spacing,
+                    top = getUIKitLayout().x4Spacing,
+                    end = getUIKitLayout().x4Spacing,
+                    bottom = getUIKitLayout().x6Spacing
+                )
         ) {
             Text(
                 text = "Controls Gallery",

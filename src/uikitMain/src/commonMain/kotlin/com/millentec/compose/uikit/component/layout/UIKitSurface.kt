@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
@@ -20,12 +22,16 @@ import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
-import com.millentec.compose.uikit.theme.getUIKitColors
+import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
+import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
+import com.millentec.compose.uikit.theme.*
 
 @Composable
 @Preview
 private fun Preview() {
     UIKitSurface(
+        modifier = Modifier.size(getUIKitLayout().interactiveHotspot),
+        shape = RoundedCornerShape(getUIKitShapes().circular),
         onClick = {}
     ) {
 
@@ -40,6 +46,9 @@ fun UIKitSurface(
     shape: Shape = RectangleShape,
     color: Color = getUIKitColors().contentFillColorTertiaryBrush,
     shadow: Shadow? = null,
+    acrylicEffectEnabled: Boolean = false,
+    acrylicMaterialsState: AcrylicMaterialsState? = null,
+    acrylicMaterial: UIKitAcrylicMaterial = getUIKitMaterials().acrylicMaterial,
     border: BorderStroke? = null,
     interactionSource: MutableInteractionSource? = null,
     indication: Indication? = UIKitInteraction.ripple(),
@@ -51,8 +60,20 @@ fun UIKitSurface(
 
     Box(
         modifier = modifier
+            .then(
+                if (shadow != null)
+                    Modifier.dropShadow(shape, shadow)
+                else Modifier
+            )
             .clip(shape)
             .background(color)
+            .then(if (acrylicEffectEnabled && acrylicMaterialsState != null) {
+                Modifier.acrylicMaterial(
+                    acrylicMaterialsState,
+                    shape = shape,
+                    acrylicMaterial = acrylicMaterial,
+                )
+            } else Modifier)
             .uikitClickable(
                 enabled = enabled,
                 onClick = onClick,
@@ -64,12 +85,6 @@ fun UIKitSurface(
     ) {
         Box(
             modifier = Modifier
-                .clip(shape)
-                .then(
-                    if (shadow != null)
-                        Modifier.dropShadow(shape, shadow)
-                    else Modifier
-                )
                 .then(
                     if (border != null)
                         Modifier.border(border)
