@@ -36,7 +36,7 @@ fun FluentIcons.AnimatableIcons.ArrowCircle(
     modifier: Modifier = Modifier,
     progress: Float = 0f,
     state: UIKitArrowCircleAnimateState = Running,
-    tint: Color = getUIKitColors().textFillColorPrimaryBrush,
+    tint: Brush,
     resetProgressOnError: Boolean = true,
     lineWidth: Dp = 1.dp,
     rotate: Float,
@@ -267,7 +267,7 @@ fun FluentIcons.AnimatableIcons.ArrowCircle(
 
                     drawPath(
                         path = trimmedPath,
-                        color = tint,
+                        brush = tint,
                         style = Stroke(
                             width = lineWidth.toPx(),
                             cap = StrokeCap.Round,
@@ -277,7 +277,7 @@ fun FluentIcons.AnimatableIcons.ArrowCircle(
 
                     drawPath(
                         path = trimmedPath1,
-                        color = tint,
+                        brush = tint,
                         style = Stroke(
                             width = lineWidth.toPx(),
                             cap = StrokeCap.Round,
@@ -310,7 +310,7 @@ fun FluentIcons.AnimatableIcons.ArrowCircle(
 
                     drawPath(
                         path = trimmedPath,
-                        color = tint,
+                        brush = tint,
                         style = Stroke(
                             width = lineWidth.toPx(),
                             cap = StrokeCap.Round,
@@ -352,13 +352,13 @@ fun FluentIcons.AnimatableIcons.ArrowCircle(
                                     Offset(13.dp.toPx(), 10.5.dp.toPx()),
                                 ),
                                 pointMode = PointMode.Polygon,
-                                color = tint,
+                                brush = tint,
                                 strokeWidth = lineWidth.toPx(),
                                 cap = StrokeCap.Round,
                             )
 
                             drawLine(
-                                color = tint,
+                                brush = tint,
                                 start = Offset(10.dp.toPx(), 13.5.dp.toPx()),
                                 end = Offset(10.dp.toPx(), 6.5.dp.toPx()),
                                 strokeWidth = lineWidth.toPx(),
@@ -375,7 +375,8 @@ fun FluentIcons.AnimatableIcons.ArrowCircle(
                 left = size.width / 2 - 15.dp.toPx() / 2
             ) {
                 drawArc(
-                    color = tint.copy(0.3f),
+                    brush = tint,
+                    alpha = 0.3f,
                     startAngle = -90f,
                     sweepAngle = 360f,
                     useCenter = false,
@@ -390,7 +391,7 @@ fun FluentIcons.AnimatableIcons.ArrowCircle(
                 )
 
                 drawArc(
-                    color = tint,
+                    brush = tint,
                     startAngle = -90f,
                     sweepAngle = progressAnimated.value * 360f,
                     useCenter = false,
@@ -414,16 +415,18 @@ fun FluentIcons.AnimatableIcons.ArrowCircle(
     progress: Float = 0f,
     state: UIKitArrowCircleAnimateState = Running,
     resetProgressOnError: Boolean = true,
+    primaryTint: Color = getUIKitColors().highlightColorPrimaryBrush,
+    autoTint: Boolean = true,
     lineWidth: Dp = 1.dp,
     rotate: Float
 ) {
     val tintAnimated by animateColorAsState(
-        targetValue = when(state) {
-            Running -> getUIKitColors().highlightColorPrimaryBrush
+        targetValue = if (autoTint) when(state) {
+            Running -> primaryTint
             Success -> getUIKitColors().successGreenColorPrimaryBrush
             Stopped -> getUIKitColors().warningYellowColorPrimaryBrush
             Error -> getUIKitColors().errorRedColorPrimaryBrush
-        },
+        } else primaryTint,
         animationSpec = tween(
             getUIKitAnimate().transformRegularDurationMillis,
             easing = LinearEasing,
@@ -440,7 +443,7 @@ fun FluentIcons.AnimatableIcons.ArrowCircle(
         modifier = modifier,
         progress = progress,
         state = state,
-        tint = tintAnimated,
+        tint = SolidColor(tintAnimated),
         resetProgressOnError = resetProgressOnError,
         lineWidth = lineWidth,
         rotate = rotate,

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
@@ -43,7 +44,7 @@ private fun Preview() {
  * @param circleRadius 进度环的半径, 需根据实际的基础图标而设置, 与圆环半径保持一致
  * @param progress 进度, 可传入范围为 0f..1f 的浮点数
  * @param lineWidth 进度环的线条宽度, 需根据实际的基础图标而设置, 与圆环宽度保持一致
- * @param activeColor 进度环激活状态的填充颜色, 一般与基础图标色调一致
+ * @param activeBrush 进度环激活状态的填充色刷, 一般与基础图标色刷一致
  */
 @Composable
 fun ProgressableCircleIcon(
@@ -52,7 +53,7 @@ fun ProgressableCircleIcon(
     circleRadius: Dp = 15.dp,
     progress: Float,
     lineWidth: Dp = 1.dp,
-    activeColor: Color = getUIKitColors().textFillColorPrimaryBrush,
+    activeBrush: Brush,
 ) {
     val vectorPainter = rememberVectorPainter(basicIcon)
 
@@ -81,7 +82,7 @@ fun ProgressableCircleIcon(
                 left = size.width / 2 - circleRadius.toPx() / 2
             ) {
                 drawArc(
-                    color = activeColor,
+                    brush = activeBrush,
                     startAngle = -90f,
                     sweepAngle = progress.coerceIn(0f..1f) * 360f,
                     useCenter = false,
@@ -98,3 +99,20 @@ fun ProgressableCircleIcon(
         }
     }
 }
+
+@Composable
+fun ProgressableCircleIcon(
+    basicIcon: ImageVector,
+    modifier: Modifier = Modifier,
+    circleRadius: Dp = 15.dp,
+    progress: Float,
+    lineWidth: Dp = 1.dp,
+    activeColor: Color,
+) = ProgressableCircleIcon(
+    basicIcon = basicIcon,
+    modifier = modifier,
+    circleRadius = circleRadius,
+    progress = progress,
+    lineWidth = lineWidth,
+    activeBrush = SolidColor(activeColor),
+)
