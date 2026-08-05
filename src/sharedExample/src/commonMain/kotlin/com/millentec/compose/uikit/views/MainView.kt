@@ -140,6 +140,8 @@ fun MainView() {
                 }
             ) {
                 Row(
+                    modifier = Modifier
+                        .widthIn(max = 700.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                 ) {
@@ -173,6 +175,7 @@ fun MainView() {
                             checkedIndex = dockItems.value.ordinal,
                             onChecked = {
                                 nav.switchPage(Pages.entries[it])
+                                dockItems.value = NavDock.entries[it]
                             },
                             items = remember {
                                 listOf(
@@ -189,8 +192,7 @@ fun MainView() {
                                         icon = FluentIcons.designIdeas()
                                     )
                                 )
-                            },
-                            maxWidth = 600.dp
+                            }
                         )
                     }
 
