@@ -1,5 +1,7 @@
 ﻿package com.millentec.compose.uikit.icons.fluenticons.filled.dp20
 
+
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -7,45 +9,65 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 
-val FluentIcons.Filled.ZoomOut: ImageVector
-    get() {
-        if (_ZoomOut != null) {
-            return _ZoomOut!!
+fun FluentIcons.Filled.zoomOut(
+    primary: Brush,
+    secondary: Brush
+): ImageVector {
+    return ImageVector.Builder(
+        name = "ZoomOut",
+        defaultWidth = 20.dp,
+        defaultHeight = 20.dp,
+        viewportWidth = 20f,
+        viewportHeight = 20f
+    ).apply {
+        path(fill = secondary) {
+            moveTo(16.85f, 16.15f)
+            lineToRelative(-3.42f, -3.42f)
+            curveToRelative(0.97f, -1.14f, 1.56f, -2.61f, 1.56f, -4.23f)
+            curveToRelative(0f, -3.59f, -2.91f, -6.5f, -6.5f, -6.5f)
+            reflectiveCurveToRelative(-6.5f, 2.91f, -6.5f, 6.5f)
+            reflectiveCurveToRelative(2.91f, 6.5f, 6.5f, 6.5f)
+            curveToRelative(1.61f, 0f, 3.09f, -0.59f, 4.23f, -1.56f)
+            lineToRelative(3.42f, 3.42f)
+            lineToRelative(0.07f, 0.06f)
+            curveToRelative(0.19f, 0.14f, 0.46f, 0.12f, 0.64f, -0.06f)
+            curveToRelative(0.2f, -0.2f, 0.2f, -0.51f, 0f, -0.71f)
+            close()
+            moveTo(11f, 9f)
+            horizontalLineToRelative(-5f)
+            curveToRelative(-0.28f, 0f, -0.5f, -0.22f, -0.5f, -0.5f)
+            reflectiveCurveToRelative(0.22f, -0.5f, 0.5f, -0.5f)
+            horizontalLineToRelative(5f)
+            curveToRelative(0.28f, 0f, 0.5f, 0.22f, 0.5f, 0.5f)
+            reflectiveCurveToRelative(-0.22f, 0.5f, -0.5f, 0.5f)
+            close()
         }
-        _ZoomOut = ImageVector.Builder(
-            name = "ZoomOut",
-            defaultWidth = 20.dp,
-            defaultHeight = 20.dp,
-            viewportWidth = 20f,
-            viewportHeight = 20f
-        ).apply {
-            path(fill = SolidColor(Color(0xFF1D1D1F))) {
-                moveTo(8.5f, 2f)
-                curveTo(12.09f, 2f, 15f, 4.91f, 15f, 8.5f)
-                curveTo(15f, 10.115f, 14.411f, 11.593f, 13.436f, 12.729f)
-                lineTo(16.854f, 16.146f)
-                curveTo(17.049f, 16.342f, 17.049f, 16.658f, 16.854f, 16.854f)
-                curveTo(16.68f, 17.027f, 16.411f, 17.046f, 16.216f, 16.911f)
-                lineTo(16.146f, 16.854f)
-                lineTo(12.729f, 13.436f)
-                curveTo(11.593f, 14.411f, 10.115f, 15f, 8.5f, 15f)
-                curveTo(4.91f, 15f, 2f, 12.09f, 2f, 8.5f)
-                curveTo(2f, 4.91f, 4.91f, 2f, 8.5f, 2f)
-                close()
-                moveTo(6f, 8f)
-                curveTo(5.724f, 8f, 5.5f, 8.224f, 5.5f, 8.5f)
-                curveTo(5.5f, 8.776f, 5.724f, 9f, 6f, 9f)
-                horizontalLineTo(11f)
-                curveTo(11.276f, 9f, 11.5f, 8.776f, 11.5f, 8.5f)
-                curveTo(11.5f, 8.224f, 11.276f, 8f, 11f, 8f)
-                horizontalLineTo(6f)
-                close()
-            }
-        }.build()
+        path(fill = primary) {
+            moveTo(6f, 8f)
+            curveToRelative(-0.28f, 0f, -0.5f, 0.22f, -0.5f, 0.5f)
+            reflectiveCurveToRelative(0.22f, 0.5f, 0.5f, 0.5f)
+            horizontalLineToRelative(5f)
+            curveToRelative(0.28f, 0f, 0.5f, -0.22f, 0.5f, -0.5f)
+            reflectiveCurveToRelative(-0.22f, -0.5f, -0.5f, -0.5f)
+            horizontalLineToRelative(-5f)
+            close()
+        }
+    }.build()
+}
 
-        return _ZoomOut!!
-    }
+fun FluentIcons.Filled.zoomOut(): ImageVector {
+    return zoomOut(
+        SolidColor(Color(0x001D1D1F)),
+        SolidColor(Color(0xFF1D1D1F))
+    )
+}
 
-@Suppress("ObjectPropertyName")
-private var _ZoomOut: ImageVector? = null
-
+fun FluentIcons.Filled.zoomOut(
+    color: Color,
+    layered: Boolean = false
+): ImageVector {
+    return zoomOut(
+        if (layered) SolidColor(color) else SolidColor(color.copy(0f)),
+        if (layered) SolidColor(color.copy(0.3f)) else SolidColor(color)
+    )
+}

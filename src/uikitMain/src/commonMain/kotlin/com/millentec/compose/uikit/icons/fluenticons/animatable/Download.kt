@@ -3,6 +3,7 @@
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -26,7 +27,7 @@ fun FluentIcons.AnimatableIcons.Download(
     modifier: Modifier = Modifier,
     progress: Float,
     state: UIKitArrowCircleAnimateState = Running,
-    tint: Color = getUIKitColors().textFillColorPrimaryBrush,
+    tint: Brush,
     resetProgressOnError: Boolean = true,
     lineWidth: Dp = 1.dp
 ) = ArrowCircle(
@@ -43,12 +44,16 @@ fun FluentIcons.AnimatableIcons.Download(
     modifier: Modifier = Modifier,
     progress: Float,
     state: UIKitArrowCircleAnimateState = Running,
+    primaryTint: Color = getUIKitColors().highlightColorPrimaryBrush,
+    autoTint: Boolean = true,
     resetProgressOnError: Boolean = true,
     lineWidth: Dp = 1.dp
 ) = ArrowCircle(
     modifier = modifier,
     progress = progress,
     state = state,
+    primaryTint = primaryTint,
+    autoTint = autoTint,
     resetProgressOnError = resetProgressOnError,
     lineWidth = lineWidth,
     rotate = 0f

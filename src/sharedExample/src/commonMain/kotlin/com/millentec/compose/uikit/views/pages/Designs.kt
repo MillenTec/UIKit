@@ -6,7 +6,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.component.layout.UIKitSettingCard
@@ -22,11 +21,6 @@ import com.millentec.compose.uikit.viewmodels.MainViewModel
 @Composable
 @Preview
 fun Designs() {
-
-    LaunchedEffect(Unit) {
-        MainViewModel.navigationDockVisible(true)
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -37,7 +31,12 @@ fun Designs() {
             modifier = Modifier
                 .fillMaxSize()
                 .safeDrawingPadding()
-                .padding(getUIKitLayout().x4Spacing, getUIKitLayout().x6Spacing)
+                .padding(
+                    start = getUIKitLayout().x4Spacing,
+                    top = getUIKitLayout().x4Spacing,
+                    end = getUIKitLayout().x4Spacing,
+                    bottom = getUIKitLayout().x6Spacing
+                )
         ) {
             Text(
                 text = "Designs",

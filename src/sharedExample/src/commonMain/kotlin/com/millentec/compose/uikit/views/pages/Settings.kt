@@ -28,7 +28,12 @@ fun Settings() {
             modifier = Modifier
                 .fillMaxSize()
                 .safeDrawingPadding()
-                .padding(getUIKitLayout().x4Spacing, getUIKitLayout().x6Spacing)
+                .padding(
+                    start = getUIKitLayout().x4Spacing,
+                    top = getUIKitLayout().x4Spacing,
+                    end = getUIKitLayout().x4Spacing,
+                    bottom = getUIKitLayout().x6Spacing
+                )
         ) {
             Text(
                 text = "Settings",

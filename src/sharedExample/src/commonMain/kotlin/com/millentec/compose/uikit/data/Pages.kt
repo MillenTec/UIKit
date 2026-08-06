@@ -6,5 +6,7 @@ enum class Pages {
     Design,
     Settings,
 
-    Icons
+    Icons,
+    License,
+    ThirdParty,
 }

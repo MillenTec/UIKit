@@ -22,7 +22,7 @@ import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterials
 import com.millentec.compose.uikit.theme.AppTheme
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitTheme
-import com.millentec.compose.uikit.views.MainViewVerticalLayout
+import com.millentec.compose.uikit.views.MainView
 
 val LocalAcrylicMaterialsState = compositionLocalOf<AcrylicMaterialsState> { error("not provided") }
 
@@ -58,7 +58,7 @@ fun App() {
                             )
                         }
                 ) {
-                    MainViewVerticalLayout()
+                    MainView()
                 }
             }
         }
