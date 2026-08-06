@@ -4,35 +4,35 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun getUIKitTheme(): UIKitTheme {
-    return UIKitTheme.themeCurrent.current
+    return UIKitTheme.LocalTheme.current
 }
 
 @Composable
 fun getUIKitColors(): UIKitColors {
-    return UIKitTheme.themeCurrent.current.colors
+    return UIKitTheme.LocalTheme.current.colors
 }
 
 @Composable
 fun getUIKitShapes(): UIKitShapes {
-    return UIKitTheme.themeCurrent.current.shapes
+    return UIKitTheme.LocalTheme.current.shapes
 }
 
 @Composable
 fun getUIKitTypography(): UIKitTypography {
-    return UIKitTheme.themeCurrent.current.typography
+    return UIKitTheme.LocalTheme.current.typography
 }
 
 @Composable
 fun getUIKitLayout(): UIKitLayout {
-    return UIKitTheme.themeCurrent.current.layout
+    return UIKitTheme.LocalTheme.current.layout
 }
 
 @Composable
 fun getUIKitAnimate(): UIKitAnimate {
-    return UIKitTheme.themeCurrent.current.animate
+    return UIKitTheme.LocalTheme.current.animate
 }
 
 @Composable
 fun getUIKitMaterials(): UIKitMaterials {
-    return UIKitTheme.themeCurrent.current.materials
+    return UIKitTheme.LocalTheme.current.materials
 }

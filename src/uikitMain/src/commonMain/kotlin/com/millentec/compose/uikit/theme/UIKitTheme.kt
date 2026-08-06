@@ -23,6 +23,13 @@ data class UIKitTheme(
         /**
          * 当前的主题实例
          */
-        val themeCurrent = compositionLocalOf { UIKitTheme() }
+        val LocalTheme = compositionLocalOf { UIKitTheme() }
+
+        fun getLight(): UIKitTheme = UIKitTheme()
+
+        fun getDark(): UIKitTheme = UIKitTheme(
+            colors = UIKitColors.getDark(),
+            materials = UIKitMaterials.getDark(),
+        )
     }
 }

@@ -14,7 +14,7 @@ fun UIKitTheme(
     theme: UIKitTheme,
     content: @Composable (() -> Unit)
 ) {
-    CompositionLocalProvider(UIKitTheme.themeCurrent provides theme){
+    CompositionLocalProvider(UIKitTheme.LocalTheme provides theme){
         content()
     }
 }
