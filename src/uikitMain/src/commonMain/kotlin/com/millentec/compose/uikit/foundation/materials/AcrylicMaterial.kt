@@ -15,7 +15,7 @@ import com.skydoves.cloudy.cloudy
 import com.skydoves.cloudy.rememberSky
 import com.skydoves.cloudy.sky
 
-class AcrylicMaterialsState {
+class AcrylicMaterialState {
     internal var _sky: Sky
 
     internal constructor(sky: Sky) {
@@ -32,14 +32,14 @@ class AcrylicMaterialsState {
 }
 
 @Composable
-fun rememberAcrylicMaterialsState(): AcrylicMaterialsState {
+fun rememberAcrylicMaterialState(): AcrylicMaterialState {
     val sky = rememberSky()
-    return remember(sky) { AcrylicMaterialsState(sky) }
+    return remember(sky) { AcrylicMaterialState(sky) }
 }
 
 @Composable
 fun Modifier.acrylicMaterial(
-    state: AcrylicMaterialsState,
+    state: AcrylicMaterialState,
     enabled: Boolean = true,
     shape: Shape = RectangleShape,
     acrylicMaterial: UIKitAcrylicMaterial = getUIKitMaterials().acrylicMaterial
@@ -59,7 +59,7 @@ fun Modifier.acrylicMaterial(
 
 @Composable
 fun Modifier.acrylicMaterialSource(
-    state: AcrylicMaterialsState
+    state: AcrylicMaterialState
 ) = this.sky(state._sky)
 
 @Composable

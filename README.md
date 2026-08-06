@@ -76,11 +76,11 @@ dependencies {
 
 ## 3.设计
 ### 3.1.主题系统
-在 UIKitTheme (class) 中，你可以通过 `getLight()` 或 `getDark()` 来获取默认的亮色或暗色主题并传入 UIKitTheme (Composition) 中，直接创建 UIKitTheme 实例即默认为亮色主题
+在 UIKitTheme 中，你可以通过 `getLight()` 或 `getDark()` 来获取默认的亮色或暗色主题并传入 UIKitThemeHost 中，直接创建 UIKitTheme 实例即默认为亮色主题
 ```kt
 @Composable
 fun App() {
-    UIKitTheme(UIKitTheme.getLight()) {
+    UIKitThemeHost(UIKitTheme.getLight()) {
         Box(
             Modifier
                 .fillMaxSize()
@@ -89,15 +89,15 @@ fun App() {
     }
 }
 ```
-UIKitTheme 本质是一个 `CompositionLocalProvider`，访问主题的 `getUIKitColors()` 写法等价于 `UIKitTheme.LocalTheme.current.colors`；若在应用上层没有使用 UIKitTheme 包裹，那么 `getUIKitTheme` 默认为亮色
+UIKitThemeHost 本质是一个 `CompositionLocalProvider`，访问主题的 `getUIKitColors()` 写法等价于 `UIKitTheme.LocalTheme.current.colors`；若在应用上层没有使用 UIKitThemeHost 包裹，那么 `getUIKitTheme` 默认为亮色
 
-你可以在你的应用程序中创建一个可观察属性并将其传入 UIKitTheme，通过改变它以改变主题
+你可以在你的应用程序中创建一个可观察属性并将其传入 UIKitThemeHost，通过改变它以改变主题
 ```kt
 @Composable
 fun App() {
     val checked = remember { mutableStateOf(false) }
 
-    UIKitTheme(
+    UIKitThemeHost(
         if (checked) UIKitTheme.getDark() else UIKitTheme.getLight()
     ) {
         Box(
@@ -163,10 +163,10 @@ FluentIcons.addCircle(
 > [!TIP]
 > 亚克力效果展示图片中的背景图片来自 [Pixabay](https://pixabay.com/zh/photos/beach-cliff-bay-sea-ocean-418742/)（[使用许可](https://pixabay.com/service/license-summary/)）
 
-要使用亚克力材质，应该先使用 `rememberAcrylicMaterialsState` 创建一个 State，然后设置 Source 并为容器添加材质
+要使用亚克力材质，应该先使用 `rememberAcrylicMaterialState` 创建一个 State，然后设置 Source 并为容器添加材质
 ```kt
 Box {
-    val state = rememberAcrylicMaterialsState()
+    val state = rememberAcrylicMaterialState()
 
     Box(
         modifier = Modifier
@@ -188,7 +188,7 @@ Box {
 > 绝对不能在 AcrylicMaterialSource 的子级使用同一个 State 的 AcrylicMaterial，即一个 AcrylicMaterial 的 Source 不能是自己，否则会导致程序崩溃：
 > ```kt
 > Box {
->    val state = rememberAcrylicMaterialsState()
+>    val state = rememberAcrylicMaterialState()
 >
 >    Box(
 >        modifier = Modifier

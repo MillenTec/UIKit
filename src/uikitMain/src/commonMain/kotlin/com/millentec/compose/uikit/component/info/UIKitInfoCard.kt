@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.component.UIKitTheme
 import com.millentec.compose.uikit.component.info.UIKitInfoCardType.*
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
@@ -33,7 +32,7 @@ import com.millentec.compose.uikit.theme.*
 @Composable
 @Preview
 private fun Preview() {
-    UIKitTheme(UIKitTheme(
+    UIKitThemeHost(UIKitTheme(
         colors = UIKitColors.getLight()
     )) {
         Column(

@@ -21,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.component.UIKitTheme
 import com.millentec.compose.uikit.component.layout.UIKitSurface
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.isDesktopOS
@@ -32,7 +31,7 @@ import com.millentec.compose.uikit.theme.*
 @Composable
 @Preview
 private fun Preview() {
-    UIKitTheme(
+    UIKitThemeHost(
         UIKitTheme(
             colors = UIKitColors.getLight()
         )

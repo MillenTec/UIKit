@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
-import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialsState
+import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.theme.UIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
 
@@ -29,7 +29,7 @@ import com.millentec.compose.uikit.theme.getUIKitLayout
 @Preview
 private fun Preview() {
     UIKitFlyouter {
-        val acrylicMaterialsState = rememberAcrylicMaterialsState()
+        val acrylicMaterialsState = rememberAcrylicMaterialState()
 
         Box(
             Modifier

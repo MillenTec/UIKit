@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
-import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
+import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
 import com.millentec.compose.uikit.theme.*
 
@@ -47,7 +47,7 @@ fun UIKitSurface(
     color: Color = getUIKitColors().contentFillColorTertiaryBrush,
     shadow: Shadow? = null,
     acrylicEffectEnabled: Boolean = false,
-    acrylicMaterialsState: AcrylicMaterialsState? = null,
+    acrylicMaterialState: AcrylicMaterialState? = null,
     acrylicMaterial: UIKitAcrylicMaterial = getUIKitMaterials().acrylicMaterial,
     border: BorderStroke? = null,
     interactionSource: MutableInteractionSource? = null,
@@ -67,9 +67,9 @@ fun UIKitSurface(
             )
             .clip(shape)
             .background(color)
-            .then(if (acrylicEffectEnabled && acrylicMaterialsState != null) {
+            .then(if (acrylicEffectEnabled && acrylicMaterialState != null) {
                 Modifier.acrylicMaterial(
-                    acrylicMaterialsState,
+                    acrylicMaterialState,
                     shape = shape,
                     acrylicMaterial = acrylicMaterial,
                 )

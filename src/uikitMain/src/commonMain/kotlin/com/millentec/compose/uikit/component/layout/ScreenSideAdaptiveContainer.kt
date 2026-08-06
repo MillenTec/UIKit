@@ -28,7 +28,7 @@ import com.millentec.compose.uikit.foundation.LayoutPosition
 import com.millentec.compose.uikit.foundation.LayoutPosition.*
 import com.millentec.compose.uikit.foundation.helper.*
 import com.millentec.compose.uikit.foundation.isDesktopOS
-import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
+import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
 import com.millentec.compose.uikit.getScreenCornerRadius
 import com.millentec.compose.uikit.theme.*
@@ -216,7 +216,7 @@ fun ScreenSideAdaptiveContainer(
     interaction: (@Composable Modifier.(State<Boolean>, State<Boolean>, State<Shape>) -> Modifier)? = null,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     acrylicEffectEnabled: Boolean = true,
-    acrylicState: AcrylicMaterialsState? = null,
+    acrylicState: AcrylicMaterialState? = null,
     shadowEnable: Boolean = true,
     content: @Composable BoxScope.() -> Unit
 ) {
@@ -259,7 +259,7 @@ fun ScreenSideAdaptiveContainer(
     state: ScreenSideAdaptiveContainerState,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     acrylicEffectEnabled: Boolean = true,
-    acrylicState: AcrylicMaterialsState? = null,
+    acrylicState: AcrylicMaterialState? = null,
     shadowEnable: Boolean = true,
     content: @Composable BoxScope.() -> Unit
 ) = ScreenSideAdaptiveContainer(

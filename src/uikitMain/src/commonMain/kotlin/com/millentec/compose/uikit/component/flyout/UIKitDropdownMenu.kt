@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.layout.VerticalItemLayout
 import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
-import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
+import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
@@ -71,14 +71,14 @@ fun UIKitDropdownMenu(
     onDismissRequest: (() -> Unit)? = null,
     appearPosition: Alignment = Alignment.BottomEnd,
     acrylicEffectEnabled: Boolean = true,
-    acrylicMaterialsState: AcrylicMaterialsState? = null,
+    acrylicMaterialState: AcrylicMaterialState? = null,
     acrylicMaterial: UIKitAcrylicMaterial = getUIKitMaterials().acrylicMaterial,
     shadowEnabled: Boolean = true,
 ) {
     val positionOnRoot = remember { mutableStateOf(Offset.Zero) }
 
     LaunchedEffect(positionOnRoot.value) {
-        acrylicMaterialsState?.invalidate()
+        acrylicMaterialState?.invalidate()
     }
 
     UIKitPopup(
@@ -144,9 +144,9 @@ fun UIKitDropdownMenu(
         VerticalItemLayout(
             modifier = modifier
                 .then(
-                    if (acrylicEffectEnabled && acrylicMaterialsState != null) {
+                    if (acrylicEffectEnabled && acrylicMaterialState != null) {
                         Modifier.acrylicMaterial(
-                            state = acrylicMaterialsState,
+                            state = acrylicMaterialState,
                             shape = RoundedCornerShape(cornerRadius),
                             acrylicMaterial = acrylicMaterial
                         )
@@ -155,7 +155,7 @@ fun UIKitDropdownMenu(
             maxLength = maxLength,
             minWidth = minWidth,
             items = items,
-            background = if (acrylicEffectEnabled && acrylicMaterialsState != null) background.copy(0f) else background,
+            background = if (acrylicEffectEnabled && acrylicMaterialState != null) background.copy(0f) else background,
             cornerRadius = cornerRadius,
             contentPadding = contentPadding,
         )

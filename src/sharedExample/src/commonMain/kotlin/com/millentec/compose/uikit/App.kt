@@ -13,25 +13,25 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
-import com.millentec.compose.uikit.component.UIKitTheme
 import com.millentec.compose.uikit.component.flyout.UIKitFlyouter
 import com.millentec.compose.uikit.foundation.helper.toHsv
-import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
+import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
-import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialsState
+import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.theme.AppTheme
+import com.millentec.compose.uikit.theme.UIKitThemeHost
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitTheme
 import com.millentec.compose.uikit.views.MainView
 
-val LocalAcrylicMaterialsState = compositionLocalOf<AcrylicMaterialsState> { error("not provided") }
+val LocalAcrylicMaterialState = compositionLocalOf<AcrylicMaterialState> { error("not provided") }
 
 @Composable
 @Preview
 fun App() {
-    UIKitTheme(AppTheme.theme.collectAsState().value) {
+    UIKitThemeHost(AppTheme.theme.collectAsState().value) {
         UIKitFlyouter {
-            CompositionLocalProvider(LocalAcrylicMaterialsState provides rememberAcrylicMaterialsState()) {
+            CompositionLocalProvider(LocalAcrylicMaterialState provides rememberAcrylicMaterialState()) {
                 val uikitTheme = getUIKitTheme()
                 val statusBarHeight = WindowInsets.statusBars.getTop(LocalDensity.current)
 
@@ -39,7 +39,7 @@ fun App() {
 
                 Box(
                     modifier = Modifier
-                        .acrylicMaterialSource(LocalAcrylicMaterialsState.current)
+                        .acrylicMaterialSource(LocalAcrylicMaterialState.current)
                         .drawWithContent {
                             drawContent()
                             drawRect(

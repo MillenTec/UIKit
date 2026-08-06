@@ -79,11 +79,11 @@ Then re-sync your Gradle project to verify that UIKit works correctly.
 
 ## 3. Design
 ### 3.1. Theming System
-In `UIKitTheme` (class), you can use `getLight()` or `getDark()` to retrieve the default light or dark theme and pass it to `UIKitTheme` (Composition). Creating a `UIKitTheme` instance directly defaults to the light theme.
+In `UIKitTheme`, you can use `getLight()` or `getDark()` to retrieve the default light or dark theme and pass it to `UIKitThemeHost`. Creating a `UIKitTheme` instance directly defaults to the light theme.
 ```kt
 @Composable
 fun App() {
-    UIKitTheme(UIKitTheme.getLight()) {
+    UIKitThemeHost(UIKitTheme.getLight()) {
         Box(
             Modifier
                 .fillMaxSize()
@@ -92,15 +92,15 @@ fun App() {
     }
 }
 ```
-`UIKitTheme` is essentially a `CompositionLocalProvider`. Accessing theme values with `getUIKitColors()` is equivalent to `UIKitTheme.LocalTheme.current.colors`. If no `UIKitTheme` wrapper is present in the upper layers of your app, `getUIKitTheme` defaults to the light theme.
+`UIKitThemeHost` is essentially a `CompositionLocalProvider`. Accessing theme values with `getUIKitColors()` is equivalent to `UIKitTheme.LocalTheme.current.colors`. If no `UIKitThemeHost` wrapper is present in the upper layers of your app, `getUIKitTheme` defaults to the light theme.
 
-You can create an observable property in your application and pass it to `UIKitTheme`, updating it to change the theme:
+You can create an observable property in your application and pass it to `UIKitThemeHost`, updating it to change the theme:
 ```kt
 @Composable
 fun App() {
     val checked = remember { mutableStateOf(false) }
 
-    UIKitTheme(
+    UIKitThemeHost(
         if (checked) UIKitTheme.getDark() else UIKitTheme.getLight()
     ) {
         Box(
@@ -151,8 +151,8 @@ FluentIcons.addCircle(
 )
 ```
 
-#### 3.2.2. Animated Icons
-Under `FluentIcons.AnimatableIcons`, you'll find animated icons. These are not `ImageVector` types but composables driven by `Canvas`. You can set their size using `Modifier.size`, and they scale proportionally.
+#### 3.2.2. Animatable Icons
+Under `FluentIcons.AnimatableIcons`, you'll find animatable icons. These are not `ImageVector` types but composables driven by `Canvas`. You can set their size using `Modifier.size`, and they scale proportionally.
 
 #### 3.2.3. Resizable Icons
 Under `FluentIcons.ResizableIcons`, there are icons with adjustable stroke widths. These are of type `ImageVector`.
@@ -166,10 +166,10 @@ Background blur is powered by the open-source library [Cloudy](https://github.co
 > [!TIP]
 > The background image used in the acrylic effect demo is from [Pixabay](https://pixabay.com/zh/photos/beach-cliff-bay-sea-ocean-418742/) ([License Summary](https://pixabay.com/service/license-summary/)).
 
-To use acrylic material, first create a state with `rememberAcrylicMaterialsState`, set a source, and apply the material to a container:
+To use acrylic material, first create a state with `rememberAcrylicMaterialState`, set a source, and apply the material to a container:
 ```kt
 Box {
-    val state = rememberAcrylicMaterialsState()
+    val state = rememberAcrylicMaterialState()
 
     Box(
         modifier = Modifier
@@ -191,7 +191,7 @@ Box {
 > Do not use an `AcrylicMaterial` with the same state as its source inside the child hierarchy of `AcrylicMaterialSource`. In other words, an `AcrylicMaterial` cannot have itself as its source, as this will cause a crash:
 > ```kt
 > Box {
->    val state = rememberAcrylicMaterialsState()
+>    val state = rememberAcrylicMaterialState()
 >
 >    Box(
 >        modifier = Modifier

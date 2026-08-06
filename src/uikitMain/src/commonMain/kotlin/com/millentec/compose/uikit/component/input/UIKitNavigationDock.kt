@@ -24,7 +24,7 @@ import com.millentec.compose.uikit.component.layout.ScreenSideAdaptiveContainerS
 import com.millentec.compose.uikit.component.layout.rememberScreenSideAdaptiveContainerState
 import com.millentec.compose.uikit.foundation.LayoutPosition
 import com.millentec.compose.uikit.foundation.layout.UIKitNavigationDockItem
-import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
+import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Alert
@@ -70,7 +70,7 @@ fun UIKitNavigationDock(
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.3f),
     acrylicEffectEnabled: Boolean = true,
-    acrylicState: AcrylicMaterialsState? = null,
+    acrylicState: AcrylicMaterialState? = null,
     shadowEnable: Boolean = true,
     maxWidth: Dp = (-1).dp
 ) {
@@ -109,7 +109,7 @@ fun UIKitNavigationDock(
     indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.3f),
     state: ScreenSideAdaptiveContainerState,
     acrylicEffectEnabled: Boolean = true,
-    acrylicState: AcrylicMaterialsState? = null,
+    acrylicState: AcrylicMaterialState? = null,
     shadowEnable: Boolean = true,
     maxWidth: Dp = (-1).dp
 ) {

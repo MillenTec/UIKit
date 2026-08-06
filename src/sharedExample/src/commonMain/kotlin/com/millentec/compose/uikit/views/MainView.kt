@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.App
 import com.millentec.compose.uikit.BackHandler
-import com.millentec.compose.uikit.LocalAcrylicMaterialsState
+import com.millentec.compose.uikit.LocalAcrylicMaterialState
 import com.millentec.compose.uikit.component.input.UIKitDropdownButton
 import com.millentec.compose.uikit.component.input.UIKitNavigationDock
 import com.millentec.compose.uikit.component.layout.UIKitSurface
@@ -34,10 +34,12 @@ import com.millentec.compose.uikit.data.Pages
 import com.millentec.compose.uikit.data.Pages.*
 import com.millentec.compose.uikit.foundation.LayoutPosition
 import com.millentec.compose.uikit.foundation.NavigationType
+import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
+import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
 import com.millentec.compose.uikit.foundation.layout.UIKitNavigationDockItem
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
-import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialsState
+import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.theme.*
@@ -66,7 +68,7 @@ fun MainView() {
     val hasHistoryPages by nav.hasHistoryPages.collectAsState()
     val acrylicEnabled by AppTheme.useAcrylic.collectAsState()
 
-    val acrylicMaterialsState = rememberAcrylicMaterialsState()
+    val acrylicMaterialsState = rememberAcrylicMaterialState()
 
     BoxWithConstraints(
         modifier = Modifier
@@ -218,7 +220,7 @@ fun MainView() {
                             expanded = expanded.value,
                             onDismissRequest = { expanded.value = false },
                             appearPosition = Alignment.BottomEnd,
-                            acrylicMaterialsState = LocalAcrylicMaterialsState.current,
+                            acrylicMaterialState = LocalAcrylicMaterialState.current,
                             items = listOf(
                                 UIKitMenuItem.textWithIcon(
                                     icon = FluentIcons.Scales,
@@ -258,7 +260,8 @@ fun MainView() {
                                 shape = RoundedCornerShape(state.cornerRadius),
                                 shadow = UIKitShadowMaterial.getMarginal(),
                                 acrylicEffectEnabled = acrylicEnabled,
-                                acrylicMaterialsState = acrylicMaterialsState,
+                                acrylicMaterialState = acrylicMaterialsState,
+                                indication = if (isDesktopOS()) null else UIKitInteraction.ripple(),
                                 onClick = {
                                     expanded.value = !expanded.value
                                 },

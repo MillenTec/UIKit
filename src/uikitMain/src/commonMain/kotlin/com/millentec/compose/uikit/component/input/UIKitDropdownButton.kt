@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.flyout.UIKitDropdownMenu
 import com.millentec.compose.uikit.component.flyout.UIKitFlyouter
 import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
-import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialsState
+import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.theme.*
 
 @Composable
@@ -88,7 +88,7 @@ fun UIKitDropdownButton(
     borderWidth: Dp = 1.dp,
     appearPosition: Alignment? = null,
     acrylicEffectEnabled: Boolean = true,
-    acrylicMaterialsState: AcrylicMaterialsState? = null,
+    acrylicMaterialState: AcrylicMaterialState? = null,
     acrylicMaterial: UIKitAcrylicMaterial = getUIKitMaterials().acrylicMaterial.copy(
         tint = getUIKitMaterials().acrylicMaterial.tint.copy(0.6f),
         lightingEffectsEnabled = false
@@ -127,7 +127,7 @@ fun UIKitDropdownButton(
         expanded = expanded,
         items = items,
         acrylicEffectEnabled = acrylicEffectEnabled,
-        acrylicMaterialsState = acrylicMaterialsState,
+        acrylicMaterialState = acrylicMaterialState,
         acrylicMaterial = acrylicMaterial,
         cornerRadius = cornerRadius,
         maxLength = maxLength,

@@ -50,7 +50,7 @@ import com.millentec.compose.uikit.foundation.helper.toHsv
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
-import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialsState
+import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.animatable.*
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
@@ -570,7 +570,7 @@ private fun IconItem(
 @Preview
 fun IconsGallery() {
     val uikitTheme = getUIKitTheme()
-    val acrylicMaterialsState = rememberAcrylicMaterialsState()
+    val acrylicMaterialsState = rememberAcrylicMaterialState()
     val optionsState = remember { OptionState(
         initialTint = uikitTheme.colors.highlightColorPrimaryBrush.toHsv(),
         initialBackground = uikitTheme.colors.contentFillColorSecondaryBrush.toHsv()

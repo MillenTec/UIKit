@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.millentec.compose.uikit.LocalAcrylicMaterialsState
+import com.millentec.compose.uikit.LocalAcrylicMaterialState
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
 import com.millentec.compose.uikit.theme.getUIKitTypography
@@ -24,7 +24,7 @@ fun Home() {
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            val acrylicMaterialsState = LocalAcrylicMaterialsState.current
+            val acrylicMaterialsState = LocalAcrylicMaterialState.current
 
             LaunchedEffect(maxWidth, maxHeight) {
                 acrylicMaterialsState.invalidate()
