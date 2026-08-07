@@ -45,6 +45,10 @@ import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.viewmodels.MainViewModel
 import com.millentec.compose.uikit.views.pages.*
+import com.millentec.compose.uikit.views.pages.controls.ControlsBasicInputs
+import com.millentec.compose.uikit.views.pages.controls.ControlsFlyouts
+import com.millentec.compose.uikit.views.pages.controls.ControlsLayouts
+import com.millentec.compose.uikit.views.pages.controls.ControlsStatusAndInfo
 
 @Composable
 @Preview
@@ -57,6 +61,8 @@ private enum class NavDock {
     Controls,
     Designs,
 }
+
+val LocalNavigationDockHeight = mutableStateOf(0.dp)
 
 @Composable
 fun MainView() {
@@ -85,13 +91,12 @@ fun MainView() {
         }
 
         LaunchedEffect(page) {
-            when (page) {
-                Home, Design, Controls -> {
-                    MainViewModel.navigationDockVisible(true)
-                }
-                else -> {
-                    MainViewModel.navigationDockVisible(false)
-                }
+            if (page == Home || page == Controls || page == Design) {
+                MainViewModel.navigationDockVisible(true)
+            } else if (page.parent == null) {
+                MainViewModel.navigationDockVisible(false)
+            } else {
+                MainViewModel.navigationDockVisible(true)
             }
         }
 
@@ -111,6 +116,10 @@ fun MainView() {
                     Icons -> IconsGallery()
                     License -> License()
                     ThirdParty ->ThirdParty()
+                    ControlsBasicInputs -> ControlsBasicInputs()
+                    ControlsStatusAndInfo -> ControlsStatusAndInfo()
+                    ControlsFlyouts -> ControlsFlyouts()
+                    ControlsLayouts -> ControlsLayouts()
                 }
             }
         }
@@ -153,6 +162,10 @@ fun MainView() {
                         expectWidth = 56.dp,
                     )
 
+                    LaunchedEffect(state.height) {
+                        LocalNavigationDockHeight.value = state.height + state.margins.calculateBottomPadding()
+                    }
+
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -160,8 +173,11 @@ fun MainView() {
                         val dockItems = remember { mutableStateOf(NavDock.entries[page.ordinal.coerceIn(0..2)]) }
 
                         LaunchedEffect(page) {
-                            if (page.ordinal in 0..2)
+                            if (page.ordinal in 0..2) {
                                 dockItems.value = NavDock.entries[page.ordinal]
+                            } else if (page.parent in 0..2) {
+                                dockItems.value = NavDock.entries[page.parent ?: return@LaunchedEffect]
+                            }
                         }
 
                         UIKitNavigationDock(

@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -67,6 +68,7 @@ fun UIKitPopup(
     enabled: Boolean = true,
     alignment: Alignment = Alignment.Center,
     offset: (IntSize, IntSize) -> DpOffset = { rootSize, contentSize -> DpOffset.Zero },
+    clipToBounds: Boolean = false,
     onDismissRequest: (() -> Unit)? = null,
     dismissOnClickOutside: Boolean = true,
     content: @Composable () -> Unit
@@ -112,6 +114,9 @@ fun UIKitPopup(
                                     x = offsetCurrent(rootSize.value, contentSize.value).x,
                                     y = offsetCurrent(rootSize.value, contentSize.value).y
                                 )
+                                .then(if (clipToBounds) {
+                                    Modifier.clipToBounds()
+                                } else Modifier)
                                 .onGloballyPositioned {
                                     contentSize.value = it.size
                                 }
@@ -131,7 +136,7 @@ fun UIKitPopup(
         }
     }
 
-    DisposableEffect(enabled) {
+    DisposableEffect(Unit) {
         onDispose {
             flyoutManager.remove(id.value)
         }
@@ -149,6 +154,7 @@ fun UIKitPopup(
     offset: (IntSize, IntSize) -> DpOffset = { rootSize, contentSize -> DpOffset.Zero },
     onDismissRequest: (() -> Unit)? = null,
     dismissOnClickOutside: Boolean = true,
+    onAnimateStateChange: ((Boolean) -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
     val id = remember { mutableStateOf(0) }
@@ -241,6 +247,7 @@ fun UIKitPopup(
 
     // 在 Transaction 中 currentState 在动画后变化
     LaunchedEffect(transitionState.currentState) {
+        onAnimateStateChange?.invoke(transitionState.currentState)
         if (!visibleCurrent && !transitionState.currentState && added.value) {
             flyoutManager.remove(id.value)
             id.value = 0

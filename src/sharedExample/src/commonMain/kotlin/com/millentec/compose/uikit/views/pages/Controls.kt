@@ -2,310 +2,113 @@
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.dropShadow
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.component.info.UIKitInfoCard
-import com.millentec.compose.uikit.component.info.UIKitInfoCardType
-import com.millentec.compose.uikit.component.info.UIKitInfoCardType.*
-import com.millentec.compose.uikit.component.input.*
-import com.millentec.compose.uikit.foundation.helper.toHsv
+import com.millentec.compose.uikit.component.layout.UIKitSettingCard
+import com.millentec.compose.uikit.data.Pages
+import com.millentec.compose.uikit.foundation.NavigationType
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.LayoutDynamic
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.chatMultiple
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.layerDiagonal
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.toggleMultiple
-import com.millentec.compose.uikit.theme.*
+import com.millentec.compose.uikit.theme.getUIKitColors
+import com.millentec.compose.uikit.theme.getUIKitLayout
+import com.millentec.compose.uikit.theme.getUIKitTypography
+import com.millentec.compose.uikit.viewmodels.MainViewModel
+import com.millentec.compose.uikit.views.LocalNavigationDockHeight
 
 @Composable
 @Preview
 fun Controls() {
-    val uikitAnimate = getUIKitAnimate()
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(getUIKitColors().contentFillColorPrimaryBrush)
-            .verticalScroll(rememberScrollState())
+            .background(getUIKitColors().contentFillColorPrimaryBrush),
+        contentPadding = PaddingValues(
+            start = getUIKitLayout().x4Spacing,
+            top = getUIKitLayout().x4Spacing,
+            end = getUIKitLayout().x4Spacing,
+            bottom = getUIKitLayout().x6Spacing
+        ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .safeDrawingPadding()
-                .padding(
-                    start = getUIKitLayout().x4Spacing,
-                    top = getUIKitLayout().x4Spacing,
-                    end = getUIKitLayout().x4Spacing,
-                    bottom = getUIKitLayout().x6Spacing
-                )
-        ) {
+        val nav = MainViewModel.navigation
+
+        item {
             Text(
                 text = "Controls Gallery",
                 style = getUIKitTypography().largeTitle,
                 color = getUIKitColors().textFillColorPrimaryBrush
             )
+        }
 
-            val enabled = remember { mutableStateOf(true) }
-
-            UIKitButton(
-                enabled = enabled.value,
-                text = "Button",
-                onClick = {}
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            UIKitButton(
-                enabled = enabled.value,
-                text = "Button",
-                onClick = {},
-                colors = UIKitButtonColors.default().copy(
-                    background = getUIKitColors().contentFillColorPrimaryBrush.copy(0f),
-                    content = getUIKitColors().highlightColorPrimaryBrush,
-                    border = getUIKitColors().highlightColorPrimaryBrush
-                ),
-                hasBorder = true
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            UIKitButton(
-                enabled = enabled.value,
-                icon = FluentIcons.designIdeas(Color(0xFFFFFFFF), true),
-                onClick = {},
-                colors = UIKitButtonColors.default().copy(
-                    background = getUIKitColors().highlightColorPrimaryBrush,
-                    content = Color(0xFFFFFFFF)
-                )
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            UIKitButton(
-                enabled = enabled.value,
-                icon = FluentIcons.toggleMultiple(getUIKitColors().textFillColorPrimaryBrush, true),
-                text = "Button",
-                onClick = {},
-                colors = UIKitButtonColors.default().copy(
-                    background = getUIKitColors().highlightColorFourthBrush,
-                    content = getUIKitColors().textFillColorPrimaryBrush
-                )
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            val value = remember { mutableStateOf(20f) }
-            UIKitSlider(
-                value = value.value,
-                onValueChange = {
-                    value.value = it
-                },
-                enabled = enabled.value,
-                maxValue = 100f,
-                tickStep = 10f,
-                adsorbedOntoTick = true
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            Text(
-                text = value.value.toString(),
-                style = getUIKitTypography().body,
-                color = getUIKitColors().textFillColorPrimaryBrush,
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            val value1 = remember { mutableStateOf(10f) }
-            UIKitSlider(
-                value = value1.value,
-                onValueChange = {
-                    value1.value = it
-                },
-                enabled = enabled.value,
-                maxValue = 100f,
-                hasTick = false,
-                adsorbedOntoTick = false
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            Text(
-                text = value1.value.toString(),
-                style = getUIKitTypography().body,
-                color = getUIKitColors().textFillColorPrimaryBrush,
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            val color = remember { mutableStateOf(Color.White.toHsv()) }
-            UIKitHSVColorPicker(
-                modifier = Modifier
-                    .sizeIn(maxWidth = 500.dp),
-                enabled = enabled.value,
-                onColorChange = {
-                    color.value = it
-                }
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(getUIKitShapes().basicRounded))
-                        .size(80.dp, 35.dp)
-                        .background(color.value.getColor())
-                )
-
-                Spacer(Modifier.width(getUIKitLayout().smallSpacing))
-
-                Text(
-                    text = color.value.getColor().value.toString(16),
-                    style = getUIKitTypography().body,
-                    color = getUIKitColors().textFillColorPrimaryBrush,
-                )
-            }
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            val selected = remember { mutableStateOf(false) }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                UIKitRadioButton(
-                    selected = selected.value,
-                    onClick = { selected.value = !selected.value },
-                    enabled = enabled.value,
-                )
-
-                Spacer(Modifier.width(getUIKitLayout().smallSpacing))
-
-                Text(
-                    text = selected.value.toString(),
-                    style = getUIKitTypography().body,
-                    color = getUIKitColors().textFillColorPrimaryBrush,
-                )
-            }
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                UIKitRadioButton(
-                    selected = !selected.value,
-                    onClick = { selected.value = !selected.value },
-                    enabled = enabled.value,
-                )
-
-                Spacer(Modifier.width(getUIKitLayout().smallSpacing))
-
-                Text(
-                    text = selected.value.toString(),
-                    style = getUIKitTypography().body,
-                    color = getUIKitColors().textFillColorPrimaryBrush,
-                )
-            }
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            UIKitToggleSwitch(
-                size = DpSize(64.dp, 32.dp),
-                checked = enabled.value,
-                onCheckedChange = {
-                    enabled.value = it
-                }
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            UIKitInfoCard(
-                modifier = Modifier.fillMaxWidth(),
-                clickable = true,
-                type = Info,
-                title = "Info",
-                body = "This the body."
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            UIKitInfoCard(
-                modifier = Modifier.fillMaxWidth(),
-                clickable = true,
-                type = HighlightInfo,
-                title = "Highlight Info",
-                body = "This the body."
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            UIKitInfoCard(
-                modifier = Modifier.fillMaxWidth(),
-                clickable = true,
-                type = Success,
-                title = "Success",
-                body = "This the body."
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            UIKitInfoCard(
-                modifier = Modifier.fillMaxWidth(),
-                clickable = true,
-                type = Warning,
-                title = "Warning",
-                body = "This the body."
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            UIKitInfoCard(
-                modifier = Modifier.fillMaxWidth(),
-                clickable = true,
-                type = UIKitInfoCardType.Error,
-                title = "Error",
-                body = "This the body."
-            )
-
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-            Box(
-                modifier = Modifier
-                    .size(100.dp)
-                    .dropShadow(
-                        shape = RoundedCornerShape(getUIKitShapes().regularRounded),
-                        shadow = UIKitShadowMaterial.getPrimary()
-                    )
-                    .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
-                    .background(getUIKitColors().contentFillColorPrimaryBrush)
-            )
-
+        item {
             Spacer(Modifier.height(getUIKitLayout().x2Spacing))
+        }
 
-            Box(
-                modifier = Modifier
-                    .size(100.dp)
-                    .dropShadow(
-                        shape = RoundedCornerShape(getUIKitShapes().regularRounded),
-                        shadow = UIKitShadowMaterial.getMarginal()
-                    )
-                    .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
-                    .background(getUIKitColors().contentFillColorPrimaryBrush)
+        item {
+            UIKitSettingCard(
+                title = "Inputs",
+                icon = FluentIcons.toggleMultiple(getUIKitColors().textFillColorPrimaryBrush, true),
+                onClick = {
+                    nav.switchPage(Pages.ControlsBasicInputs, type = NavigationType.Forward)
+                }
             )
+        }
 
-            Spacer(Modifier.height(getUIKitLayout().x4Spacing))
+        item {
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+        }
+
+        item {
+            UIKitSettingCard(
+                title = "Status & Info",
+                icon = FluentIcons.chatMultiple(getUIKitColors().textFillColorPrimaryBrush, true),
+                onClick = {
+                    nav.switchPage(Pages.ControlsStatusAndInfo, type = NavigationType.Forward)
+                }
+            )
+        }
+
+        item {
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+        }
+
+        item {
+            UIKitSettingCard(
+                title = "Flyouts",
+                icon = FluentIcons.layerDiagonal(getUIKitColors().textFillColorPrimaryBrush, true),
+                onClick = {
+                    nav.switchPage(Pages.ControlsFlyouts, type = NavigationType.Forward)
+                }
+            )
+        }
+
+        item {
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+        }
+
+        item {
+            UIKitSettingCard(
+                title = "Layouts",
+                icon = FluentIcons.LayoutDynamic,
+                onClick = {
+                    nav.switchPage(Pages.ControlsLayouts, type = NavigationType.Forward)
+                }
+            )
+        }
+
+        item {
+            Spacer(Modifier.height(
+                maxOf(
+                    LocalNavigationDockHeight.value + getUIKitLayout().mediumSpacing,
+                    getUIKitLayout().x4Spacing
+                )
+            ))
         }
     }
 }
