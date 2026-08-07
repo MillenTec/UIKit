@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import com.millentec.compose.uikit.BackHandler
 import com.millentec.compose.uikit.IconGalleryList
+import com.millentec.compose.uikit.component.flyout.UIKitSwipeableFlyoutState
 import com.millentec.compose.uikit.component.input.UIKitHSVColorPicker
 import com.millentec.compose.uikit.component.input.UIKitSlider
 import com.millentec.compose.uikit.component.input.UIKitSliderChangeType
@@ -56,6 +57,7 @@ import com.millentec.compose.uikit.icons.fluenticons.animatable.*
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.icons.fluenticons.resizeable.shapes
 import com.millentec.compose.uikit.theme.*
+import com.millentec.compose.uikit.views.LocalNavigationDockHeight
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -580,10 +582,9 @@ fun IconsGallery() {
         optionsState.isLayered.value
     )) }
     val checkedIconIndex = remember { mutableStateOf<Int?>(null) }
-    val bottomSheetState = remember { UIKitBottomSheetState(
-        expanded = false
-    ) }
+    val bottomSheetState = remember { UIKitSwipeableFlyoutState() }
     val animatableIconList = remember { makeAnimatableIconList(optionsState) }
+    val bottomSheetExpanded = remember { mutableStateOf(false) }
 
     LaunchedEffect(optionsState.isLayered.value, optionsState.tintColor.value) {
         iconLists.value = IconGalleryList(
@@ -629,10 +630,7 @@ fun IconsGallery() {
                 .fillMaxSize()
                 .background(getUIKitColors().contentFillColorPrimaryBrush)
                 .uikitBottomSheetCollaborativeAnimation(
-                    state = bottomSheetState,
-                    onClick = {
-                        bottomSheetState.expanded.value = false
-                    }
+                    state = bottomSheetState
                 )
         ) {
             Row {
@@ -681,7 +679,7 @@ fun IconsGallery() {
                             title = icon?.name ?: "Unknown",
                             onClick = {
                                 checkedIconIndex.value = it
-                                if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetState.expanded.value = true
+                                if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetExpanded.value = true
                             },
                             background = optionsState.backgroundColor.value.getColor()
                         ) {
@@ -718,7 +716,7 @@ fun IconsGallery() {
                             title = icon?.name ?: "Unknown",
                             onClick = {
                                 checkedIconIndex.value = it + iconLists.value.regularIconsList.size
-                                if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetState.expanded.value = true
+                                if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetExpanded.value = true
                             },
                             background = optionsState.backgroundColor.value.getColor()
                         ) {
@@ -769,7 +767,7 @@ fun IconsGallery() {
                                     iconName = item?.name ?: "Unknown",
                                     iconSize = item?.size ?: "Unknown",
                                 )
-                                if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetState.expanded.value = true
+                                if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetExpanded.value = true
                             },
                             background = optionsState.backgroundColor.value.getColor()
                         ) {
@@ -782,7 +780,12 @@ fun IconsGallery() {
                     }
 
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        Spacer(Modifier.height(getUIKitLayout().x4Spacing))
+                        Spacer(Modifier.height(
+                            maxOf(
+                                LocalNavigationDockHeight.value + getUIKitLayout().mediumSpacing,
+                                getUIKitLayout().x4Spacing
+                            )
+                        ))
                     }
                 }
 
@@ -844,7 +847,7 @@ fun IconsGallery() {
                     modifier = Modifier
                         .fillMaxSize(),
                     state = rememberScreenSideAdaptiveContainerState(
-                        position = LayoutPosition.BottomRight,
+                        position = LayoutPosition.TopRight,
                         expectHeight = getUIKitLayout().interactiveHotspot,
                         expectWidth = getUIKitLayout().interactiveHotspot,
                         fillWidth = false,
@@ -853,7 +856,7 @@ fun IconsGallery() {
                     acrylicEffectEnabled = true,
                     acrylicState = acrylicMaterialsState,
                     onClick = {
-                        bottomSheetState.expanded.value = true
+                        bottomSheetExpanded.value = true
                     }
                 ) {
                     Icon(
@@ -868,20 +871,22 @@ fun IconsGallery() {
         }
 
         UIKitBottomSheet(
-            modifier = Modifier
-                .fillMaxSize(),
+            expanded = bottomSheetExpanded.value,
             state = bottomSheetState,
             maxHeight = this@BoxWithConstraints.maxHeight * 0.8f,
             minHeight = this@BoxWithConstraints.maxHeight * 0.8f,
-            title = "Options"
+            title = "Options",
+            onDismissRequest = {
+                bottomSheetExpanded.value = false
+            }
         ) {
             OptionsWindow(
                 optionsState
             )
         }
 
-        BackHandler(bottomSheetState.expanded.value) {
-            bottomSheetState.expanded.value = false
+        BackHandler(bottomSheetExpanded.value) {
+            bottomSheetExpanded.value = false
         }
     }
 }
