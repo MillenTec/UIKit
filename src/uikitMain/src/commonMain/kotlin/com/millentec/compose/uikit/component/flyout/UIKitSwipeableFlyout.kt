@@ -1,19 +1,15 @@
 ﻿package com.millentec.compose.uikit.component.flyout
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.VectorConverter
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.visible
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
@@ -61,13 +57,16 @@ fun UIKitSwipeableFlyout(
     content: @Composable (Modifier) -> Unit
 ) {
     fun calculateHypotenuseLength(offset: Offset): Float {
-        // 对于斜向 swipeDirections 的使用勾股数来量化, 对于二维方向依然可以正常返回为 1f
+        // 对于斜向 swipeDirections 的使用勾股数来量化, 对于二维方向 (其中一项为 0) 依然可以正常返回为 1f
         return sqrt(offset.x.pow(2) + offset.y.pow(2))
     }
 
-    val densityDpi by rememberUpdatedState(LocalDensity.current.density)
     val uikitTheme by rememberUpdatedState(getUIKitTheme())
     val layoutDirection by rememberUpdatedState(LocalLayoutDirection.current)
+    val stateCurrent by rememberUpdatedState(state)
+    val visibleCurrent by rememberUpdatedState(visible)
+    val onDismissRequestCurrent by rememberUpdatedState(onDismissRequest)
+    val swipeDirectionCurrent by rememberUpdatedState(swipeDirection)
 
     val contentSize = remember { mutableStateOf(IntSize.Zero) }
     val offsetChangeWithAnimate = remember { mutableStateOf(false) }
@@ -82,11 +81,18 @@ fun UIKitSwipeableFlyout(
         initialValue = contentOffsetRatio.value,
         typeConverter = Offset.VectorConverter
     ) }
+    val animateEasing = remember { mutableStateOf(FastOutSlowInEasing) }
 
     LaunchedEffect(visible) {
         if (visible) {
+            animateEasing.value = FastOutSlowInEasing
             offsetChangeWithAnimate.value = true
-            contentOffsetRatio.value = Offset(1f, 1f)
+            contentOffsetRatio.value = Offset(abs(swipeDirection.horizontalBias), abs(swipeDirection.verticalBias))
+        } else {
+            if (contentOffsetRatio.value != Offset(abs(swipeDirection.horizontalBias), abs(swipeDirection.verticalBias)))
+                animateEasing.value = LinearOutSlowInEasing
+            offsetChangeWithAnimate.value = true
+            contentOffsetRatio.value = Offset.Zero
         }
     }
 
@@ -97,10 +103,13 @@ fun UIKitSwipeableFlyout(
                 animationSpec = tween(
                     if (abs(calculateHypotenuseLength(contentOffsetRatio.value)
                                 - calculateHypotenuseLength(contentOffsetRatioAnimated.value))
-                        // 单方向的偏移比例最大值为 1f, 那么斜方向上最大值实际就是 √2
-                        >= sqrt(2f) * 0.5f) {
+                        >= calculateHypotenuseLength(Offset(
+                            x = swipeDirectionCurrent.horizontalBias,
+                            y = swipeDirectionCurrent.verticalBias
+                        )) * 0.5f) {
                         uikitTheme.animate.motionMediumDurationMillis
-                    } else uikitTheme.animate.motionRegularDurationMillis
+                    } else uikitTheme.animate.motionRegularDurationMillis,
+                    easing = animateEasing.value
                 )
             )
             offsetChangeWithAnimate.value = false
@@ -110,13 +119,16 @@ fun UIKitSwipeableFlyout(
     }
 
     LaunchedEffect(contentOffsetRatioAnimated.value) {
-        state.progress.value = calculateHypotenuseLength(contentOffsetRatioAnimated.value) / sqrt(2f)
+        state.progress.value = calculateHypotenuseLength(contentOffsetRatioAnimated.value) / calculateHypotenuseLength(Offset(
+            x = swipeDirectionCurrent.horizontalBias,
+            y = swipeDirectionCurrent.verticalBias
+        ))
     }
 
     UIKitPopup(
-        enabled = state.progress.value > 0f,
-        dismissOnClickOutside = state.progress.value > 0f,
-        onDismissRequest = onDismissRequest,
+        enabled = stateCurrent.progress.value > 0f,
+        dismissOnClickOutside = visibleCurrent,
+        onDismissRequest = onDismissRequestCurrent,
         alignment = alignment,
         clipToBounds = true,
         offset = { root, content ->
@@ -126,20 +138,19 @@ fun UIKitSwipeableFlyout(
     ) {
         Box(
             Modifier
-                .visible(contentSize.value != IntSize.Zero)
                 .drawWithContent {
                     translate(
-                        left = (size.width / densityDpi).dp.toPx() * swipeDirection.horizontalBias,
-                        top = (size.height / densityDpi).dp.toPx() * swipeDirection.verticalBias
+                        left = size.width * swipeDirectionCurrent.horizontalBias,
+                        top = size.height * swipeDirectionCurrent.verticalBias
                     ) {
                         translate(
-                            left = -(contentOffsetRatioAnimated.value.x * size.width) * swipeDirection.horizontalBias,
-                            top = -(contentOffsetRatioAnimated.value.y * size.height) * swipeDirection.verticalBias
+                            left = -(contentOffsetRatioAnimated.value.x * size.width) * swipeDirectionCurrent.horizontalBias,
+                            top = -(contentOffsetRatioAnimated.value.y * size.height) * swipeDirectionCurrent.verticalBias
                         ) {
                             this@drawWithContent.drawContent()
                         }
                     }
-                }
+                },
         ) {
             Box(modifier) {
                 content(
@@ -147,29 +158,36 @@ fun UIKitSwipeableFlyout(
                         .uikitSwipeable(
                             onDrag = {
                                 val offsetWithBias = Offset(
-                                    x = if (it.x * swipeDirection.horizontalBias > 0f) it.x * swipeDirection.horizontalBias else 0f,
-                                    y = if (it.y * swipeDirection.verticalBias > 0f) it.y * swipeDirection.verticalBias else 0f
+                                    x = it.x * swipeDirectionCurrent.horizontalBias,
+                                    y = it.y * swipeDirectionCurrent.verticalBias
                                 )
 
                                 val offsetRatio = Offset(
-                                    x = offsetWithBias.x / contentSize.value.width,
-                                    y = offsetWithBias.y / contentSize.value.height
+                                    // 若尺寸为 0(可能是未加载完成) 则不做出改变
+                                    x = if (contentSize.value.width == 0) 0f else offsetWithBias.x / contentSize.value.width,
+                                    y = if (contentSize.value.height == 0) 0f else offsetWithBias.y / contentSize.value.height
                                 )
 
-                                contentOffsetRatio.value -= offsetRatio
+                                contentOffsetRatio.value = Offset(
+                                    x = (contentOffsetRatio.value.x - offsetRatio.x).coerceIn(0f..1f),
+                                    y = (contentOffsetRatio.value.y - offsetRatio.y).coerceIn(0f..1f),
+                                )
                             },
                             onDragEnd = {
-                                if (calculateHypotenuseLength(contentOffsetRatio.value) <= sqrt(2f) * 0.5f) {
-                                    onDismissRequest?.invoke()
+                                if (calculateHypotenuseLength(contentOffsetRatio.value) <= calculateHypotenuseLength(Offset(
+                                        x = swipeDirectionCurrent.horizontalBias,
+                                        y = swipeDirectionCurrent.verticalBias)) * 0.5f) {
+                                    onDismissRequestCurrent?.invoke()
                                 } else {
                                     // 归位
+                                    animateEasing.value = FastOutSlowInEasing
                                     offsetChangeWithAnimate.value = true
-                                    contentOffsetRatio.value = Offset(1f, 1f)
+                                    contentOffsetRatio.value = Offset(abs(swipeDirectionCurrent.horizontalBias), abs(swipeDirectionCurrent.verticalBias))
                                 }
                             },
                             onDragCancel = {
                                 offsetChangeWithAnimate.value = true
-                                contentOffsetRatio.value = Offset(1f, 1f)
+                                contentOffsetRatio.value = Offset(abs(swipeDirectionCurrent.horizontalBias), abs(swipeDirectionCurrent.verticalBias))
                             },
 
                             /*
@@ -180,23 +198,23 @@ fun UIKitSwipeableFlyout(
                              */
                             onSwipeUp = {
                                 if (swipeDirection.verticalBias == -1f)
-                                    onDismissRequest?.invoke()
+                                    onDismissRequestCurrent?.invoke()
                             },
                             onSwipeDown = {
                                 if (swipeDirection.verticalBias == 1f)
-                                    onDismissRequest?.invoke()
+                                    onDismissRequestCurrent?.invoke()
                             },
                             onSwipeLeft = {
                                 if (swipeDirection.horizontalBias == -1f && layoutDirection == LayoutDirection.Ltr ||
                                     swipeDirection.horizontalBias == 1f && layoutDirection == LayoutDirection.Rtl
                                 )
-                                    onDismissRequest?.invoke()
+                                    onDismissRequestCurrent?.invoke()
                             },
                             onSwipeRight = {
-                                if (swipeDirection.horizontalBias == 1f && layoutDirection == LayoutDirection.Ltr ||
-                                    swipeDirection.horizontalBias == -1f && layoutDirection == LayoutDirection.Rtl
+                                if (swipeDirectionCurrent.horizontalBias == 1f && layoutDirection == LayoutDirection.Ltr ||
+                                    swipeDirectionCurrent.horizontalBias == -1f && layoutDirection == LayoutDirection.Rtl
                                 )
-                                    onDismissRequest?.invoke()
+                                    onDismissRequestCurrent?.invoke()
                             }
                         )
                 )
