@@ -237,6 +237,7 @@ fun MainView() {
                             onDismissRequest = { expanded.value = false },
                             appearPosition = Alignment.BottomEnd,
                             acrylicMaterialState = LocalAcrylicMaterialState.current,
+                            acrylicEffectEnabled = AppTheme.useAcrylic.collectAsState().value,
                             items = listOf(
                                 UIKitMenuItem.textWithIcon(
                                     icon = FluentIcons.Scales,

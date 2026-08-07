@@ -1,5 +1,6 @@
 package com.millentec.compose.uikit
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.statusBars
@@ -18,10 +19,7 @@ import com.millentec.compose.uikit.foundation.helper.toHsv
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
-import com.millentec.compose.uikit.theme.AppTheme
-import com.millentec.compose.uikit.theme.UIKitThemeHost
-import com.millentec.compose.uikit.theme.getUIKitColors
-import com.millentec.compose.uikit.theme.getUIKitTheme
+import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.views.MainView
 
 val LocalAcrylicMaterialState = compositionLocalOf<AcrylicMaterialState> { error("not provided") }
@@ -29,7 +27,13 @@ val LocalAcrylicMaterialState = compositionLocalOf<AcrylicMaterialState> { error
 @Composable
 @Preview
 fun App() {
-    UIKitThemeHost(AppTheme.theme.collectAsState().value) {
+    UIKitThemeHost(
+        when(AppTheme.theme.collectAsState().value) {
+            ThemeType.System -> if (isSystemInDarkTheme()) UIKitTheme.getDark() else UIKitTheme.getLight()
+            ThemeType.Light -> UIKitTheme.getLight()
+            ThemeType.Dark -> UIKitTheme.getDark()
+        }
+    ) {
         UIKitFlyouter {
             CompositionLocalProvider(LocalAcrylicMaterialState provides rememberAcrylicMaterialState()) {
                 val uikitTheme = getUIKitTheme()

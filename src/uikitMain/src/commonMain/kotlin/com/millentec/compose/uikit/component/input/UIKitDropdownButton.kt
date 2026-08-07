@@ -82,6 +82,7 @@ fun UIKitDropdownButton(
     cornerRadius: Dp = getUIKitShapes().regularRounded,
     maxLength: Dp = 360.dp,
     minWidth: Dp = 200.dp,
+    offset: DpOffset = DpOffset.Zero,
     onDismissRequest: (() -> Unit)? = null,
     colors: UIKitDropdownButtonColors = UIKitDropdownButtonColors.default(),
     hasBorder: Boolean = true,
@@ -147,7 +148,7 @@ fun UIKitDropdownButton(
                             ((buttonSize.value.height / densityDpi).dp + uiKitTheme.layout.mediumSpacing)
                             else (-(contentSize.value.height / densityDpi).dp - uiKitTheme.layout.mediumSpacing)
                 )
-            )
+            ) + offset
         },
         onDismissRequest = onDismissRequest,
     )

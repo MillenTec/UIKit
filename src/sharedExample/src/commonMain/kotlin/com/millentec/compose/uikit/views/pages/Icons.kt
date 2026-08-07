@@ -630,7 +630,8 @@ fun IconsGallery() {
                 .fillMaxSize()
                 .background(getUIKitColors().contentFillColorPrimaryBrush)
                 .uikitBottomSheetCollaborativeAnimation(
-                    state = bottomSheetState
+                    state = bottomSheetState,
+                    blurEffectEnabled = AppTheme.useAcrylic.collectAsState().value
                 )
         ) {
             Row {
@@ -853,7 +854,7 @@ fun IconsGallery() {
                         fillWidth = false,
                         fillHeight = false,
                     ),
-                    acrylicEffectEnabled = true,
+                    acrylicEffectEnabled = AppTheme.useAcrylic.collectAsState().value,
                     acrylicState = acrylicMaterialsState,
                     onClick = {
                         bottomSheetExpanded.value = true
