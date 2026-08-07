@@ -19,10 +19,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.component.layout.ScreenSideAdaptiveContainer
-import com.millentec.compose.uikit.component.layout.ScreenSideAdaptiveContainerState
-import com.millentec.compose.uikit.component.layout.rememberScreenSideAdaptiveContainerState
-import com.millentec.compose.uikit.foundation.LayoutPosition
+import com.millentec.compose.uikit.component.layout.UIKitAdaptiveCornerContainer
+import com.millentec.compose.uikit.component.layout.UIKitAdaptiveCornerContainerState
+import com.millentec.compose.uikit.component.layout.rememberUIKitAdaptiveCornerContainerState
+import com.millentec.compose.uikit.foundation.layout.UIKitAlignment
 import com.millentec.compose.uikit.foundation.layout.UIKitNavigationDockItem
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
@@ -66,7 +66,7 @@ fun UIKitNavigationDock(
     checkedIndex: Int,
     onChecked: (Int) -> Unit,
     items: List<UIKitNavigationDockItem>,
-    position: LayoutPosition = LayoutPosition.Bottom,
+    position: UIKitAlignment = UIKitAlignment.BottomCenter,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.3f),
     acrylicEffectEnabled: Boolean = true,
@@ -74,7 +74,7 @@ fun UIKitNavigationDock(
     shadowEnable: Boolean = true,
     maxWidth: Dp = (-1).dp
 ) {
-    val state: ScreenSideAdaptiveContainerState = rememberScreenSideAdaptiveContainerState(
+    val state: UIKitAdaptiveCornerContainerState = rememberUIKitAdaptiveCornerContainerState(
         expectHeight = minHeight,
         expectWidth = minHeight,
         minMargin = minMargin,
@@ -107,7 +107,7 @@ fun UIKitNavigationDock(
     items: List<UIKitNavigationDockItem>,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.3f),
-    state: ScreenSideAdaptiveContainerState,
+    state: UIKitAdaptiveCornerContainerState,
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialState? = null,
     shadowEnable: Boolean = true,
@@ -127,7 +127,7 @@ fun UIKitNavigationDock(
                 ),
             horizontalArrangement = Arrangement.Center
         ) {
-            ScreenSideAdaptiveContainer(
+            UIKitAdaptiveCornerContainer(
                 modifier = Modifier
                     .weight(1f),
                 state = state,

@@ -5,7 +5,7 @@ import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 
-class NavigationAnimate {
+class UIKitNavigationAnimate {
     val jump: ContentTransform = ContentTransform(
         targetContentEnter = fadeIn(animationSpec = tween(220, delayMillis = 160)) +
                 scaleIn(initialScale = 0.96f, animationSpec = tween(220, delayMillis = 160)),

@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.component.layout.UIKitSettingCard
 import com.millentec.compose.uikit.data.Pages
-import com.millentec.compose.uikit.foundation.NavigationType
+import com.millentec.compose.uikit.foundation.UIKitNavigationType
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.LayoutDynamic
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.chatMultiple
@@ -55,7 +55,7 @@ fun Controls() {
                 title = "Inputs",
                 icon = FluentIcons.toggleMultiple(getUIKitColors().textFillColorPrimaryBrush, true),
                 onClick = {
-                    nav.switchPage(Pages.ControlsBasicInputs, type = NavigationType.Forward)
+                    nav.switchPage(Pages.ControlsBasicInputs, type = UIKitNavigationType.Forward)
                 }
             )
         }
@@ -69,7 +69,7 @@ fun Controls() {
                 title = "Status & Info",
                 icon = FluentIcons.chatMultiple(getUIKitColors().textFillColorPrimaryBrush, true),
                 onClick = {
-                    nav.switchPage(Pages.ControlsStatusAndInfo, type = NavigationType.Forward)
+                    nav.switchPage(Pages.ControlsStatusAndInfo, type = UIKitNavigationType.Forward)
                 }
             )
         }
@@ -83,7 +83,7 @@ fun Controls() {
                 title = "Flyouts",
                 icon = FluentIcons.layerDiagonal(getUIKitColors().textFillColorPrimaryBrush, true),
                 onClick = {
-                    nav.switchPage(Pages.ControlsFlyouts, type = NavigationType.Forward)
+                    nav.switchPage(Pages.ControlsFlyouts, type = UIKitNavigationType.Forward)
                 }
             )
         }
@@ -97,7 +97,7 @@ fun Controls() {
                 title = "Layouts",
                 icon = FluentIcons.LayoutDynamic,
                 onClick = {
-                    nav.switchPage(Pages.ControlsLayouts, type = NavigationType.Forward)
+                    nav.switchPage(Pages.ControlsLayouts, type = UIKitNavigationType.Forward)
                 }
             )
         }

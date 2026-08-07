@@ -24,10 +24,9 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.foundation.LayoutPosition
-import com.millentec.compose.uikit.foundation.LayoutPosition.*
 import com.millentec.compose.uikit.foundation.helper.*
 import com.millentec.compose.uikit.foundation.isDesktopOS
+import com.millentec.compose.uikit.foundation.layout.UIKitAlignment
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
 import com.millentec.compose.uikit.getScreenCornerRadius
@@ -42,7 +41,7 @@ private fun Preview() {
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.End
     ) {
-        ScreenSideAdaptiveContainer(
+        UIKitAdaptiveCornerContainer(
             onClick = {},
             indication = null,
             interaction = 
@@ -69,8 +68,8 @@ private fun Preview() {
                             scaleY = scaleAnimated,
                         )
                 },
-            state = rememberScreenSideAdaptiveContainerState(
-                position = LayoutPosition.BottomRight,
+            state = rememberUIKitAdaptiveCornerContainerState(
+                position = UIKitAlignment.BottomEnd,
                 fillWidth = false,
             )
         ) {
@@ -89,7 +88,7 @@ private fun Preview() {
  * @param cornerRadius 圆角半径固定值
  * @param alignment 容器的对齐状态
  */
-data class ScreenSideAdaptiveContainerState(
+data class UIKitAdaptiveCornerContainerState(
     val margins: PaddingValues,
     val fillHeight: Boolean,
     val fillWidth: Boolean,
@@ -112,8 +111,8 @@ data class ScreenSideAdaptiveContainerState(
  * @return 一个 ScreenSideAdaptiveContainerState 实例, 可直接传入 ScreenSideAdaptiveContainer
  */
 @Composable
-fun rememberScreenSideAdaptiveContainerState(
-    position: LayoutPosition = Bottom,
+fun rememberUIKitAdaptiveCornerContainerState(
+    position: UIKitAlignment = UIKitAlignment.BottomCenter,
     expectCornerRadius: Dp = getUIKitShapes().basicRounded,
     fallbackCornerRadius: Dp = getUIKitShapes().circular,
     expectHeight: Dp = getUIKitLayout().interactiveHotspot,
@@ -123,7 +122,7 @@ fun rememberScreenSideAdaptiveContainerState(
     fillWidth: Boolean = true,
     fillHeight: Boolean = false,
     providedScreenCornerRadius: Dp = (getScreenCornerRadius() / LocalDensity.current.density).dp,
-): ScreenSideAdaptiveContainerState {
+): UIKitAdaptiveCornerContainerState {
     val safeDrawing = WindowInsets.safeDrawing
     val layoutDirection = LocalLayoutDirection.current
     val density = LocalDensity.current
@@ -132,17 +131,17 @@ fun rememberScreenSideAdaptiveContainerState(
     // 取所需的几个侧边边距的最大值作为统一边距以达到等距效果
     var unifiedMargin: Dp? = maxOf(
         // 在这五种位置布局下会需要底部边距
-        if (position == Bottom || position == BottomLeft || position == BottomRight || position == Left || position == Right)
+        if (position == UIKitAlignment.BottomCenter || position == UIKitAlignment.BottomStart || position == UIKitAlignment.BottomEnd || position == UIKitAlignment.CenterStart || position == UIKitAlignment.CenterEnd)
         // 若底部安全边距小于期望最小边距则取期望最小边距, 在无需用到底部边距时底部边距取 0
             maxOf(safeDrawing.getBottom(density).toFloat() / densityDpi, minMargin.value) else 0f,
 
-        if (position == Top || position == TopLeft || position == TopRight || position == Left || position == Right)
+        if (position == UIKitAlignment.TopCenter || position == UIKitAlignment.TopStart || position == UIKitAlignment.TopEnd || position == UIKitAlignment.CenterStart || position == UIKitAlignment.CenterEnd)
             maxOf(safeDrawing.getTop(density).toFloat() / densityDpi, minMargin.value) else 0f,
 
-        if (position == Left || position == BottomLeft || position == TopLeft || position == Bottom || position == Top)
+        if (position == UIKitAlignment.CenterStart || position == UIKitAlignment.BottomStart || position == UIKitAlignment.TopStart || position == UIKitAlignment.BottomCenter || position == UIKitAlignment.TopCenter)
             maxOf(safeDrawing.getLeft(density, layoutDirection).toFloat() / densityDpi, minMargin.value) else 0f,
 
-        if (position == Right || position == BottomRight || position == TopRight || position == Top || position == Bottom)
+        if (position == UIKitAlignment.CenterEnd || position == UIKitAlignment.BottomEnd || position == UIKitAlignment.TopEnd || position == UIKitAlignment.TopCenter || position == UIKitAlignment.BottomCenter)
             maxOf(safeDrawing.getRight(density, layoutDirection).toFloat() / densityDpi, minMargin.value) else 0f,
     ).dp
 
@@ -150,7 +149,7 @@ fun rememberScreenSideAdaptiveContainerState(
     unifiedMargin?.let { if (it > maxMargin) unifiedMargin = null }
 
     // 若无法统一出一个边距, 那么则没有必要适应圆角
-    val cornerRadius: Dp = if (position == Center) fallbackCornerRadius else
+    val cornerRadius: Dp = if (position == UIKitAlignment.Center) fallbackCornerRadius else
         if (unifiedMargin != null) {
             if (providedScreenCornerRadius - unifiedMargin >= expectCornerRadius)
                 providedScreenCornerRadius - unifiedMargin
@@ -171,45 +170,35 @@ fun rememberScreenSideAdaptiveContainerState(
 
     val margins = PaddingValues(
         // 如果不涉及这个边距则设置为 0, 否则若有统一边距则取统一边距 (此时若有统一边距, 统一边距一定大于每一个安全边距), 否则取安全边距或期望最小边距的最大值
-        top = if (position == Top || position == TopLeft || position == TopRight || position == Left || position == Right)
+        top = if (position == UIKitAlignment.TopCenter || position == UIKitAlignment.TopStart || position == UIKitAlignment.TopEnd || position == UIKitAlignment.CenterStart || position == UIKitAlignment.CenterEnd)
             unifiedMargin ?: maxOf(safeDrawing.getTop(density).toFloat() / densityDpi, minMargin.value).dp
         else 0.dp,
-        bottom = if (position == Bottom || position == BottomLeft || position == BottomRight || position == Left || position == Right)
+        bottom = if (position == UIKitAlignment.BottomCenter || position == UIKitAlignment.BottomStart || position == UIKitAlignment.BottomEnd || position == UIKitAlignment.CenterStart || position == UIKitAlignment.CenterEnd)
             unifiedMargin ?: maxOf(safeDrawing.getBottom(density).toFloat() / densityDpi, minMargin.value).dp
         else 0.dp,
-        start = if (position == Left || position == BottomLeft || position == TopLeft || position == Bottom || position == Top)
+        start = if (position == UIKitAlignment.CenterStart || position == UIKitAlignment.BottomStart || position == UIKitAlignment.TopStart || position == UIKitAlignment.BottomCenter || position == UIKitAlignment.TopCenter)
             unifiedMargin ?: maxOf(safeDrawing.getLeft(density, layoutDirection).toFloat() / densityDpi, minMargin.value).dp
         else 0.dp,
-        end = if (position == Right || position == BottomRight || position == TopRight || position == Top || position == Bottom)
+        end = if (position == UIKitAlignment.CenterEnd || position == UIKitAlignment.BottomEnd || position == UIKitAlignment.TopEnd || position == UIKitAlignment.TopCenter || position == UIKitAlignment.BottomCenter)
             unifiedMargin ?: maxOf(safeDrawing.getRight(density, layoutDirection).toFloat() / densityDpi, minMargin.value).dp
         else 0.dp,
     )
 
-    return ScreenSideAdaptiveContainerState(
+    return UIKitAdaptiveCornerContainerState(
         margins = margins,
         fillHeight = fillHeight,
         fillWidth = fillWidth,
         height = height,
         width = width,
         cornerRadius = cornerRadius,
-        alignment = when(position){
-            Top -> Alignment.TopCenter
-            Bottom -> Alignment.BottomCenter
-            Left -> Alignment.CenterStart
-            Right -> Alignment.CenterEnd
-            TopLeft -> Alignment.TopStart
-            TopRight -> Alignment.TopEnd
-            BottomLeft -> Alignment.BottomStart
-            BottomRight -> Alignment.BottomEnd
-            Center -> Alignment.Center
-        }
+        alignment = position.toAlignment()
     )
 }
 
 @Composable
-fun ScreenSideAdaptiveContainer(
+fun UIKitAdaptiveCornerContainer(
     modifier: Modifier = Modifier,
-    state: ScreenSideAdaptiveContainerState,
+    state: UIKitAdaptiveCornerContainerState,
     clickable: Boolean = true,
     onClick: () -> Unit,
     indication: Indication? = if (isDesktopOS()) null else UIKitInteraction.ripple(),
@@ -254,15 +243,15 @@ fun ScreenSideAdaptiveContainer(
 }
 
 @Composable
-fun ScreenSideAdaptiveContainer(
+fun UIKitAdaptiveCornerContainer(
     modifier: Modifier = Modifier,
-    state: ScreenSideAdaptiveContainerState,
+    state: UIKitAdaptiveCornerContainerState,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialState? = null,
     shadowEnable: Boolean = true,
     content: @Composable BoxScope.() -> Unit
-) = ScreenSideAdaptiveContainer(
+) = UIKitAdaptiveCornerContainer(
     modifier = modifier,
     state = state,
     clickable = false,

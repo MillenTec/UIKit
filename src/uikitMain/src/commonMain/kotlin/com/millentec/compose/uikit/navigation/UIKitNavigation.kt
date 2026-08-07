@@ -1,6 +1,6 @@
 ﻿package com.millentec.compose.uikit.navigation
 
-import com.millentec.compose.uikit.foundation.NavigationType
+import com.millentec.compose.uikit.foundation.UIKitNavigationType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,13 +20,13 @@ class UIKitNavigation<S>(
     private val _hasHistoryPages = MutableStateFlow(initialPage != homePage)
     val hasHistoryPages: StateFlow<Boolean> = _hasHistoryPages.asStateFlow()
 
-    private val _pageSwitchAnimate = MutableStateFlow(NavigationAnimate().jump)
+    private val _pageSwitchAnimate = MutableStateFlow(UIKitNavigationAnimate().jump)
     val pageSwitchAnimate = _pageSwitchAnimate.asStateFlow()
 
-    fun switchPage(page: S, isAddInHistory: Boolean = true, type: NavigationType = NavigationType.Jump){
+    fun switchPage(page: S, isAddInHistory: Boolean = true, type: UIKitNavigationType = UIKitNavigationType.Jump){
         // 若仅是设置下面的targetContentZIndex为负数的话, 其深度会一直保留, 导致下一次切换是的目标页面于原页面在同一深度(-1)
         // 故使深度递增, 保证每一次切换时目标页面的深度都低于任何一个页面
-        if (type == NavigationType.Backward){
+        if (type == UIKitNavigationType.Backward){
             if (_pageDepth == Int.MAX_VALUE) _pageDepth = 0
             _pageDepth++
         } else{
@@ -34,9 +34,9 @@ class UIKitNavigation<S>(
         }
 
         _pageSwitchAnimate.value = when(type){
-            NavigationType.Forward -> NavigationAnimate().forward
-            NavigationType.Backward -> NavigationAnimate().backward(_pageDepth.toFloat())
-            else -> NavigationAnimate().jump
+            UIKitNavigationType.Forward -> UIKitNavigationAnimate().forward
+            UIKitNavigationType.Backward -> UIKitNavigationAnimate().backward(_pageDepth.toFloat())
+            else -> UIKitNavigationAnimate().jump
         }
 
         _page.value = page
@@ -71,6 +71,6 @@ class UIKitNavigation<S>(
         if (last == homePage) {
             reset()
         }
-        switchPage(last, false, NavigationType.Backward)
+        switchPage(last, false, UIKitNavigationType.Backward)
     }
 }

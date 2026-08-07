@@ -1,6 +1,6 @@
 ﻿package com.millentec.compose.uikit.foundation
 
-enum class NavigationType {
+enum class UIKitNavigationType {
     Forward,
     Backward,
     Jump

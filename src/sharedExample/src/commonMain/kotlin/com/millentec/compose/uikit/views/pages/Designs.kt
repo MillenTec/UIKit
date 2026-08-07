@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.component.layout.UIKitSettingCard
 import com.millentec.compose.uikit.data.Pages
-import com.millentec.compose.uikit.foundation.NavigationType
+import com.millentec.compose.uikit.foundation.UIKitNavigationType
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Symbols
 import com.millentec.compose.uikit.theme.getUIKitColors
@@ -50,7 +50,7 @@ fun Designs() {
                 icon = FluentIcons.Symbols,
                 title = "Fluent Icons",
                 onClick = {
-                    MainViewModel.navigation.switchPage(Pages.Icons, type = NavigationType.Forward)
+                    MainViewModel.navigation.switchPage(Pages.Icons, type = UIKitNavigationType.Forward)
                 }
             )
         }

@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.component.layout.VerticalItemLayout
+import com.millentec.compose.uikit.component.layout.UIKitVerticalMenu
 import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
@@ -141,7 +141,7 @@ fun UIKitDropdownMenu(
         onDismissRequest = onDismissRequest,
         dismissOnClickOutside = expanded,
     ) {
-        VerticalItemLayout(
+        UIKitVerticalMenu(
             modifier = modifier
                 .then(
                     if (acrylicEffectEnabled && acrylicMaterialState != null) {

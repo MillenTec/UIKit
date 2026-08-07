@@ -4,13 +4,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 object AppTheme {
-    val themeLight: UIKitTheme = UIKitTheme()
-    val themeDark: UIKitTheme = UIKitTheme(
-        colors = UIKitColors.getDark(),
-        materials = UIKitMaterials.getDark()
-    )
+    val themeLight: UIKitTheme = UIKitTheme.getLight()
+    val themeDark: UIKitTheme = UIKitTheme.getDark()
 
-    private val _theme = MutableStateFlow(themeLight)
+    private val _theme = MutableStateFlow(themeDark)
     val theme = _theme.asStateFlow()
 
     private val _useAcrylic = MutableStateFlow(true)

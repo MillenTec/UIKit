@@ -27,7 +27,7 @@ import com.millentec.compose.uikit.theme.getUIKitShapes
 @Composable
 @Preview
 private fun Preview() {
-    VerticalItemLayout(
+    UIKitVerticalMenu(
         items = listOf(
             UIKitMenuItem.textWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {}),
             UIKitMenuItem.text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush),
@@ -37,7 +37,7 @@ private fun Preview() {
 }
 
 @Composable
-fun VerticalItemLayout(
+fun UIKitVerticalMenu(
     modifier: Modifier = Modifier,
     maxLength: Dp = (-1).dp,
     minWidth: Dp = 200.dp,

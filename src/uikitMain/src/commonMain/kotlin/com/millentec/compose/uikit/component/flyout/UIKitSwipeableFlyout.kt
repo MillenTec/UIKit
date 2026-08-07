@@ -91,8 +91,10 @@ fun UIKitSwipeableFlyout(
         } else {
             if (contentOffsetRatio.value != Offset(abs(swipeDirection.horizontalBias), abs(swipeDirection.verticalBias)))
                 animateEasing.value = LinearOutSlowInEasing
-            offsetChangeWithAnimate.value = true
-            contentOffsetRatio.value = Offset.Zero
+            if (contentOffsetRatio.value != Offset.Zero) {
+                offsetChangeWithAnimate.value = true
+                contentOffsetRatio.value = Offset.Zero
+            }
         }
     }
 

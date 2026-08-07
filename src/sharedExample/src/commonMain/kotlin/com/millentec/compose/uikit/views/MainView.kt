@@ -29,13 +29,13 @@ import com.millentec.compose.uikit.LocalAcrylicMaterialState
 import com.millentec.compose.uikit.component.input.UIKitDropdownButton
 import com.millentec.compose.uikit.component.input.UIKitNavigationDock
 import com.millentec.compose.uikit.component.layout.UIKitSurface
-import com.millentec.compose.uikit.component.layout.rememberScreenSideAdaptiveContainerState
+import com.millentec.compose.uikit.component.layout.rememberUIKitAdaptiveCornerContainerState
 import com.millentec.compose.uikit.data.Pages
 import com.millentec.compose.uikit.data.Pages.*
-import com.millentec.compose.uikit.foundation.LayoutPosition
-import com.millentec.compose.uikit.foundation.NavigationType
+import com.millentec.compose.uikit.foundation.UIKitNavigationType
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.isDesktopOS
+import com.millentec.compose.uikit.foundation.layout.UIKitAlignment
 import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
 import com.millentec.compose.uikit.foundation.layout.UIKitNavigationDockItem
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
@@ -156,8 +156,8 @@ fun MainView() {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    val state = rememberScreenSideAdaptiveContainerState(
-                        position = LayoutPosition.BottomLeft,
+                    val state = rememberUIKitAdaptiveCornerContainerState(
+                        position = UIKitAlignment.BottomStart,
                         expectHeight = 56.dp,
                         expectWidth = 56.dp,
                     )
@@ -242,7 +242,7 @@ fun MainView() {
                                     icon = FluentIcons.Scales,
                                     text = "License",
                                     onClick = {
-                                        nav.switchPage(License, type = NavigationType.Forward)
+                                        nav.switchPage(License, type = UIKitNavigationType.Forward)
                                         expanded.value = false
                                     }
                                 ),
@@ -251,7 +251,7 @@ fun MainView() {
                                     icon = FluentIcons.certificate(),
                                     text = "Third-party Licenses",
                                     onClick = {
-                                        nav.switchPage(ThirdParty, type = NavigationType.Forward)
+                                        nav.switchPage(ThirdParty, type = UIKitNavigationType.Forward)
                                         expanded.value = false
                                     }
                                 ),
@@ -260,7 +260,7 @@ fun MainView() {
                                     icon = FluentIcons.Settings,
                                     text = "Settings",
                                     onClick = {
-                                        nav.switchPage(Settings, type = NavigationType.Forward)
+                                        nav.switchPage(Settings, type = UIKitNavigationType.Forward)
                                         expanded.value = false
                                     }
                                 )
