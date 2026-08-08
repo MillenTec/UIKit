@@ -144,7 +144,7 @@ fun UIKitBottomSheet(
                                         top = getUIKitLayout().mediumSpacing
                                     )
                                     .fillMaxWidth(0.3f)
-                                    .height(5.dp)
+                                    .height(3.dp)
                                     .clip(RoundedCornerShape(getUIKitShapes().circular))
                                     .background(stripColorCurrent)
                             )

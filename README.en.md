@@ -27,7 +27,7 @@ UIKit is currently under development, and not all controls are complete.
 ### 1.1. Features
 - **Cross-Platform Consistency:** All core component code is implemented purely with Compose in commonMain, with fallbacks provided on other platforms for platform-specific features.
 - **Ease of Use and High Customizability:** Most controls offer multi-layered APIs, allowing you to create a beautiful control with default configuration in just a few lines of code, or use lower-level APIs for more extensive customization.
-- **Complete Theming System:** `UIKitTheme` provides six customizable, mutable theme attributes: colors, typography, shapes, layout, animations, and materials. Light and dark configurations are built-in. Simply wrap your application root with `UIKitTheme` and provide your theme configuration, and you can access the theme anywhere in your app using `getUIKitTheme`.
+- **Complete Theming System:** `UIKitTheme` provides six customizable, mutable theme attributes: colors, typography, shapes, layout, animations, and materials. Light and dark configurations are built-in. Simply wrap your application root with `UIKitThemeHost` and provide your theme configuration, and you can access the theme anywhere in your app using `getUIKitTheme`.
 - **Smooth Animation System:** UIKit advocates that everything should have transitions. Animations and transition effects permeate every aspect of UIKit's design.
 - **Rich Icon Set:** UIKit's built-in icons are based on [FluentUI System Icons](https://github.com/microsoft/fluentui-system-icons) and have been further refined, offering a more diverse icon system including **layered icons**, **animated icons**, and more.
 
@@ -101,7 +101,7 @@ fun App() {
     val checked = remember { mutableStateOf(false) }
 
     UIKitThemeHost(
-        if (checked) UIKitTheme.getDark() else UIKitTheme.getLight()
+        if (checked.value) UIKitTheme.getDark() else UIKitTheme.getLight()
     ) {
         Box(
             Modifier

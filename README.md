@@ -24,7 +24,7 @@ UIKit 是一个以 Fluent Design 为基础，融合了 Apple 设计精神的一�
 ### 1.1.特性
 - **跨平台一致性：** 所有组件核心代码均在 commonMain 中使用纯 Compose 实现，需要的平台特性均在其余平台提供了 Fallback
 - **快捷调用与高自定义性：** 大部分控件提供了多层 API，既可以使用简单几行代码创建一个漂亮的默认配置控件，也可以使用更底层的 API 实现更多属性的自定义
-- **完整的主题体系：** `UIKitTheme` 提供了颜色、排版、形状、布局、动画、材质六项可自定义的可变主题，默认内置了亮色与暗色配置，你只需使用 `UIKitTheme` 包裹你的应用根并传入主题配置，你就可以在应用的任何地方使用 `getUIKitTheme` 获取并使用主题
+- **完整的主题体系：** `UIKitTheme` 提供了颜色、排版、形状、布局、动画、材质六项可自定义的可变主题，默认内置了亮色与暗色配置，你只需使用 `UIKitThemeHost` 包裹你的应用根并传入主题配置，你就可以在应用的任何地方使用 `getUIKitTheme` 获取并使用主题
 - **流畅的动画系统：** UIKit 主张一切都拥有过渡，动画与过渡动画渗透了 UIKit 的每一处设计
 - **丰富的图标集：** UIKit 内置图标集基于 [FluentUI System Icons](https://github.com/microsoft/fluentui-system-icons)，并在其基础上深入设计，提供了**分层图标**、**动画图标**等更多元化的图标体系
 
@@ -98,7 +98,7 @@ fun App() {
     val checked = remember { mutableStateOf(false) }
 
     UIKitThemeHost(
-        if (checked) UIKitTheme.getDark() else UIKitTheme.getLight()
+        if (checked.value) UIKitTheme.getDark() else UIKitTheme.getLight()
     ) {
         Box(
             Modifier
@@ -201,7 +201,7 @@ Box {
 >            // ... 
 >        }
 >    }
->}
+> }
 > ```
 
 ## 4.许可证
