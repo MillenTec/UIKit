@@ -19,16 +19,13 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.PageBasic
 import com.millentec.compose.uikit.foundation.isDesktopOS
-import com.millentec.compose.uikit.theme.getUIKitColors
-import com.millentec.compose.uikit.theme.getUIKitLayout
-import com.millentec.compose.uikit.theme.getUIKitShapes
-import com.millentec.compose.uikit.theme.getUIKitTypography
+import com.millentec.compose.uikit.theme.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import uikit.sharedexample.generated.resources.Res
 
-class ThirdParty: PageBasic("Third Party") {
+class ThirdParty: PageBasic("third-party") {
     @Composable
     override fun Content() {
         val thirdPartyLicenseContents = remember { mutableStateOf(listOf("Loading...")) }
@@ -68,7 +65,7 @@ class ThirdParty: PageBasic("Third Party") {
                     )
             ) {
                 Text(
-                    text = "Third Party",
+                    text = LocalStrings.current.thirdPartyLicenses.title,
                     style = getUIKitTypography().largeTitle,
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
@@ -76,7 +73,7 @@ class ThirdParty: PageBasic("Third Party") {
                 Spacer(modifier = Modifier.height(getUIKitLayout().basicSpacing))
 
                 Text(
-                    text = "UIKit project can't do without the contributions from open source projects.",
+                    text = LocalStrings.current.thirdPartyLicenses.description,
                     style = getUIKitTypography().body,
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )

@@ -63,6 +63,7 @@ val LocalNavigationDockHeight = mutableStateOf(0.dp)
 fun MainView() {
     val nav = MainViewModel.navigation
     val uiKitTheme = getUIKitTheme()
+    val strings by rememberUpdatedState(LocalStrings.current)
 
     val page by nav.page.collectAsState()
     val navAnimate by nav.pageSwitchAnimate.collectAsState()
@@ -181,15 +182,15 @@ fun MainView() {
                             items = remember {
                                 listOf(
                                     UIKitNavigationDockItem.createByStringWithIcon(
-                                        text = "Home",
+                                        text = strings.navigation.home,
                                         icon = FluentIcons.Home
                                     ),
                                     UIKitNavigationDockItem.createByStringWithIcon(
-                                        text = "Controls",
+                                        text = strings.navigation.controls,
                                         icon = FluentIcons.toggleMultiple()
                                     ),
                                     UIKitNavigationDockItem.createByStringWithIcon(
-                                        text = "Designs",
+                                        text = strings.navigation.designs,
                                         icon = FluentIcons.designIdeas()
                                     )
                                 )
@@ -224,7 +225,7 @@ fun MainView() {
                             items = listOf(
                                 UIKitMenuItem.textWithIcon(
                                     icon = FluentIcons.Scales,
-                                    text = "License",
+                                    text = strings.navigation.license,
                                     onClick = {
                                         nav.switchPage(License.ordinal, type = UIKitNavigationType.Forward)
                                         expanded.value = false
@@ -233,7 +234,7 @@ fun MainView() {
                                 UIKitMenuItem.divider(),
                                 UIKitMenuItem.textWithIcon(
                                     icon = FluentIcons.certificate(),
-                                    text = "Third-party Licenses",
+                                    text = strings.navigation.thirdPartyLicenses,
                                     onClick = {
                                         nav.switchPage(ThirdParty.ordinal, type = UIKitNavigationType.Forward)
                                         expanded.value = false
@@ -242,7 +243,7 @@ fun MainView() {
                                 UIKitMenuItem.divider(),
                                 UIKitMenuItem.textWithIcon(
                                     icon = FluentIcons.Settings,
-                                    text = "Settings",
+                                    text = strings.navigation.settings,
                                     onClick = {
                                         nav.switchPage(Settings.ordinal, type = UIKitNavigationType.Forward)
                                         expanded.value = false

@@ -2,4 +2,4 @@
 
 import com.millentec.compose.uikit.foundation.CommonPage
 
-class Home: CommonPage("Home")
+class Home: CommonPage("home")

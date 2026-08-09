@@ -44,7 +44,7 @@ open class CommonPage(
 
             item {
                 Text(
-                    text = title.value,
+                    text = getTitleById(id.value),
                     style = getUIKitTypography().largeTitle,
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )

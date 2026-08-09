@@ -20,16 +20,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.PageBasic
 import com.millentec.compose.uikit.foundation.isDesktopOS
-import com.millentec.compose.uikit.theme.getUIKitColors
-import com.millentec.compose.uikit.theme.getUIKitLayout
-import com.millentec.compose.uikit.theme.getUIKitShapes
-import com.millentec.compose.uikit.theme.getUIKitTypography
+import com.millentec.compose.uikit.theme.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import uikit.sharedexample.generated.resources.Res
 
-class License: PageBasic("License") {
+class License: PageBasic("license") {
     @Composable
     @Preview
     override fun Content() {
@@ -70,7 +67,7 @@ class License: PageBasic("License") {
                     )
             ) {
                 Text(
-                    text = "License",
+                    text = LocalStrings.current.license.title,
                     style = getUIKitTypography().largeTitle,
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
@@ -78,8 +75,7 @@ class License: PageBasic("License") {
                 Spacer(modifier = Modifier.height(getUIKitLayout().basicSpacing))
 
                 Text(
-                    text = "UIKit is released under the MIT LICENSE, which means you are free to " +
-                            "use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the software.",
+                    text = LocalStrings.current.license.description,
                     style = getUIKitTypography().body,
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )

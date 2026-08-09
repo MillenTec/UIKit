@@ -3,6 +3,6 @@
 import com.millentec.compose.uikit.foundation.CommonPage
 
 class ControlsLayouts: CommonPage(
-    title = "Layouts",
+    title = "controls_layouts",
     parent = 1
 )

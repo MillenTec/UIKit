@@ -3,6 +3,6 @@
 import com.millentec.compose.uikit.foundation.CommonPage
 
 class ControlsFlyouts: CommonPage(
-    title = "Flyouts",
+    title = "controls_flyouts",
     parent = 1
 )

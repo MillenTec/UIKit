@@ -22,8 +22,9 @@ import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.theme.*
+import com.millentec.compose.uikit.theme.ThemeType.*
 
-class Settings: CommonPage("Settings") {
+class Settings: CommonPage("settings") {
     override fun LazyListScope.lazyContent() {
         item {
             val expanded = remember { mutableStateOf(false) }
@@ -32,7 +33,7 @@ class Settings: CommonPage("Settings") {
                 onClick = {
                     expanded.value = !expanded.value
                 },
-                title = "Theme",
+                title = LocalStrings.current.settings.themeSettingTitle,
                 icon = FluentIcons.Color,
             ) {
                 UIKitDropdownButton(
@@ -48,7 +49,7 @@ class Settings: CommonPage("Settings") {
                     expanded = expanded.value,
                     items = listOf(
                         UIKitMenuItem.textWithIcon(
-                            text = "System",
+                            text = LocalStrings.current.settings.themeSystem,
                             icon = FluentIcons.Person,
                             onClick = {
                                 AppTheme.switchTheme(ThemeType.System)
@@ -57,7 +58,7 @@ class Settings: CommonPage("Settings") {
                         ),
                         UIKitMenuItem.divider(),
                         UIKitMenuItem.textWithIcon(
-                            text = "Light",
+                            text = LocalStrings.current.settings.themeLight,
                             icon = FluentIcons.weatherSunny(),
                             onClick = {
                                 AppTheme.switchTheme(ThemeType.Light)
@@ -66,7 +67,7 @@ class Settings: CommonPage("Settings") {
                         ),
                         UIKitMenuItem.divider(),
                         UIKitMenuItem.textWithIcon(
-                            text = "Dark",
+                            text = LocalStrings.current.settings.themeDark,
                             icon = FluentIcons.Moon,
                             onClick = {
                                 AppTheme.switchTheme(ThemeType.Dark)
@@ -79,7 +80,11 @@ class Settings: CommonPage("Settings") {
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = AppTheme.theme.collectAsState().value.name,
+                            text = when(AppTheme.theme.collectAsState().value) {
+                                System -> LocalStrings.current.settings.themeSystem
+                                Light -> LocalStrings.current.settings.themeLight
+                                Dark -> LocalStrings.current.settings.themeDark
+                            },
                             style = getUIKitTypography().footnote,
                             color = getUIKitColors().textFillColorPrimaryBrush
                         )
@@ -104,7 +109,7 @@ class Settings: CommonPage("Settings") {
             val acrylicEnabled = AppTheme.useAcrylic.collectAsState()
 
             UIKitSettingCard(
-                title = "Acrylic Effect",
+                title = LocalStrings.current.settings.acrylicEnabledSettingTitle,
                 icon = FluentIcons.Blur,
                 onClick = {
                     AppTheme.enableAcrylic(!acrylicEnabled.value)

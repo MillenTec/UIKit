@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 
 open class PageBasic(
-    title: String,
+    id: String,
     parent: Int? = null,
 ) {
-    val title = mutableStateOf(title)
+    val id = mutableStateOf(id)
     val parent = mutableStateOf(parent)
 
     @Composable

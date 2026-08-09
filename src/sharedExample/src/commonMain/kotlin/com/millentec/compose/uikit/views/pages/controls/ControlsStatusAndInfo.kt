@@ -3,6 +3,6 @@
 import com.millentec.compose.uikit.foundation.CommonPage
 
 class ControlsStatusAndInfo: CommonPage(
-    title = "Status & Info",
+    title = "controls_status-and-info",
     parent = 1
 )

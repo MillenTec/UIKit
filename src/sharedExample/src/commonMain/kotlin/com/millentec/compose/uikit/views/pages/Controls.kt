@@ -13,15 +13,16 @@ import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.LayoutDynamic
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.chatMultiple
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.layerDiagonal
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.toggleMultiple
+import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
 import com.millentec.compose.uikit.viewmodels.MainViewModel
 
-class Controls: CommonPage("Controls") {
+class Controls: CommonPage("controls") {
     override fun LazyListScope.lazyContent() {
         item {
             UIKitSettingCard(
-                title = "Inputs",
+                title = LocalStrings.current.controls.inputsEntrance,
                 icon = FluentIcons.toggleMultiple(getUIKitColors().textFillColorPrimaryBrush, true),
                 onClick = {
                     MainViewModel.navigation.switchPage(Pages.ControlsBasicInputs.ordinal, type = UIKitNavigationType.Forward)
@@ -35,7 +36,7 @@ class Controls: CommonPage("Controls") {
 
         item {
             UIKitSettingCard(
-                title = "Status & Info",
+                title = LocalStrings.current.controls.statusAndInfosEntrance,
                 icon = FluentIcons.chatMultiple(getUIKitColors().textFillColorPrimaryBrush, true),
                 onClick = {
                     MainViewModel.navigation.switchPage(Pages.ControlsStatusAndInfo.ordinal, type = UIKitNavigationType.Forward)
@@ -49,7 +50,7 @@ class Controls: CommonPage("Controls") {
 
         item {
             UIKitSettingCard(
-                title = "Flyouts",
+                title = LocalStrings.current.controls.flyoutsEntrance,
                 icon = FluentIcons.layerDiagonal(getUIKitColors().textFillColorPrimaryBrush, true),
                 onClick = {
                     MainViewModel.navigation.switchPage(Pages.ControlsFlyouts.ordinal, type = UIKitNavigationType.Forward)
@@ -63,7 +64,7 @@ class Controls: CommonPage("Controls") {
 
         item {
             UIKitSettingCard(
-                title = "Layouts",
+                title = LocalStrings.current.controls.flyoutsEntrance,
                 icon = FluentIcons.LayoutDynamic,
                 onClick = {
                     MainViewModel.navigation.switchPage(Pages.ControlsLayouts.ordinal, type = UIKitNavigationType.Forward)

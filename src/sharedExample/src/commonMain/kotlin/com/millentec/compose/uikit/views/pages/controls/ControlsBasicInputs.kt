@@ -7,18 +7,19 @@ import androidx.compose.ui.Modifier
 import com.millentec.compose.uikit.component.layout.UIKitSettingCard
 import com.millentec.compose.uikit.foundation.CommonPage
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
+import com.millentec.compose.uikit.foundation.getTitleById
 import com.millentec.compose.uikit.theme.getUIKitLayout
 import com.millentec.compose.uikit.viewmodels.MainViewModel
 import com.millentec.compose.uikit.viewmodels.pageIndex
 
 class ControlsBasicInputs: CommonPage(
-    title = "Basic Inputs",
+    title = "controls_inputs",
     parent = 1
 ) {
     override fun LazyListScope.lazyContent() {
         items(BasicInputControls.size) { index ->
             UIKitSettingCard(
-                title = BasicInputControls[index].title.value,
+                title = getTitleById(BasicInputControls[index].id.value),
                 onClick = {
                     MainViewModel.navigation.switchPage(pageIndex.withIndex().find {
                         it.value == BasicInputControls[index]

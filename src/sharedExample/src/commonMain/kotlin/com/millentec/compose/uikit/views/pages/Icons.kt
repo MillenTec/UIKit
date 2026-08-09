@@ -180,7 +180,7 @@ private fun OptionsWindow(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
-                                text = "Info",
+                                text = LocalStrings.current.designs.fluentIcons.options.info,
                                 style = getUIKitTypography().body,
                                 color = getUIKitColors().textFillColorSecondaryBrush
                             )
@@ -217,7 +217,7 @@ private fun OptionsWindow(
                     Column {
                         UIKitSettingCard(
                             icon = FluentIcons.Tag,
-                            title = "Name",
+                            title = LocalStrings.current.designs.fluentIcons.options.name,
                             onClick = {}
                         ) {
                             Text(
@@ -251,7 +251,7 @@ private fun OptionsWindow(
                     Column {
                         UIKitSettingCard(
                             icon = FluentIcons.Resize,
-                            title = "Size",
+                            title = LocalStrings.current.designs.fluentIcons.options.size,
                             onClick = {}
                         ) {
                             Text(
@@ -286,7 +286,7 @@ private fun OptionsWindow(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = "Extension",
+                            text = LocalStrings.current.designs.fluentIcons.options.extension,
                             style = getUIKitTypography().body,
                             color = getUIKitColors().textFillColorSecondaryBrush
                         )
@@ -335,7 +335,7 @@ private fun OptionsWindow(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "General",
+                    text = LocalStrings.current.designs.fluentIcons.options.general,
                     style = getUIKitTypography().body,
                     color = getUIKitColors().textFillColorSecondaryBrush
                 )
@@ -354,7 +354,7 @@ private fun OptionsWindow(
         item {
             UIKitSettingCard(
                 icon = FluentIcons.layerDiagonal(getUIKitColors().textFillColorPrimaryBrush, true),
-                title = "Layered Icon",
+                title = LocalStrings.current.designs.fluentIcons.options.layeredIcon,
                 onClick = {
                     state.isLayered.value = !state.isLayered.value
                 }
@@ -376,7 +376,7 @@ private fun OptionsWindow(
                 onClick = {
                     tintColorPickerExpanded.value = !tintColorPickerExpanded.value
                 },
-                title = "Tint Color",
+                title = LocalStrings.current.designs.fluentIcons.options.tintColor,
                 icon = FluentIcons.PaintBrush
             ) {
                 UIKitHSVColorPicker(
@@ -443,7 +443,7 @@ private fun OptionsWindow(
                 onClick = {
                     backgroundColorPickerExpanded.value = !backgroundColorPickerExpanded.value
                 },
-                title = "Background Color",
+                title = LocalStrings.current.designs.fluentIcons.options.backgroundColor,
                 icon = FluentIcons.PaintBucket
             ) {
                 UIKitHSVColorPicker(
@@ -570,7 +570,7 @@ private fun IconItem(
 }
 
 class Icons: PageBasic(
-    "Fluent Icons",
+    "designs_fluent-icons",
     parent = 2
 ) {
     @Composable
@@ -656,7 +656,7 @@ class Icons: PageBasic(
                                 Spacer(Modifier.height(getUIKitLayout().x4Spacing))
 
                                 Text(
-                                    text = "Icons Gallery",
+                                    text = LocalStrings.current.designs.fluentIcons.title,
                                     style = getUIKitTypography().largeTitle,
                                     color = getUIKitColors().textFillColorPrimaryBrush
                                 )
@@ -668,7 +668,7 @@ class Icons: PageBasic(
                         item(span = { GridItemSpan(maxLineSpan) }) {
                             Column {
                                 Text(
-                                    text = "Regular Icons",
+                                    text = LocalStrings.current.designs.fluentIcons.regularIcons,
                                     style = getUIKitTypography().subtitle,
                                     color = getUIKitColors().textFillColorSecondaryBrush
                                 )
@@ -705,7 +705,7 @@ class Icons: PageBasic(
                                 Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
 
                                 Text(
-                                    text = "Filled Icons",
+                                    text = LocalStrings.current.designs.fluentIcons.filledIcons,
                                     style = getUIKitTypography().subtitle,
                                     color = getUIKitColors().textFillColorSecondaryBrush
                                 )
@@ -742,7 +742,7 @@ class Icons: PageBasic(
                                 Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
 
                                 Text(
-                                    text = "Animatable Icons",
+                                    text = LocalStrings.current.designs.fluentIcons.animatableIcons,
                                     style = getUIKitTypography().subtitle,
                                     color = getUIKitColors().textFillColorSecondaryBrush
                                 )
@@ -834,7 +834,7 @@ class Icons: PageBasic(
                                 Spacer(Modifier.width(getUIKitLayout().mediumSpacing))
 
                                 Text(
-                                    text = "Icons Gallery",
+                                    text = LocalStrings.current.designs.fluentIcons.options.title,
                                     style = getUIKitTypography().largeTitle,
                                     color = getUIKitColors().textFillColorPrimaryBrush
                                 )
@@ -880,7 +880,7 @@ class Icons: PageBasic(
                 state = bottomSheetState,
                 maxHeight = this@BoxWithConstraints.maxHeight * 0.8f,
                 minHeight = this@BoxWithConstraints.maxHeight * 0.8f,
-                title = "Options",
+                title = LocalStrings.current.designs.fluentIcons.options.title,
                 onDismissRequest = {
                     bottomSheetExpanded.value = false
                 }
@@ -1338,7 +1338,7 @@ private fun makeAnimatableIconList(
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
                 UIKitSettingCard(
-                    title = "Reset Progress On Error",
+                    title = LocalStrings.current.designs.fluentIcons.options.resetProgressOnError,
                     onClick = {
                         resetProgressOnError.value = !resetProgressOnError.value
                     },
@@ -1353,7 +1353,7 @@ private fun makeAnimatableIconList(
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
                 UIKitSettingCard(
-                    title = "Auto Tint",
+                    title = LocalStrings.current.designs.fluentIcons.options.autoTint,
                     onClick = {
                         autoTint.value = !autoTint.value
                     },
@@ -1456,7 +1456,7 @@ private fun makeAnimatableIconList(
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
                 UIKitSettingCard(
-                    title = "Reset Progress On Error",
+                    title = LocalStrings.current.designs.fluentIcons.options.resetProgressOnError,
                     onClick = {
                         resetProgressOnError.value = !resetProgressOnError.value
                     },
@@ -1471,7 +1471,7 @@ private fun makeAnimatableIconList(
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
                 UIKitSettingCard(
-                    title = "Auto Tint",
+                    title = LocalStrings.current.designs.fluentIcons.options.autoTint,
                     onClick = {
                         autoTint.value = !autoTint.value
                     },
@@ -1573,7 +1573,7 @@ private fun makeAnimatableIconList(
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
                 UIKitSettingCard(
-                    title = "Reset Progress On Error",
+                    title = LocalStrings.current.designs.fluentIcons.options.resetProgressOnError,
                     onClick = {
                         resetProgressOnError.value = !resetProgressOnError.value
                     },
@@ -1588,7 +1588,7 @@ private fun makeAnimatableIconList(
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
                 UIKitSettingCard(
-                    title = "Auto Tint",
+                    title = LocalStrings.current.designs.fluentIcons.options.autoTint,
                     onClick = {
                         autoTint.value = !autoTint.value
                     },
@@ -1667,7 +1667,7 @@ private fun makeAnimatableIconList(
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
                 UIKitSettingCard(
-                    title = "Auto Tint",
+                    title = LocalStrings.current.designs.fluentIcons.options.autoTint,
                     onClick = {
                         autoTint.value = !autoTint.value
                     },

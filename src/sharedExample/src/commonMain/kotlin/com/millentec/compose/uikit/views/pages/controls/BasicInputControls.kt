@@ -25,13 +25,10 @@ import com.millentec.compose.uikit.foundation.ControlGalleryBasic
 import com.millentec.compose.uikit.foundation.helper.toHsv
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
-import com.millentec.compose.uikit.theme.UIKitColors
-import com.millentec.compose.uikit.theme.getUIKitColors
-import com.millentec.compose.uikit.theme.getUIKitLayout
-import com.millentec.compose.uikit.theme.getUIKitTypography
+import com.millentec.compose.uikit.theme.*
 
 val BasicInputControls = listOf(
-    object: ControlGalleryBasic("Button") {
+    object: ControlGalleryBasic("controls_inputs_button") {
         private val buttonSize = mutableStateOf(IntSize.Zero)
         private val buttonEnabled = mutableStateOf(true)
         private val buttonBackground = mutableStateOf<Color?>(null)
@@ -41,7 +38,7 @@ val BasicInputControls = listOf(
         override fun LazyListScope.description() {
             item {
                 Text(
-                    text = "按钮是一个基础的可点击控件，提供了 onClick 回调，在被点击时触发",
+                    text = LocalStrings.current.controls.inputs.button.description,
                     style = getUIKitTypography().body,
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
@@ -55,7 +52,7 @@ val BasicInputControls = listOf(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = "A simple Button with text content.",
+                    text = LocalStrings.current.controls.inputs.button.button0Description,
                     style = getUIKitTypography().body,
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
@@ -88,7 +85,7 @@ val BasicInputControls = listOf(
                             .onSizeChanged {
                                 buttonSize.value = it
                             },
-                        text = "Button",
+                        text = LocalStrings.current.controls.inputs.button.button0Content,
                         shape = RoundedCornerShape(
                             (buttonSize.value.height / LocalDensity.current.density / 2).dp * buttonCornerRadius.value
                         ),
@@ -105,7 +102,7 @@ val BasicInputControls = listOf(
                     Spacer(Modifier.width(getUIKitLayout().basicSpacing))
 
                     Text(
-                        text = "You clicked ${count.value} times.",
+                        text = LocalStrings.current.controls.inputs.button.buttonHint(count.value),
                         style = getUIKitTypography().body,
                         color = getUIKitColors().textFillColorPrimaryBrush
                     )
@@ -114,7 +111,7 @@ val BasicInputControls = listOf(
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
                 Text(
-                    text = "A Button with text and icon content.",
+                    text = LocalStrings.current.controls.inputs.button.button1Description,
                     style = getUIKitTypography().body,
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
@@ -132,7 +129,7 @@ val BasicInputControls = listOf(
                             .onSizeChanged {
                                 buttonSize.value = it
                             },
-                        text = "Add",
+                        text = LocalStrings.current.controls.inputs.button.button1Content,
                         shape = RoundedCornerShape(
                             (buttonSize.value.height / LocalDensity.current.density / 2).dp * buttonCornerRadius.value
                         ),
@@ -150,7 +147,7 @@ val BasicInputControls = listOf(
                     Spacer(Modifier.width(getUIKitLayout().basicSpacing))
 
                     Text(
-                        text = "You clicked ${count.value} times.",
+                        text = LocalStrings.current.controls.inputs.button.buttonHint(count.value),
                         style = getUIKitTypography().body,
                         color = getUIKitColors().textFillColorPrimaryBrush
                     )
@@ -165,7 +162,7 @@ val BasicInputControls = listOf(
                     .fillMaxWidth()
             ) {
                 UIKitSettingCard(
-                    title = "Enabled",
+                    title = LocalStrings.current.controls.inputs.common.enabled,
                     icon = FluentIcons.checkmarkCircle(getUIKitColors().textFillColorPrimaryBrush, true),
                     onClick = {
                         buttonEnabled.value = !buttonEnabled.value
@@ -209,7 +206,7 @@ val BasicInputControls = listOf(
                     onClick = {
                         backgroundPickerExpanded.value = !backgroundPickerExpanded.value
                     },
-                    title = "Color",
+                    title = LocalStrings.current.controls.inputs.common.color,
                     icon = FluentIcons.Color
                 ) {
                     val uikitColors = getUIKitColors()
@@ -247,7 +244,7 @@ val BasicInputControls = listOf(
             """.trimIndent()
         }
     },
-    object: ControlGalleryBasic("Toggle Button") {
+    object: ControlGalleryBasic("controls_inputs_toggle-button") {
         private val buttonSize = mutableStateOf(IntSize.Zero)
         private val buttonEnabled = mutableStateOf(true)
         private val buttonBackground = mutableStateOf<Color?>(null)
@@ -257,7 +254,7 @@ val BasicInputControls = listOf(
         override fun LazyListScope.description() {
             item {
                 Text(
-                    text = "开关拥有两种状态并可保持，提供的 onCheckedChange 回调在状态更新时调用",
+                    text = LocalStrings.current.controls.inputs.toggleButton.description,
                     style = getUIKitTypography().body,
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
@@ -271,7 +268,7 @@ val BasicInputControls = listOf(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = "A simple Toggle Button with text content.",
+                    text = LocalStrings.current.controls.inputs.toggleButton.button0Description,
                     style = getUIKitTypography().body,
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
@@ -305,7 +302,7 @@ val BasicInputControls = listOf(
                                 buttonSize.value = it
                             },
                         checked = checked.value,
-                        text = "Button",
+                        text = LocalStrings.current.controls.inputs.toggleButton.button0Content,
                         shape = RoundedCornerShape(
                             (buttonSize.value.height / LocalDensity.current.density / 2).dp * buttonCornerRadius.value
                         ),
@@ -322,7 +319,9 @@ val BasicInputControls = listOf(
                     Spacer(Modifier.width(getUIKitLayout().basicSpacing))
 
                     Text(
-                        text = if (checked.value) "Checked" else "Unchecked",
+                        text = if (checked.value)
+                            LocalStrings.current.controls.inputs.toggleButton.buttonHintChecked
+                        else LocalStrings.current.controls.inputs.toggleButton.buttonHintUnchecked,
                         style = getUIKitTypography().body,
                         color = getUIKitColors().textFillColorPrimaryBrush
                     )
@@ -331,7 +330,7 @@ val BasicInputControls = listOf(
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
                 Text(
-                    text = "A Button with text and icon content.",
+                    text = LocalStrings.current.controls.inputs.toggleButton.button1Description,
                     style = getUIKitTypography().body,
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
@@ -349,7 +348,7 @@ val BasicInputControls = listOf(
                             .onSizeChanged {
                                 buttonSize.value = it
                             },
-                        text = "Add",
+                        text = LocalStrings.current.controls.inputs.toggleButton.button1Content,
                         checked = checked.value,
                         shape = RoundedCornerShape(
                             (buttonSize.value.height / LocalDensity.current.density / 2).dp * buttonCornerRadius.value
@@ -359,7 +358,7 @@ val BasicInputControls = listOf(
                             backgroundChecked = buttonBackground.value ?: getUIKitColors().highlightColorPrimaryBrush,
                             contentChecked = buttonForeground.value ?: UIKitColors.White
                         ),
-                        icon = FluentIcons.Add,
+                        icon = FluentIcons.Checkmark,
                         onCheckedChange = {
                             checked.value = it
                         }
@@ -368,7 +367,9 @@ val BasicInputControls = listOf(
                     Spacer(Modifier.width(getUIKitLayout().basicSpacing))
 
                     Text(
-                        text = if (checked.value) "Checked" else "Unchecked",
+                        text = if (checked.value)
+                            LocalStrings.current.controls.inputs.toggleButton.buttonHintChecked
+                        else LocalStrings.current.controls.inputs.toggleButton.buttonHintUnchecked,
                         style = getUIKitTypography().body,
                         color = getUIKitColors().textFillColorPrimaryBrush
                     )
@@ -403,7 +404,7 @@ val BasicInputControls = listOf(
                     .fillMaxWidth()
             ) {
                 UIKitSettingCard(
-                    title = "Enabled",
+                    title = LocalStrings.current.controls.inputs.common.enabled,
                     icon = FluentIcons.checkmarkCircle(getUIKitColors().textFillColorPrimaryBrush, true),
                     onClick = {
                         buttonEnabled.value = !buttonEnabled.value
@@ -447,7 +448,7 @@ val BasicInputControls = listOf(
                     onClick = {
                         backgroundPickerExpanded.value = !backgroundPickerExpanded.value
                     },
-                    title = "Color (Checked)",
+                    title = LocalStrings.current.controls.inputs.common.color,
                     icon = FluentIcons.Color
                 ) {
                     val uikitColors = getUIKitColors()
@@ -466,9 +467,19 @@ val BasicInputControls = listOf(
             }
         }
     },
-    object: ControlGalleryBasic("Toggle Switch") {
+    object: ControlGalleryBasic("controls_inputs_toggle-switch") {
         private val buttonEnabled = mutableStateOf(true)
         private val buttonBackground = mutableStateOf<Color?>(null)
+
+        override fun LazyListScope.description() {
+            item {
+                Text(
+                    text = LocalStrings.current.controls.inputs.toggleSwitch.description,
+                    style = getUIKitTypography().body,
+                    color = getUIKitColors().textFillColorPrimaryBrush
+                )
+            }
+        }
 
         @Composable
         override fun ControlView() {
@@ -477,7 +488,7 @@ val BasicInputControls = listOf(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = "A simple Toggle Switch",
+                    text = LocalStrings.current.controls.inputs.toggleSwitch.switchDescription,
                     style = getUIKitTypography().body,
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
@@ -504,7 +515,9 @@ val BasicInputControls = listOf(
                     Spacer(Modifier.width(getUIKitLayout().basicSpacing))
 
                     Text(
-                        text = if (checked.value) "Checked" else "Unchecked",
+                        text = if (checked.value)
+                            LocalStrings.current.controls.inputs.toggleSwitch.switchHintChecked
+                        else LocalStrings.current.controls.inputs.toggleSwitch.switchHintUnchecked,
                         style = getUIKitTypography().body,
                         color = getUIKitColors().textFillColorPrimaryBrush
                     )
@@ -537,7 +550,7 @@ val BasicInputControls = listOf(
                     .fillMaxWidth()
             ) {
                 UIKitSettingCard(
-                    title = "Enabled",
+                    title = LocalStrings.current.controls.inputs.common.enabled,
                     icon = FluentIcons.checkmarkCircle(getUIKitColors().textFillColorPrimaryBrush, true),
                     onClick = {
                         buttonEnabled.value = !buttonEnabled.value
@@ -559,7 +572,7 @@ val BasicInputControls = listOf(
                     onClick = {
                         backgroundPickerExpanded.value = !backgroundPickerExpanded.value
                     },
-                    title = "Color (Checked)",
+                    title = LocalStrings.current.controls.inputs.common.color,
                     icon = FluentIcons.Color
                 ) {
                     val uikitColors = getUIKitColors()

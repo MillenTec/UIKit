@@ -7,14 +7,15 @@ import com.millentec.compose.uikit.foundation.CommonPage
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Symbols
+import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.viewmodels.MainViewModel
 
-class Designs: CommonPage("Designs") {
+class Designs: CommonPage("designs") {
     override fun LazyListScope.lazyContent() {
         item {
             UIKitSettingCard(
                 icon = FluentIcons.Symbols,
-                title = "Fluent Icons",
+                title = LocalStrings.current.designs.fluentIconsEntrance,
                 onClick = {
                     MainViewModel.navigation.switchPage(Pages.Icons.ordinal, type = UIKitNavigationType.Forward)
                 }

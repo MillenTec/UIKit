@@ -30,10 +30,10 @@ import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.views.pages.StateSelectorItem
 
 open class ControlGalleryBasic(
-    title: String,
+    id: String,
     parent: Int? = 1
 ): CommonPage(
-    title,
+    id,
     parent
 ) {
     private val maxWidth = mutableStateOf(Dp.Unspecified)
@@ -117,7 +117,7 @@ open class ControlGalleryBasic(
                 onClick = {
                     expanded.value = !expanded.value
                 },
-                title = "Source Code",
+                title = LocalStrings.current.controls.inputs.common.sourceCode,
                 icon = FluentIcons.Code,
                 contentPadding = PaddingValues(0.dp),
                 headerPadding = PaddingValues(getUIKitLayout().basicSpacing)

@@ -19,6 +19,8 @@ import com.millentec.compose.uikit.foundation.helper.toHsv
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
+import com.millentec.compose.uikit.i18n.SupportedLanguages
+import com.millentec.compose.uikit.i18n.strings.SimplifiedChinese
 import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.views.MainView
 
@@ -36,33 +38,38 @@ fun App() {
     ) {
         UIKitFlyouter {
             CompositionLocalProvider(LocalAcrylicMaterialState provides rememberAcrylicMaterialState()) {
-                val uikitTheme = getUIKitTheme()
-                val statusBarHeight = WindowInsets.statusBars.getTop(LocalDensity.current)
+                CompositionLocalProvider(LocalStrings provides when(AppSettings.languages.collectAsState().value) {
+                    SupportedLanguages.EnUS -> TODO()
+                    SupportedLanguages.ZhCN -> SimplifiedChinese()
+                }) {
+                    val uikitTheme = getUIKitTheme()
+                    val statusBarHeight = WindowInsets.statusBars.getTop(LocalDensity.current)
 
-                IsStatusBarDarkMode(getUIKitColors().contentFillColorPrimaryBrush.toHsv().value <= 0.5f)
+                    IsStatusBarDarkMode(getUIKitColors().contentFillColorPrimaryBrush.toHsv().value <= 0.5f)
 
-                Box(
-                    modifier = Modifier
-                        .acrylicMaterialSource(LocalAcrylicMaterialState.current)
-                        .drawWithContent {
-                            drawContent()
-                            drawRect(
-                                brush = Brush.verticalGradient(
-                                    colors = listOf(
-                                        uikitTheme.colors.contentFillColorPrimaryBrush.copy(0.8f),
-                                        uikitTheme.colors.contentFillColorSecondaryBrush.copy(0f),
+                    Box(
+                        modifier = Modifier
+                            .acrylicMaterialSource(LocalAcrylicMaterialState.current)
+                            .drawWithContent {
+                                drawContent()
+                                drawRect(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(
+                                            uikitTheme.colors.contentFillColorPrimaryBrush.copy(0.8f),
+                                            uikitTheme.colors.contentFillColorSecondaryBrush.copy(0f),
+                                        ),
+                                        startY = 0f,
+                                        endY = statusBarHeight.toFloat()
                                     ),
-                                    startY = 0f,
-                                    endY = statusBarHeight.toFloat()
-                                ),
-                                size = Size(
-                                    width = size.width,
-                                    height = statusBarHeight.toFloat()
+                                    size = Size(
+                                        width = size.width,
+                                        height = statusBarHeight.toFloat()
+                                    )
                                 )
-                            )
-                        }
-                ) {
-                    MainView()
+                            }
+                    ) {
+                        MainView()
+                    }
                 }
             }
         }
