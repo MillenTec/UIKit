@@ -56,6 +56,7 @@ fun UIKitSettingsExpander(
     cornerRadius: Dp = getUIKitShapes().regularRounded,
     shadowEnabled: Boolean = false,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
+    headerPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
     content: @Composable ColumnScope.() -> Unit
 ) {
@@ -88,7 +89,7 @@ fun UIKitSettingsExpander(
                 description = description,
                 cornerRadius = cornerRadius,
                 background = background,
-                contentPadding = contentPadding,
+                contentPadding = headerPadding,
                 shadowEnabled = false
             ) {
                 Icon(
@@ -138,3 +139,33 @@ fun UIKitSettingsExpander(
         }
     }
 }
+
+@Composable
+fun UIKitSettingsExpander(
+    modifier: Modifier = Modifier,
+    expanded: Boolean,
+    onClick: () -> Unit,
+    icon: ImageVector? = null,
+    iconColor: Color = getUIKitColors().textFillColorPrimaryBrush,
+    title: String,
+    description: String? = null,
+    cornerRadius: Dp = getUIKitShapes().regularRounded,
+    shadowEnabled: Boolean = false,
+    background: Color = getUIKitColors().contentFillColorSecondaryBrush,
+    contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
+    content: @Composable ColumnScope.() -> Unit
+) = UIKitSettingsExpander(
+    modifier = modifier,
+    expanded = expanded,
+    onClick = onClick,
+    icon = icon,
+    iconColor = iconColor,
+    title = title,
+    description = description,
+    cornerRadius = cornerRadius,
+    shadowEnabled = shadowEnabled,
+    background = background,
+    headerPadding = contentPadding,
+    contentPadding = contentPadding,
+    content = content
+)

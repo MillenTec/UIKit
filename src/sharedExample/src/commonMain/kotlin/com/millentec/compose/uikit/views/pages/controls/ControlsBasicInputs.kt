@@ -1,50 +1,34 @@
 ﻿package com.millentec.compose.uikit.views.pages.controls
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.Preview
-import com.millentec.compose.uikit.theme.getUIKitColors
+import com.millentec.compose.uikit.component.layout.UIKitSettingCard
+import com.millentec.compose.uikit.foundation.CommonPage
+import com.millentec.compose.uikit.foundation.UIKitNavigationType
 import com.millentec.compose.uikit.theme.getUIKitLayout
-import com.millentec.compose.uikit.theme.getUIKitTypography
 import com.millentec.compose.uikit.viewmodels.MainViewModel
-import com.millentec.compose.uikit.views.LocalNavigationDockHeight
+import com.millentec.compose.uikit.viewmodels.pageIndex
 
-@Composable
-@Preview
-fun ControlsBasicInputs() {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(getUIKitColors().contentFillColorPrimaryBrush),
-        contentPadding = PaddingValues(
-            start = getUIKitLayout().x4Spacing,
-            top = getUIKitLayout().x4Spacing,
-            end = getUIKitLayout().x4Spacing,
-            bottom = getUIKitLayout().x6Spacing
-        ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current)
-    ) {
-        val nav = MainViewModel.navigation
-
-        item {
-            Text(
-                text = "Inputs",
-                style = getUIKitTypography().largeTitle,
-                color = getUIKitColors().textFillColorPrimaryBrush
+class ControlsBasicInputs: CommonPage(
+    title = "Basic Inputs",
+    parent = 1
+) {
+    override fun LazyListScope.lazyContent() {
+        items(BasicInputControls.size) { index ->
+            UIKitSettingCard(
+                title = BasicInputControls[index].title.value,
+                onClick = {
+                    MainViewModel.navigation.switchPage(pageIndex.withIndex().find {
+                        it.value == BasicInputControls[index]
+                    }?.index!!, type = UIKitNavigationType.Forward)
+                }
             )
-        }
 
-        item {
-            Spacer(Modifier.height(
-                maxOf(
-                    LocalNavigationDockHeight.value + getUIKitLayout().mediumSpacing,
-                    getUIKitLayout().x4Spacing
-                )
-            ))
+            if (index != BasicInputControls.size - 1) {
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+            }
         }
     }
 }

@@ -269,8 +269,6 @@ fun UIKitToggleButton(
     enabled: Boolean = true,
     onCheckedChange: (Boolean) -> Unit,
     iconSize: DpSize = DpSize(icon.defaultWidth, icon.defaultHeight),
-    iconColor: Color = colors.contentChecked,
-    iconColorChecked: Color = colors.content,
     textStyle: TextStyle = getUIKitTypography().body
 ) = UIKitToggleButton(
     modifier = modifier,
@@ -288,11 +286,6 @@ fun UIKitToggleButton(
         animationSpec = tween(if (enabled) getUIKitAnimate().transformMomentaryDurationMillis else getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
     )
 
-    val iconColorAnimated by animateColorAsState(
-        targetValue = if (!enabled) colors.contentDisabled else if (checked) iconColorChecked else iconColor,
-        animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
-    )
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -301,7 +294,7 @@ fun UIKitToggleButton(
                 .size(iconSize),
             imageVector = icon,
             contentDescription = null,
-            tint = iconColorAnimated,
+            tint = contentColorAnimated,
         )
 
         Spacer(Modifier.width(getUIKitLayout().smallSpacing))

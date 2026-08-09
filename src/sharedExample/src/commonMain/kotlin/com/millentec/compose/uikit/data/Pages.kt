@@ -1,17 +1,15 @@
 ﻿package com.millentec.compose.uikit.data
 
-enum class Pages(val parent: Int? = null) {
+enum class Pages {
     Home,
     Controls,
-    Design,
-    Settings,
-
-    Icons(2),
+    Designs,
+    Icons,
     License,
     ThirdParty,
-
-    ControlsBasicInputs(1),
-    ControlsStatusAndInfo(1),
-    ControlsFlyouts(1),
-    ControlsLayouts(1),
+    Settings,
+    ControlsBasicInputs,
+    ControlsStatusAndInfo,
+    ControlsFlyouts,
+    ControlsLayouts
 }

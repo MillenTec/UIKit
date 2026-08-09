@@ -10,6 +10,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
@@ -62,7 +63,6 @@ fun UIKitCodeBlock(
     config: UIKitCodeBlockConfig = UIKitCodeBlockConfig.text(),
     style: TextStyle = getUIKitTypography().body,
     fontFamily: FontFamily = FontFamily.Monospace,
-    contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
     onTextLayout: ((TextLayoutResult) -> Unit)? = null,
     content: @Composable () -> String
 ) {
@@ -87,7 +87,6 @@ fun UIKitCodeBlock(
     Box(
         modifier = Modifier
             .background(config.colors.primaryBackground)
-            .padding(contentPadding)
     ) {
         Text(
             modifier = modifier,
@@ -111,8 +110,9 @@ fun UIKitCodeViewer(
     lineNumberEnabled: Boolean = true,
     warpEnabled: Boolean = false,
     config: UIKitCodeBlockConfig = UIKitCodeBlockConfig.text(),
-    textStyle: TextStyle = getUIKitTypography().body,
+    textStyle: TextStyle = getUIKitTypography().footnote,
     fontFamily: FontFamily = FontFamily.Monospace,
+    selectable: Boolean = true,
     content: @Composable () -> String
 ) {
     Column(
@@ -196,26 +196,54 @@ fun UIKitCodeViewer(
                 }
             }
 
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(config.colors.primaryBackground)
-            ) {
-                UIKitCodeBlock(
+            if (selectable) {
+                SelectionContainer(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .then(if (!warpEnabled) {
-                            Modifier.horizontalScroll(rememberScrollState())
-                        } else Modifier),
-                    config = config,
-                    style = textStyle,
-                    fontFamily = fontFamily,
-                    contentPadding = PaddingValues(getUIKitLayout().basicSpacing),
-                    content = content,
-                    onTextLayout = {
-                        lineCount.value = it.lineCount
-                    }
-                )
+                        .fillMaxSize()
+                        .background(config.colors.primaryBackground)
+                ) {
+                    UIKitCodeBlock(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .then(
+                                if (!warpEnabled) {
+                                    Modifier.horizontalScroll(rememberScrollState())
+                                } else Modifier
+                            )
+                            .padding(PaddingValues(getUIKitLayout().basicSpacing)),
+                        config = config,
+                        style = textStyle,
+                        fontFamily = fontFamily,
+                        content = content,
+                        onTextLayout = {
+                            lineCount.value = it.lineCount
+                        }
+                    )
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(config.colors.primaryBackground)
+                ) {
+                    UIKitCodeBlock(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .then(
+                                if (!warpEnabled) {
+                                    Modifier.horizontalScroll(rememberScrollState())
+                                } else Modifier
+                            )
+                            .padding(PaddingValues(getUIKitLayout().basicSpacing)),
+                        config = config,
+                        style = textStyle,
+                        fontFamily = fontFamily,
+                        content = content,
+                        onTextLayout = {
+                            lineCount.value = it.lineCount
+                        }
+                    )
+                }
             }
         }
     }

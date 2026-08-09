@@ -30,7 +30,6 @@ import com.millentec.compose.uikit.component.input.UIKitDropdownButton
 import com.millentec.compose.uikit.component.input.UIKitNavigationDock
 import com.millentec.compose.uikit.component.layout.UIKitSurface
 import com.millentec.compose.uikit.component.layout.rememberUIKitAdaptiveCornerContainerState
-import com.millentec.compose.uikit.data.Pages
 import com.millentec.compose.uikit.data.Pages.*
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
@@ -44,11 +43,7 @@ import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.viewmodels.MainViewModel
-import com.millentec.compose.uikit.views.pages.*
-import com.millentec.compose.uikit.views.pages.controls.ControlsBasicInputs
-import com.millentec.compose.uikit.views.pages.controls.ControlsFlyouts
-import com.millentec.compose.uikit.views.pages.controls.ControlsLayouts
-import com.millentec.compose.uikit.views.pages.controls.ControlsStatusAndInfo
+import com.millentec.compose.uikit.viewmodels.pageIndex
 
 @Composable
 @Preview
@@ -91,12 +86,12 @@ fun MainView() {
         }
 
         LaunchedEffect(page) {
-            if (page == Home || page == Controls || page == Design) {
+            if (page in 0..2) {
                 MainViewModel.navigationDockVisible(true)
-            } else if (page.parent == null) {
-                MainViewModel.navigationDockVisible(false)
+            } else if (pageIndex.getOrNull(page)?.parent?.value in 0..2) {
+                MainViewModel.navigationDockVisible(true)
             } else {
-                MainViewModel.navigationDockVisible(true)
+                MainViewModel.navigationDockVisible(false)
             }
         }
 
@@ -108,19 +103,7 @@ fun MainView() {
                 targetState = page,
                 transitionSpec = { navAnimate }
             ) {
-                when (it) {
-                    Home -> Home()
-                    Controls -> Controls()
-                    Design -> Designs()
-                    Settings -> Settings()
-                    Icons -> IconsGallery()
-                    License -> License()
-                    ThirdParty ->ThirdParty()
-                    ControlsBasicInputs -> ControlsBasicInputs()
-                    ControlsStatusAndInfo -> ControlsStatusAndInfo()
-                    ControlsFlyouts -> ControlsFlyouts()
-                    ControlsLayouts -> ControlsLayouts()
-                }
+                pageIndex.getOrNull(it)?.Content()
             }
         }
 
@@ -170,13 +153,13 @@ fun MainView() {
                         modifier = Modifier
                             .weight(1f)
                     ) {
-                        val dockItems = remember { mutableStateOf(NavDock.entries[page.ordinal.coerceIn(0..2)]) }
+                        val dockItems = remember { mutableStateOf(NavDock.entries[page.coerceIn(0..2)]) }
 
                         LaunchedEffect(page) {
-                            if (page.ordinal in 0..2) {
-                                dockItems.value = NavDock.entries[page.ordinal]
-                            } else if (page.parent in 0..2) {
-                                dockItems.value = NavDock.entries[page.parent ?: return@LaunchedEffect]
+                            if (page in 0..2) {
+                                dockItems.value = NavDock.entries[page]
+                            } else if (pageIndex.getOrNull(page)?.parent?.value in 0..2) {
+                                dockItems.value = NavDock.entries[pageIndex.getOrNull(page)?.parent?.value ?: return@LaunchedEffect]
                             }
                         }
 
@@ -192,7 +175,7 @@ fun MainView() {
                             shadowEnable = true,
                             checkedIndex = dockItems.value.ordinal,
                             onChecked = {
-                                nav.switchPage(Pages.entries[it])
+                                nav.switchPage(it)
                                 dockItems.value = NavDock.entries[it]
                             },
                             items = remember {
@@ -243,7 +226,7 @@ fun MainView() {
                                     icon = FluentIcons.Scales,
                                     text = "License",
                                     onClick = {
-                                        nav.switchPage(License, type = UIKitNavigationType.Forward)
+                                        nav.switchPage(License.ordinal, type = UIKitNavigationType.Forward)
                                         expanded.value = false
                                     }
                                 ),
@@ -252,7 +235,7 @@ fun MainView() {
                                     icon = FluentIcons.certificate(),
                                     text = "Third-party Licenses",
                                     onClick = {
-                                        nav.switchPage(ThirdParty, type = UIKitNavigationType.Forward)
+                                        nav.switchPage(ThirdParty.ordinal, type = UIKitNavigationType.Forward)
                                         expanded.value = false
                                     }
                                 ),
@@ -261,7 +244,7 @@ fun MainView() {
                                     icon = FluentIcons.Settings,
                                     text = "Settings",
                                     onClick = {
-                                        nav.switchPage(Settings, type = UIKitNavigationType.Forward)
+                                        nav.switchPage(Settings.ordinal, type = UIKitNavigationType.Forward)
                                         expanded.value = false
                                     }
                                 )

@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.millentec.compose.uikit.foundation.PageBasic
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
@@ -28,77 +29,79 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import uikit.sharedexample.generated.resources.Res
 
-@Composable
-@Preview
-fun License() {
-    val licenseContents = remember { mutableStateOf(listOf("Loading...")) }
-    val density = LocalDensity.current
+class License: PageBasic("License") {
+    @Composable
+    @Preview
+    override fun Content() {
+        val licenseContents = remember { mutableStateOf(listOf("Loading...")) }
+        val density = LocalDensity.current
 
-    LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            try {
-                val bytes = Res.readBytes("files/LICENSE.txt")
-                val string = bytes.decodeToString()
-                if (string.isEmpty()) {
-                    throw Exception("Read or decoded file is blank")
+        LaunchedEffect(Unit) {
+            withContext(Dispatchers.IO) {
+                try {
+                    val bytes = Res.readBytes("files/LICENSE.txt")
+                    val string = bytes.decodeToString()
+                    if (string.isEmpty()) {
+                        throw Exception("Read or decoded file is blank")
+                    }
+                    licenseContents.value = string.split('\n')
+                } catch(e: Exception) {
+                    licenseContents.value = listOf("Loading failed: ${e.message}")
                 }
-                licenseContents.value = string.split('\n')
-            } catch(e: Exception) {
-                licenseContents.value = listOf("Loading failed: ${e.message}")
             }
         }
-    }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(getUIKitColors().contentFillColorPrimaryBrush)
-    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(
-                    top = (WindowInsets.safeDrawing.getTop(density) / density.density).dp + getUIKitLayout().x4Spacing,
-                    start = (WindowInsets.safeDrawing.getLeft(density, LocalLayoutDirection.current) / density.density).dp + getUIKitLayout().x4Spacing,
-                    end = (WindowInsets.safeDrawing.getRight(density, LocalLayoutDirection.current) / density.density).dp + getUIKitLayout().x4Spacing,
-                    bottom = maxOf(
-                        (WindowInsets.safeDrawing.getBottom(density) / density.density).dp,
-                        getUIKitLayout().x4Spacing
-                    )
-                )
+                .background(getUIKitColors().contentFillColorPrimaryBrush)
         ) {
-            Text(
-                text = "License",
-                style = getUIKitTypography().largeTitle,
-                color = getUIKitColors().textFillColorPrimaryBrush
-            )
-
-            Spacer(modifier = Modifier.height(getUIKitLayout().basicSpacing))
-
-            Text(
-                text = "UIKit is released under the MIT LICENSE, which means you are free to " +
-                        "use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the software.",
-                style = getUIKitTypography().body,
-                color = getUIKitColors().textFillColorPrimaryBrush
-            )
-
-            Spacer(modifier = Modifier.height(getUIKitLayout().x2Spacing))
-
-            SelectionContainer {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(if (isDesktopOS()) getUIKitShapes().regularRounded else getUIKitShapes().largeRounded))
-                        .background(getUIKitColors().contentFillColorSecondaryBrush)
-                        .horizontalScroll(rememberScrollState()),
-                    contentPadding = PaddingValues(getUIKitLayout().x2Spacing),
-                ) {
-                    items(licenseContents.value.size) {
-                        Text(
-                            text = licenseContents.value[it],
-                            style = getUIKitTypography().body,
-                            color = getUIKitColors().textFillColorPrimaryBrush
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        top = (WindowInsets.safeDrawing.getTop(density) / density.density).dp + getUIKitLayout().x4Spacing,
+                        start = (WindowInsets.safeDrawing.getLeft(density, LocalLayoutDirection.current) / density.density).dp + getUIKitLayout().x4Spacing,
+                        end = (WindowInsets.safeDrawing.getRight(density, LocalLayoutDirection.current) / density.density).dp + getUIKitLayout().x4Spacing,
+                        bottom = maxOf(
+                            (WindowInsets.safeDrawing.getBottom(density) / density.density).dp,
+                            getUIKitLayout().x4Spacing
                         )
+                    )
+            ) {
+                Text(
+                    text = "License",
+                    style = getUIKitTypography().largeTitle,
+                    color = getUIKitColors().textFillColorPrimaryBrush
+                )
+
+                Spacer(modifier = Modifier.height(getUIKitLayout().basicSpacing))
+
+                Text(
+                    text = "UIKit is released under the MIT LICENSE, which means you are free to " +
+                            "use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the software.",
+                    style = getUIKitTypography().body,
+                    color = getUIKitColors().textFillColorPrimaryBrush
+                )
+
+                Spacer(modifier = Modifier.height(getUIKitLayout().x2Spacing))
+
+                SelectionContainer {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(if (isDesktopOS()) getUIKitShapes().regularRounded else getUIKitShapes().largeRounded))
+                            .background(getUIKitColors().contentFillColorSecondaryBrush)
+                            .horizontalScroll(rememberScrollState()),
+                        contentPadding = PaddingValues(getUIKitLayout().x2Spacing),
+                    ) {
+                        items(licenseContents.value.size) {
+                            Text(
+                                text = licenseContents.value[it],
+                                style = getUIKitTypography().body,
+                                color = getUIKitColors().textFillColorPrimaryBrush
+                            )
+                        }
                     }
                 }
             }

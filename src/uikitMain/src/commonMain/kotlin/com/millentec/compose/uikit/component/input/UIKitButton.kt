@@ -234,7 +234,6 @@ fun UIKitButton(
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
     enabled: Boolean = true,
     onClick: () -> Unit,
-    iconColor: Color = colors.content,
     textStyle: TextStyle = getUIKitTypography().body
 ) = UIKitButton(
     modifier = modifier,
@@ -251,11 +250,6 @@ fun UIKitButton(
         animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
     )
 
-    val iconColorAnimated by animateColorAsState(
-        targetValue = if (enabled) iconColor else colors.contentDisabled,
-        animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
-    )
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -264,7 +258,7 @@ fun UIKitButton(
                 .size(iconSize),
             imageVector = icon,
             contentDescription = null,
-            tint = iconColorAnimated,
+            tint = contentColorAnimated,
         )
 
         Spacer(Modifier.width(getUIKitLayout().smallSpacing))

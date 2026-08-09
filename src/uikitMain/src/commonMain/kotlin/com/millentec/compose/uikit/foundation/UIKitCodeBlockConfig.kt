@@ -32,17 +32,17 @@ data class UIKitCodeBlockConfig(
                 rules = listOf(
                     // 关键字匹配
                     Pair(
-                        """(?<!\w)${keyword}\s""".toRegex(),
+                        """(?<!\w)${keyword}[\s,]""".toRegex(),
                         SpanStyle(color = colors.keywordText)
                     ),
                     // 函数调用匹配
                     Pair(
-                        """(?<!\bfun)(?<!\w)(\p{L}+|\p{N}+)(?=\b*\()""".toRegex(),
+                        """(?<!\bfun)(?<!\w)(\p{L}+|\p{N}+)(?=\s*\()""".toRegex(),
                         SpanStyle(color = colors.functionCallText)
                     ),
                     // 函数声明匹配
                     Pair(
-                        """(?<=\bfun)(?<!\w)(\p{L}+|\p{N}+)(?=\b*\()""".toRegex(),
+                        """(?<=\bfun)(?<!\w)(\p{L}+|\p{N}+)(?=\s*\()""".toRegex(),
                         SpanStyle(color = colors.functionDeclarationText)
                     ),
                     // 注解匹配
@@ -57,7 +57,12 @@ data class UIKitCodeBlockConfig(
                     ),
                     // 数字匹配
                     Pair(
-                        """\d+f*""".toRegex(),
+                        """((\d+|\.)f*)""".toRegex(),
+                        SpanStyle(color = colors.numberText)
+                    ),
+                    // 十六进制数
+                    Pair(
+                        """(0x\w+)""".toRegex(),
                         SpanStyle(color = colors.numberText)
                     ),
                     // 注释匹配

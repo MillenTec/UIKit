@@ -43,6 +43,7 @@ import com.millentec.compose.uikit.component.input.UIKitSlider
 import com.millentec.compose.uikit.component.input.UIKitSliderChangeType
 import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.*
+import com.millentec.compose.uikit.foundation.PageBasic
 import com.millentec.compose.uikit.foundation.UIKitHSVColor
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.mapTo
@@ -568,326 +569,330 @@ private fun IconItem(
     }
 }
 
-@Composable
-@Preview
-fun IconsGallery() {
-    val uikitTheme = getUIKitTheme()
-    val acrylicMaterialsState = rememberAcrylicMaterialState()
-    val optionsState = remember { OptionState(
-        initialTint = uikitTheme.colors.highlightColorPrimaryBrush.toHsv(),
-        initialBackground = uikitTheme.colors.contentFillColorSecondaryBrush.toHsv()
-    ) }
-    val iconLists = remember { mutableStateOf(IconGalleryList(
-        optionsState.tintColor.value.getColor(),
-        optionsState.isLayered.value
-    )) }
-    val checkedIconIndex = remember { mutableStateOf<Int?>(null) }
-    val bottomSheetState = remember { UIKitSwipeableFlyoutState() }
-    val animatableIconList = remember { makeAnimatableIconList(optionsState) }
-    val bottomSheetExpanded = remember { mutableStateOf(false) }
-
-    LaunchedEffect(optionsState.isLayered.value, optionsState.tintColor.value) {
-        iconLists.value = IconGalleryList(
+class Icons: PageBasic(
+    "Fluent Icons",
+    parent = 2
+) {
+    @Composable
+    override fun Content() {
+        val uikitTheme = getUIKitTheme()
+        val acrylicMaterialsState = rememberAcrylicMaterialState()
+        val optionsState = remember { OptionState(
+            initialTint = uikitTheme.colors.highlightColorPrimaryBrush.toHsv(),
+            initialBackground = uikitTheme.colors.contentFillColorSecondaryBrush.toHsv()
+        ) }
+        val iconLists = remember { mutableStateOf(IconGalleryList(
             optionsState.tintColor.value.getColor(),
             optionsState.isLayered.value
-        )
-    }
+        )) }
+        val checkedIconIndex = remember { mutableStateOf<Int?>(null) }
+        val bottomSheetState = remember { UIKitSwipeableFlyoutState() }
+        val animatableIconList = remember { makeAnimatableIconList(optionsState) }
+        val bottomSheetExpanded = remember { mutableStateOf(false) }
 
-    LaunchedEffect(checkedIconIndex.value) {
-        optionsState.extendedOptions.value = null
-        optionsState.iconPreview.value = if (checkedIconIndex.value == null) null else {
-            val icon = if ((checkedIconIndex.value ?: return@LaunchedEffect) < iconLists.value.regularIconsList.size) {
-                iconLists.value.regularIconsList.getOrNull(checkedIconIndex.value ?: return@LaunchedEffect) ?: return@LaunchedEffect
-            } else {
-                iconLists.value.filledIconsList.getOrNull((checkedIconIndex.value ?: return@LaunchedEffect) - iconLists.value.regularIconsList.size) ?: return@LaunchedEffect
-            }
-            optionsState.iconInfo.value = IconInfo(
-                iconName = icon.name,
-                iconSize = "${icon.defaultWidth.value.toString().removeSuffix(".0")} x ${icon.defaultHeight.value.toString().removeSuffix(".0")}",
-            );
-            {
-                BoxWithConstraints {
-                    Icon(
-                        modifier = Modifier
-                            .size(maxWidth * 0.6f),
-                        // 为保证能够被重组故需如此
-                        imageVector = if ((checkedIconIndex.value ?: return@BoxWithConstraints) < iconLists.value.regularIconsList.size) {
-                            iconLists.value.regularIconsList.getOrNull(checkedIconIndex.value ?: return@BoxWithConstraints) ?: return@BoxWithConstraints
-                        } else {
-                            iconLists.value.filledIconsList.getOrNull((checkedIconIndex.value ?: return@BoxWithConstraints) - iconLists.value.regularIconsList.size) ?: return@BoxWithConstraints
-                        },
-                        contentDescription = null,
-                        tint = optionsState.tintColor.value.getColor(),
-                    )
-                }
-            }
-        }
-    }
-
-    BoxWithConstraints {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(getUIKitColors().contentFillColorPrimaryBrush)
-                .uikitBottomSheetCollaborativeAnimation(
-                    state = bottomSheetState,
-                    blurEffectEnabled = AppTheme.useAcrylic.collectAsState().value
-                )
-        ) {
-            Row {
-                LazyVerticalGrid(
-                    modifier = Modifier
-                        .weight(1f)
-                        .acrylicMaterialSource(acrylicMaterialsState),
-                    columns = GridCells.Adaptive(minSize = 128.dp),
-                    contentPadding = PaddingValues(
-                        horizontal = getUIKitLayout().x4Spacing
-                    )
-                ) {
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        Column(
-                            modifier = Modifier
-                                .safeDrawingPadding()
-                        ) {
-                            Spacer(Modifier.height(getUIKitLayout().x4Spacing))
-
-                            Text(
-                                text = "Icons Gallery",
-                                style = getUIKitTypography().largeTitle,
-                                color = getUIKitColors().textFillColorPrimaryBrush
-                            )
-
-                            Spacer(Modifier.height(getUIKitLayout().x2Spacing))
-                        }
-                    }
-
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        Column {
-                            Text(
-                                text = "Regular Icons",
-                                style = getUIKitTypography().subtitle,
-                                color = getUIKitColors().textFillColorSecondaryBrush
-                            )
-
-                            Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
-                        }
-                    }
-
-                    items(iconLists.value.regularIconsList.size) {
-                        val icon = iconLists.value.regularIconsList.getOrNull(it)
-
-                        IconItem(
-                            title = icon?.name ?: "Unknown",
-                            onClick = {
-                                checkedIconIndex.value = it
-                                if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetExpanded.value = true
-                            },
-                            background = optionsState.backgroundColor.value.getColor()
-                        ) {
-                            if (icon != null) {
-                                Icon(
-                                    modifier = Modifier
-                                        .fillMaxSize(),
-                                    imageVector = icon,
-                                    contentDescription = icon.name,
-                                    tint = optionsState.tintColor.value.getColor()
-                                )
-                            }
-                        }
-                    }
-
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        Column {
-                            Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
-
-                            Text(
-                                text = "Filled Icons",
-                                style = getUIKitTypography().subtitle,
-                                color = getUIKitColors().textFillColorSecondaryBrush
-                            )
-
-                            Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
-                        }
-                    }
-
-                    items(iconLists.value.filledIconsList.size) {
-                        val icon = iconLists.value.filledIconsList.getOrNull(it)
-
-                        IconItem(
-                            title = icon?.name ?: "Unknown",
-                            onClick = {
-                                checkedIconIndex.value = it + iconLists.value.regularIconsList.size
-                                if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetExpanded.value = true
-                            },
-                            background = optionsState.backgroundColor.value.getColor()
-                        ) {
-                            if (icon != null) {
-                                Icon(
-                                    modifier = Modifier
-                                        .fillMaxSize(),
-                                    imageVector = icon,
-                                    contentDescription = icon.name,
-                                    tint = optionsState.tintColor.value.getColor()
-                                )
-                            }
-                        }
-                    }
-
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        Column {
-                            Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
-
-                            Text(
-                                text = "Animatable Icons",
-                                style = getUIKitTypography().subtitle,
-                                color = getUIKitColors().textFillColorSecondaryBrush
-                            )
-
-                            Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
-                        }
-                    }
-
-                    items(animatableIconList.size) {
-                        val item = animatableIconList.getOrNull(it)
-
-                        IconItem(
-                            title = item?.name ?: "Unknown",
-                            onClick = {
-                                optionsState.iconPreview.value = {
-                                    BoxWithConstraints {
-                                        item?.IconContent(
-                                            modifier = Modifier
-                                                .size(maxWidth * 0.6f)
-                                        )
-                                    }
-                                }
-                                optionsState.extendedOptions.value = {
-                                    item?.ExtendedOptions()
-                                }
-                                optionsState.iconInfo.value = IconInfo(
-                                    iconName = item?.name ?: "Unknown",
-                                    iconSize = item?.size ?: "Unknown",
-                                )
-                                if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetExpanded.value = true
-                            },
-                            background = optionsState.backgroundColor.value.getColor()
-                        ) {
-                            item?.IconContent(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .aspectRatio(1f)
-                            )
-                        }
-                    }
-
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        Spacer(Modifier.height(
-                            maxOf(
-                                LocalNavigationDockHeight.value + getUIKitLayout().mediumSpacing,
-                                getUIKitLayout().x4Spacing
-                            )
-                        ))
-                    }
-                }
-
-                AnimatedVisibility(
-                    visible = this@BoxWithConstraints.maxWidth >= 1024.dp,
-                    enter = slideInHorizontally(
-                        animationSpec = tween(
-                            getUIKitAnimate().motionRegularDurationMillis,
-                            easing = FastOutSlowInEasing
-                        )
-                    ) {
-                        it
-                    },
-                    exit = slideOutHorizontally(
-                        animationSpec = tween(
-                            getUIKitAnimate().motionRegularDurationMillis,
-                            easing = FastOutSlowInEasing
-                        )
-                    ) {
-                        it
-                    }
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .width(420.dp)
-                            .fillMaxHeight()
-                    ) {
-                        Spacer(Modifier.height(getUIKitLayout().x6Spacing + (WindowInsets.safeDrawing.getTop(LocalDensity.current) / LocalDensity.current.density).dp))
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Icon(
-                                modifier = Modifier
-                                    .size(getUIKitTypography().largeTitle.lineHeight.value.dp),
-                                imageVector = FluentIcons.options(getUIKitColors().textFillColorPrimaryBrush, true),
-                                contentDescription = "Options",
-                                tint = getUIKitColors().textFillColorPrimaryBrush
-                            )
-
-                            Spacer(Modifier.width(getUIKitLayout().mediumSpacing))
-
-                            Text(
-                                text = "Icons Gallery",
-                                style = getUIKitTypography().largeTitle,
-                                color = getUIKitColors().textFillColorPrimaryBrush
-                            )
-                        }
-
-                        OptionsWindow(
-                            optionsState
-                        )
-                    }
-                }
-            }
-
-            if (this@BoxWithConstraints.maxWidth <= 1024.dp) {
-                UIKitAdaptiveCornerContainer(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    state = rememberUIKitAdaptiveCornerContainerState(
-                        position = UIKitAlignment.TopEnd,
-                        expectHeight = getUIKitLayout().interactiveHotspot,
-                        expectWidth = getUIKitLayout().interactiveHotspot,
-                        fillWidth = false,
-                        fillHeight = false,
-                    ),
-                    acrylicEffectEnabled = AppTheme.useAcrylic.collectAsState().value,
-                    acrylicState = acrylicMaterialsState,
-                    onClick = {
-                        bottomSheetExpanded.value = true
-                    }
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .fillMaxSize(0.6f),
-                        imageVector = FluentIcons.options(getUIKitColors().textFillColorPrimaryBrush, true),
-                        contentDescription = "Options",
-                        tint = getUIKitColors().textFillColorPrimaryBrush
-                    )
-                }
-            }
-        }
-
-        UIKitBottomSheet(
-            expanded = bottomSheetExpanded.value,
-            state = bottomSheetState,
-            maxHeight = this@BoxWithConstraints.maxHeight * 0.8f,
-            minHeight = this@BoxWithConstraints.maxHeight * 0.8f,
-            title = "Options",
-            onDismissRequest = {
-                bottomSheetExpanded.value = false
-            }
-        ) {
-            OptionsWindow(
-                optionsState
+        LaunchedEffect(optionsState.isLayered.value, optionsState.tintColor.value) {
+            iconLists.value = IconGalleryList(
+                optionsState.tintColor.value.getColor(),
+                optionsState.isLayered.value
             )
         }
 
-        BackHandler(bottomSheetExpanded.value) {
-            bottomSheetExpanded.value = false
+        LaunchedEffect(checkedIconIndex.value) {
+            optionsState.extendedOptions.value = null
+            optionsState.iconPreview.value = if (checkedIconIndex.value == null) null else {
+                val icon = if ((checkedIconIndex.value ?: return@LaunchedEffect) < iconLists.value.regularIconsList.size) {
+                    iconLists.value.regularIconsList.getOrNull(checkedIconIndex.value ?: return@LaunchedEffect) ?: return@LaunchedEffect
+                } else {
+                    iconLists.value.filledIconsList.getOrNull((checkedIconIndex.value ?: return@LaunchedEffect) - iconLists.value.regularIconsList.size) ?: return@LaunchedEffect
+                }
+                optionsState.iconInfo.value = IconInfo(
+                    iconName = icon.name,
+                    iconSize = "${icon.defaultWidth.value.toString().removeSuffix(".0")} x ${icon.defaultHeight.value.toString().removeSuffix(".0")}",
+                );
+                {
+                    BoxWithConstraints {
+                        Icon(
+                            modifier = Modifier
+                                .size(maxWidth * 0.6f),
+                            // 为保证能够被重组故需如此
+                            imageVector = if ((checkedIconIndex.value ?: return@BoxWithConstraints) < iconLists.value.regularIconsList.size) {
+                                iconLists.value.regularIconsList.getOrNull(checkedIconIndex.value ?: return@BoxWithConstraints) ?: return@BoxWithConstraints
+                            } else {
+                                iconLists.value.filledIconsList.getOrNull((checkedIconIndex.value ?: return@BoxWithConstraints) - iconLists.value.regularIconsList.size) ?: return@BoxWithConstraints
+                            },
+                            contentDescription = null,
+                            tint = optionsState.tintColor.value.getColor(),
+                        )
+                    }
+                }
+            }
+        }
+
+        BoxWithConstraints {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(getUIKitColors().contentFillColorPrimaryBrush)
+                    .uikitBottomSheetCollaborativeAnimation(
+                        state = bottomSheetState,
+                        blurEffectEnabled = AppTheme.useAcrylic.collectAsState().value
+                    )
+            ) {
+                Row {
+                    LazyVerticalGrid(
+                        modifier = Modifier
+                            .weight(1f)
+                            .acrylicMaterialSource(acrylicMaterialsState),
+                        columns = GridCells.Adaptive(minSize = 128.dp),
+                        contentPadding = PaddingValues(
+                            horizontal = getUIKitLayout().x4Spacing
+                        )
+                    ) {
+                        item(span = { GridItemSpan(maxLineSpan) }) {
+                            Column(
+                                modifier = Modifier
+                                    .safeDrawingPadding()
+                            ) {
+                                Spacer(Modifier.height(getUIKitLayout().x4Spacing))
+
+                                Text(
+                                    text = "Icons Gallery",
+                                    style = getUIKitTypography().largeTitle,
+                                    color = getUIKitColors().textFillColorPrimaryBrush
+                                )
+
+                                Spacer(Modifier.height(getUIKitLayout().x2Spacing))
+                            }
+                        }
+
+                        item(span = { GridItemSpan(maxLineSpan) }) {
+                            Column {
+                                Text(
+                                    text = "Regular Icons",
+                                    style = getUIKitTypography().subtitle,
+                                    color = getUIKitColors().textFillColorSecondaryBrush
+                                )
+
+                                Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
+                            }
+                        }
+
+                        items(iconLists.value.regularIconsList.size) {
+                            val icon = iconLists.value.regularIconsList.getOrNull(it)
+
+                            IconItem(
+                                title = icon?.name ?: "Unknown",
+                                onClick = {
+                                    checkedIconIndex.value = it
+                                    if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetExpanded.value = true
+                                },
+                                background = optionsState.backgroundColor.value.getColor()
+                            ) {
+                                if (icon != null) {
+                                    Icon(
+                                        modifier = Modifier
+                                            .fillMaxSize(),
+                                        imageVector = icon,
+                                        contentDescription = icon.name,
+                                        tint = optionsState.tintColor.value.getColor()
+                                    )
+                                }
+                            }
+                        }
+
+                        item(span = { GridItemSpan(maxLineSpan) }) {
+                            Column {
+                                Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
+
+                                Text(
+                                    text = "Filled Icons",
+                                    style = getUIKitTypography().subtitle,
+                                    color = getUIKitColors().textFillColorSecondaryBrush
+                                )
+
+                                Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
+                            }
+                        }
+
+                        items(iconLists.value.filledIconsList.size) {
+                            val icon = iconLists.value.filledIconsList.getOrNull(it)
+
+                            IconItem(
+                                title = icon?.name ?: "Unknown",
+                                onClick = {
+                                    checkedIconIndex.value = it + iconLists.value.regularIconsList.size
+                                    if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetExpanded.value = true
+                                },
+                                background = optionsState.backgroundColor.value.getColor()
+                            ) {
+                                if (icon != null) {
+                                    Icon(
+                                        modifier = Modifier
+                                            .fillMaxSize(),
+                                        imageVector = icon,
+                                        contentDescription = icon.name,
+                                        tint = optionsState.tintColor.value.getColor()
+                                    )
+                                }
+                            }
+                        }
+
+                        item(span = { GridItemSpan(maxLineSpan) }) {
+                            Column {
+                                Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
+
+                                Text(
+                                    text = "Animatable Icons",
+                                    style = getUIKitTypography().subtitle,
+                                    color = getUIKitColors().textFillColorSecondaryBrush
+                                )
+
+                                Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
+                            }
+                        }
+
+                        items(animatableIconList.size) {
+                            val item = animatableIconList.getOrNull(it)
+
+                            IconItem(
+                                title = item?.name ?: "Unknown",
+                                onClick = {
+                                    optionsState.iconPreview.value = {
+                                        BoxWithConstraints {
+                                            item?.IconContent(
+                                                modifier = Modifier
+                                                    .size(maxWidth * 0.6f)
+                                            )
+                                        }
+                                    }
+                                    optionsState.extendedOptions.value = {
+                                        item?.ExtendedOptions()
+                                    }
+                                    optionsState.iconInfo.value = IconInfo(
+                                        iconName = item?.name ?: "Unknown",
+                                        iconSize = item?.size ?: "Unknown",
+                                    )
+                                    if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetExpanded.value = true
+                                },
+                                background = optionsState.backgroundColor.value.getColor()
+                            ) {
+                                item?.IconContent(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .aspectRatio(1f)
+                                )
+                            }
+                        }
+
+                        item(span = { GridItemSpan(maxLineSpan) }) {
+                            Spacer(Modifier.height(
+                                maxOf(
+                                    LocalNavigationDockHeight.value + getUIKitLayout().mediumSpacing,
+                                    getUIKitLayout().x4Spacing
+                                )
+                            ))
+                        }
+                    }
+
+                    AnimatedVisibility(
+                        visible = this@BoxWithConstraints.maxWidth >= 1024.dp,
+                        enter = slideInHorizontally(
+                            animationSpec = tween(
+                                getUIKitAnimate().motionRegularDurationMillis,
+                                easing = FastOutSlowInEasing
+                            )
+                        ) {
+                            it
+                        },
+                        exit = slideOutHorizontally(
+                            animationSpec = tween(
+                                getUIKitAnimate().motionRegularDurationMillis,
+                                easing = FastOutSlowInEasing
+                            )
+                        ) {
+                            it
+                        }
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .width(420.dp)
+                                .fillMaxHeight()
+                        ) {
+                            Spacer(Modifier.height(getUIKitLayout().x6Spacing + (WindowInsets.safeDrawing.getTop(LocalDensity.current) / LocalDensity.current.density).dp))
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .size(getUIKitTypography().largeTitle.lineHeight.value.dp),
+                                    imageVector = FluentIcons.options(getUIKitColors().textFillColorPrimaryBrush, true),
+                                    contentDescription = "Options",
+                                    tint = getUIKitColors().textFillColorPrimaryBrush
+                                )
+
+                                Spacer(Modifier.width(getUIKitLayout().mediumSpacing))
+
+                                Text(
+                                    text = "Icons Gallery",
+                                    style = getUIKitTypography().largeTitle,
+                                    color = getUIKitColors().textFillColorPrimaryBrush
+                                )
+                            }
+
+                            OptionsWindow(
+                                optionsState
+                            )
+                        }
+                    }
+                }
+
+                if (this@BoxWithConstraints.maxWidth <= 1024.dp) {
+                    UIKitAdaptiveCornerContainer(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        state = rememberUIKitAdaptiveCornerContainerState(
+                            position = UIKitAlignment.TopEnd,
+                            expectHeight = getUIKitLayout().interactiveHotspot,
+                            expectWidth = getUIKitLayout().interactiveHotspot,
+                            fillWidth = false,
+                            fillHeight = false,
+                        ),
+                        acrylicEffectEnabled = AppTheme.useAcrylic.collectAsState().value,
+                        acrylicState = acrylicMaterialsState,
+                        onClick = {
+                            bottomSheetExpanded.value = true
+                        }
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .fillMaxSize(0.6f),
+                            imageVector = FluentIcons.options(getUIKitColors().textFillColorPrimaryBrush, true),
+                            contentDescription = "Options",
+                            tint = getUIKitColors().textFillColorPrimaryBrush
+                        )
+                    }
+                }
+            }
+
+            UIKitBottomSheet(
+                expanded = bottomSheetExpanded.value,
+                state = bottomSheetState,
+                maxHeight = this@BoxWithConstraints.maxHeight * 0.8f,
+                minHeight = this@BoxWithConstraints.maxHeight * 0.8f,
+                title = "Options",
+                onDismissRequest = {
+                    bottomSheetExpanded.value = false
+                }
+            ) {
+                OptionsWindow(
+                    optionsState
+                )
+            }
+
+            BackHandler(bottomSheetExpanded.value) {
+                bottomSheetExpanded.value = false
+            }
         }
     }
 }
@@ -1218,7 +1223,7 @@ private open class AnimatableIconItem(
     }
 }
 
-private data class StateSelectorItem(
+data class StateSelectorItem(
     val state: String,
     val statePreview: @Composable BoxScope.() -> Unit
 )
