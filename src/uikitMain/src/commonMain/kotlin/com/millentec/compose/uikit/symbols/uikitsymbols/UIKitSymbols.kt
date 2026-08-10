@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.symbols.uikitsymbols
+package com.millentec.compose.uikit.symbols.uikitsymbols
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable

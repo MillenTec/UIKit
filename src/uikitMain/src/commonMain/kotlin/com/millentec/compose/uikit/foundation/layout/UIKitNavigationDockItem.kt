@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.foundation.layout
+package com.millentec.compose.uikit.foundation.layout
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing

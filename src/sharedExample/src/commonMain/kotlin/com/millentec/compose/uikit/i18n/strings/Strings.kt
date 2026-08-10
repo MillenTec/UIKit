@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.i18n.strings
+package com.millentec.compose.uikit.i18n.strings
 
 interface Strings {
     val navigation: Navigation get() = object : Navigation {}

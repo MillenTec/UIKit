@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.symbols.uikitsymbols.filled.dp20
+package com.millentec.compose.uikit.symbols.uikitsymbols.filled.dp20
 
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color

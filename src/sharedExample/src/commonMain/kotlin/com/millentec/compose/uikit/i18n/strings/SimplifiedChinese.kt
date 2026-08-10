@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.i18n.strings
+package com.millentec.compose.uikit.i18n.strings
 
 class SimplifiedChinese: Strings {
     override val navigation: Strings.Navigation get() = object : Strings.Navigation {

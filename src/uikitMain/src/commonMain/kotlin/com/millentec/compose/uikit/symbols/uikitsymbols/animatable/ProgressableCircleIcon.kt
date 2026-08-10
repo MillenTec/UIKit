@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.symbols.uikitsymbols.animatable
+package com.millentec.compose.uikit.symbols.uikitsymbols.animatable
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.defaultMinSize

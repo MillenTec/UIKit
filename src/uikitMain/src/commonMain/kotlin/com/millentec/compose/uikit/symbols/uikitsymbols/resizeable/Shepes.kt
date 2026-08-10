@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.symbols.uikitsymbols.resizeable
+package com.millentec.compose.uikit.symbols.uikitsymbols.resizeable
 
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color

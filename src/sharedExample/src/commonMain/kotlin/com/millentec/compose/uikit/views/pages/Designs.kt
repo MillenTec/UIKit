@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.views.pages
+package com.millentec.compose.uikit.views.pages
 
 import androidx.compose.foundation.lazy.LazyListScope
 import com.millentec.compose.uikit.component.layout.UIKitSettingCard

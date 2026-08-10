@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env kotlin
+#!/usr/bin/env kotlin
 
 import java.io.File
 import java.time.LocalDateTime

@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.foundation
+package com.millentec.compose.uikit.foundation
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing

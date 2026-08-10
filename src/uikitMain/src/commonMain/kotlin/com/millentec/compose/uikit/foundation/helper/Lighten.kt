@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.foundation.helper
+package com.millentec.compose.uikit.foundation.helper
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

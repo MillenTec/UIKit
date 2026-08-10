@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.views.pages.controls
+package com.millentec.compose.uikit.views.pages.controls
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height

@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.navigation
+package com.millentec.compose.uikit.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.EaseInOut

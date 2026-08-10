@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.views.pages
+package com.millentec.compose.uikit.views.pages
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.Animatable
