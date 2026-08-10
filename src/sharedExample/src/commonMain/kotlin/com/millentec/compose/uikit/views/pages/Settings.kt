@@ -18,11 +18,14 @@ import com.millentec.compose.uikit.component.input.UIKitDropdownButton
 import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.UIKitSettingCard
 import com.millentec.compose.uikit.foundation.CommonPage
+import com.millentec.compose.uikit.foundation.Pages
+import com.millentec.compose.uikit.foundation.UIKitNavigationType
 import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.theme.ThemeType.*
+import com.millentec.compose.uikit.viewmodels.MainViewModel
 
 class Settings: CommonPage("settings") {
     override fun LazyListScope.lazyContent() {
@@ -122,6 +125,20 @@ class Settings: CommonPage("settings") {
                     }
                 )
             }
+        }
+
+        item {
+            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+        }
+
+        item {
+            UIKitSettingCard(
+                title = LocalStrings.current.settings.languageSettingTitle,
+                icon = FluentIcons.Globe,
+                onClick = {
+                    MainViewModel.navigation.switchPage(Pages.SettingsLanguage.ordinal, type = UIKitNavigationType.Forward)
+                }
+            )
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.data
+﻿package com.millentec.compose.uikit.foundation
 
 enum class Pages {
     Home,
@@ -11,5 +11,6 @@ enum class Pages {
     ControlsBasicInputs,
     ControlsStatusAndInfo,
     ControlsFlyouts,
-    ControlsLayouts
+    ControlsLayouts,
+    SettingsLanguage,
 }

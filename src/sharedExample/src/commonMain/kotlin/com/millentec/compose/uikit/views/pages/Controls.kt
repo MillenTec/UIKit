@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.ui.Modifier
 import com.millentec.compose.uikit.component.layout.UIKitSettingCard
-import com.millentec.compose.uikit.data.Pages
 import com.millentec.compose.uikit.foundation.CommonPage
+import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.LayoutDynamic
@@ -64,7 +64,7 @@ class Controls: CommonPage("controls") {
 
         item {
             UIKitSettingCard(
-                title = LocalStrings.current.controls.flyoutsEntrance,
+                title = LocalStrings.current.controls.layoutsEntrance,
                 icon = FluentIcons.LayoutDynamic,
                 onClick = {
                     MainViewModel.navigation.switchPage(Pages.ControlsLayouts.ordinal, type = UIKitNavigationType.Forward)

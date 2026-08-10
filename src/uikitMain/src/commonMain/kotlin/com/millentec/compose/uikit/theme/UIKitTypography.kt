@@ -2,6 +2,7 @@
 
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 
 /**
@@ -15,7 +16,11 @@ data class UIKitTypography(
     val display: TextStyle = TextStyle(
         fontSize = 55.sp,
         fontWeight = FontWeight.Medium,
-        lineHeight = 66.sp
+        lineHeight = 66.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.Both
+        )
     ),
 
     /**
@@ -24,7 +29,11 @@ data class UIKitTypography(
     val largeTitle: TextStyle = TextStyle(
         fontSize = 34.sp,
         fontWeight = FontWeight.Medium,
-        lineHeight = 41.sp
+        lineHeight = 41.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.Both
+        )
     ),
 
     /**
@@ -33,7 +42,11 @@ data class UIKitTypography(
     val title: TextStyle = TextStyle(
         fontSize = 28.sp,
         fontWeight = FontWeight.Medium,
-        lineHeight = 34.sp
+        lineHeight = 34.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.Both
+        )
     ),
 
     /**
@@ -42,7 +55,11 @@ data class UIKitTypography(
     val subtitle: TextStyle = TextStyle(
         fontSize = 22.sp,
         fontWeight = FontWeight.Normal,
-        lineHeight = 28.sp
+        lineHeight = 28.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.Both
+        )
     ),
 
     /**
@@ -51,7 +68,11 @@ data class UIKitTypography(
     val body: TextStyle = TextStyle(
         fontSize = 17.sp,
         fontWeight = FontWeight.Normal,
-        lineHeight = 22.sp
+        lineHeight = 22.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.Both
+        )
     ),
 
     /**
@@ -60,6 +81,10 @@ data class UIKitTypography(
     val footnote: TextStyle = TextStyle(
         fontSize = 14.sp,
         fontWeight = FontWeight.Normal,
-        lineHeight = 19.sp
+        lineHeight = 19.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.Both
+        )
     )
 )

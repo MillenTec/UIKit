@@ -33,5 +33,6 @@ val pageIndex = listOf(
     ControlsBasicInputs(),
     ControlsStatusAndInfo(),
     ControlsFlyouts(),
-    ControlsLayouts()
+    ControlsLayouts(),
+    Language()
 ) + BasicInputControls

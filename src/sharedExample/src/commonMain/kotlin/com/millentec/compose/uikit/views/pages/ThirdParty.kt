@@ -70,7 +70,7 @@ class ThirdParty: PageBasic("third-party") {
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
 
-                Spacer(modifier = Modifier.height(getUIKitLayout().basicSpacing))
+                Spacer(modifier = Modifier.height(getUIKitLayout().x2Spacing))
 
                 Text(
                     text = LocalStrings.current.thirdPartyLicenses.description,
@@ -78,7 +78,7 @@ class ThirdParty: PageBasic("third-party") {
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
 
-                Spacer(modifier = Modifier.height(getUIKitLayout().x2Spacing))
+                Spacer(modifier = Modifier.height(getUIKitLayout().basicSpacing))
 
                 SelectionContainer {
                     LazyColumn(

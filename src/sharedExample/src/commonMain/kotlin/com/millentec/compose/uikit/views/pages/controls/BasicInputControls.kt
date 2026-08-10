@@ -228,6 +228,7 @@ val BasicInputControls = listOf(
         @Composable
         override fun exampleCode(): String {
             return """
+                val count = remember { mutableStateOf(0) }
                 UIKitButton(
                     text = "Add",
                     icon = FluentIcons.Add,
@@ -382,7 +383,7 @@ val BasicInputControls = listOf(
             return """
                 val checked = remember { mutableStateOf(false) }
                 UIKitToggleButton(
-                    enabled = buttonEnabled.value,
+                    enabled = ${buttonEnabled.value},
                     checked = checked.value,
                     text = "Button",
                     shape = RoundedCornerShape(${buttonCornerRadius.value * buttonSize.value.height / LocalDensity.current.density / 2}.dp),
@@ -530,7 +531,7 @@ val BasicInputControls = listOf(
             return """
                 val checked = remember { mutableStateOf(false) }
                 UIKitToggleSwitch(
-                    enabled = buttonEnabled.value,
+                    enabled = ${buttonEnabled.value},
                     checked = checked.value,
                     colors = UIKitToggleSwitchColors.default(
                         backgroundChecked = Color(0x${(buttonBackground.value ?: getUIKitColors().contentFillColorTertiaryBrush).toArgb().toHexString(HexFormat.UpperCase)}),

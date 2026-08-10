@@ -30,7 +30,7 @@ import com.millentec.compose.uikit.component.input.UIKitDropdownButton
 import com.millentec.compose.uikit.component.input.UIKitNavigationDock
 import com.millentec.compose.uikit.component.layout.UIKitSurface
 import com.millentec.compose.uikit.component.layout.rememberUIKitAdaptiveCornerContainerState
-import com.millentec.compose.uikit.data.Pages.*
+import com.millentec.compose.uikit.foundation.Pages.*
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.isDesktopOS

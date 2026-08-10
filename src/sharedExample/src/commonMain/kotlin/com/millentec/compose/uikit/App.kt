@@ -20,7 +20,10 @@ import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.i18n.SupportedLanguages
+import com.millentec.compose.uikit.i18n.strings.Japanese
 import com.millentec.compose.uikit.i18n.strings.SimplifiedChinese
+import com.millentec.compose.uikit.i18n.strings.TraditionalChinese
+import com.millentec.compose.uikit.i18n.strings.UnitedStatesEnglish
 import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.views.MainView
 
@@ -36,12 +39,14 @@ fun App() {
             ThemeType.Dark -> UIKitTheme.getDark()
         }
     ) {
-        UIKitFlyouter {
-            CompositionLocalProvider(LocalAcrylicMaterialState provides rememberAcrylicMaterialState()) {
-                CompositionLocalProvider(LocalStrings provides when(AppSettings.languages.collectAsState().value) {
-                    SupportedLanguages.EnUS -> TODO()
-                    SupportedLanguages.ZhCN -> SimplifiedChinese()
-                }) {
+        CompositionLocalProvider(LocalAcrylicMaterialState provides rememberAcrylicMaterialState()) {
+            CompositionLocalProvider(LocalStrings provides when(AppSettings.languages.collectAsState().value) {
+                SupportedLanguages.EnUS -> UnitedStatesEnglish()
+                SupportedLanguages.ZhCN -> SimplifiedChinese()
+                SupportedLanguages.ZhTW -> TraditionalChinese()
+                SupportedLanguages.JaJP -> Japanese()
+            }) {
+                UIKitFlyouter {
                     val uikitTheme = getUIKitTheme()
                     val statusBarHeight = WindowInsets.statusBars.getTop(LocalDensity.current)
 

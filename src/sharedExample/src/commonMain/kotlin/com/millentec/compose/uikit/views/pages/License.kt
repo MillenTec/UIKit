@@ -72,7 +72,7 @@ class License: PageBasic("license") {
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
 
-                Spacer(modifier = Modifier.height(getUIKitLayout().basicSpacing))
+                Spacer(modifier = Modifier.height(getUIKitLayout().x2Spacing))
 
                 Text(
                     text = LocalStrings.current.license.description,
@@ -80,7 +80,7 @@ class License: PageBasic("license") {
                     color = getUIKitColors().textFillColorPrimaryBrush
                 )
 
-                Spacer(modifier = Modifier.height(getUIKitLayout().x2Spacing))
+                Spacer(modifier = Modifier.height(getUIKitLayout().basicSpacing))
 
                 SelectionContainer {
                     LazyColumn(

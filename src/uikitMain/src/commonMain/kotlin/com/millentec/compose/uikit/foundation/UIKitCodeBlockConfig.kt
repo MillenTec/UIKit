@@ -32,7 +32,7 @@ data class UIKitCodeBlockConfig(
                 rules = listOf(
                     // 关键字匹配
                     Pair(
-                        """(?<!\w)${keyword}[\s,]""".toRegex(),
+                        """(?<!\w)${keyword}(?!\w)""".toRegex(),
                         SpanStyle(color = colors.keywordText)
                     ),
                     // 函数调用匹配

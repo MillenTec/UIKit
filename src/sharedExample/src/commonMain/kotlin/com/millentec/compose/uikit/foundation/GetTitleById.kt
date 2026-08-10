@@ -14,6 +14,8 @@ fun getTitleById(id: String): String {
         "third-party" -> strings.thirdPartyLicenses.title
         "settings" -> strings.settings.title
 
+        "settings_language" -> strings.settings.language.title
+
         "controls_inputs" -> strings.controls.inputs.title
         "controls_flyouts" -> strings.controls.flyouts.title
         "controls_status-and-infos" -> strings.controls.statusAndInfos.title

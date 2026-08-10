@@ -2,8 +2,8 @@
 
 import androidx.compose.foundation.lazy.LazyListScope
 import com.millentec.compose.uikit.component.layout.UIKitSettingCard
-import com.millentec.compose.uikit.data.Pages
 import com.millentec.compose.uikit.foundation.CommonPage
+import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Symbols
