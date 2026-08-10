@@ -23,8 +23,8 @@ import com.millentec.compose.uikit.component.layout.UIKitSettingCard
 import com.millentec.compose.uikit.component.layout.UIKitSettingsExpander
 import com.millentec.compose.uikit.foundation.ControlGalleryBasic
 import com.millentec.compose.uikit.foundation.helper.toHsv
-import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
+import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbols
+import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.*
 import com.millentec.compose.uikit.theme.*
 
 val BasicInputControls = listOf(
@@ -138,7 +138,7 @@ val BasicInputControls = listOf(
                             background = buttonBackground.value ?: getUIKitColors().contentFillColorTertiaryBrush,
                             content = buttonForeground.value ?: getUIKitColors().textFillColorPrimaryBrush
                         ),
-                        icon = FluentIcons.Add,
+                        icon = UIKitSymbols.Add,
                         onClick = {
                             count.value++
                         }
@@ -163,7 +163,7 @@ val BasicInputControls = listOf(
             ) {
                 UIKitSettingCard(
                     title = LocalStrings.current.controls.inputs.common.enabled,
-                    icon = FluentIcons.checkmarkCircle(getUIKitColors().textFillColorPrimaryBrush, true),
+                    icon = UIKitSymbols.checkmarkCircle(getUIKitColors().textFillColorPrimaryBrush, true),
                     onClick = {
                         buttonEnabled.value = !buttonEnabled.value
                     }
@@ -183,7 +183,7 @@ val BasicInputControls = listOf(
                     iconStart = {
                         Icon(
                             modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
-                            imageVector = FluentIcons.Square,
+                            imageVector = UIKitSymbols.Square,
                             contentDescription = "Rectangle",
                             tint = getUIKitColors().textFillColorPrimaryBrush
                         )
@@ -191,7 +191,7 @@ val BasicInputControls = listOf(
                     iconEnd = {
                         Icon(
                             modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
-                            imageVector = FluentIcons.Circle,
+                            imageVector = UIKitSymbols.Circle,
                             contentDescription = "Rounded",
                             tint = getUIKitColors().textFillColorPrimaryBrush
                         )
@@ -207,7 +207,7 @@ val BasicInputControls = listOf(
                         backgroundPickerExpanded.value = !backgroundPickerExpanded.value
                     },
                     title = LocalStrings.current.controls.inputs.common.color,
-                    icon = FluentIcons.Color
+                    icon = UIKitSymbols.Color
                 ) {
                     val uikitColors = getUIKitColors()
                     val color = remember { mutableStateOf((buttonBackground.value ?: uikitColors.contentFillColorTertiaryBrush).toHsv()) }
@@ -359,7 +359,7 @@ val BasicInputControls = listOf(
                             backgroundChecked = buttonBackground.value ?: getUIKitColors().highlightColorPrimaryBrush,
                             contentChecked = buttonForeground.value ?: UIKitColors.White
                         ),
-                        icon = FluentIcons.Checkmark,
+                        icon = UIKitSymbols.Checkmark,
                         onCheckedChange = {
                             checked.value = it
                         }
@@ -406,7 +406,7 @@ val BasicInputControls = listOf(
             ) {
                 UIKitSettingCard(
                     title = LocalStrings.current.controls.inputs.common.enabled,
-                    icon = FluentIcons.checkmarkCircle(getUIKitColors().textFillColorPrimaryBrush, true),
+                    icon = UIKitSymbols.checkmarkCircle(getUIKitColors().textFillColorPrimaryBrush, true),
                     onClick = {
                         buttonEnabled.value = !buttonEnabled.value
                     }
@@ -426,7 +426,7 @@ val BasicInputControls = listOf(
                     iconStart = {
                         Icon(
                             modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
-                            imageVector = FluentIcons.Square,
+                            imageVector = UIKitSymbols.Square,
                             contentDescription = "Rectangle",
                             tint = getUIKitColors().textFillColorPrimaryBrush
                         )
@@ -434,7 +434,7 @@ val BasicInputControls = listOf(
                     iconEnd = {
                         Icon(
                             modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
-                            imageVector = FluentIcons.Circle,
+                            imageVector = UIKitSymbols.Circle,
                             contentDescription = "Rounded",
                             tint = getUIKitColors().textFillColorPrimaryBrush
                         )
@@ -450,7 +450,7 @@ val BasicInputControls = listOf(
                         backgroundPickerExpanded.value = !backgroundPickerExpanded.value
                     },
                     title = LocalStrings.current.controls.inputs.common.color,
-                    icon = FluentIcons.Color
+                    icon = UIKitSymbols.Color
                 ) {
                     val uikitColors = getUIKitColors()
                     val color = remember { mutableStateOf((buttonBackground.value ?: uikitColors.highlightColorPrimaryBrush).toHsv()) }
@@ -552,7 +552,7 @@ val BasicInputControls = listOf(
             ) {
                 UIKitSettingCard(
                     title = LocalStrings.current.controls.inputs.common.enabled,
-                    icon = FluentIcons.checkmarkCircle(getUIKitColors().textFillColorPrimaryBrush, true),
+                    icon = UIKitSymbols.checkmarkCircle(getUIKitColors().textFillColorPrimaryBrush, true),
                     onClick = {
                         buttonEnabled.value = !buttonEnabled.value
                     }
@@ -574,7 +574,7 @@ val BasicInputControls = listOf(
                         backgroundPickerExpanded.value = !backgroundPickerExpanded.value
                     },
                     title = LocalStrings.current.controls.inputs.common.color,
-                    icon = FluentIcons.Color
+                    icon = UIKitSymbols.Color
                 ) {
                     val uikitColors = getUIKitColors()
                     val color = remember { mutableStateOf((buttonBackground.value ?: uikitColors.contentFillColorTertiaryBrush).toHsv()) }

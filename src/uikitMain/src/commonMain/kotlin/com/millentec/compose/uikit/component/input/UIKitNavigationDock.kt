@@ -25,11 +25,11 @@ import com.millentec.compose.uikit.component.layout.rememberUIKitAdaptiveCornerC
 import com.millentec.compose.uikit.foundation.layout.UIKitAlignment
 import com.millentec.compose.uikit.foundation.layout.UIKitNavigationDockItem
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
-import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Alert
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Settings
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Text
+import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbols
+import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.Accessibility
+import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.Alert
+import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.Settings
+import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.Text
 import com.millentec.compose.uikit.theme.getUIKitAnimate
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
@@ -49,10 +49,10 @@ private fun Preview(){
             checkedIndex = 1,
             onChecked = { },
             items = listOf(
-                UIKitNavigationDockItem.createByStringWithIcon("Text", FluentIcons.Text),
-                UIKitNavigationDockItem.createByStringWithIcon("Accessibility", FluentIcons.Accessibility),
-                UIKitNavigationDockItem.createByStringWithIcon("Settings", FluentIcons.Settings),
-                UIKitNavigationDockItem.createByStringWithIcon("Alert", FluentIcons.Alert)
+                UIKitNavigationDockItem.createByStringWithIcon("Text", UIKitSymbols.Text),
+                UIKitNavigationDockItem.createByStringWithIcon("Accessibility", UIKitSymbols.Accessibility),
+                UIKitNavigationDockItem.createByStringWithIcon("Settings", UIKitSymbols.Settings),
+                UIKitNavigationDockItem.createByStringWithIcon("Alert", UIKitSymbols.Alert)
             ),
         )
     }

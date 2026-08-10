@@ -39,8 +39,8 @@ import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
 import com.millentec.compose.uikit.foundation.layout.UIKitNavigationDockItem
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
-import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
+import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbols
+import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.*
 import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.viewmodels.MainViewModel
 import com.millentec.compose.uikit.viewmodels.pageIndex
@@ -183,15 +183,15 @@ fun MainView() {
                                 listOf(
                                     UIKitNavigationDockItem.createByStringWithIcon(
                                         text = strings.navigation.home,
-                                        icon = FluentIcons.Home
+                                        icon = UIKitSymbols.Home
                                     ),
                                     UIKitNavigationDockItem.createByStringWithIcon(
                                         text = strings.navigation.controls,
-                                        icon = FluentIcons.toggleMultiple()
+                                        icon = UIKitSymbols.toggleMultiple()
                                     ),
                                     UIKitNavigationDockItem.createByStringWithIcon(
                                         text = strings.navigation.designs,
-                                        icon = FluentIcons.designIdeas()
+                                        icon = UIKitSymbols.designIdeas()
                                     )
                                 )
                             }
@@ -224,7 +224,7 @@ fun MainView() {
                             acrylicEffectEnabled = AppTheme.useAcrylic.collectAsState().value,
                             items = listOf(
                                 UIKitMenuItem.textWithIcon(
-                                    icon = FluentIcons.Scales,
+                                    icon = UIKitSymbols.Scales,
                                     text = strings.navigation.license,
                                     onClick = {
                                         nav.switchPage(License.ordinal, type = UIKitNavigationType.Forward)
@@ -233,7 +233,7 @@ fun MainView() {
                                 ),
                                 UIKitMenuItem.divider(),
                                 UIKitMenuItem.textWithIcon(
-                                    icon = FluentIcons.certificate(),
+                                    icon = UIKitSymbols.certificate(),
                                     text = strings.navigation.thirdPartyLicenses,
                                     onClick = {
                                         nav.switchPage(ThirdParty.ordinal, type = UIKitNavigationType.Forward)
@@ -242,7 +242,7 @@ fun MainView() {
                                 ),
                                 UIKitMenuItem.divider(),
                                 UIKitMenuItem.textWithIcon(
-                                    icon = FluentIcons.Settings,
+                                    icon = UIKitSymbols.Settings,
                                     text = strings.navigation.settings,
                                     onClick = {
                                         nav.switchPage(Settings.ordinal, type = UIKitNavigationType.Forward)
@@ -279,7 +279,7 @@ fun MainView() {
                                     modifier = Modifier
                                         .fillMaxSize(0.6f)
                                         .rotate(iconRotateAnimated.value),
-                                    imageVector = FluentIcons.Add,
+                                    imageVector = UIKitSymbols.Add,
                                     contentDescription = "More",
                                     tint = getUIKitColors().textFillColorPrimaryBrush
                                 )

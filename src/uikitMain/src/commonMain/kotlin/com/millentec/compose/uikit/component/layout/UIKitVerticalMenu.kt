@@ -16,9 +16,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
-import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Text
+import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbols
+import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.Accessibility
+import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.Text
 import com.millentec.compose.uikit.theme.getUIKitAnimate
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
@@ -29,9 +29,9 @@ import com.millentec.compose.uikit.theme.getUIKitShapes
 private fun Preview() {
     UIKitVerticalMenu(
         items = listOf(
-            UIKitMenuItem.textWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {}),
+            UIKitMenuItem.textWithIcon(UIKitSymbols.Accessibility, "Option 1", onClick = {}),
             UIKitMenuItem.text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush),
-            UIKitMenuItem.icon(FluentIcons.Text, onClick = {}),
+            UIKitMenuItem.icon(UIKitSymbols.Text, onClick = {}),
         )
     )
 }

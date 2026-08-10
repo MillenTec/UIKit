@@ -53,10 +53,10 @@ import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.layout.UIKitAlignment
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
-import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
-import com.millentec.compose.uikit.icons.fluenticons.animatable.*
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
-import com.millentec.compose.uikit.icons.fluenticons.resizeable.shapes
+import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbols
+import com.millentec.compose.uikit.symbols.uikitsymbols.animatable.*
+import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.*
+import com.millentec.compose.uikit.symbols.uikitsymbols.resizeable.shapes
 import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.views.LocalNavigationDockHeight
 import kotlin.math.ceil
@@ -93,7 +93,7 @@ private fun OptionsWindowPreview() {
             Icon(
                 modifier = Modifier
                     .size(maxWidth * 0.6f),
-                imageVector = FluentIcons.Symbols,
+                imageVector = UIKitSymbols.Symbols,
                 contentDescription = null,
                 tint = optionState.tintColor.value.getColor(),
             )
@@ -216,7 +216,7 @@ private fun OptionsWindow(
                 ) {
                     Column {
                         UIKitSettingCard(
-                            icon = FluentIcons.Tag,
+                            icon = UIKitSymbols.Tag,
                             title = LocalStrings.current.designs.fluentIcons.options.name,
                             onClick = {}
                         ) {
@@ -250,7 +250,7 @@ private fun OptionsWindow(
                 ) {
                     Column {
                         UIKitSettingCard(
-                            icon = FluentIcons.Resize,
+                            icon = UIKitSymbols.Resize,
                             title = LocalStrings.current.designs.fluentIcons.options.size,
                             onClick = {}
                         ) {
@@ -353,7 +353,7 @@ private fun OptionsWindow(
 
         item {
             UIKitSettingCard(
-                icon = FluentIcons.layerDiagonal(getUIKitColors().textFillColorPrimaryBrush, true),
+                icon = UIKitSymbols.layerDiagonal(getUIKitColors().textFillColorPrimaryBrush, true),
                 title = LocalStrings.current.designs.fluentIcons.options.layeredIcon,
                 onClick = {
                     state.isLayered.value = !state.isLayered.value
@@ -377,7 +377,7 @@ private fun OptionsWindow(
                     tintColorPickerExpanded.value = !tintColorPickerExpanded.value
                 },
                 title = LocalStrings.current.designs.fluentIcons.options.tintColor,
-                icon = FluentIcons.PaintBrush
+                icon = UIKitSymbols.PaintBrush
             ) {
                 UIKitHSVColorPicker(
                     color = state.tintColor.value,
@@ -444,7 +444,7 @@ private fun OptionsWindow(
                     backgroundColorPickerExpanded.value = !backgroundColorPickerExpanded.value
                 },
                 title = LocalStrings.current.designs.fluentIcons.options.backgroundColor,
-                icon = FluentIcons.PaintBucket
+                icon = UIKitSymbols.PaintBucket
             ) {
                 UIKitHSVColorPicker(
                     color = state.backgroundColor.value,
@@ -521,7 +521,7 @@ private fun IconItemPreview() {
             Icon(
                 modifier = Modifier
                     .fillMaxSize(),
-                imageVector = FluentIcons.Tag,
+                imageVector = UIKitSymbols.Tag,
                 contentDescription = null,
                 tint = getUIKitColors().textFillColorPrimaryBrush
             )
@@ -826,7 +826,7 @@ class Icons: PageBasic(
                                 Icon(
                                     modifier = Modifier
                                         .size(getUIKitTypography().largeTitle.lineHeight.value.dp),
-                                    imageVector = FluentIcons.options(getUIKitColors().textFillColorPrimaryBrush, true),
+                                    imageVector = UIKitSymbols.options(getUIKitColors().textFillColorPrimaryBrush, true),
                                     contentDescription = "Options",
                                     tint = getUIKitColors().textFillColorPrimaryBrush
                                 )
@@ -867,7 +867,7 @@ class Icons: PageBasic(
                         Icon(
                             modifier = Modifier
                                 .fillMaxSize(0.6f),
-                            imageVector = FluentIcons.options(getUIKitColors().textFillColorPrimaryBrush, true),
+                            imageVector = UIKitSymbols.options(getUIKitColors().textFillColorPrimaryBrush, true),
                             contentDescription = "Options",
                             tint = getUIKitColors().textFillColorPrimaryBrush
                         )
@@ -1128,7 +1128,7 @@ private open class AnimatableIconItem(
             Icon(
                 modifier = Modifier
                     .size(getUIKitTypography().body.lineHeight.value.dp),
-                imageVector = FluentIcons.ResizableIcons.shapes(getUIKitColors().textFillColorPrimaryBrush, true, 0.5f),
+                imageVector = UIKitSymbols.ResizableIcons.shapes(getUIKitColors().textFillColorPrimaryBrush, true, 0.5f),
                 contentDescription = "Thin",
                 tint = getUIKitColors().textFillColorPrimaryBrush,
             )
@@ -1162,7 +1162,7 @@ private open class AnimatableIconItem(
             Icon(
                 modifier = Modifier
                     .size(getUIKitTypography().body.lineHeight.value.dp),
-                imageVector = FluentIcons.ResizableIcons.shapes(getUIKitColors().textFillColorPrimaryBrush, true, 1.5f),
+                imageVector = UIKitSymbols.ResizableIcons.shapes(getUIKitColors().textFillColorPrimaryBrush, true, 1.5f),
                 contentDescription = "Thin",
                 tint = getUIKitColors().textFillColorPrimaryBrush,
             )
@@ -1246,7 +1246,7 @@ private fun makeAnimatableIconList(
                 StateSelector(
                     states = listOf(
                         StateSelectorItem("Running") {
-                            FluentIcons.AnimatableIcons.ArrowCircle(
+                            UIKitSymbols.AnimatableIcons.ArrowCircle(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = progressProperty.value,
@@ -1259,7 +1259,7 @@ private fun makeAnimatableIconList(
                             )
                         },
                         StateSelectorItem("Stopped") {
-                            FluentIcons.AnimatableIcons.ArrowCircle(
+                            UIKitSymbols.AnimatableIcons.ArrowCircle(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = progressProperty.value,
@@ -1272,7 +1272,7 @@ private fun makeAnimatableIconList(
                             )
                         },
                         StateSelectorItem("Error") {
-                            FluentIcons.AnimatableIcons.ArrowCircle(
+                            UIKitSymbols.AnimatableIcons.ArrowCircle(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = if (resetProgressOnError.value) 0f else progressProperty.value,
@@ -1285,7 +1285,7 @@ private fun makeAnimatableIconList(
                             )
                         },
                         StateSelectorItem("Success") {
-                            FluentIcons.AnimatableIcons.ArrowCircle(
+                            UIKitSymbols.AnimatableIcons.ArrowCircle(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = progressProperty.value,
@@ -1309,7 +1309,7 @@ private fun makeAnimatableIconList(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .rotate(0f),
-                            imageVector = FluentIcons.arrowCircleDown(getUIKitColors().textFillColorPrimaryBrush, true),
+                            imageVector = UIKitSymbols.arrowCircleDown(getUIKitColors().textFillColorPrimaryBrush, true),
                             contentDescription = "Angle",
                             tint = getUIKitColors().textFillColorPrimaryBrush,
                         )
@@ -1319,7 +1319,7 @@ private fun makeAnimatableIconList(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .rotate(225f),
-                            imageVector = FluentIcons.arrowCircleDown(getUIKitColors().textFillColorPrimaryBrush, true),
+                            imageVector = UIKitSymbols.arrowCircleDown(getUIKitColors().textFillColorPrimaryBrush, true),
                             contentDescription = "Angle",
                             tint = getUIKitColors().textFillColorPrimaryBrush,
                         )
@@ -1342,7 +1342,7 @@ private fun makeAnimatableIconList(
                     onClick = {
                         resetProgressOnError.value = !resetProgressOnError.value
                     },
-                    icon = FluentIcons.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
+                    icon = UIKitSymbols.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
                 ) {
                     UIKitToggleSwitch(
                         checked = resetProgressOnError.value,
@@ -1357,7 +1357,7 @@ private fun makeAnimatableIconList(
                     onClick = {
                         autoTint.value = !autoTint.value
                     },
-                    icon = FluentIcons.PaintBrush
+                    icon = UIKitSymbols.PaintBrush
                 ) {
                     UIKitToggleSwitch(
                         checked = autoTint.value,
@@ -1369,7 +1369,7 @@ private fun makeAnimatableIconList(
 
         @Composable
         override fun IconContent(modifier: Modifier) {
-            FluentIcons.AnimatableIcons.ArrowCircle(
+            UIKitSymbols.AnimatableIcons.ArrowCircle(
                 modifier = modifier,
                 progress = progressProperty.value,
                 state = UIKitArrowCircleAnimateState.entries[stateProperty.value],
@@ -1395,7 +1395,7 @@ private fun makeAnimatableIconList(
                 StateSelector(
                     states = listOf(
                         StateSelectorItem("Running") {
-                            FluentIcons.AnimatableIcons.Download(
+                            UIKitSymbols.AnimatableIcons.Download(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = progressProperty.value,
@@ -1407,7 +1407,7 @@ private fun makeAnimatableIconList(
                             )
                         },
                         StateSelectorItem("Stopped") {
-                            FluentIcons.AnimatableIcons.Download(
+                            UIKitSymbols.AnimatableIcons.Download(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = progressProperty.value,
@@ -1419,7 +1419,7 @@ private fun makeAnimatableIconList(
                             )
                         },
                         StateSelectorItem("Error") {
-                            FluentIcons.AnimatableIcons.Download(
+                            UIKitSymbols.AnimatableIcons.Download(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = if (resetProgressOnError.value) 0f else progressProperty.value,
@@ -1431,7 +1431,7 @@ private fun makeAnimatableIconList(
                             )
                         },
                         StateSelectorItem("Success") {
-                            FluentIcons.AnimatableIcons.Download(
+                            UIKitSymbols.AnimatableIcons.Download(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = progressProperty.value,
@@ -1460,7 +1460,7 @@ private fun makeAnimatableIconList(
                     onClick = {
                         resetProgressOnError.value = !resetProgressOnError.value
                     },
-                    icon = FluentIcons.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
+                    icon = UIKitSymbols.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
                 ) {
                     UIKitToggleSwitch(
                         checked = resetProgressOnError.value,
@@ -1475,7 +1475,7 @@ private fun makeAnimatableIconList(
                     onClick = {
                         autoTint.value = !autoTint.value
                     },
-                    icon = FluentIcons.PaintBrush
+                    icon = UIKitSymbols.PaintBrush
                 ) {
                     UIKitToggleSwitch(
                         checked = autoTint.value,
@@ -1487,7 +1487,7 @@ private fun makeAnimatableIconList(
 
         @Composable
         override fun IconContent(modifier: Modifier) {
-            FluentIcons.AnimatableIcons.Download(
+            UIKitSymbols.AnimatableIcons.Download(
                 modifier = modifier,
                 progress = progressProperty.value,
                 state = UIKitArrowCircleAnimateState.entries[stateProperty.value],
@@ -1512,7 +1512,7 @@ private fun makeAnimatableIconList(
                 StateSelector(
                     states = listOf(
                         StateSelectorItem("Running") {
-                            FluentIcons.AnimatableIcons.Upload(
+                            UIKitSymbols.AnimatableIcons.Upload(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = progressProperty.value,
@@ -1524,7 +1524,7 @@ private fun makeAnimatableIconList(
                             )
                         },
                         StateSelectorItem("Stopped") {
-                            FluentIcons.AnimatableIcons.Upload(
+                            UIKitSymbols.AnimatableIcons.Upload(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = progressProperty.value,
@@ -1536,7 +1536,7 @@ private fun makeAnimatableIconList(
                             )
                         },
                         StateSelectorItem("Error") {
-                            FluentIcons.AnimatableIcons.Upload(
+                            UIKitSymbols.AnimatableIcons.Upload(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = if (resetProgressOnError.value) 0f else progressProperty.value,
@@ -1548,7 +1548,7 @@ private fun makeAnimatableIconList(
                             )
                         },
                         StateSelectorItem("Success") {
-                            FluentIcons.AnimatableIcons.Upload(
+                            UIKitSymbols.AnimatableIcons.Upload(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 progress = progressProperty.value,
@@ -1577,7 +1577,7 @@ private fun makeAnimatableIconList(
                     onClick = {
                         resetProgressOnError.value = !resetProgressOnError.value
                     },
-                    icon = FluentIcons.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
+                    icon = UIKitSymbols.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
                 ) {
                     UIKitToggleSwitch(
                         checked = resetProgressOnError.value,
@@ -1592,7 +1592,7 @@ private fun makeAnimatableIconList(
                     onClick = {
                         autoTint.value = !autoTint.value
                     },
-                    icon = FluentIcons.PaintBrush
+                    icon = UIKitSymbols.PaintBrush
                 ) {
                     UIKitToggleSwitch(
                         checked = autoTint.value,
@@ -1604,7 +1604,7 @@ private fun makeAnimatableIconList(
 
         @Composable
         override fun IconContent(modifier: Modifier) {
-            FluentIcons.AnimatableIcons.Upload(
+            UIKitSymbols.AnimatableIcons.Upload(
                 modifier = modifier,
                 progress = progressProperty.value,
                 state = UIKitArrowCircleAnimateState.entries[stateProperty.value],
@@ -1628,7 +1628,7 @@ private fun makeAnimatableIconList(
                 StateSelector(
                     states = listOf(
                         StateSelectorItem("Add") {
-                            FluentIcons.AnimatableIcons.AddCircleFilled(
+                            UIKitSymbols.AnimatableIcons.AddCircleFilled(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 state = UIKitAddCircleAnimateState.Add,
@@ -1638,7 +1638,7 @@ private fun makeAnimatableIconList(
                             )
                         },
                         StateSelectorItem("Error") {
-                            FluentIcons.AnimatableIcons.AddCircleFilled(
+                            UIKitSymbols.AnimatableIcons.AddCircleFilled(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 state = UIKitAddCircleAnimateState.Error,
@@ -1648,7 +1648,7 @@ private fun makeAnimatableIconList(
                             )
                         },
                         StateSelectorItem("Success") {
-                            FluentIcons.AnimatableIcons.AddCircleFilled(
+                            UIKitSymbols.AnimatableIcons.AddCircleFilled(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 state = UIKitAddCircleAnimateState.Success,
@@ -1671,7 +1671,7 @@ private fun makeAnimatableIconList(
                     onClick = {
                         autoTint.value = !autoTint.value
                     },
-                    icon = FluentIcons.PaintBrush
+                    icon = UIKitSymbols.PaintBrush
                 ) {
                     UIKitToggleSwitch(
                         checked = autoTint.value,
@@ -1683,7 +1683,7 @@ private fun makeAnimatableIconList(
 
         @Composable
         override fun IconContent(modifier: Modifier) {
-            FluentIcons.AnimatableIcons.AddCircleFilled(
+            UIKitSymbols.AnimatableIcons.AddCircleFilled(
                 modifier = modifier,
                 state = UIKitAddCircleAnimateState.entries[stateProperty.value],
                 primaryTint = generalOptionsStateProperty.tintColor.value.getColor(),

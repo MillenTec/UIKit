@@ -1,0 +1,143 @@
+﻿package com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20
+
+
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.path
+import androidx.compose.ui.unit.dp
+import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbols
+
+fun UIKitSymbols.transportationShip(
+    primary: Brush,
+    secondary: Brush
+): ImageVector {
+    return ImageVector.Builder(
+        name = "TransportationShip",
+        defaultWidth = 20.dp,
+        defaultHeight = 20.dp,
+        viewportWidth = 20f,
+        viewportHeight = 20f
+    ).apply {
+        path(fill = primary) {
+            moveTo(7.5f, 2.039f)
+            curveTo(7.224f, 2.039f, 7f, 2.263f, 7f, 2.539f)
+            verticalLineTo(5.001f)
+            horizontalLineTo(4.5f)
+            curveTo(4.224f, 5.001f, 4f, 5.224f, 4f, 5.501f)
+            verticalLineTo(9.563f)
+            lineTo(2.366f, 10.019f)
+            curveTo(2.224f, 10.058f, 2.107f, 10.158f, 2.045f, 10.292f)
+            curveTo(1.984f, 10.426f, 1.985f, 10.58f, 2.048f, 10.713f)
+            lineTo(3.85f, 14.542f)
+            curveTo(4.067f, 14.281f, 4.371f, 14.096f, 4.713f, 14.029f)
+            lineTo(3.204f, 10.823f)
+            lineTo(9.459f, 9.079f)
+            curveTo(9.811f, 8.981f, 10.182f, 8.981f, 10.533f, 9.079f)
+            lineTo(16.79f, 10.822f)
+            lineTo(15.25f, 14.021f)
+            curveTo(15.594f, 14.078f, 15.901f, 14.252f, 16.126f, 14.505f)
+            lineTo(17.951f, 10.717f)
+            curveTo(18.015f, 10.584f, 18.017f, 10.429f, 17.955f, 10.294f)
+            curveTo(17.894f, 10.159f, 17.777f, 10.058f, 17.634f, 10.019f)
+            lineTo(16f, 9.564f)
+            verticalLineTo(5.501f)
+            curveTo(16f, 5.224f, 15.776f, 5.001f, 15.5f, 5.001f)
+            horizontalLineTo(13f)
+            verticalLineTo(2.539f)
+            curveTo(13f, 2.263f, 12.776f, 2.039f, 12.5f, 2.039f)
+            horizontalLineTo(7.5f)
+            close()
+            moveTo(12f, 5.001f)
+            horizontalLineTo(8f)
+            verticalLineTo(3.039f)
+            horizontalLineTo(12f)
+            verticalLineTo(5.001f)
+            close()
+            moveTo(15f, 6.001f)
+            verticalLineTo(9.285f)
+            lineTo(10.801f, 8.116f)
+            curveTo(10.274f, 7.969f, 9.718f, 7.969f, 9.191f, 8.116f)
+            lineTo(5f, 9.284f)
+            verticalLineTo(6.001f)
+            horizontalLineTo(15f)
+            close()
+        }
+        path(fill = secondary) {
+            moveTo(15.488f, 15.39f)
+            lineTo(15.485f, 15.38f)
+            curveTo(15.433f, 15.168f, 15.248f, 15.014f, 15.03f, 15.001f)
+            curveTo(14.811f, 14.988f, 14.609f, 15.12f, 14.532f, 15.325f)
+            lineTo(14.528f, 15.336f)
+            curveTo(14.523f, 15.346f, 14.516f, 15.363f, 14.506f, 15.386f)
+            curveTo(14.486f, 15.432f, 14.455f, 15.5f, 14.412f, 15.582f)
+            curveTo(14.325f, 15.748f, 14.195f, 15.968f, 14.018f, 16.185f)
+            curveTo(13.661f, 16.625f, 13.164f, 17f, 12.5f, 17f)
+            curveTo(11.836f, 17f, 11.337f, 16.625f, 10.978f, 16.184f)
+            curveTo(10.801f, 15.967f, 10.67f, 15.747f, 10.583f, 15.581f)
+            curveTo(10.539f, 15.498f, 10.508f, 15.431f, 10.488f, 15.385f)
+            curveTo(10.478f, 15.362f, 10.471f, 15.345f, 10.466f, 15.335f)
+            lineTo(10.462f, 15.323f)
+            curveTo(10.387f, 15.128f, 10.201f, 15f, 9.993f, 15f)
+            curveTo(9.785f, 15.001f, 9.598f, 15.131f, 9.526f, 15.326f)
+            lineTo(9.521f, 15.337f)
+            curveTo(9.517f, 15.347f, 9.51f, 15.364f, 9.5f, 15.387f)
+            curveTo(9.48f, 15.433f, 9.449f, 15.5f, 9.407f, 15.583f)
+            curveTo(9.321f, 15.749f, 9.191f, 15.969f, 9.015f, 16.186f)
+            curveTo(8.659f, 16.625f, 8.164f, 17f, 7.5f, 17f)
+            curveTo(6.836f, 17f, 6.339f, 16.625f, 5.982f, 16.185f)
+            curveTo(5.805f, 15.968f, 5.675f, 15.748f, 5.588f, 15.582f)
+            curveTo(5.545f, 15.5f, 5.514f, 15.432f, 5.494f, 15.386f)
+            curveTo(5.484f, 15.363f, 5.477f, 15.346f, 5.472f, 15.336f)
+            lineTo(5.468f, 15.325f)
+            lineTo(5.468f, 15.324f)
+            curveTo(5.39f, 15.119f, 5.19f, 14.989f, 4.972f, 15.001f)
+            curveTo(4.753f, 15.014f, 4.568f, 15.167f, 4.515f, 15.379f)
+            lineTo(4.515f, 15.378f)
+            lineTo(4.513f, 15.387f)
+            curveTo(4.51f, 15.396f, 4.505f, 15.412f, 4.499f, 15.433f)
+            curveTo(4.485f, 15.476f, 4.462f, 15.541f, 4.429f, 15.621f)
+            curveTo(4.362f, 15.781f, 4.256f, 15.992f, 4.1f, 16.201f)
+            curveTo(3.793f, 16.61f, 3.304f, 17f, 2.5f, 17f)
+            curveTo(2.224f, 17f, 2f, 17.224f, 2f, 17.5f)
+            curveTo(2f, 17.777f, 2.224f, 18f, 2.5f, 18f)
+            curveTo(3.696f, 18f, 4.457f, 17.392f, 4.9f, 16.801f)
+            curveTo(4.951f, 16.733f, 4.998f, 16.665f, 5.041f, 16.599f)
+            curveTo(5.091f, 16.67f, 5.146f, 16.743f, 5.206f, 16.816f)
+            curveTo(5.661f, 17.376f, 6.414f, 18f, 7.5f, 18f)
+            curveTo(8.586f, 18f, 9.338f, 17.375f, 9.792f, 16.815f)
+            curveTo(9.867f, 16.723f, 9.935f, 16.63f, 9.996f, 16.541f)
+            curveTo(10.059f, 16.631f, 10.128f, 16.723f, 10.203f, 16.816f)
+            curveTo(10.66f, 17.376f, 11.414f, 18f, 12.5f, 18f)
+            curveTo(13.586f, 18f, 14.339f, 17.376f, 14.794f, 16.816f)
+            curveTo(14.852f, 16.745f, 14.906f, 16.674f, 14.956f, 16.604f)
+            curveTo(14.999f, 16.671f, 15.046f, 16.74f, 15.097f, 16.808f)
+            curveTo(15.54f, 17.404f, 16.303f, 18.015f, 17.506f, 18f)
+            curveTo(17.782f, 17.997f, 18.003f, 17.771f, 18f, 17.494f)
+            curveTo(17.997f, 17.218f, 17.77f, 16.997f, 17.494f, 17f)
+            curveTo(16.691f, 17.01f, 16.204f, 16.621f, 15.899f, 16.211f)
+            curveTo(15.743f, 16.001f, 15.637f, 15.788f, 15.571f, 15.627f)
+            curveTo(15.538f, 15.547f, 15.516f, 15.481f, 15.502f, 15.437f)
+            curveTo(15.495f, 15.415f, 15.491f, 15.399f, 15.488f, 15.39f)
+            close()
+        }
+    }.build()
+}
+
+fun UIKitSymbols.transportationShip(): ImageVector {
+    return transportationShip(
+        SolidColor(Color(0xFF1D1D1F)),
+        SolidColor(Color(0xFF1D1D1F))
+    )
+}
+
+fun UIKitSymbols.transportationShip(
+    color: Color,
+    layered: Boolean = false
+): ImageVector {
+    return transportationShip(
+        SolidColor(color),
+        if (layered) SolidColor(color.copy(0.6f)) else SolidColor(color),
+    )
+}

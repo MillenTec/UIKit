@@ -8,11 +8,11 @@ import com.millentec.compose.uikit.component.layout.UIKitSettingCard
 import com.millentec.compose.uikit.foundation.CommonPage
 import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
-import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.LayoutDynamic
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.chatMultiple
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.layerDiagonal
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.toggleMultiple
+import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbols
+import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.LayoutDynamic
+import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.chatMultiple
+import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.layerDiagonal
+import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.toggleMultiple
 import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
@@ -23,7 +23,7 @@ class Controls: CommonPage("controls") {
         item {
             UIKitSettingCard(
                 title = LocalStrings.current.controls.inputsEntrance,
-                icon = FluentIcons.toggleMultiple(getUIKitColors().textFillColorPrimaryBrush, true),
+                icon = UIKitSymbols.toggleMultiple(getUIKitColors().textFillColorPrimaryBrush, true),
                 onClick = {
                     MainViewModel.navigation.switchPage(Pages.ControlsBasicInputs.ordinal, type = UIKitNavigationType.Forward)
                 }
@@ -37,7 +37,7 @@ class Controls: CommonPage("controls") {
         item {
             UIKitSettingCard(
                 title = LocalStrings.current.controls.statusAndInfosEntrance,
-                icon = FluentIcons.chatMultiple(getUIKitColors().textFillColorPrimaryBrush, true),
+                icon = UIKitSymbols.chatMultiple(getUIKitColors().textFillColorPrimaryBrush, true),
                 onClick = {
                     MainViewModel.navigation.switchPage(Pages.ControlsStatusAndInfo.ordinal, type = UIKitNavigationType.Forward)
                 }
@@ -51,7 +51,7 @@ class Controls: CommonPage("controls") {
         item {
             UIKitSettingCard(
                 title = LocalStrings.current.controls.flyoutsEntrance,
-                icon = FluentIcons.layerDiagonal(getUIKitColors().textFillColorPrimaryBrush, true),
+                icon = UIKitSymbols.layerDiagonal(getUIKitColors().textFillColorPrimaryBrush, true),
                 onClick = {
                     MainViewModel.navigation.switchPage(Pages.ControlsFlyouts.ordinal, type = UIKitNavigationType.Forward)
                 }
@@ -65,7 +65,7 @@ class Controls: CommonPage("controls") {
         item {
             UIKitSettingCard(
                 title = LocalStrings.current.controls.layoutsEntrance,
-                icon = FluentIcons.LayoutDynamic,
+                icon = UIKitSymbols.LayoutDynamic,
                 onClick = {
                     MainViewModel.navigation.switchPage(Pages.ControlsLayouts.ordinal, type = UIKitNavigationType.Forward)
                 }

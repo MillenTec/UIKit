@@ -3,19 +3,19 @@
 import java.io.File
 import java.time.LocalDateTime
 
-val regularList: Array<File>? = File("../../../uikitMain/src/commonMain/kotlin/com/millentec/compose/uikit/icons/fluenticons/regular/dp20").listFiles {
+val regularList: Array<File>? = File("../../../uikitMain/src/commonMain/kotlin/com/millentec/compose/uikit/symbols/uikitsymbols/regular/dp20").listFiles {
     it.isFile && it.extension == "kt"
 }
 var regularString: String = ""
 regularList?.forEach {
-    if ("fun FluentIcons." in it.readText()) {
-        val str = "FluentIcons.${it.nameWithoutExtension.replaceFirstChar { char ->
+    if ("fun UIKitSymbols." in it.readText()) {
+        val str = "UIKitSymbols.${it.nameWithoutExtension.replaceFirstChar { char ->
             if (char.isUpperCase()) char.lowercaseChar() else char
         }}(primaryColor, layered),"
         println(str)
         regularString += "        $str\n"
     } else {
-        val str = "FluentIcons.${it.nameWithoutExtension},"
+        val str = "UIKitSymbols.${it.nameWithoutExtension},"
         println(str)
         regularString += "        $str\n"
     }
@@ -23,19 +23,19 @@ regularList?.forEach {
 
 println()
 
-val filledList: Array<File>? = File("../../../uikitMain/src/commonMain/kotlin/com/millentec/compose/uikit/icons/fluenticons/filled/dp20").listFiles {
+val filledList: Array<File>? = File("../../../uikitMain/src/commonMain/kotlin/com/millentec/compose/uikit/symbols/uikitsymbols/filled/dp20").listFiles {
     it.isFile && it.extension == "kt"
 }
 var filledString: String = ""
 filledList?.forEach {
-    if ("fun FluentIcons.Filled" in it.readText()) {
-        val str = "FluentIcons.Filled.${it.nameWithoutExtension.replaceFirstChar { char ->
+    if ("fun UIKitSymbols.Filled" in it.readText()) {
+        val str = "UIKitSymbols.Filled.${it.nameWithoutExtension.replaceFirstChar { char ->
             if (char.isUpperCase()) char.lowercaseChar() else char
         }}(primaryColor, layered),"
         println(str)
         filledString += "        $str\n"
     } else {
-        val str = "FluentIcons.Filled.${it.nameWithoutExtension},"
+        val str = "UIKitSymbols.Filled.${it.nameWithoutExtension},"
         println(str)
         filledString += "        $str\n"
     }
@@ -49,9 +49,9 @@ val builtString = """
  
 package com.millentec.compose.uikit
     
-import com.millentec.compose.uikit.icons.fluenticons.*
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
-import com.millentec.compose.uikit.icons.fluenticons.filled.dp20.*
+import com.millentec.compose.uikit.symbols.uikitsymbols.*
+import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.*
+import com.millentec.compose.uikit.symbols.uikitsymbols.filled.dp20.*
 import androidx.compose.ui.graphics.Color
 
 class IconGalleryList(
