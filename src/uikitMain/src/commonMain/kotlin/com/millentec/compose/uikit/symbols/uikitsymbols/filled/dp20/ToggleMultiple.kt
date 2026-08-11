@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitFilledSymbols
 import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitStaticSymbol
+import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbolLayerInfo
 
 fun UIKitFilledSymbols.toggleMultiple(
     brushes: List<Brush>
@@ -16,7 +17,16 @@ fun UIKitFilledSymbols.toggleMultiple(
     return object : UIKitStaticSymbol(
         name = "ToggleMultiple",
         defaultSize = DpSize(20.dp, 20.dp),
-        brushes = brushes
+        brushes = brushes,
+        layers = listOf(
+            UIKitSymbolLayerInfo(
+                description = "Primary",
+                expectAlpha = 0.3f
+            ), UIKitSymbolLayerInfo(
+                description = "Secondary",
+                expectAlpha = 1f
+            )
+        )
     ) {
         override fun builder(): ImageVector {
             val brushes = this.brushes

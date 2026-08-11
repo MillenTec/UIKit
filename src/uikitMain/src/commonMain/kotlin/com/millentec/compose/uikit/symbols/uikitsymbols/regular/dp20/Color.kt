@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitRegularSymbols
 import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitStaticSymbol
+import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbolLayerInfo
 
 fun UIKitRegularSymbols.color(
     brush: Brush
@@ -16,7 +17,13 @@ fun UIKitRegularSymbols.color(
     return object : UIKitStaticSymbol(
         name = "Color",
         defaultSize = DpSize(20.dp, 20.dp),
-        brushes = listOf(brush)
+        brushes = listOf(brush),
+        layers = listOf(
+            UIKitSymbolLayerInfo(
+                description = "Primary",
+                expectAlpha = 1f
+            )
+        )
     ) {
         override fun builder(): ImageVector {
             return ImageVector.Builder(

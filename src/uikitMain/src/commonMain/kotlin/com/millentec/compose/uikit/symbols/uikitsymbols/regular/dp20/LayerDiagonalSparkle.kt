@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitRegularSymbols
 import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitStaticSymbol
+import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbolLayerInfo
 
 fun UIKitRegularSymbols.layerDiagonalSparkle(
     brushes: List<Brush>
@@ -16,7 +17,25 @@ fun UIKitRegularSymbols.layerDiagonalSparkle(
     return object : UIKitStaticSymbol(
         name = "LayerDiagonalSparkle",
         defaultSize = DpSize(20.dp, 20.dp),
-        brushes = brushes
+        brushes = brushes,
+        layers = listOf(
+            UIKitSymbolLayerInfo(
+                description = "Primary",
+                expectAlpha = 1f
+            ), UIKitSymbolLayerInfo(
+                description = "Secondary",
+                expectAlpha = 0.75f
+            ), UIKitSymbolLayerInfo(
+                description = "Tertiary",
+                expectAlpha = 0.6f
+            ), UIKitSymbolLayerInfo(
+                description = "Fourth",
+                expectAlpha = 0.45f
+            ), UIKitSymbolLayerInfo(
+                description = "Fifth",
+                expectAlpha = 0.3f
+            )
+        )
     ) {
         override fun builder(): ImageVector {
             val brushes = this.brushes

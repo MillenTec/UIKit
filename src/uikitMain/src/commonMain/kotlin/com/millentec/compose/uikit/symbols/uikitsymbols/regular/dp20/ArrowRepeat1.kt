@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitRegularSymbols
 import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitStaticSymbol
+import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbolLayerInfo
 
 fun UIKitRegularSymbols.arrowRepeat1(
     brushes: List<Brush>
@@ -16,7 +17,16 @@ fun UIKitRegularSymbols.arrowRepeat1(
     return object : UIKitStaticSymbol(
         name = "ArrowRepeat1",
         defaultSize = DpSize(20.dp, 20.dp),
-        brushes = brushes
+        brushes = brushes,
+        layers = listOf(
+            UIKitSymbolLayerInfo(
+                description = "Primary",
+                expectAlpha = 1f
+            ), UIKitSymbolLayerInfo(
+                description = "Secondary",
+                expectAlpha = 0.6f
+            )
+        )
     ) {
         override fun builder(): ImageVector {
             val brushes = this.brushes

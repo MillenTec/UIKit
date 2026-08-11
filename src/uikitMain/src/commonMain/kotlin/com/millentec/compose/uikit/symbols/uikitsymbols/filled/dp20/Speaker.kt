@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitFilledSymbols
 import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitStaticSymbol
+import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbolLayerInfo
 
 fun UIKitFilledSymbols.speaker(
     brushes: List<Brush>
@@ -16,7 +17,19 @@ fun UIKitFilledSymbols.speaker(
     return object : UIKitStaticSymbol(
         name = "Speaker",
         defaultSize = DpSize(20.dp, 20.dp),
-        brushes = brushes
+        brushes = brushes,
+        layers = listOf(
+            UIKitSymbolLayerInfo(
+                description = "Primary",
+                expectAlpha = 1f
+            ), UIKitSymbolLayerInfo(
+                description = "Secondary",
+                expectAlpha = 0.75f
+            ), UIKitSymbolLayerInfo(
+                description = "Tertiary",
+                expectAlpha = 0.6f
+            )
+        )
     ) {
         override fun builder(): ImageVector {
             val brushes = this.brushes

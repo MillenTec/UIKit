@@ -26,10 +26,16 @@ class UIKitFilledSymbols { internal constructor() }
 class UIKitAnimatableSymbols { internal constructor() }
 class UIKitResizableSymbols { internal constructor() }
 
+data class UIKitSymbolLayerInfo(
+    val description: String? = null,
+    val expectAlpha: Float = 1f,
+)
+
 abstract class UIKitSymbol(
     val name: String,
     val defaultSize: DpSize,
-    brushes: List<Brush>
+    brushes: List<Brush>,
+    val layers: List<UIKitSymbolLayerInfo>,
 ) {
     private val _brushes = brushes.toMutableList()
     val brushes: List<Brush>
@@ -49,8 +55,9 @@ abstract class UIKitSymbol(
 abstract class UIKitStaticSymbol(
     name: String,
     defaultSize: DpSize,
-    brushes: List<Brush>
-): UIKitSymbol(name, defaultSize, brushes) {
+    brushes: List<Brush>,
+    layers: List<UIKitSymbolLayerInfo>,
+): UIKitSymbol(name, defaultSize, brushes, layers) {
     private var cachedVector: ImageVector? = null
     private var cachedKey: Any? = null
 
@@ -100,15 +107,17 @@ abstract class UIKitStaticSymbol(
 abstract class UIKitAnimatableSymbol(
     name: String,
     defaultSize: DpSize,
-    brushes: List<Brush>
-): UIKitSymbol(name, defaultSize, brushes)
+    brushes: List<Brush>,
+    layers: List<UIKitSymbolLayerInfo>,
+): UIKitSymbol(name, defaultSize, brushes, layers)
 
 abstract class UIKitResizableSymbol(
     name: String,
     defaultSize: DpSize,
     initialLineWidth: Dp,
-    brushes: List<Brush>
-): UIKitSymbol(name, defaultSize, brushes) {
+    brushes: List<Brush>,
+    layers: List<UIKitSymbolLayerInfo>
+): UIKitSymbol(name, defaultSize, brushes, layers) {
     var lineWidth = initialLineWidth
         private set
 

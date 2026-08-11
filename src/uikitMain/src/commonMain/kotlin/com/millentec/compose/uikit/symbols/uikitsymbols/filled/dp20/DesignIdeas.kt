@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitFilledSymbols
 import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitStaticSymbol
+import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbolLayerInfo
 
 fun UIKitFilledSymbols.designIdeas(
     brushes: List<Brush>
@@ -16,7 +17,16 @@ fun UIKitFilledSymbols.designIdeas(
     return object : UIKitStaticSymbol(
         name = "DesignIdeas",
         defaultSize = DpSize(20.dp, 20.dp),
-        brushes = brushes
+        brushes = brushes,
+        layers = listOf(
+            UIKitSymbolLayerInfo(
+                description = "Primary",
+                expectAlpha = 1f
+            ), UIKitSymbolLayerInfo(
+                description = "Secondary",
+                expectAlpha = 0.6f
+            )
+        )
     ) {
         override fun builder(): ImageVector {
             val brushes = this.brushes
