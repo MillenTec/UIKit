@@ -1,98 +1,100 @@
 package com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20
 
-
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbols
+import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitRegularSymbols
+import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitStaticSymbol
 
-fun UIKitSymbols.arrowTrendingLines(
-    primary: Brush,
-    secondary: Brush
-): ImageVector {
-    return ImageVector.Builder(
+fun UIKitRegularSymbols.arrowTrendingLines(
+    brushes: List<Brush>
+): UIKitStaticSymbol {
+    return object : UIKitStaticSymbol(
         name = "ArrowTrendingLines",
-        defaultWidth = 20.dp,
-        defaultHeight = 20.dp,
-        viewportWidth = 20f,
-        viewportHeight = 20f
-    ).apply {
-        path(fill = primary) {
-            moveTo(14.5f, 2f)
-            curveToRelative(-0.28f, 0f, -0.5f, 0.22f, -0.5f, 0.5f)
-            reflectiveCurveToRelative(0.22f, 0.5f, 0.5f, 0.5f)
-            horizontalLineToRelative(1.79f)
-            lineToRelative(-4.79f, 4.79f)
-            lineToRelative(-2.65f, -2.65f)
-            curveToRelative(-0.2f, -0.2f, -0.51f, -0.2f, -0.71f, 0f)
-            lineToRelative(-5f, 5f)
-            curveToRelative(-0.2f, 0.2f, -0.2f, 0.51f, 0f, 0.71f)
-            curveToRelative(0.2f, 0.2f, 0.51f, 0.2f, 0.71f, 0f)
-            lineToRelative(4.65f, -4.65f)
-            lineToRelative(2.65f, 2.65f)
-            curveToRelative(0.2f, 0.2f, 0.51f, 0.2f, 0.71f, 0f)
-            lineToRelative(5.15f, -5.15f)
-            verticalLineToRelative(1.79f)
-            curveToRelative(0f, 0.28f, 0.22f, 0.5f, 0.5f, 0.5f)
-            reflectiveCurveToRelative(0.5f, -0.22f, 0.5f, -0.5f)
-            verticalLineToRelative(-3f)
-            curveToRelative(0f, -0.28f, -0.22f, -0.5f, -0.5f, -0.5f)
-            horizontalLineToRelative(-3f)
-            close()
+        defaultSize = DpSize(20.dp, 20.dp),
+        brushes = brushes
+    ) {
+        override fun builder(): ImageVector {
+            val brushes = this.brushes
+            return ImageVector.Builder(
+                name = "ArrowTrendingLines",
+                defaultWidth = 20.dp,
+                defaultHeight = 20.dp,
+                viewportWidth = 20f,
+                viewportHeight = 20f
+            ).apply {
+                path(fill = brushes.getOrNull(0)) {
+                    moveTo(14.5f, 2f)
+                    curveToRelative(-0.28f, 0f, -0.5f, 0.22f, -0.5f, 0.5f)
+                    reflectiveCurveToRelative(0.22f, 0.5f, 0.5f, 0.5f)
+                    horizontalLineToRelative(1.79f)
+                    lineToRelative(-4.79f, 4.79f)
+                    lineToRelative(-2.65f, -2.65f)
+                    curveToRelative(-0.2f, -0.2f, -0.51f, -0.2f, -0.71f, 0f)
+                    lineToRelative(-5f, 5f)
+                    curveToRelative(-0.2f, 0.2f, -0.2f, 0.51f, 0f, 0.71f)
+                    curveToRelative(0.2f, 0.2f, 0.51f, 0.2f, 0.71f, 0f)
+                    lineToRelative(4.65f, -4.65f)
+                    lineToRelative(2.65f, 2.65f)
+                    curveToRelative(0.2f, 0.2f, 0.51f, 0.2f, 0.71f, 0f)
+                    lineToRelative(5.15f, -5.15f)
+                    verticalLineToRelative(1.79f)
+                    curveToRelative(0f, 0.28f, 0.22f, 0.5f, 0.5f, 0.5f)
+                    reflectiveCurveToRelative(0.5f, -0.22f, 0.5f, -0.5f)
+                    verticalLineToRelative(-3f)
+                    curveToRelative(0f, -0.28f, -0.22f, -0.5f, -0.5f, -0.5f)
+                    horizontalLineToRelative(-3f)
+                    close()
+                }
+                path(fill = brushes.getOrNull(1)) {
+                    moveTo(15.5f, 9f)
+                    curveToRelative(-0.28f, 0f, -0.5f, 0.22f, -0.5f, 0.5f)
+                    verticalLineToRelative(8f)
+                    curveToRelative(0f, 0.28f, 0.22f, 0.5f, 0.5f, 0.5f)
+                    reflectiveCurveToRelative(0.5f, -0.22f, 0.5f, -0.5f)
+                    verticalLineToRelative(-8f)
+                    curveToRelative(0f, -0.28f, -0.22f, -0.5f, -0.5f, -0.5f)
+                    close()
+                    moveTo(7.5f, 11f)
+                    curveToRelative(-0.28f, 0f, -0.5f, 0.22f, -0.5f, 0.5f)
+                    verticalLineToRelative(6f)
+                    curveToRelative(0f, 0.28f, 0.22f, 0.5f, 0.5f, 0.5f)
+                    reflectiveCurveToRelative(0.5f, -0.22f, 0.5f, -0.5f)
+                    verticalLineToRelative(-6f)
+                    curveToRelative(0f, -0.28f, -0.22f, -0.5f, -0.5f, -0.5f)
+                    close()
+                    moveTo(11f, 13.5f)
+                    curveToRelative(0f, -0.28f, 0.22f, -0.5f, 0.5f, -0.5f)
+                    reflectiveCurveToRelative(0.5f, 0.22f, 0.5f, 0.5f)
+                    verticalLineToRelative(4f)
+                    curveToRelative(0f, 0.28f, -0.22f, 0.5f, -0.5f, 0.5f)
+                    reflectiveCurveToRelative(-0.5f, -0.22f, -0.5f, -0.5f)
+                    verticalLineToRelative(-4f)
+                    close()
+                    moveTo(3f, 14.5f)
+                    curveToRelative(0f, -0.28f, 0.22f, -0.5f, 0.5f, -0.5f)
+                    reflectiveCurveToRelative(0.5f, 0.22f, 0.5f, 0.5f)
+                    verticalLineToRelative(3f)
+                    curveToRelative(0f, 0.28f, -0.22f, 0.5f, -0.5f, 0.5f)
+                    reflectiveCurveToRelative(-0.5f, -0.22f, -0.5f, -0.5f)
+                    verticalLineToRelative(-3f)
+                    close()
+                }
+            }.build()
         }
-        path(fill = secondary) {
-            moveTo(15.5f, 9f)
-            curveToRelative(-0.28f, 0f, -0.5f, 0.22f, -0.5f, 0.5f)
-            verticalLineToRelative(8f)
-            curveToRelative(0f, 0.28f, 0.22f, 0.5f, 0.5f, 0.5f)
-            reflectiveCurveToRelative(0.5f, -0.22f, 0.5f, -0.5f)
-            verticalLineToRelative(-8f)
-            curveToRelative(0f, -0.28f, -0.22f, -0.5f, -0.5f, -0.5f)
-            close()
-            moveTo(7.5f, 11f)
-            curveToRelative(-0.28f, 0f, -0.5f, 0.22f, -0.5f, 0.5f)
-            verticalLineToRelative(6f)
-            curveToRelative(0f, 0.28f, 0.22f, 0.5f, 0.5f, 0.5f)
-            reflectiveCurveToRelative(0.5f, -0.22f, 0.5f, -0.5f)
-            verticalLineToRelative(-6f)
-            curveToRelative(0f, -0.28f, -0.22f, -0.5f, -0.5f, -0.5f)
-            close()
-            moveTo(11f, 13.5f)
-            curveToRelative(0f, -0.28f, 0.22f, -0.5f, 0.5f, -0.5f)
-            reflectiveCurveToRelative(0.5f, 0.22f, 0.5f, 0.5f)
-            verticalLineToRelative(4f)
-            curveToRelative(0f, 0.28f, -0.22f, 0.5f, -0.5f, 0.5f)
-            reflectiveCurveToRelative(-0.5f, -0.22f, -0.5f, -0.5f)
-            verticalLineToRelative(-4f)
-            close()
-            moveTo(3f, 14.5f)
-            curveToRelative(0f, -0.28f, 0.22f, -0.5f, 0.5f, -0.5f)
-            reflectiveCurveToRelative(0.5f, 0.22f, 0.5f, 0.5f)
-            verticalLineToRelative(3f)
-            curveToRelative(0f, 0.28f, -0.22f, 0.5f, -0.5f, 0.5f)
-            reflectiveCurveToRelative(-0.5f, -0.22f, -0.5f, -0.5f)
-            verticalLineToRelative(-3f)
-            close()
-        }
-    }.build()
+    }
 }
 
-fun UIKitSymbols.arrowTrendingLines(): ImageVector {
-    return arrowTrendingLines(
-        SolidColor(Color(0xFF1D1D1F)),
-        SolidColor(Color(0xFF1D1D1F))
-    )
-}
-
-fun UIKitSymbols.arrowTrendingLines(
+fun UIKitRegularSymbols.arrowTrendingLines(
     color: Color,
     layered: Boolean = false
-): ImageVector {
-    return arrowTrendingLines(
+) = arrowTrendingLines(
+    listOf(
         SolidColor(color),
-        if (layered) SolidColor(color.copy(0.6f)) else SolidColor(color),
+        if (layered) SolidColor(color.copy(0.6f)) else SolidColor(color)
     )
-}
+)
