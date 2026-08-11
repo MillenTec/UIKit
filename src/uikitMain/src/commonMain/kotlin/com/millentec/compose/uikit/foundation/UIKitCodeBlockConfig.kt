@@ -1,4 +1,4 @@
-package com.millentec.compose.uikit.foundation
+﻿package com.millentec.compose.uikit.foundation
 
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontStyle

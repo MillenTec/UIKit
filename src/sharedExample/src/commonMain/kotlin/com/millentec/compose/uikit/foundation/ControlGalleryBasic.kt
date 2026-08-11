@@ -1,4 +1,4 @@
-package com.millentec.compose.uikit.foundation
+﻿package com.millentec.compose.uikit.foundation
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -24,8 +24,8 @@ import com.millentec.compose.uikit.component.layout.UIKitCodeViewer
 import com.millentec.compose.uikit.component.layout.UIKitSettingsExpander
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
-import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.Code
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Code
 import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.views.pages.StateSelectorItem
 
@@ -118,7 +118,7 @@ open class ControlGalleryBasic(
                     expanded.value = !expanded.value
                 },
                 title = LocalStrings.current.controls.inputs.common.sourceCode,
-                icon = UIKitSymbols.Code,
+                icon = FluentIcons.Code,
                 contentPadding = PaddingValues(0.dp),
                 headerPadding = PaddingValues(getUIKitLayout().basicSpacing)
             ) {

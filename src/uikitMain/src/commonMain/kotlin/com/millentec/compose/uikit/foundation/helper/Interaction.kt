@@ -1,4 +1,4 @@
-package com.millentec.compose.uikit.foundation.helper
+﻿package com.millentec.compose.uikit.foundation.helper
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing

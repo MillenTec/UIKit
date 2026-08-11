@@ -1,4 +1,4 @@
-package com.millentec.compose.uikit.views
+﻿package com.millentec.compose.uikit.views
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -39,8 +39,8 @@ import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
 import com.millentec.compose.uikit.foundation.layout.UIKitNavigationDockItem
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
-import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.*
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.viewmodels.MainViewModel
 import com.millentec.compose.uikit.viewmodels.pageIndex
@@ -183,15 +183,15 @@ fun MainView() {
                                 listOf(
                                     UIKitNavigationDockItem.createByStringWithIcon(
                                         text = strings.navigation.home,
-                                        icon = UIKitSymbols.Home
+                                        icon = FluentIcons.Home
                                     ),
                                     UIKitNavigationDockItem.createByStringWithIcon(
                                         text = strings.navigation.controls,
-                                        icon = UIKitSymbols.toggleMultiple()
+                                        icon = FluentIcons.toggleMultiple()
                                     ),
                                     UIKitNavigationDockItem.createByStringWithIcon(
                                         text = strings.navigation.designs,
-                                        icon = UIKitSymbols.designIdeas()
+                                        icon = FluentIcons.designIdeas()
                                     )
                                 )
                             }
@@ -224,7 +224,7 @@ fun MainView() {
                             acrylicEffectEnabled = AppTheme.useAcrylic.collectAsState().value,
                             items = listOf(
                                 UIKitMenuItem.textWithIcon(
-                                    icon = UIKitSymbols.Scales,
+                                    icon = FluentIcons.Scales,
                                     text = strings.navigation.license,
                                     onClick = {
                                         nav.switchPage(License.ordinal, type = UIKitNavigationType.Forward)
@@ -233,7 +233,7 @@ fun MainView() {
                                 ),
                                 UIKitMenuItem.divider(),
                                 UIKitMenuItem.textWithIcon(
-                                    icon = UIKitSymbols.certificate(),
+                                    icon = FluentIcons.certificate(),
                                     text = strings.navigation.thirdPartyLicenses,
                                     onClick = {
                                         nav.switchPage(ThirdParty.ordinal, type = UIKitNavigationType.Forward)
@@ -242,7 +242,7 @@ fun MainView() {
                                 ),
                                 UIKitMenuItem.divider(),
                                 UIKitMenuItem.textWithIcon(
-                                    icon = UIKitSymbols.Settings,
+                                    icon = FluentIcons.Settings,
                                     text = strings.navigation.settings,
                                     onClick = {
                                         nav.switchPage(Settings.ordinal, type = UIKitNavigationType.Forward)
@@ -279,7 +279,7 @@ fun MainView() {
                                     modifier = Modifier
                                         .fillMaxSize(0.6f)
                                         .rotate(iconRotateAnimated.value),
-                                    imageVector = UIKitSymbols.Add,
+                                    imageVector = FluentIcons.Add,
                                     contentDescription = "More",
                                     tint = getUIKitColors().textFillColorPrimaryBrush
                                 )

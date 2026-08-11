@@ -1,4 +1,4 @@
-package com.millentec.compose.uikit.component.input
+﻿package com.millentec.compose.uikit.component.input
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.layout.UIKitSurface
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.isDesktopOS
-import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.designIdeas
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
 import com.millentec.compose.uikit.theme.*
 
 @Composable
@@ -47,7 +47,7 @@ private fun Preview() {
                 onClick = {
 
                 },
-                icon = UIKitSymbols.designIdeas(getUIKitColors().textFillColorPrimaryBrush, layered = true),
+                icon = FluentIcons.designIdeas(getUIKitColors().textFillColorPrimaryBrush, layered = true),
                 iconSize = DpSize(32.dp, 32.dp),
                 text = "Designs"
             )
@@ -59,7 +59,7 @@ private fun Preview() {
                 onClick = {
 
                 },
-                icon = UIKitSymbols.designIdeas(getUIKitColors().textFillColorPrimaryBrush, layered = true),
+                icon = FluentIcons.designIdeas(getUIKitColors().textFillColorPrimaryBrush, layered = true),
                 iconSize = DpSize(32.dp, 32.dp),
                 text = "Designs"
             )

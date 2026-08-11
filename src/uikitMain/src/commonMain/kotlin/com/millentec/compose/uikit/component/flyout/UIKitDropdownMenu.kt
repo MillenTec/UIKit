@@ -1,4 +1,4 @@
-package com.millentec.compose.uikit.component.flyout
+﻿package com.millentec.compose.uikit.component.flyout
 
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring
@@ -29,9 +29,9 @@ import com.millentec.compose.uikit.component.layout.UIKitVerticalMenu
 import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
-import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.Accessibility
-import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.Text
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Text
 import com.millentec.compose.uikit.theme.*
 
 @Composable
@@ -46,9 +46,9 @@ private fun Preview() {
             UIKitDropdownMenu(
                 expanded = true,
                 items = listOf(
-                    UIKitMenuItem.textWithIcon(UIKitSymbols.Accessibility, "Option 1", onClick = {}),
+                    UIKitMenuItem.textWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {}),
                     UIKitMenuItem.text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush),
-                    UIKitMenuItem.icon(UIKitSymbols.Text, onClick = {}),
+                    UIKitMenuItem.icon(FluentIcons.Text, onClick = {}),
                 ),
                 onDismissRequest = {}
             )

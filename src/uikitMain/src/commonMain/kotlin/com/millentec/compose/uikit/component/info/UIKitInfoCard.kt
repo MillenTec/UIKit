@@ -1,4 +1,4 @@
-package com.millentec.compose.uikit.component.info
+﻿package com.millentec.compose.uikit.component.info
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -20,13 +20,13 @@ import com.millentec.compose.uikit.component.info.UIKitInfoCardType.*
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
-import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.uikitsymbols.filled.dp20.checkmarkCircle
-import com.millentec.compose.uikit.symbols.uikitsymbols.filled.dp20.dismissCircle
-import com.millentec.compose.uikit.symbols.uikitsymbols.filled.dp20.info
-import com.millentec.compose.uikit.symbols.uikitsymbols.filled.dp20.warning
-import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.Dismiss
-import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.info
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.filled.dp20.checkmarkCircle
+import com.millentec.compose.uikit.icons.fluenticons.filled.dp20.dismissCircle
+import com.millentec.compose.uikit.icons.fluenticons.filled.dp20.info
+import com.millentec.compose.uikit.icons.fluenticons.filled.dp20.warning
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Dismiss
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.info
 import com.millentec.compose.uikit.theme.*
 
 @Composable
@@ -113,11 +113,11 @@ fun UIKitInfoCard(
         Error -> getUIKitColors().errorRedColorPrimaryBrush
     },
     icon: ImageVector? = when(type) {
-        Info -> UIKitSymbols.info(getUIKitColors().highlightColorPrimaryBrush, true)
-        HighlightInfo -> UIKitSymbols.Filled.info(getUIKitColors().highlightColorPrimaryBrush, true)
-        Warning -> UIKitSymbols.Filled.warning(getUIKitColors().warningYellowColorPrimaryBrush, true)
-        Success -> UIKitSymbols.Filled.checkmarkCircle(getUIKitColors().successGreenColorPrimaryBrush, true)
-        Error -> UIKitSymbols.Filled.dismissCircle(getUIKitColors().errorRedColorPrimaryBrush, true)
+        Info -> FluentIcons.info(getUIKitColors().highlightColorPrimaryBrush, true)
+        HighlightInfo -> FluentIcons.Filled.info(getUIKitColors().highlightColorPrimaryBrush, true)
+        Warning -> FluentIcons.Filled.warning(getUIKitColors().warningYellowColorPrimaryBrush, true)
+        Success -> FluentIcons.Filled.checkmarkCircle(getUIKitColors().successGreenColorPrimaryBrush, true)
+        Error -> FluentIcons.Filled.dismissCircle(getUIKitColors().errorRedColorPrimaryBrush, true)
     },
     iconColor: Color = when(type) {
         Info -> getUIKitColors().highlightColorPrimaryBrush
@@ -218,7 +218,7 @@ fun UIKitInfoCard(
                         Icon(
                             modifier = Modifier
                                 .size(20.dp),
-                            imageVector = UIKitSymbols.Dismiss,
+                            imageVector = FluentIcons.Dismiss,
                             contentDescription = "Close Info Bar",
                             tint = getUIKitColors().textFillColorPrimaryBrush
                         )
@@ -248,11 +248,11 @@ fun UIKitInfoCard(
         Error -> getUIKitColors().errorRedColorPrimaryBrush
     },
     icon: ImageVector? = when(type) {
-        Info -> UIKitSymbols.info(getUIKitColors().highlightColorPrimaryBrush, true)
-        HighlightInfo -> UIKitSymbols.Filled.info(getUIKitColors().highlightColorPrimaryBrush, true)
-        Warning -> UIKitSymbols.Filled.warning(getUIKitColors().warningYellowColorPrimaryBrush, true)
-        Success -> UIKitSymbols.Filled.checkmarkCircle(getUIKitColors().successGreenColorPrimaryBrush, true)
-        Error -> UIKitSymbols.Filled.dismissCircle(getUIKitColors().errorRedColorPrimaryBrush, true)
+        Info -> FluentIcons.info(getUIKitColors().highlightColorPrimaryBrush, true)
+        HighlightInfo -> FluentIcons.Filled.info(getUIKitColors().highlightColorPrimaryBrush, true)
+        Warning -> FluentIcons.Filled.warning(getUIKitColors().warningYellowColorPrimaryBrush, true)
+        Success -> FluentIcons.Filled.checkmarkCircle(getUIKitColors().successGreenColorPrimaryBrush, true)
+        Error -> FluentIcons.Filled.dismissCircle(getUIKitColors().errorRedColorPrimaryBrush, true)
     },
     iconColor: Color = when(type) {
         Info -> getUIKitColors().highlightColorPrimaryBrush

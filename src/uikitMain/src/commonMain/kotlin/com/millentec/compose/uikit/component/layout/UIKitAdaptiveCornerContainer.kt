@@ -1,4 +1,4 @@
-package com.millentec.compose.uikit.component.layout
+﻿package com.millentec.compose.uikit.component.layout
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing

@@ -1,4 +1,4 @@
-package com.millentec.compose.uikit.component.layout
+﻿package com.millentec.compose.uikit.component.layout
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
@@ -23,9 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.ChevronArrowDown
-import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.Wheelchair
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.ChevronArrowDown
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Wheelchair
 import com.millentec.compose.uikit.theme.*
 
 @Composable
@@ -38,7 +38,7 @@ private fun Preview() {
         },
         title = "Expander",
         description = "This is a description.",
-        icon = UIKitSymbols.Wheelchair
+        icon = FluentIcons.Wheelchair
     ) {
         Text("Hello, World!")
     }
@@ -96,7 +96,7 @@ fun UIKitSettingsExpander(
                     modifier = Modifier
                         .size(getUIKitTypography().body.lineHeight.value.dp)
                         .rotate(iconRotateAnimated),
-                    imageVector = UIKitSymbols.ChevronArrowDown,
+                    imageVector = FluentIcons.ChevronArrowDown,
                     contentDescription = null,
                     tint = getUIKitColors().textFillColorPrimaryBrush
                 )

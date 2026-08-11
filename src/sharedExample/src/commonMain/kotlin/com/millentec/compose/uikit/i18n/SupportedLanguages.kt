@@ -1,4 +1,4 @@
-package com.millentec.compose.uikit.i18n
+﻿package com.millentec.compose.uikit.i18n
 
 enum class SupportedLanguages(
     val displayName: String,

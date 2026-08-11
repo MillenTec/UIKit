@@ -1,4 +1,4 @@
-package com.millentec.compose.uikit.component.layout
+﻿package com.millentec.compose.uikit.component.layout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,10 +18,10 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
-import com.millentec.compose.uikit.symbols.uikitsymbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.Apps
-import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.ChevronArrowRight
-import com.millentec.compose.uikit.symbols.uikitsymbols.regular.dp20.Tools
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Apps
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.ChevronArrowRight
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Tools
 import com.millentec.compose.uikit.theme.*
 
 @Composable
@@ -32,14 +32,14 @@ private fun Preview() {
             onClick = {},
             title = "Hello",
             description = "This is a description",
-            icon = UIKitSymbols.Apps
+            icon = FluentIcons.Apps
         )
 
         Spacer(modifier = Modifier.size(getUIKitLayout().basicSpacing))
 
         UIKitSettingCard(
             title = "Title",
-            icon = UIKitSymbols.Tools
+            icon = FluentIcons.Tools
         ) {
             Text(
                 text = "This is a content.",
@@ -67,7 +67,7 @@ fun UIKitSettingCard(
         Icon(
             modifier = Modifier
                 .size(getUIKitTypography().body.lineHeight.value.dp),
-            imageVector = UIKitSymbols.ChevronArrowRight,
+            imageVector = FluentIcons.ChevronArrowRight,
             contentDescription = null,
             tint = getUIKitColors().textFillColorPrimaryBrush
         )

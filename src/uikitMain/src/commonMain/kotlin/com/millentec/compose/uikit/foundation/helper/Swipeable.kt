@@ -1,4 +1,4 @@
-package com.millentec.compose.uikit.foundation.helper
+﻿package com.millentec.compose.uikit.foundation.helper
 
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown

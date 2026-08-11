@@ -1,0 +1,54 @@
+﻿package com.millentec.compose.uikit.icons.fluenticons.filled.dp20
+
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.path
+import androidx.compose.ui.unit.dp
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+
+val FluentIcons.Filled.Text: ImageVector
+    get() {
+        if (_Text != null) {
+            return _Text!!
+        }
+        _Text = ImageVector.Builder(
+            name = "Text",
+            defaultWidth = 20.dp,
+            defaultHeight = 20.dp,
+            viewportWidth = 20f,
+            viewportHeight = 20f
+        ).apply {
+            path(fill = SolidColor(Color(0xFF1D1D1F))) {
+                moveTo(4f, 3.75f)
+                curveTo(4f, 3.336f, 4.336f, 3f, 4.75f, 3f)
+                horizontalLineTo(14.75f)
+                curveTo(15.164f, 3f, 15.5f, 3.336f, 15.5f, 3.75f)
+                verticalLineTo(5.25f)
+                curveTo(15.5f, 5.664f, 15.164f, 6f, 14.75f, 6f)
+                curveTo(14.336f, 6f, 14f, 5.664f, 14f, 5.25f)
+                verticalLineTo(4.5f)
+                horizontalLineTo(10.5f)
+                verticalLineTo(15.5f)
+                horizontalLineTo(11.75f)
+                curveTo(12.164f, 15.5f, 12.5f, 15.836f, 12.5f, 16.25f)
+                curveTo(12.5f, 16.664f, 12.164f, 17f, 11.75f, 17f)
+                horizontalLineTo(7.75f)
+                curveTo(7.336f, 17f, 7f, 16.664f, 7f, 16.25f)
+                curveTo(7f, 15.836f, 7.336f, 15.5f, 7.75f, 15.5f)
+                horizontalLineTo(9f)
+                verticalLineTo(4.5f)
+                horizontalLineTo(5.5f)
+                verticalLineTo(5.25f)
+                curveTo(5.5f, 5.664f, 5.164f, 6f, 4.75f, 6f)
+                curveTo(4.336f, 6f, 4f, 5.664f, 4f, 5.25f)
+                verticalLineTo(3.75f)
+                close()
+            }
+        }.build()
+
+        return _Text!!
+    }
+
+@Suppress("ObjectPropertyName")
+private var _Text: ImageVector? = null

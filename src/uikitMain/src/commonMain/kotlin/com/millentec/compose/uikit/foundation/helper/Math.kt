@@ -1,4 +1,4 @@
-package com.millentec.compose.uikit.foundation.helper
+﻿package com.millentec.compose.uikit.foundation.helper
 
 fun Double.mapTo(from: ClosedRange<Double>, to: ClosedRange<Double>): Double {
     val fromStart = from.start
