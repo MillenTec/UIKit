@@ -118,6 +118,7 @@ open class UIKitNavigationDockItem: UIKitItem() {
                             contentDescription = description,
                             tint = colorAnimated,
                         )
+
                         Text(
                             text = text,
                             style = getUIKitTypography().footnote,
