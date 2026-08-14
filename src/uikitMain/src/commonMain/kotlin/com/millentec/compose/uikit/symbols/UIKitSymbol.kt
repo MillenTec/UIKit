@@ -4,7 +4,6 @@ import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -22,7 +21,7 @@ abstract class UIKitSymbol(
     abstract val layers: List<UIKitSymbolLayer>
 
     @Composable
-    abstract fun colorSet(style: UIKitSymbolStyle): List<Pair<Brush, Float>>
+    abstract fun colorSet(style: UIKitSymbolStyle): List<UIKitSymbolColor>
 
     private var _groupsCache: List<UIKitSymbolPathGroup>? = null
     val groups: List<UIKitSymbolPathGroup>
@@ -72,20 +71,20 @@ abstract class UIKitSymbol(
         }.build()
     }
 
-    open fun appearEffect(): UIKitSymbolAnimTree {
+    open fun appearEffect(): UIKitSymbolAnimTree? {
         val tree = UIKitSymbolAnimTree()
         groups.forEachIndexed { index, group ->
-            tree.addParallel(UIKitSymbolAnimNode.scaleIn(
+            tree.addParallel(UIKitSymbolAnimNode.scaleTo(
                 group.id,
-                initialValue = 0.8f,
+                targetValue = 1f,
                 animateSpec = tween(
                     260 / (groups.size + 1) * 2,
                     easing = CubicBezierEasing(0f, 0.62f, 0.38f, 1f),
                     delayMillis = index * 260 / (groups.size + 1)
                 ),
-            )).addParallel(UIKitSymbolAnimNode.fadeIn(
+            )).addParallel(UIKitSymbolAnimNode.alphaTo(
                 group.id,
-                initialValue = 0f,
+                targetValue = 1f,
                 animateSpec = tween(
                     260 / (groups.size + 1) * 2,
                     easing = CubicBezierEasing(0f, 0.62f, 0.38f, 1f),
@@ -97,10 +96,10 @@ abstract class UIKitSymbol(
         return tree
     }
 
-    open fun disappearEffect(): UIKitSymbolAnimTree {
+    open fun disappearEffect(): UIKitSymbolAnimTree? {
         val tree = UIKitSymbolAnimTree()
         groups.forEachIndexed { index, group ->
-            tree.addParallel(UIKitSymbolAnimNode.scaleOut(
+            tree.addParallel(UIKitSymbolAnimNode.scaleTo(
                 group.id,
                 targetValue = 0.8f,
                 animateSpec = tween(
@@ -108,7 +107,7 @@ abstract class UIKitSymbol(
                     easing = CubicBezierEasing(1f, 0.62f, 0.62f, 1f),
                     delayMillis = index * 260 / (groups.size + 1)
                 ),
-            )).addParallel(UIKitSymbolAnimNode.fadeOut(
+            )).addParallel(UIKitSymbolAnimNode.alphaTo(
                 group.id,
                 targetValue = 0f,
                 animateSpec = tween(
@@ -120,5 +119,13 @@ abstract class UIKitSymbol(
         }
 
         return tree
+    }
+
+    open fun enableEffect(): UIKitSymbolAnimTree? {
+        return null
+    }
+
+    open fun disableEffect(): UIKitSymbolAnimTree? {
+        return null
     }
 }

@@ -2,13 +2,13 @@ package com.millentec.compose.uikit.symbols.regular
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.symbols.UIKitRegularSymbols
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
+import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.getUIKitColors
@@ -24,9 +24,9 @@ val UIKitRegularSymbols.AddCircle: UIKitSymbol
         ) {
             override val layers: List<UIKitSymbolLayer>
                 get() = listOf(
-                    UIKitSymbolLayer("Secondary").apply {
+                    UIKitSymbolLayer("add_symbol").apply {
                         group(
-                            id = 1,
+                            id = "add_symbol",
                             drawType = UIKitPathDrawType.Fill
                         ) {
                             moveTo(6f, 10f)
@@ -49,9 +49,9 @@ val UIKitRegularSymbols.AddCircle: UIKitSymbol
                             close()
                         }
                     },
-                    UIKitSymbolLayer("Primary").apply {
+                    UIKitSymbolLayer("circle").apply {
                         group(
-                            id = 2,
+                            id = "circle",
                             drawType = UIKitPathDrawType.Fill,
                         ) {
                             moveTo(10f, 2f)
@@ -71,22 +71,22 @@ val UIKitRegularSymbols.AddCircle: UIKitSymbol
                 )
 
             @Composable
-            override fun colorSet(style: UIKitSymbolStyle): List<Pair<Brush, Float>> {
+            override fun colorSet(style: UIKitSymbolStyle): List<UIKitSymbolColor> {
                 return when(style) {
                     is UIKitSymbolStyle.Monochrome -> listOf(
-                        Pair(style.brush, 1f),
-                        Pair(style.brush, 1f)
+                        UIKitSymbolColor("add_symbol", style.brush, 1f),
+                        UIKitSymbolColor("circle", style.brush, 1f)
                     )
-                    is UIKitSymbolStyle.MultiColor -> listOf(
-                        Pair(SolidColor(getUIKitColors().highlightColorPrimaryBrush), 1f),
-                        Pair(SolidColor(getUIKitColors().highlightColorPrimaryBrush), 0.6f),
+                    UIKitSymbolStyle.MultiColor -> listOf(
+                        UIKitSymbolColor("add_symbol", SolidColor(getUIKitColors().highlightColorPrimaryBrush), 1f),
+                        UIKitSymbolColor("circle", SolidColor(getUIKitColors().highlightColorPrimaryBrush), 0.6f),
                     )
                     is UIKitSymbolStyle.Hierarchical -> listOf(
-                        Pair(style.brush, 1f),
-                        Pair(style.brush, 0.6f)
+                        UIKitSymbolColor("add_symbol", style.brush, 1f),
+                        UIKitSymbolColor("circle", style.brush, 0.6f),
                     )
-                    is UIKitSymbolStyle.Palette -> style.brushes.map {
-                        Pair(it, 1f)
+                    is UIKitSymbolStyle.Palette -> style.brushes.mapIndexed { index, brush ->
+                        UIKitSymbolColor(layers.getOrNull(index)?.id ?: "unknown", brush, 1f)
                     }
                 }
             }

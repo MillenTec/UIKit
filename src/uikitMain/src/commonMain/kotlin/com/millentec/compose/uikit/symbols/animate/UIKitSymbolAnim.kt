@@ -24,63 +24,58 @@ class UIKitSymbolAnimTree {
 
 data class UIKitSymbolAnimNode(
     val type: UIKitAnimSelector,
-    val groupSelector: Int,
-    val initialValue: Float,
+    val groupSelector: String,
     val targetValue: Float,
-    val animateSpec: AnimationSpec<Float>
+    val animateSpec: AnimationSpec<Float>?
 ) {
     companion object {
-        fun scaleIn(
-            layerSelector: Int,
-            initialValue: Float = 0f,
-            animateSpec: AnimationSpec<Float>
+        fun scaleTo(
+            groupSelector: String,
+            targetValue: Float,
+            animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.Scale,
-                groupSelector = layerSelector,
-                initialValue = initialValue,
-                targetValue = 1f,
-                animateSpec = animateSpec
-            )
-        }
-
-        fun scaleOut(
-            layerSelector: Int,
-            targetValue: Float = 0f,
-            animateSpec: AnimationSpec<Float>
-        ): UIKitSymbolAnimNode {
-            return UIKitSymbolAnimNode(
-                type = UIKitAnimSelector.Scale,
-                groupSelector = layerSelector,
-                initialValue = 1f,
+                groupSelector = groupSelector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )
         }
 
-        fun fadeIn(
-            layerSelector: Int,
-            initialValue: Float = 0f,
-            animateSpec: AnimationSpec<Float>
+        fun alphaTo(
+            groupSelector: String,
+            targetValue: Float,
+            animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.Alpha,
-                groupSelector = layerSelector,
-                initialValue = initialValue,
-                targetValue = 1f,
+                groupSelector = groupSelector,
+                targetValue = targetValue,
                 animateSpec = animateSpec
             )
         }
 
-        fun fadeOut(
-            layerSelector: Int,
-            targetValue: Float = 0f,
-            animateSpec: AnimationSpec<Float>
+        fun pathTrimStartTo(
+            groupSelector: String,
+            targetValue: Float,
+            animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
-                type = UIKitAnimSelector.Alpha,
-                groupSelector = layerSelector,
-                initialValue = 1f,
+                type = UIKitAnimSelector.PathTrimStart,
+                groupSelector = groupSelector,
+                targetValue = targetValue,
+                animateSpec = animateSpec
+            )
+        }
+
+        fun pathTrimEndTo(
+            groupSelector: String,
+            targetValue: Float,
+            animateSpec: AnimationSpec<Float>?
+        ): UIKitSymbolAnimNode {
+            return UIKitSymbolAnimNode(
+                type = UIKitAnimSelector.PathTrimEnd,
+                groupSelector = groupSelector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )

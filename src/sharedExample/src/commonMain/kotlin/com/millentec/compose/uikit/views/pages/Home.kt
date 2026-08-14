@@ -13,6 +13,7 @@ import com.millentec.compose.uikit.component.layout.UIKitIcon
 import com.millentec.compose.uikit.foundation.CommonPage
 import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
+import com.millentec.compose.uikit.symbols.animate.disableEffect
 import com.millentec.compose.uikit.symbols.animate.visibleEffect
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.symbols.regular.AddCircle
@@ -32,6 +33,8 @@ class Home: CommonPage("home") {
             Column {
                 val visible0 = remember { mutableStateOf(true) }
                 val visible1 = remember { mutableStateOf(false) }
+                val enabled0 = remember { mutableStateOf(true) }
+                val enabled1 = remember { mutableStateOf(true) }
                 val style = remember { mutableStateOf(false) }
 
                 Row {
@@ -42,8 +45,9 @@ class Home: CommonPage("home") {
                         contentDescription = "Speaker",
                         symbolStyle = if (style.value) UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush)
                         else UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
-                        symbolEffect = UIKitSymbolEffect
+                        symbolEffect = UIKitSymbolEffect()
                             .visibleEffect(visible0.value)
+                            .disableEffect(enabled0.value)
                     )
 
                     UIKitIcon(
@@ -53,23 +57,42 @@ class Home: CommonPage("home") {
                         contentDescription = null,
                         symbolStyle = if (style.value) UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush)
                         else UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
-                        symbolEffect = UIKitSymbolEffect
+                        symbolEffect = UIKitSymbolEffect()
                             .visibleEffect(visible1.value)
+                            .disableEffect(enabled1.value)
                     )
                 }
 
                 Row {
-                    UIKitToggleSwitch(
-                        checked = visible0.value,
-                        onCheckedChange = { visible0.value = it }
-                    )
+                    Column {
+                        UIKitToggleSwitch(
+                            checked = visible0.value,
+                            onCheckedChange = { visible0.value = it }
+                        )
+
+                        Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                        UIKitToggleSwitch(
+                            checked = enabled0.value,
+                            onCheckedChange = { enabled0.value = it }
+                        )
+                    }
 
                     Spacer(Modifier.width(getUIKitLayout().basicSpacing))
 
-                    UIKitToggleSwitch(
-                        checked = visible1.value,
-                        onCheckedChange = { visible1.value = it }
-                    )
+                    Column {
+                        UIKitToggleSwitch(
+                            checked = visible1.value,
+                            onCheckedChange = { visible1.value = it }
+                        )
+
+                        Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                        UIKitToggleSwitch(
+                            checked = enabled1.value,
+                            onCheckedChange = { enabled1.value = it }
+                        )
+                    }
 
                     Spacer(Modifier.width(getUIKitLayout().basicSpacing))
 

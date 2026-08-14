@@ -2,13 +2,13 @@ package com.millentec.compose.uikit.symbols.regular
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.symbols.UIKitRegularSymbols
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
+import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.getUIKitColors
@@ -24,9 +24,9 @@ val UIKitRegularSymbols.Speaker: UIKitSymbol
         ) {
             override val layers: List<UIKitSymbolLayer>
                 get() = listOf(
-                    UIKitSymbolLayer("Primary").apply {
+                    UIKitSymbolLayer("speaker").apply {
                         group(
-                            id = 0,
+                            id = "speaker",
                             drawType = UIKitPathDrawType.Fill
                         ) {
                             moveTo(10.32f, 2.27f)
@@ -57,9 +57,9 @@ val UIKitRegularSymbols.Speaker: UIKitSymbol
                             close()
                         }
                     },
-                    UIKitSymbolLayer("Wave0").apply {
+                    UIKitSymbolLayer("wave0").apply {
                         group(
-                            id = 1,
+                            id = "wave0",
                             drawType = UIKitPathDrawType.Fill,
                         ) {
                             moveTo(14.08f, 12.93f)
@@ -72,9 +72,9 @@ val UIKitRegularSymbols.Speaker: UIKitSymbol
                             close()
                         }
                     },
-                    UIKitSymbolLayer("Wave1").apply {
+                    UIKitSymbolLayer("wave1").apply {
                         group(
-                            id = 2,
+                            id = "wave1",
                             drawType = UIKitPathDrawType.Fill,
                         ) {
                             moveTo(15.26f, 4.63f)
@@ -90,18 +90,34 @@ val UIKitRegularSymbols.Speaker: UIKitSymbol
                 )
 
             @Composable
-            override fun colorSet(style: UIKitSymbolStyle): List<Pair<Brush, Float>> {
+            override fun colorSet(style: UIKitSymbolStyle): List<UIKitSymbolColor> {
                 return when(style) {
                     is UIKitSymbolStyle.Hierarchical -> listOf(
-                        Pair(style.brush, 1f),
-                        Pair(style.brush, 0.75f),
-                        Pair(style.brush, 0.6f),
+                        UIKitSymbolColor("speaker", style.brush, 1f),
+                        UIKitSymbolColor("wave0", style.brush, 0.75f),
+                        UIKitSymbolColor("wave1", style.brush, 0.6f)
                     )
-                    is UIKitSymbolStyle.Monochrome -> layers.map { Pair(style.brush, 1f) }
-                    UIKitSymbolStyle.MultiColor -> layers.map {
-                        Pair(SolidColor(getUIKitColors().highlightColorPrimaryBrush), 1f)
+                    is UIKitSymbolStyle.Monochrome -> layers.map { layer ->
+                        UIKitSymbolColor(
+                            layer.id,
+                            style.brush,
+                            1f
+                        )
                     }
-                    is UIKitSymbolStyle.Palette -> style.brushes.map { Pair(it, 1f) }
+                    UIKitSymbolStyle.MultiColor -> layers.map { layer ->
+                        UIKitSymbolColor(
+                            layer.id,
+                            SolidColor(getUIKitColors().highlightColorPrimaryBrush),
+                            1f
+                        )
+                    }
+                    is UIKitSymbolStyle.Palette -> style.brushes.mapIndexed { index, brush ->
+                        UIKitSymbolColor(
+                            layers.getOrNull(index)?.id ?: "unknown",
+                            brush,
+                            1f
+                        )
+                    }
                 }
             }
         }

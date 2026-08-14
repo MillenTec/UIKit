@@ -7,10 +7,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathMeasure
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.scale
@@ -60,8 +58,11 @@ fun UIKitIcon(
     symbolStyle: UIKitSymbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush),
     symbolEffect: UIKitSymbolEffect? = null,
 ) {
-    val animState = remember { mutableStateListOf<Pair<Int, UIKitSymbolAnimState>>() }
-    val colorSet = symbol.colorSet(symbolStyle)
+    val animStates = remember { symbol.groups.map {
+        UIKitSymbolAnimState(it.id)
+    }.toMutableStateList() }
+    val colorSet by rememberUpdatedState(symbol.colorSet(symbolStyle))
+    val symbolEffectTriggers = remember { mutableListOf<Any?>() }
     val builtPaths = remember { mutableStateOf(symbol.groups.map { group ->
         Pair(group.id, Path().apply {
             group.path.nodes.forEach { node ->
@@ -83,7 +84,7 @@ fun UIKitIcon(
         })
     }) }
 
-    LaunchedEffect(symbol) {
+    LaunchedEffect(symbol.layers) {
         builtPaths.value = symbol.groups.map { group ->
             Pair(group.id, Path().apply {
                 group.path.nodes.forEach { node ->
@@ -106,15 +107,34 @@ fun UIKitIcon(
         }
     }
 
-    LaunchedEffect(symbol) {
-        animState.clear()
-        symbol.groups.forEach {
-            animState.add(Pair(it.id, UIKitSymbolAnimState()))
-        }
+    LaunchedEffect(symbol.groups) {
+        animStates.clear()
+        animStates.addAll(symbol.groups.map {
+            UIKitSymbolAnimState(it.id)
+        })
     }
 
     LaunchedEffect(symbolEffect) {
-        symbolEffect?.Execute(symbol, animState)
+        symbolEffect?.effects?.forEachIndexed { index, effect ->
+            val preTrigger = symbolEffectTriggers.getOrElse(index) {
+                symbolEffectTriggers.add(null)
+                null
+            }
+            if (preTrigger == null && effect.initializable) {
+                effect.initialize(symbol, animStates)
+            } else if (preTrigger != effect.triggerCurrent) {
+                effect.execute(symbol, animStates)
+            }
+
+            symbolEffectTriggers[index] = effect.triggerCurrent
+        }
+    }
+
+    LaunchedEffect(symbolEffect?.effects?.size) {
+        symbolEffectTriggers.clear()
+        symbolEffect?.effects?.forEach { effect ->
+            symbolEffectTriggers.add(effect.triggerCurrent)
+        }
     }
 
     Canvas(
@@ -126,18 +146,36 @@ fun UIKitIcon(
                 this.role = Role.Image
             }
     ) {
+        var saveCount = 0
         scale(
             scaleX = size.width / symbol.viewportSize.width,
             scaleY = size.height / symbol.viewportSize.height,
             pivot = Offset(0f, 0f)
         ) {
-            symbol.layers.forEachIndexed { index, layer ->
+            drawContext.canvas.saveLayer(
+                bounds = Rect(
+                    Offset.Zero,
+                    symbol.viewportSize,
+                ),
+                paint = Paint()
+            )
+            saveCount++
+
+            symbol.layers.forEach { layer ->
+                val brush = colorSet.firstOrNull { it.selector == layer.id }?.brush ?: SolidColor(Color.Transparent)
+                val alpha = colorSet.firstOrNull { it.selector == layer.id }?.alpha ?: 0f
+
                 layer.groups.forEach { group ->
-                    val animateState = animState.firstOrNull {
+                    val animateState = animStates.firstOrNull {
+                        it.id == group.id
+                    }
+
+                    println("alpha of '${group.id}': $alpha")
+                    println("groupId: '${group.id}'")
+
+                    val path = builtPaths.value.firstOrNull {
                         it.first == group.id
-                    }?.second
-                    val brush = colorSet.getOrNull(index)?.first ?: SolidColor(Color.Transparent)
-                    val alpha = colorSet.getOrNull(index)?.second ?: 0f
+                    }?.second ?: Path()
 
                     scale(
                         scale = animateState?.scaleState?.value ?: 1f,
@@ -149,7 +187,7 @@ fun UIKitIcon(
                         when (group.drawType) {
                             UIKitPathDrawType.Fill -> {
                                 drawPath(
-                                    path = builtPaths.value.firstOrNull { it.first == group.id }?.second ?: Path(),
+                                    path = path,
                                     brush = brush,
                                     alpha = alpha * (animateState?.alphaState?.value ?: 1f),
                                     style = Fill
@@ -159,30 +197,97 @@ fun UIKitIcon(
                             is UIKitPathDrawType.Stroke -> {
                                 val pathMeasure = PathMeasure()
                                 pathMeasure.setPath(
-                                    path = builtPaths.value.firstOrNull { it.first == group.id }?.second ?: Path(),
+                                    path = path,
                                     forceClosed = false
                                 )
 
                                 val length = pathMeasure.length
 
                                 val trimmedPath = Path()
-                                pathMeasure.getSegment(0f * length, 1f * length, trimmedPath, true)
+                                pathMeasure.getSegment(
+                                    (animateState?.pathTrimStartState?.value ?: 0f) * length,
+                                    (animateState?.pathTrimEndState?.value ?: 1f) * length,
+                                    trimmedPath,
+                                    true
+                                )
 
                                 drawPath(
                                     path = trimmedPath,
                                     brush = brush,
                                     alpha = alpha * (animateState?.alphaState?.value ?: 1f),
                                     style = Stroke(
-                                        width = 1f,
+                                        width = group.drawType.lineWidth,
                                         cap = group.drawType.cap,
                                         join = group.drawType.join,
                                     )
                                 )
                             }
+
+                            UIKitPathDrawType.MaskFilled -> {
+                                drawPath(
+                                    path = path,
+                                    color = Color.Transparent,
+                                    alpha = alpha * (animateState?.alphaState?.value ?: 1f),
+                                    style = Fill,
+                                    blendMode = BlendMode.DstIn
+                                )
+
+                                drawContext.canvas.saveLayer(
+                                    bounds = Rect(
+                                        Offset.Zero,
+                                        symbol.viewportSize,
+                                    ),
+                                    paint = Paint()
+                                )
+                                saveCount++
+                            }
+
+                            is UIKitPathDrawType.MaskStroke -> {
+                                val pathMeasure = PathMeasure()
+                                pathMeasure.setPath(
+                                    path = path,
+                                    forceClosed = false
+                                )
+
+                                val length = pathMeasure.length
+
+                                val trimmedPath = Path()
+                                pathMeasure.getSegment(
+                                    (animateState?.pathTrimStartState?.value ?: 0f) * length,
+                                    (animateState?.pathTrimEndState?.value ?: 1f) * length,
+                                    trimmedPath,
+                                    true
+                                )
+
+                                drawPath(
+                                    path = trimmedPath,
+                                    color = Color.Transparent,
+                                    alpha = alpha * (animateState?.alphaState?.value ?: 1f),
+                                    style = Stroke(
+                                        width = group.drawType.lineWidth,
+                                        cap = group.drawType.cap,
+                                        join = group.drawType.join,
+                                    ),
+                                    blendMode = BlendMode.DstIn
+                                )
+
+                                drawContext.canvas.saveLayer(
+                                    bounds = Rect(
+                                        Offset.Zero,
+                                        symbol.viewportSize,
+                                    ),
+                                    paint = Paint()
+                                )
+                                saveCount++
+                            }
                         }
                     }
                 }
             }
+        }
+
+        repeat(saveCount) {
+            drawContext.canvas.restore()
         }
     }
 }
