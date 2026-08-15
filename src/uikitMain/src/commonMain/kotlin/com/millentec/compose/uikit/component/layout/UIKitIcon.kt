@@ -58,9 +58,9 @@ fun UIKitIcon(
     symbolStyle: UIKitSymbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush),
     symbolEffect: UIKitSymbolEffect? = null,
 ) {
-    val animStates = remember { symbol.groups.map {
+    val animStates = remember(symbol) { symbol.groups.map {
         UIKitSymbolAnimState(it.id)
-    }.toMutableStateList() }
+    } }
     val colorSet by rememberUpdatedState(symbol.colorSet(symbolStyle))
     val symbolEffectTriggers = remember { mutableListOf<Any?>() }
     val builtPaths = remember { mutableStateOf(symbol.groups.map { group ->
@@ -107,33 +107,19 @@ fun UIKitIcon(
         }
     }
 
-    LaunchedEffect(symbol.groups) {
-        animStates.clear()
-        animStates.addAll(symbol.groups.map {
-            UIKitSymbolAnimState(it.id)
-        })
-    }
-
     LaunchedEffect(symbolEffect) {
         symbolEffect?.effects?.forEachIndexed { index, effect ->
             val preTrigger = symbolEffectTriggers.getOrElse(index) {
                 symbolEffectTriggers.add(null)
                 null
             }
+            symbolEffectTriggers[index] = effect.triggerCurrent
+
             if (preTrigger == null && effect.initializable) {
                 effect.initialize(symbol, animStates)
             } else if (preTrigger != effect.triggerCurrent) {
                 effect.execute(symbol, animStates)
             }
-
-            symbolEffectTriggers[index] = effect.triggerCurrent
-        }
-    }
-
-    LaunchedEffect(symbolEffect?.effects?.size) {
-        symbolEffectTriggers.clear()
-        symbolEffect?.effects?.forEach { effect ->
-            symbolEffectTriggers.add(effect.triggerCurrent)
         }
     }
 
@@ -170,115 +156,118 @@ fun UIKitIcon(
                         it.id == group.id
                     }
 
-                    println("alpha of '${group.id}': $alpha")
-                    println("groupId: '${group.id}'")
-
                     val path = builtPaths.value.firstOrNull {
                         it.first == group.id
                     }?.second ?: Path()
 
-                    scale(
-                        scale = animateState?.scaleState?.value ?: 1f,
-                        pivot = Offset(
-                            x = symbol.viewportSize.width / 2,
-                            y = symbol.viewportSize.height / 2,
-                        )
-                    ) {
-                        when (group.drawType) {
-                            UIKitPathDrawType.Fill -> {
-                                drawPath(
-                                    path = path,
-                                    brush = brush,
-                                    alpha = alpha * (animateState?.alphaState?.value ?: 1f),
-                                    style = Fill
-                                )
-                            }
+                    val isRender = animateState != null && (animateState.alphaState.value > 0f
+                            && animateState.scaleState.value > 0f
+                            && animateState.pathTrimStartState.value - animateState.pathTrimEndState.value != 0f)
 
-                            is UIKitPathDrawType.Stroke -> {
-                                val pathMeasure = PathMeasure()
-                                pathMeasure.setPath(
-                                    path = path,
-                                    forceClosed = false
-                                )
-
-                                val length = pathMeasure.length
-
-                                val trimmedPath = Path()
-                                pathMeasure.getSegment(
-                                    (animateState?.pathTrimStartState?.value ?: 0f) * length,
-                                    (animateState?.pathTrimEndState?.value ?: 1f) * length,
-                                    trimmedPath,
-                                    true
-                                )
-
-                                drawPath(
-                                    path = trimmedPath,
-                                    brush = brush,
-                                    alpha = alpha * (animateState?.alphaState?.value ?: 1f),
-                                    style = Stroke(
-                                        width = group.drawType.lineWidth,
-                                        cap = group.drawType.cap,
-                                        join = group.drawType.join,
+                    if (isRender) {
+                        scale(
+                            scale = animateState.scaleState.value,
+                            pivot = Offset(
+                                x = symbol.viewportSize.width / 2,
+                                y = symbol.viewportSize.height / 2,
+                            )
+                        ) {
+                            when (group.drawType) {
+                                UIKitPathDrawType.Fill -> {
+                                    drawPath(
+                                        path = path,
+                                        brush = brush,
+                                        alpha = alpha * (animateState.alphaState.value),
+                                        style = Fill
                                     )
-                                )
-                            }
+                                }
 
-                            UIKitPathDrawType.MaskFilled -> {
-                                drawPath(
-                                    path = path,
-                                    color = Color.Transparent,
-                                    alpha = alpha * (animateState?.alphaState?.value ?: 1f),
-                                    style = Fill,
-                                    blendMode = BlendMode.DstIn
-                                )
+                                is UIKitPathDrawType.Stroke -> {
+                                    val pathMeasure = PathMeasure()
+                                    pathMeasure.setPath(
+                                        path = path,
+                                        forceClosed = false
+                                    )
 
-                                drawContext.canvas.saveLayer(
-                                    bounds = Rect(
-                                        Offset.Zero,
-                                        symbol.viewportSize,
-                                    ),
-                                    paint = Paint()
-                                )
-                                saveCount++
-                            }
+                                    val length = pathMeasure.length
 
-                            is UIKitPathDrawType.MaskStroke -> {
-                                val pathMeasure = PathMeasure()
-                                pathMeasure.setPath(
-                                    path = path,
-                                    forceClosed = false
-                                )
+                                    val trimmedPath = Path()
+                                    pathMeasure.getSegment(
+                                        animateState.pathTrimStartState.value * length,
+                                        animateState.pathTrimEndState.value * length,
+                                        trimmedPath,
+                                        true
+                                    )
 
-                                val length = pathMeasure.length
+                                    drawPath(
+                                        path = trimmedPath,
+                                        brush = brush,
+                                        alpha = alpha * animateState.alphaState.value,
+                                        style = Stroke(
+                                            width = group.drawType.lineWidth,
+                                            cap = group.drawType.cap,
+                                            join = group.drawType.join,
+                                        )
+                                    )
+                                }
 
-                                val trimmedPath = Path()
-                                pathMeasure.getSegment(
-                                    (animateState?.pathTrimStartState?.value ?: 0f) * length,
-                                    (animateState?.pathTrimEndState?.value ?: 1f) * length,
-                                    trimmedPath,
-                                    true
-                                )
+                                UIKitPathDrawType.MaskFilled -> {
+                                    drawPath(
+                                        path = path,
+                                        color = Color.Transparent,
+                                        alpha = alpha * animateState.alphaState.value,
+                                        style = Fill,
+                                        blendMode = BlendMode.DstIn
+                                    )
 
-                                drawPath(
-                                    path = trimmedPath,
-                                    color = Color.Transparent,
-                                    alpha = alpha * (animateState?.alphaState?.value ?: 1f),
-                                    style = Stroke(
-                                        width = group.drawType.lineWidth,
-                                        cap = group.drawType.cap,
-                                        join = group.drawType.join,
-                                    ),
-                                    blendMode = BlendMode.DstIn
-                                )
+                                    drawContext.canvas.saveLayer(
+                                        bounds = Rect(
+                                            Offset.Zero,
+                                            symbol.viewportSize,
+                                        ),
+                                        paint = Paint()
+                                    )
+                                    saveCount++
+                                }
 
-                                drawContext.canvas.saveLayer(
-                                    bounds = Rect(
-                                        Offset.Zero,
-                                        symbol.viewportSize,
-                                    ),
-                                    paint = Paint()
-                                )
-                                saveCount++
+                                is UIKitPathDrawType.MaskStroke -> {
+                                    val pathMeasure = PathMeasure()
+                                    pathMeasure.setPath(
+                                        path = path,
+                                        forceClosed = false
+                                    )
+
+                                    val length = pathMeasure.length
+
+                                    val trimmedPath = Path()
+                                    pathMeasure.getSegment(
+                                        animateState.pathTrimStartState.value * length,
+                                        animateState.pathTrimEndState.value * length,
+                                        trimmedPath,
+                                        true
+                                    )
+
+                                    drawPath(
+                                        path = trimmedPath,
+                                        color = Color.Transparent,
+                                        alpha = alpha * animateState.alphaState.value,
+                                        style = Stroke(
+                                            width = group.drawType.lineWidth,
+                                            cap = group.drawType.cap,
+                                            join = group.drawType.join,
+                                        ),
+                                        blendMode = BlendMode.DstIn
+                                    )
+
+                                    drawContext.canvas.saveLayer(
+                                        bounds = Rect(
+                                            Offset.Zero,
+                                            symbol.viewportSize,
+                                        ),
+                                        paint = Paint()
+                                    )
+                                    saveCount++
+                                }
                             }
                         }
                     }
