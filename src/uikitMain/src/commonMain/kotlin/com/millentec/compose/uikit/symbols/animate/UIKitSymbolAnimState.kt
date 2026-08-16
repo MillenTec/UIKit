@@ -38,6 +38,15 @@ class UIKitSymbolAnimState(
         }
     }
 
+    fun snapshot(): UIKitSymbolGroupState {
+        return UIKitSymbolGroupState(
+            scale = scaleState.value,
+            alpha = alphaState.value,
+            pathTrimStart = pathTrimStartState.value,
+            pathTrimEnd = pathTrimEndState.value,
+        )
+    }
+
     val scaleState = Animatable(
         initialValue = initialScale,
         typeConverter = Float.VectorConverter,
@@ -57,4 +66,38 @@ class UIKitSymbolAnimState(
         initialValue = initialPathTrimEnd,
         typeConverter = Float.VectorConverter,
     )
+}
+
+data class UIKitSymbolGroupState(
+    val scale: Float = 1f,
+    val alpha: Float = 1f,
+    val pathTrimStart: Float = 0f,
+    val pathTrimEnd: Float = 1f,
+) {
+    val visible: Boolean
+        get() = alpha > 0f
+                && scale > 0f
+                && pathTrimStart - pathTrimEnd != 0f
+
+    fun visible(
+        filter: List<UIKitAnimSelector>
+    ): Boolean {
+        val values = filter.map { selector ->
+            when (selector) {
+                Empty -> true
+                Scale -> scale > 0f
+                Alpha -> alpha > 0f
+                PathTrimStart -> {
+                    pathTrimStart - pathTrimEnd != 0f
+                }
+                PathTrimEnd -> {
+                    pathTrimStart - pathTrimEnd != 0f
+                }
+            }
+        }
+
+        return values.all {
+            it
+        }
+    }
 }

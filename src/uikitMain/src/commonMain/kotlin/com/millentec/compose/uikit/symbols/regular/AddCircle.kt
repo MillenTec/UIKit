@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.materials.UIKitBrush
 import com.millentec.compose.uikit.symbols.UIKitRegularSymbols
 import com.millentec.compose.uikit.symbols.UIKitSymbol
-import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
+import com.millentec.compose.uikit.symbols.animate.UIKitSymbolGroupState
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
@@ -28,7 +28,8 @@ val UIKitRegularSymbols.AddCircle: UIKitSymbol
                     UIKitSymbolLayer("add_symbol").apply {
                         group(
                             id = "add_symbol",
-                            drawType = UIKitPathDrawType.Fill
+                            drawType = UIKitPathDrawType.Fill,
+                            zIndex = 1
                         ) {
                             moveTo(6f, 10f)
                             curveToRelative(0f, -0.3f, 0.2f, -0.5f, 0.5f, -0.5f)
@@ -54,6 +55,7 @@ val UIKitRegularSymbols.AddCircle: UIKitSymbol
                         group(
                             id = "circle",
                             drawType = UIKitPathDrawType.Fill,
+                            zIndex = 0
                         ) {
                             moveTo(10f, 2f)
                             curveTo(5.6f, 2f, 2f, 5.6f, 2f, 10f)
@@ -74,7 +76,7 @@ val UIKitRegularSymbols.AddCircle: UIKitSymbol
             @Composable
             override fun colorSet(
                 style: UIKitSymbolStyle,
-                states: List<UIKitSymbolAnimState>
+                states: List<Pair<String, UIKitSymbolGroupState>>
             ): List<UIKitSymbolColor> {
                 return when(style) {
                     is UIKitSymbolStyle.Monochrome -> listOf(

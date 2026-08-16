@@ -14,7 +14,11 @@ import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimNode
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimTree
-import com.millentec.compose.uikit.symbols.draw.*
+import com.millentec.compose.uikit.symbols.animate.UIKitSymbolGroupState
+import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
+import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
+import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
+import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.getUIKitColors
 
 val UIKitRegularSymbols.Speaker: UIKitSymbol
@@ -22,7 +26,7 @@ val UIKitRegularSymbols.Speaker: UIKitSymbol
         if (_Speaker != null)
             return _Speaker!!
         _Speaker = object: UIKitSymbol(
-            name = "AddCircle",
+            name = "Speaker Wave 2",
             defaultSize = DpSize(20.dp, 20.dp),
             viewportSize = Size(20f, 20f),
         ) {
@@ -129,11 +133,11 @@ val UIKitRegularSymbols.Speaker: UIKitSymbol
             @Composable
             override fun colorSet(
                 style: UIKitSymbolStyle,
-                states: List<UIKitSymbolAnimState>
+                states: List<Pair<String, UIKitSymbolGroupState>>
             ): List<UIKitSymbolColor> {
                 return when(style) {
                     is UIKitSymbolStyle.Hierarchical -> {
-                        val disabled = states.firstOrNull { it.id == "disable" }?.visible == true
+                        val disabled = states.firstOrNull { it.first == "disable" }?.second?.visible == true
                         listOf(
                             UIKitSymbolColor("speaker", style.brush, if (disabled) 0.6f else 1f),
                             UIKitSymbolColor("wave0", style.brush, if (disabled) 0.6f else 0.75f),

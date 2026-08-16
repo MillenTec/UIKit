@@ -9,10 +9,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.DpSize
-import com.millentec.compose.uikit.symbols.animate.UIKitAnimSelector
-import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimNode
-import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
-import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimTree
+import com.millentec.compose.uikit.symbols.animate.*
 import com.millentec.compose.uikit.symbols.draw.*
 
 /**
@@ -37,7 +34,7 @@ abstract class UIKitSymbol(
     @Composable
     abstract fun colorSet(
         style: UIKitSymbolStyle,
-        states: List<UIKitSymbolAnimState>
+        states: List<Pair<String, UIKitSymbolGroupState>>
     ): List<UIKitSymbolColor>
 
     private var _groupsCache: List<UIKitSymbolPathGroup>? = null
@@ -228,6 +225,50 @@ abstract class UIKitSymbol(
     open fun disableEffect(
         states: List<UIKitSymbolAnimState>? = null
     ): UIKitSymbolAnimTree? {
+        return null
+    }
+}
+
+/**
+ * UIKitSymbol 所提供的一个兼容层, 如果你传入 `UIKitIcon` 的 symbol 属性为 `UIKitImageVectorSymbol`, UIKitIcon 将会以 ImageVector 的方式静态渲染它
+ *
+ * 当 symbol 为 UIKitImageVectorSymbol 时, 如果传入 UIKitIcon 的 symbolStyle 属性为 Monochrome, 将会使用其 Brush 中的第一个 Color 作为 tint 否则会使用 `Color.Unspecified`
+ */
+class UIKitImageVectorSymbol(
+    val imageVector: ImageVector
+): UIKitSymbol(
+    name = imageVector.name,
+    defaultSize = DpSize(imageVector.defaultWidth, imageVector.defaultHeight),
+    viewportSize = Size(imageVector.viewportWidth, imageVector.viewportHeight)
+) {
+    override val layers: List<UIKitSymbolLayer>
+        get() = emptyList()
+
+    @Composable
+    override fun colorSet(
+        style: UIKitSymbolStyle,
+        states: List<Pair<String, UIKitSymbolGroupState>>
+    ): List<UIKitSymbolColor> {
+        return emptyList()
+    }
+
+    override fun toComposeVector(color: Color): ImageVector {
+        return imageVector
+    }
+
+    override fun appearEffect(states: List<UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {
+        return null
+    }
+
+    override fun disappearEffect(states: List<UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {
+        return null
+    }
+
+    override fun enableEffect(states: List<UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {
+        return null
+    }
+
+    override fun disableEffect(states: List<UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {
         return null
     }
 }

@@ -4,7 +4,6 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
@@ -15,6 +14,7 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.materials.UIKitAnimateBrush
 import com.millentec.compose.uikit.foundation.materials.UIKitBrush
+import com.millentec.compose.uikit.symbols.UIKitImageVectorSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
@@ -74,22 +75,13 @@ private fun UIKitIconSample() {
     )
 }
 
-/**
- * 用于渲染 UIKitSymbol 的可组合项
- * @param modifier 作用于绘制图标的 Canvas 的修改器, 你可以通过 size 属性改变图标的尺寸
- * @param symbol 绘制的图标源
- * @param contentDescription 用于无障碍功能的图标语义信息, 传入 null 则不包含语义信息
- * @param symbolStyle 图标的着色模式
- * @param symbolEffect 图标动态效果, 传入 null 则无动态效果, 按图标的默认配置渲染
- * @sample UIKitIconSample
- */
 @Composable
-fun UIKitIcon(
+private fun UIKitAnimatableIcon(
     modifier: Modifier = Modifier,
     symbol: UIKitSymbol,
     contentDescription: String?,
-    symbolStyle: UIKitSymbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush),
-    symbolEffect: UIKitSymbolEffect? = null,
+    symbolStyle: UIKitSymbolStyle,
+    symbolEffect: UIKitSymbolEffect,
 ) {
     val animStates = remember(symbol) { symbol.groups.map {
         UIKitSymbolAnimState(
@@ -100,7 +92,7 @@ fun UIKitIcon(
             initialPathTrimEnd = it.defaultState.pathTrimEnd,
         )
     } }
-    val colorSet by rememberUpdatedState(symbol.colorSet(symbolStyle, animStates))
+    val colorSet by rememberUpdatedState(symbol.colorSet(symbolStyle, animStates.map { Pair(it.id, it.snapshot()) }))
     val colorsAnimated = remember { colorSet.map {
         Pair(it.selector, UIKitAnimateBrush(it.brush))
     }.toMutableStateList() }
@@ -195,7 +187,7 @@ fun UIKitIcon(
         }
     }
 
-    LaunchedEffect(symbol.layers) {
+    LaunchedEffect(symbol) {
         builtPaths.value = symbol.groups.map { group ->
             Pair(group.id, Path().apply {
                 group.path.nodes.forEach { node ->
@@ -219,7 +211,7 @@ fun UIKitIcon(
     }
 
     LaunchedEffect(symbolEffect) {
-        symbolEffect?.effects?.forEachIndexed { index, effect ->
+        symbolEffect.effects.forEachIndexed { index, effect ->
             val preTrigger = symbolEffectTriggers.getOrElse(index) {
                 symbolEffectTriggers.add(null)
                 null
@@ -235,9 +227,8 @@ fun UIKitIcon(
     }
 
     Canvas(
-        modifier = Modifier
-            .defaultMinSize(symbol.defaultSize.width, symbol.defaultSize.height)
-            .then(modifier)
+        modifier = modifier
+            .size(symbol.defaultSize.width, symbol.defaultSize.height)
             .semantics {
                 this.contentDescription = contentDescription ?: return@semantics
                 this.role = Role.Image
@@ -387,5 +378,272 @@ fun UIKitIcon(
         repeat(saveCount) {
             drawContext.canvas.restore()
         }
+    }
+}
+
+@Composable
+private fun UIKitStaticIcon(
+    modifier: Modifier = Modifier,
+    symbol: UIKitSymbol,
+    contentDescription: String?,
+    symbolStyle: UIKitSymbolStyle
+) {
+    val defaultStates = remember { symbol.groups.map { Pair(it.id, it.defaultState) } }
+    val colorSet by rememberUpdatedState(symbol.colorSet(symbolStyle, defaultStates))
+    val builtPaths = remember { mutableStateOf(symbol.groups.map { group ->
+        Pair(group.id, Path().apply {
+            group.path.nodes.forEach { node ->
+                when (node) {
+                    UIKitPathNode.Close -> close()
+                    is UIKitPathNode.CurveTo -> cubicTo(
+                        node.x1,
+                        node.y1,
+                        node.x2,
+                        node.y2,
+                        node.x3,
+                        node.y3,
+                    )
+
+                    is UIKitPathNode.LineTo -> lineTo(node.x, node.y)
+                    is UIKitPathNode.MoveTo -> moveTo(node.x, node.y)
+                }
+            }
+        })
+    }) }
+
+    LaunchedEffect(symbol) {
+        builtPaths.value = symbol.groups.map { group ->
+            Pair(group.id, Path().apply {
+                group.path.nodes.forEach { node ->
+                    when (node) {
+                        UIKitPathNode.Close -> close()
+                        is UIKitPathNode.CurveTo -> cubicTo(
+                            node.x1,
+                            node.y1,
+                            node.x2,
+                            node.y2,
+                            node.x3,
+                            node.y3,
+                        )
+
+                        is UIKitPathNode.LineTo -> lineTo(node.x, node.y)
+                        is UIKitPathNode.MoveTo -> moveTo(node.x, node.y)
+                    }
+                }
+            })
+        }
+    }
+
+    Canvas(
+        modifier = modifier
+            .size(symbol.defaultSize.width, symbol.defaultSize.height)
+            .semantics {
+                this.contentDescription = contentDescription ?: return@semantics
+                this.role = Role.Image
+            }
+    ) {
+        var saveCount = 0
+        scale(
+            scaleX = size.width / symbol.viewportSize.width,
+            scaleY = size.height / symbol.viewportSize.height,
+            pivot = Offset(0f, 0f)
+        ) {
+            drawContext.canvas.saveLayer(
+                bounds = Rect(
+                    Offset.Zero,
+                    symbol.viewportSize,
+                ),
+                paint = Paint()
+            )
+            saveCount++
+
+            symbol.layers.forEach { layer ->
+                val brush = colorSet.firstOrNull { it.selector == layer.id }?.brush ?: UIKitBrush.solid(Color.Transparent)
+                val alpha = colorSet.firstOrNull { it.selector == layer.id }?.alpha ?: 0f
+
+                layer.groups.forEach { group ->
+
+                    val path = builtPaths.value.firstOrNull {
+                        it.first == group.id
+                    }?.second ?: Path()
+
+                    val isRender = group.defaultState.visible
+
+                    if (isRender) {
+                        scale(
+                            scale = group.defaultState.scale,
+                            pivot = Offset(
+                                x = symbol.viewportSize.width / 2,
+                                y = symbol.viewportSize.height / 2,
+                            )
+                        ) {
+                            when (group.drawType) {
+                                UIKitPathDrawType.Fill -> {
+                                    drawPath(
+                                        path = path,
+                                        brush = brush.asComposeBrush(),
+                                        alpha = alpha * group.defaultState.alpha,
+                                        style = Fill
+                                    )
+                                }
+
+                                is UIKitPathDrawType.Stroke -> {
+                                    val pathMeasure = PathMeasure()
+                                    pathMeasure.setPath(
+                                        path = path,
+                                        forceClosed = false
+                                    )
+
+                                    val length = pathMeasure.length
+
+                                    val trimmedPath = Path()
+                                    pathMeasure.getSegment(
+                                        group.defaultState.pathTrimStart * length,
+                                        group.defaultState.pathTrimEnd * length,
+                                        trimmedPath,
+                                        true
+                                    )
+
+                                    drawPath(
+                                        path = trimmedPath,
+                                        brush = brush.asComposeBrush(),
+                                        alpha = alpha * group.defaultState.alpha,
+                                        style = Stroke(
+                                            width = group.drawType.lineWidth,
+                                            cap = group.drawType.cap,
+                                            join = group.drawType.join,
+                                        )
+                                    )
+                                }
+
+                                UIKitPathDrawType.MaskFilled -> {
+                                    drawPath(
+                                        path = path,
+                                        color = Color.Transparent,
+                                        alpha = alpha * group.defaultState.alpha,
+                                        style = Fill,
+                                        blendMode = BlendMode.DstIn
+                                    )
+
+                                    drawContext.canvas.saveLayer(
+                                        bounds = Rect(
+                                            Offset.Zero,
+                                            symbol.viewportSize,
+                                        ),
+                                        paint = Paint()
+                                    )
+                                    saveCount++
+                                }
+
+                                is UIKitPathDrawType.MaskStroke -> {
+                                    val pathMeasure = PathMeasure()
+                                    pathMeasure.setPath(
+                                        path = path,
+                                        forceClosed = false
+                                    )
+
+                                    val length = pathMeasure.length
+
+                                    val trimmedPath = Path()
+                                    pathMeasure.getSegment(
+                                        group.defaultState.pathTrimStart * length,
+                                        group.defaultState.pathTrimEnd * length,
+                                        trimmedPath,
+                                        true
+                                    )
+
+                                    drawPath(
+                                        path = trimmedPath,
+                                        color = Color.Transparent,
+                                        alpha = alpha * group.defaultState.alpha,
+                                        style = Stroke(
+                                            width = group.drawType.lineWidth,
+                                            cap = group.drawType.cap,
+                                            join = group.drawType.join,
+                                        ),
+                                        blendMode = BlendMode.DstIn
+                                    )
+
+                                    drawContext.canvas.saveLayer(
+                                        bounds = Rect(
+                                            Offset.Zero,
+                                            symbol.viewportSize,
+                                        ),
+                                        paint = Paint()
+                                    )
+                                    saveCount++
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        repeat(saveCount) {
+            drawContext.canvas.restore()
+        }
+    }
+}
+
+@Composable
+private fun UIKitImageVectorIcon(
+    modifier: Modifier = Modifier,
+    imageVector: ImageVector,
+    contentDescription: String?,
+    tint: Color,
+) {
+    Icon(
+        modifier = modifier,
+        imageVector = imageVector,
+        contentDescription = contentDescription,
+        tint = tint,
+    )
+}
+
+/**
+ * 用于渲染 UIKitSymbol 的可组合项
+ * @param modifier 作用于绘制图标的 Canvas 的修改器, 你可以通过 size 属性改变图标的尺寸
+ * @param symbol 绘制的图标源
+ * @param contentDescription 用于无障碍功能的图标语义信息, 传入 null 则不包含语义信息
+ * @param symbolStyle 图标的着色模式
+ * @param symbolEffect 图标动态效果, 传入 null 则无动态效果, 按图标的默认配置渲染
+ * @sample UIKitIconSample
+ */
+@Composable
+fun UIKitIcon(
+    modifier: Modifier = Modifier,
+    symbol: UIKitSymbol,
+    contentDescription: String?,
+    symbolStyle: UIKitSymbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush),
+    symbolEffect: UIKitSymbolEffect? = null,
+) {
+    if (symbol is UIKitImageVectorSymbol) {
+        val tint = when (symbolStyle) {
+            is UIKitSymbolStyle.Monochrome -> symbolStyle.brush.colorStops.getOrNull(0)?.second ?: Color.Unspecified
+            else -> Color.Unspecified
+        }
+
+        UIKitImageVectorIcon(
+            modifier = modifier,
+            imageVector = symbol.imageVector,
+            contentDescription = contentDescription,
+            tint = tint,
+        )
+    } else if (symbolEffect == null || symbolEffect.effects.isEmpty()) {
+        UIKitStaticIcon(
+            modifier = modifier,
+            symbol = symbol,
+            contentDescription = contentDescription,
+            symbolStyle = symbolStyle,
+        )
+    } else {
+        UIKitAnimatableIcon(
+            modifier = modifier,
+            symbol = symbol,
+            contentDescription = contentDescription,
+            symbolStyle = symbolStyle,
+            symbolEffect = symbolEffect,
+        )
     }
 }

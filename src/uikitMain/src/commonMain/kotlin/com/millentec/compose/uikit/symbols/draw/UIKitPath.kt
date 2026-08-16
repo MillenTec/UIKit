@@ -10,7 +10,7 @@ class UIKitPath {
 
     private val currentX: Float
         get() {
-            val pre = _nodes.lastOrNull() ?: return 0f
+            val pre = _nodes.getOrNull(_nodes.size - 1) ?: return 0f
             return when (pre) {
                 is UIKitPathNode.Close -> subPathStartX
                 is UIKitPathNode.LineTo -> pre.x
@@ -21,7 +21,7 @@ class UIKitPath {
 
     private val currentY: Float
         get() {
-            val pre = _nodes.lastOrNull() ?: return 0f
+            val pre = _nodes.getOrNull(_nodes.size - 1) ?: return 0f
             return when (pre) {
                 is UIKitPathNode.Close -> subPathStartY
                 is UIKitPathNode.LineTo -> pre.y
@@ -87,7 +87,7 @@ class UIKitPath {
     }
 
     fun reflectiveCurveTo(x1: Float, y1: Float, x2: Float, y2: Float) {
-        val pre = _nodes.lastOrNull() ?: return
+        val pre = _nodes.getOrNull(_nodes.size - 1) ?: return
 
         val cx1 = when (pre) {
             is UIKitPathNode.CurveTo -> 2 * pre.x3 - pre.x2
@@ -106,7 +106,7 @@ class UIKitPath {
     }
 
     fun reflectiveCurveToRelative(dx1: Float, dy1: Float, dx2: Float, dy2: Float) {
-        val pre = _nodes.lastOrNull() ?: return
+        val pre = _nodes.getOrNull(_nodes.size - 1) ?: return
         val cx = currentX
         val cy = currentY
 

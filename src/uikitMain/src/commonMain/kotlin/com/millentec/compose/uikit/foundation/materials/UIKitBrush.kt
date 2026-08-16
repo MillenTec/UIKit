@@ -7,6 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -18,11 +19,17 @@ data class UIKitBrush(
     val end: Offset,
 ) {
     fun asComposeBrush(): Brush {
-        return Brush.linearGradient(
-            colorStops = colorStops.toTypedArray(),
-            start = start,
-            end = end,
-        )
+        return if (colorStops.isEmpty()) {
+            SolidColor(Color.Unspecified)
+        } else if (colorStops.size == 1) {
+            SolidColor(colorStops[0].second)
+        } else {
+            Brush.linearGradient(
+                colorStops = colorStops.toTypedArray(),
+                start = start,
+                end = end,
+            )
+        }
     }
 
     companion object {

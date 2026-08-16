@@ -11,6 +11,10 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.UIKitIcon
 import com.millentec.compose.uikit.foundation.CommonPage
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.people
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.shapes
+import com.millentec.compose.uikit.symbols.UIKitImageVectorSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
 import com.millentec.compose.uikit.symbols.animate.disableEffect
@@ -40,7 +44,7 @@ class Home: CommonPage("home") {
                 Row {
                     UIKitIcon(
                         modifier = Modifier
-                            .size(100.dp),
+                            .size(50.dp),
                         symbol = UIKitSymbols.regular.Speaker,
                         contentDescription = "Speaker",
                         symbolStyle = if (style.value) UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush)
@@ -52,7 +56,7 @@ class Home: CommonPage("home") {
 
                     UIKitIcon(
                         modifier = Modifier
-                            .size(100.dp),
+                            .size(50.dp),
                         symbol = UIKitSymbols.regular.AddCircle,
                         contentDescription = null,
                         symbolStyle = if (style.value) UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush)
@@ -60,6 +64,22 @@ class Home: CommonPage("home") {
                         symbolEffect = UIKitSymbolEffect()
                             .visibleEffect(visible1.value)
                             .disableEffect(enabled1.value)
+                    )
+
+                    UIKitIcon(
+                        modifier = Modifier
+                            .size(50.dp),
+                        symbol = UIKitImageVectorSymbol(FluentIcons.people(getUIKitColors().successGreenColorPrimaryBrush, true)),
+                        contentDescription = null,
+                        symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
+                    )
+
+                    UIKitIcon(
+                        modifier = Modifier
+                            .size(50.dp),
+                        symbol = UIKitImageVectorSymbol(FluentIcons.shapes(getUIKitColors().successGreenColorPrimaryBrush, true)),
+                        contentDescription = null,
+                        symbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().highlightColorPrimaryBrush),
                     )
                 }
 

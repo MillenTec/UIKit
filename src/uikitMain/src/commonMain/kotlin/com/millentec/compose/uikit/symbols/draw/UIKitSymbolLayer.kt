@@ -1,18 +1,13 @@
 package com.millentec.compose.uikit.symbols.draw
 
+import com.millentec.compose.uikit.symbols.animate.UIKitSymbolGroupState
+
 data class UIKitSymbolPathGroup(
     val id: String,
     val drawType: UIKitPathDrawType,
     val zIndex: Int,
     val defaultState: UIKitSymbolGroupState,
     val path: UIKitPath
-)
-
-data class UIKitSymbolGroupState(
-    val scale: Float = 1f,
-    val alpha: Float = 1f,
-    val pathTrimStart: Float = 0f,
-    val pathTrimEnd: Float = 1f,
 )
 
 class UIKitSymbolLayer(
