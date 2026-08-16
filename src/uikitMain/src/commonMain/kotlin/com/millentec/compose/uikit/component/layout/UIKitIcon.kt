@@ -220,7 +220,7 @@ private fun UIKitAnimatableIcon(
 
             if (preTrigger == null && effect.initializable) {
                 effect.initialize(symbol, animStates)
-            } else if (preTrigger != effect.triggerCurrent) {
+            } else if (preTrigger != effect.triggerCurrent && preTrigger != null) {
                 effect.execute(symbol, animStates)
             }
         }

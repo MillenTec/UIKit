@@ -1,6 +1,8 @@
 package com.millentec.compose.uikit.symbols
 
 import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Size
@@ -122,17 +124,17 @@ abstract class UIKitSymbol(
                 group.id,
                 targetValue = 1f,
                 animateSpec = tween(
-                    260 / (groups.size + 1) * 2,
-                    easing = CubicBezierEasing(0f, 0.62f, 0.38f, 1f),
-                    delayMillis = index * 260 / (groups.size + 1)
+                    280 / (groups.size + 1) * 2,
+                    easing = CubicBezierEasing(0f, 0f,0.382f, 1f),
+                    delayMillis = index * 280 / (groups.size + 1)
                 ),
             )).addParallel(UIKitSymbolAnimNode.alphaTo(
                 group.id,
                 targetValue = 1f,
                 animateSpec = tween(
-                    260 / (groups.size + 1) * 2,
-                    easing = CubicBezierEasing(0f, 0.62f, 0.38f, 1f),
-                    delayMillis = index * 260 / (groups.size + 1)
+                    280 / (groups.size + 1) * 2,
+                    easing = CubicBezierEasing(0f, 0f,0.382f, 1f),
+                    delayMillis = index * 280 / (groups.size + 1)
                 )
             ))
         }
@@ -176,17 +178,17 @@ abstract class UIKitSymbol(
                 group.id,
                 targetValue = 0.8f,
                 animateSpec = tween(
-                    260 / (filterGroups.size + 1) * 2,
-                    easing = CubicBezierEasing(1f, 0.62f, 0.62f, 1f),
-                    delayMillis = index * 260 / (groups.size + 1)
+                    280 / (filterGroups.size + 1) * 2,
+                    easing = FastOutLinearInEasing,
+                    delayMillis = index * 280 / (groups.size + 1)
                 ),
             )).addParallel(UIKitSymbolAnimNode.alphaTo(
                 group.id,
                 targetValue = 0f,
                 animateSpec = tween(
-                    260 / (filterGroups.size + 1) * 2,
-                    easing = CubicBezierEasing(1f, 0.62f, 0.62f, 1f),
-                    delayMillis = index * 260 / (groups.size + 1)
+                    280 / (filterGroups.size + 1) * 2,
+                    easing = FastOutLinearInEasing,
+                    delayMillis = index * 280 / (groups.size + 1)
                 )
             ))
         }
@@ -230,6 +232,39 @@ abstract class UIKitSymbol(
         state: String,
         animateStates: List<UIKitSymbolAnimState>? = null
     ): UIKitSymbolAnimTree? = null
+
+    open fun bounceEffect(
+        states: List<UIKitSymbolAnimState>? = null
+    ): UIKitSymbolAnimTree? {
+        val tree = UIKitSymbolAnimTree()
+        val filterGroups = groups.filter {
+            if (states == null) true else {
+                val state = states.firstOrNull { state -> state.id == it.id }
+                state?.visible(
+                    UIKitAnimSelector.entries.filter { item ->
+                        item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.Alpha
+                    }
+                ) ?: true
+            }
+        }
+
+        filterGroups.sortedBy { it.zIndex }.forEachIndexed { index, group ->
+            tree.addParallel(UIKitSymbolAnimNode.scaleTo(
+                group.id,
+                targetValue = 1f,
+                animateSpec = keyframes {
+                    durationMillis = 575
+                    delayMillis = index * 80
+
+                    1.2f at 200 using CubicBezierEasing(0f, 0f,0.382f, 1f)
+                    0.9f at 450 using CubicBezierEasing(0.382f, 1f, 0f, 0f)
+                    1f at 575 using CubicBezierEasing(0f, 0f,0.382f, 1f)
+                }
+            ))
+        }
+
+        return tree
+    }
 }
 
 /**
@@ -272,6 +307,10 @@ class UIKitImageVectorSymbol(
     }
 
     override fun disableEffect(states: List<UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {
+        return null
+    }
+
+    override fun bounceEffect(states: List<UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {
         return null
     }
 }

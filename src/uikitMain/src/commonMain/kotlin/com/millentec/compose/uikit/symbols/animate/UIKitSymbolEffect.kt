@@ -222,6 +222,26 @@ fun UIKitSymbolEffect.stateEffect(
     return this
 }
 
+fun UIKitSymbolEffect.bounceEffect(trigger: Any): UIKitSymbolEffect {
+    this.addEffect(object: UIKitSymbolEffect() {
+        override val triggerCurrent = trigger
+        override val initializable: Boolean = false
+
+        override suspend fun execute(
+            symbol: UIKitSymbol,
+            states: List<UIKitSymbolAnimState>
+        ) {
+            val bounceTree = symbol.bounceEffect(states)
+
+            bounceTree?.let {
+                standardExecute(it, states)
+            }
+        }
+    })
+
+    return this
+}
+
 fun UIKitSymbolEffect.then(effect: UIKitSymbolEffect): UIKitSymbolEffect {
     if (effect is UIKitEmptyEffect) return this
 

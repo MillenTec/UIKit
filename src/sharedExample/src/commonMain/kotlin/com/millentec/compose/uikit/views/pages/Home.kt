@@ -8,14 +8,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.millentec.compose.uikit.component.input.UIKitButton
 import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.UIKitIcon
 import com.millentec.compose.uikit.foundation.CommonPage
 import com.millentec.compose.uikit.symbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
-import com.millentec.compose.uikit.symbols.animate.disableEffect
-import com.millentec.compose.uikit.symbols.animate.stateEffect
-import com.millentec.compose.uikit.symbols.animate.visibleEffect
+import com.millentec.compose.uikit.symbols.animate.*
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.symbols.regular.AddCircle
 import com.millentec.compose.uikit.symbols.regular.Speaker
@@ -38,6 +36,7 @@ class Home: CommonPage("home") {
                 val enabled1 = remember { mutableStateOf(true) }
                 val style = remember { mutableStateOf(false) }
                 val state = remember { mutableStateOf(false) }
+                val bounceTrigger = remember { mutableStateOf(0) }
 
                 Row {
                     UIKitIcon(
@@ -50,6 +49,7 @@ class Home: CommonPage("home") {
                         symbolEffect = UIKitSymbolEffect()
                             .visibleEffect(visible0.value)
                             .disableEffect(enabled0.value)
+                            .bounceEffect(bounceTrigger.value)
                     )
 
                     UIKitIcon(
@@ -63,6 +63,7 @@ class Home: CommonPage("home") {
                             .visibleEffect(visible1.value)
                             .disableEffect(enabled1.value)
                             .stateEffect(if (state.value) "checkmark" else "add")
+                            .bounceEffect(bounceTrigger.value)
                     )
                 }
 
@@ -109,6 +110,15 @@ class Home: CommonPage("home") {
                     UIKitToggleSwitch(
                         checked = style.value,
                         onCheckedChange = { style.value = it }
+                    )
+
+                    Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+
+                    UIKitButton(
+                        text = "Bounce",
+                        onClick = {
+                            bounceTrigger.value++
+                        }
                     )
                 }
             }

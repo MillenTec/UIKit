@@ -19,7 +19,10 @@ class UIKitSymbolAnimTree {
     }
 
     fun addSequential(then: UIKitSymbolAnimNode?): UIKitSymbolAnimTree {
-        if (then == null) return this
+        if (then == null) {
+            _tree.add(mutableListOf())
+            return this
+        }
 
         _tree.add(mutableListOf(then))
         return this
