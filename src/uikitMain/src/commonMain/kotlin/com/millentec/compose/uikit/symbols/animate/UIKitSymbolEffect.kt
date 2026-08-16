@@ -40,6 +40,9 @@ private suspend fun standardExecute(
     }
 }
 
+/**
+ * 你可以通过 UIKitSymbolEffect 为图标添加动态效果, 可以使用链式调用添加多个不同的效果
+ */
 open class UIKitSymbolEffect {
     private val _effects = mutableListOf<UIKitSymbolEffect>()
     val effects: List<UIKitSymbolEffect>
@@ -120,8 +123,8 @@ fun UIKitSymbolEffect.visibleEffect(visible: Boolean): UIKitSymbolEffect {
             symbol: UIKitSymbol,
             states: List<UIKitSymbolAnimState>
         ) {
-            val appearTree = symbol.appearEffect()
-            val disappearTree = symbol.disappearEffect()
+            val appearTree = symbol.appearEffect(states)
+            val disappearTree = symbol.disappearEffect(states)
 
             if (triggerCurrent && appearTree != null) {
                 standardExecute(appearTree, states)
@@ -134,8 +137,8 @@ fun UIKitSymbolEffect.visibleEffect(visible: Boolean): UIKitSymbolEffect {
             symbol: UIKitSymbol,
             states: List<UIKitSymbolAnimState>
         ) {
-            val appearTree = symbol.appearEffect()
-            val disappearTree = symbol.disappearEffect()
+            val appearTree = symbol.appearEffect(states)
+            val disappearTree = symbol.disappearEffect(states)
 
             if (triggerCurrent && appearTree != null) {
                 standardExecute(appearTree, states, true)
@@ -157,8 +160,8 @@ fun UIKitSymbolEffect.disableEffect(enabled: Boolean): UIKitSymbolEffect {
             symbol: UIKitSymbol,
             states: List<UIKitSymbolAnimState>
         ) {
-            val enableTree = symbol.enableEffect()
-            val disableTree = symbol.disableEffect()
+            val enableTree = symbol.enableEffect(states)
+            val disableTree = symbol.disableEffect(states)
 
             if (triggerCurrent && enableTree != null) {
                 standardExecute(enableTree, states)
@@ -171,8 +174,8 @@ fun UIKitSymbolEffect.disableEffect(enabled: Boolean): UIKitSymbolEffect {
             symbol: UIKitSymbol,
             states: List<UIKitSymbolAnimState>
         ) {
-            val enableTree = symbol.enableEffect()
-            val disableTree = symbol.disableEffect()
+            val enableTree = symbol.enableEffect(states)
+            val disableTree = symbol.disableEffect(states)
 
             if (triggerCurrent && enableTree != null) {
                 standardExecute(enableTree, states, true)

@@ -3,7 +3,16 @@ package com.millentec.compose.uikit.symbols.draw
 data class UIKitSymbolPathGroup(
     val id: String,
     val drawType: UIKitPathDrawType,
+    val zIndex: Int,
+    val defaultState: UIKitSymbolGroupState,
     val path: UIKitPath
+)
+
+data class UIKitSymbolGroupState(
+    val scale: Float = 1f,
+    val alpha: Float = 1f,
+    val pathTrimStart: Float = 0f,
+    val pathTrimEnd: Float = 1f,
 )
 
 class UIKitSymbolLayer(
@@ -23,11 +32,15 @@ class UIKitSymbolLayer(
     fun group(
         id: String,
         drawType: UIKitPathDrawType,
+        zIndex: Int = 0,
+        defaultState: UIKitSymbolGroupState = UIKitSymbolGroupState(),
         path: UIKitPath.() -> Unit
     ) {
         _groups.add(UIKitSymbolPathGroup(
             id = id,
             drawType = drawType,
+            zIndex = zIndex,
+            defaultState = defaultState,
             path = UIKitPath().apply(path)
         ))
     }

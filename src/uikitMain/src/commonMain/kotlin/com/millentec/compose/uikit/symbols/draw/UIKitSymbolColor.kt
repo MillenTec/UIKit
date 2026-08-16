@@ -1,9 +1,9 @@
 package com.millentec.compose.uikit.symbols.draw
 
-import androidx.compose.ui.graphics.Brush
+import com.millentec.compose.uikit.foundation.materials.UIKitBrush
 
 data class UIKitSymbolColor(
     val selector: String,
-    val brush: Brush,
+    val brush: UIKitBrush,
     val alpha: Float,
 )

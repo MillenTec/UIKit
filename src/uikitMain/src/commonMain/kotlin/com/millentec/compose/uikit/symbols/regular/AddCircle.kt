@@ -2,11 +2,12 @@ package com.millentec.compose.uikit.symbols.regular
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import com.millentec.compose.uikit.foundation.materials.UIKitBrush
 import com.millentec.compose.uikit.symbols.UIKitRegularSymbols
 import com.millentec.compose.uikit.symbols.UIKitSymbol
+import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
@@ -71,15 +72,18 @@ val UIKitRegularSymbols.AddCircle: UIKitSymbol
                 )
 
             @Composable
-            override fun colorSet(style: UIKitSymbolStyle): List<UIKitSymbolColor> {
+            override fun colorSet(
+                style: UIKitSymbolStyle,
+                states: List<UIKitSymbolAnimState>
+            ): List<UIKitSymbolColor> {
                 return when(style) {
                     is UIKitSymbolStyle.Monochrome -> listOf(
                         UIKitSymbolColor("add_symbol", style.brush, 1f),
                         UIKitSymbolColor("circle", style.brush, 1f)
                     )
                     UIKitSymbolStyle.MultiColor -> listOf(
-                        UIKitSymbolColor("add_symbol", SolidColor(getUIKitColors().highlightColorPrimaryBrush), 1f),
-                        UIKitSymbolColor("circle", SolidColor(getUIKitColors().highlightColorPrimaryBrush), 0.6f),
+                        UIKitSymbolColor("add_symbol", UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush), 1f),
+                        UIKitSymbolColor("circle", UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush), 0.6f),
                     )
                     is UIKitSymbolStyle.Hierarchical -> listOf(
                         UIKitSymbolColor("add_symbol", style.brush, 1f),

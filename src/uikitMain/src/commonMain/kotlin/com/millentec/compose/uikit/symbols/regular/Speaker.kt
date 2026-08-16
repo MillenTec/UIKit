@@ -4,19 +4,17 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import com.millentec.compose.uikit.foundation.materials.UIKitBrush
 import com.millentec.compose.uikit.symbols.UIKitRegularSymbols
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimNode
+import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimTree
-import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
-import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
-import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
-import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
+import com.millentec.compose.uikit.symbols.draw.*
 import com.millentec.compose.uikit.theme.getUIKitColors
 
 val UIKitRegularSymbols.Speaker: UIKitSymbol
@@ -101,6 +99,10 @@ val UIKitRegularSymbols.Speaker: UIKitSymbol
                                 cap = StrokeCap.Round,
                                 join = StrokeJoin.Round
                             ),
+                            zIndex = 1,
+                            defaultState = UIKitSymbolGroupState(
+                                pathTrimEnd = 0f
+                            )
                         ) {
                             moveTo(3.21f, 1.79f)
                             lineTo(18.2f, 16.8f)
@@ -113,6 +115,10 @@ val UIKitRegularSymbols.Speaker: UIKitSymbol
                                 cap = StrokeCap.Round,
                                 join = StrokeJoin.Round
                             ),
+                            zIndex = 2,
+                            defaultState = UIKitSymbolGroupState(
+                                pathTrimEnd = 0f
+                            )
                         ) {
                             moveTo(2.5f, 2.5f)
                             lineTo(17.5f, 17.5f)
@@ -121,14 +127,20 @@ val UIKitRegularSymbols.Speaker: UIKitSymbol
                 )
 
             @Composable
-            override fun colorSet(style: UIKitSymbolStyle): List<UIKitSymbolColor> {
+            override fun colorSet(
+                style: UIKitSymbolStyle,
+                states: List<UIKitSymbolAnimState>
+            ): List<UIKitSymbolColor> {
                 return when(style) {
-                    is UIKitSymbolStyle.Hierarchical -> listOf(
-                        UIKitSymbolColor("speaker", style.brush, 1f),
-                        UIKitSymbolColor("wave0", style.brush, 0.75f),
-                        UIKitSymbolColor("wave1", style.brush, 0.6f),
-                        UIKitSymbolColor("disable", style.brush, 1f)
-                    )
+                    is UIKitSymbolStyle.Hierarchical -> {
+                        val disabled = states.firstOrNull { it.id == "disable" }?.visible == true
+                        listOf(
+                            UIKitSymbolColor("speaker", style.brush, if (disabled) 0.6f else 1f),
+                            UIKitSymbolColor("wave0", style.brush, if (disabled) 0.6f else 0.75f),
+                            UIKitSymbolColor("wave1", style.brush, 0.6f),
+                            UIKitSymbolColor("disable", style.brush, 1f)
+                        )
+                    }
                     is UIKitSymbolStyle.Monochrome -> layers.map { layer ->
                         UIKitSymbolColor(
                             layer.id,
@@ -139,7 +151,7 @@ val UIKitRegularSymbols.Speaker: UIKitSymbol
                     UIKitSymbolStyle.MultiColor -> layers.map { layer ->
                         UIKitSymbolColor(
                             layer.id,
-                            SolidColor(getUIKitColors().highlightColorPrimaryBrush),
+                            UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush),
                             1f
                         )
                     }
@@ -153,7 +165,9 @@ val UIKitRegularSymbols.Speaker: UIKitSymbol
                 }
             }
 
-            override fun enableEffect(): UIKitSymbolAnimTree {
+            override fun enableEffect(
+                states: List<UIKitSymbolAnimState>?
+            ): UIKitSymbolAnimTree {
                 return UIKitSymbolAnimTree().addParallel(
                     UIKitSymbolAnimNode.pathTrimStartTo(
                         groupSelector = "disable",
@@ -181,7 +195,9 @@ val UIKitRegularSymbols.Speaker: UIKitSymbol
                 )
             }
 
-            override fun disableEffect(): UIKitSymbolAnimTree {
+            override fun disableEffect(
+                states: List<UIKitSymbolAnimState>?
+            ): UIKitSymbolAnimTree {
                 return UIKitSymbolAnimTree().addParallel(
                     UIKitSymbolAnimNode.pathTrimStartTo(
                         groupSelector = "disable",

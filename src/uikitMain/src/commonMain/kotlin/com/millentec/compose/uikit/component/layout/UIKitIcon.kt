@@ -1,5 +1,8 @@
 package com.millentec.compose.uikit.component.layout
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.size
@@ -18,15 +21,22 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.millentec.compose.uikit.foundation.materials.UIKitAnimateBrush
+import com.millentec.compose.uikit.foundation.materials.UIKitBrush
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
+import com.millentec.compose.uikit.symbols.animate.disableEffect
+import com.millentec.compose.uikit.symbols.animate.visibleEffect
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitPathNode
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.symbols.regular.AddCircle
+import com.millentec.compose.uikit.symbols.regular.Speaker
 import com.millentec.compose.uikit.theme.getUIKitColors
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 @Preview
@@ -51,6 +61,29 @@ private fun Preview2() {
 }
 
 @Composable
+private fun UIKitIconSample() {
+    UIKitIcon(
+        modifier = Modifier
+            .size(32.dp),
+        symbol = UIKitSymbols.regular.Speaker,
+        contentDescription = "Volume",
+        symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
+        symbolEffect = UIKitSymbolEffect()
+            .visibleEffect(true)
+            .disableEffect(false)
+    )
+}
+
+/**
+ * 用于渲染 UIKitSymbol 的可组合项
+ * @param modifier 作用于绘制图标的 Canvas 的修改器, 你可以通过 size 属性改变图标的尺寸
+ * @param symbol 绘制的图标源
+ * @param contentDescription 用于无障碍功能的图标语义信息, 传入 null 则不包含语义信息
+ * @param symbolStyle 图标的着色模式
+ * @param symbolEffect 图标动态效果, 传入 null 则无动态效果, 按图标的默认配置渲染
+ * @sample UIKitIconSample
+ */
+@Composable
 fun UIKitIcon(
     modifier: Modifier = Modifier,
     symbol: UIKitSymbol,
@@ -59,9 +92,21 @@ fun UIKitIcon(
     symbolEffect: UIKitSymbolEffect? = null,
 ) {
     val animStates = remember(symbol) { symbol.groups.map {
-        UIKitSymbolAnimState(it.id)
+        UIKitSymbolAnimState(
+            id = it.id,
+            initialScale = it.defaultState.scale,
+            initialAlpha = it.defaultState.alpha,
+            initialPathTrimStart = it.defaultState.pathTrimStart,
+            initialPathTrimEnd = it.defaultState.pathTrimEnd,
+        )
     } }
-    val colorSet by rememberUpdatedState(symbol.colorSet(symbolStyle))
+    val colorSet by rememberUpdatedState(symbol.colorSet(symbolStyle, animStates))
+    val colorsAnimated = remember { colorSet.map {
+        Pair(it.selector, UIKitAnimateBrush(it.brush))
+    }.toMutableStateList() }
+    val alphasAnimated = remember { colorSet.map {
+        Pair(it.selector, Animatable(it.alpha))
+    }.toMutableStateList() }
     val symbolEffectTriggers = remember { mutableListOf<Any?>() }
     val builtPaths = remember { mutableStateOf(symbol.groups.map { group ->
         Pair(group.id, Path().apply {
@@ -83,6 +128,72 @@ fun UIKitIcon(
             }
         })
     }) }
+    val cacheSymbolStyle = remember { mutableStateOf<UIKitSymbolStyle?>(null) }
+
+    LaunchedEffect(colorSet.size) {
+        colorsAnimated.clear()
+        colorsAnimated.addAll(colorSet.map {
+            Pair(it.selector, UIKitAnimateBrush(it.brush))
+        })
+        alphasAnimated.clear()
+        alphasAnimated.addAll(colorSet.map {
+            Pair(it.selector, Animatable(it.alpha))
+        })
+    }
+
+    LaunchedEffect(symbolStyle) {
+        if (symbolStyle != cacheSymbolStyle.value) {
+            coroutineScope {
+                colorsAnimated.forEachIndexed { index, color ->
+                    launch {
+                        color.second.snapTo(colorSet.getOrNull(index)?.brush ?: color.second.value,)
+                    }
+                }
+
+                alphasAnimated.forEachIndexed { index, alpha ->
+                    launch {
+                        alpha.second.snapTo(colorSet.getOrNull(index)?.alpha ?: alpha.second.value)
+                    }
+                }
+            }
+        }
+
+        cacheSymbolStyle.value = symbolStyle
+    }
+
+    LaunchedEffect(colorSet) {
+        coroutineScope {
+            colorsAnimated.forEachIndexed { index, color ->
+                launch {
+                    val colorCurrent = colorSet.getOrNull(index)?.brush ?: color.second.value
+
+                    if (colorCurrent != color.second.value) {
+                        color.second.animateTo(
+                            colorCurrent,
+                            200,
+                            LinearEasing
+                        )
+                    }
+                }
+            }
+
+            alphasAnimated.forEachIndexed { index, alpha ->
+                launch {
+                    val alphaCurrent = colorSet.getOrNull(index)?.alpha ?: alpha.second.value
+
+                    if (alphaCurrent != alpha.second.value) {
+                        alpha.second.animateTo(
+                            alphaCurrent,
+                            animationSpec = tween(
+                                200,
+                                easing = LinearEasing
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
 
     LaunchedEffect(symbol.layers) {
         builtPaths.value = symbol.groups.map { group ->
@@ -148,8 +259,8 @@ fun UIKitIcon(
             saveCount++
 
             symbol.layers.forEach { layer ->
-                val brush = colorSet.firstOrNull { it.selector == layer.id }?.brush ?: SolidColor(Color.Transparent)
-                val alpha = colorSet.firstOrNull { it.selector == layer.id }?.alpha ?: 0f
+                val brush = colorsAnimated.firstOrNull { it.first == layer.id }?.second?.value ?: UIKitBrush.solid(Color.Transparent)
+                val alpha = alphasAnimated.firstOrNull { it.first == layer.id }?.second?.value ?: 0f
 
                 layer.groups.forEach { group ->
                     val animateState = animStates.firstOrNull {
@@ -160,9 +271,7 @@ fun UIKitIcon(
                         it.first == group.id
                     }?.second ?: Path()
 
-                    val isRender = animateState != null && (animateState.alphaState.value > 0f
-                            && animateState.scaleState.value > 0f
-                            && animateState.pathTrimStartState.value - animateState.pathTrimEndState.value != 0f)
+                    val isRender = animateState != null && animateState.visible
 
                     if (isRender) {
                         scale(
@@ -176,7 +285,7 @@ fun UIKitIcon(
                                 UIKitPathDrawType.Fill -> {
                                     drawPath(
                                         path = path,
-                                        brush = brush,
+                                        brush = brush.asComposeBrush(),
                                         alpha = alpha * (animateState.alphaState.value),
                                         style = Fill
                                     )
@@ -201,7 +310,7 @@ fun UIKitIcon(
 
                                     drawPath(
                                         path = trimmedPath,
-                                        brush = brush,
+                                        brush = brush.asComposeBrush(),
                                         alpha = alpha * animateState.alphaState.value,
                                         style = Stroke(
                                             width = group.drawType.lineWidth,
