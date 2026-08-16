@@ -11,13 +11,10 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.UIKitIcon
 import com.millentec.compose.uikit.foundation.CommonPage
-import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.people
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.shapes
-import com.millentec.compose.uikit.symbols.UIKitImageVectorSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
 import com.millentec.compose.uikit.symbols.animate.disableEffect
+import com.millentec.compose.uikit.symbols.animate.stateEffect
 import com.millentec.compose.uikit.symbols.animate.visibleEffect
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.symbols.regular.AddCircle
@@ -40,11 +37,12 @@ class Home: CommonPage("home") {
                 val enabled0 = remember { mutableStateOf(true) }
                 val enabled1 = remember { mutableStateOf(true) }
                 val style = remember { mutableStateOf(false) }
+                val state = remember { mutableStateOf(false) }
 
                 Row {
                     UIKitIcon(
                         modifier = Modifier
-                            .size(50.dp),
+                            .size(100.dp),
                         symbol = UIKitSymbols.regular.Speaker,
                         contentDescription = "Speaker",
                         symbolStyle = if (style.value) UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush)
@@ -56,30 +54,15 @@ class Home: CommonPage("home") {
 
                     UIKitIcon(
                         modifier = Modifier
-                            .size(50.dp),
+                            .size(100.dp),
                         symbol = UIKitSymbols.regular.AddCircle,
                         contentDescription = null,
                         symbolStyle = if (style.value) UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush)
-                        else UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
+                        else UIKitSymbolStyle.MultiColor,
                         symbolEffect = UIKitSymbolEffect()
                             .visibleEffect(visible1.value)
                             .disableEffect(enabled1.value)
-                    )
-
-                    UIKitIcon(
-                        modifier = Modifier
-                            .size(50.dp),
-                        symbol = UIKitImageVectorSymbol(FluentIcons.people(getUIKitColors().successGreenColorPrimaryBrush, true)),
-                        contentDescription = null,
-                        symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
-                    )
-
-                    UIKitIcon(
-                        modifier = Modifier
-                            .size(50.dp),
-                        symbol = UIKitImageVectorSymbol(FluentIcons.shapes(getUIKitColors().successGreenColorPrimaryBrush, true)),
-                        contentDescription = null,
-                        symbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().highlightColorPrimaryBrush),
+                            .stateEffect(if (state.value) "checkmark" else "add")
                     )
                 }
 
@@ -111,6 +94,13 @@ class Home: CommonPage("home") {
                         UIKitToggleSwitch(
                             checked = enabled1.value,
                             onCheckedChange = { enabled1.value = it }
+                        )
+
+                        Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                        UIKitToggleSwitch(
+                            checked = state.value,
+                            onCheckedChange = { state.value = it }
                         )
                     }
 

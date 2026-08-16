@@ -6,8 +6,8 @@ import androidx.compose.ui.graphics.StrokeJoin
 sealed class UIKitPathDrawType {
     data class Stroke(
         val lineWidth: Float,
-        val cap: StrokeCap,
-        val join: StrokeJoin
+        val cap: StrokeCap = StrokeCap.Round,
+        val join: StrokeJoin = StrokeJoin.Round
     ): UIKitPathDrawType()
 
     object Fill: UIKitPathDrawType()
@@ -16,7 +16,7 @@ sealed class UIKitPathDrawType {
 
     data class MaskStroke(
         val lineWidth: Float,
-        val cap: StrokeCap,
-        val join: StrokeJoin
+        val cap: StrokeCap = StrokeCap.Round,
+        val join: StrokeJoin = StrokeJoin.Round
     ): UIKitPathDrawType()
 }

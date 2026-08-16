@@ -7,7 +7,9 @@ class UIKitSymbolAnimTree {
     val tree: List<List<UIKitSymbolAnimNode>>
         get() = _tree.toList()
 
-    fun addParallel(other: UIKitSymbolAnimNode): UIKitSymbolAnimTree {
+    fun addParallel(other: UIKitSymbolAnimNode?): UIKitSymbolAnimTree {
+        if (other == null) return this
+
         if (_tree.isEmpty())
             addSequential(other)
         else
@@ -16,7 +18,9 @@ class UIKitSymbolAnimTree {
         return this
     }
 
-    fun addSequential(then: UIKitSymbolAnimNode): UIKitSymbolAnimTree {
+    fun addSequential(then: UIKitSymbolAnimNode?): UIKitSymbolAnimTree {
+        if (then == null) return this
+
         _tree.add(mutableListOf(then))
         return this
     }

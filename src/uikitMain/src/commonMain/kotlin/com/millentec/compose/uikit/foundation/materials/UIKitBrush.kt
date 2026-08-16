@@ -15,8 +15,8 @@ import kotlin.math.sign
 
 data class UIKitBrush(
     val colorStops: List<Pair<Float, Color>>,
-    val start: Offset,
-    val end: Offset,
+    val start: Offset = Offset.Zero,
+    val end: Offset = Offset.Infinite,
 ) {
     fun asComposeBrush(): Brush {
         return if (colorStops.isEmpty()) {

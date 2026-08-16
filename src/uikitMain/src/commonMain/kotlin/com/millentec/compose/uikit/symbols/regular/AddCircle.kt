@@ -1,5 +1,8 @@
 package com.millentec.compose.uikit.symbols.regular
 
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.DpSize
@@ -7,6 +10,9 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.materials.UIKitBrush
 import com.millentec.compose.uikit.symbols.UIKitRegularSymbols
 import com.millentec.compose.uikit.symbols.UIKitSymbol
+import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimNode
+import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
+import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimTree
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolGroupState
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
@@ -25,32 +31,6 @@ val UIKitRegularSymbols.AddCircle: UIKitSymbol
         ) {
             override val layers: List<UIKitSymbolLayer>
                 get() = listOf(
-                    UIKitSymbolLayer("add_symbol").apply {
-                        group(
-                            id = "add_symbol",
-                            drawType = UIKitPathDrawType.Fill,
-                            zIndex = 1
-                        ) {
-                            moveTo(6f, 10f)
-                            curveToRelative(0f, -0.3f, 0.2f, -0.5f, 0.5f, -0.5f)
-                            horizontalLineToRelative(3f)
-                            verticalLineToRelative(-3f)
-                            curveToRelative(0f, -0.3f, 0.2f, -0.5f, 0.5f, -0.5f)
-                            reflectiveCurveToRelative(0.5f, 0.2f, 0.5f, 0.5f)
-                            verticalLineToRelative(3f)
-                            horizontalLineToRelative(3f)
-                            curveToRelative(0.3f, 0f, 0.5f, 0.2f, 0.5f, 0.5f)
-                            reflectiveCurveToRelative(-0.2f, 0.5f, -0.5f, 0.5f)
-                            horizontalLineToRelative(-3f)
-                            verticalLineToRelative(3f)
-                            curveToRelative(0f, 0.3f, -0.2f, 0.5f, -0.5f, 0.5f)
-                            reflectiveCurveToRelative(-0.5f, -0.2f, -0.5f, -0.5f)
-                            verticalLineToRelative(-3f)
-                            horizontalLineToRelative(-3f)
-                            curveToRelative(-0.3f, 0f, -0.5f, -0.2f, -0.5f, -0.5f)
-                            close()
-                        }
-                    },
                     UIKitSymbolLayer("circle").apply {
                         group(
                             id = "circle",
@@ -70,6 +50,44 @@ val UIKitRegularSymbols.AddCircle: UIKitSymbol
                             reflectiveCurveToRelative(-3.1f, 7f, -7f, 7f)
                             close()
                         }
+                    },
+                    UIKitSymbolLayer("add_symbol").apply {
+                        group(
+                            id = "add_symbol.horizontal",
+                            drawType = UIKitPathDrawType.Stroke(
+                                lineWidth = 1f
+                            ),
+                            zIndex = 1
+                        ) {
+                            moveTo(6.5f, 10f)
+                            horizontalLineTo(13.5f)
+                        }
+
+                        group(
+                            id = "add_symbol.vertical",
+                            drawType = UIKitPathDrawType.Stroke(
+                                lineWidth = 1f
+                            ),
+                            zIndex = 1
+                        ) {
+                            moveTo(10f, 6.5f)
+                            verticalLineTo(13.5f)
+                        }
+                    },
+                    UIKitSymbolLayer("checkmark_symbol").apply {
+                        group(
+                            id = "checkmark_symbol",
+                            drawType = UIKitPathDrawType.Stroke(
+                                lineWidth = 1f
+                            ),
+                            defaultState = UIKitSymbolGroupState(
+                                pathTrimEnd = 0f
+                            )
+                        ) {
+                            moveTo(7f, 10f)
+                            lineTo(9f, 12f)
+                            lineTo(13f, 8f)
+                        }
                     }
                 )
 
@@ -79,21 +97,117 @@ val UIKitRegularSymbols.AddCircle: UIKitSymbol
                 states: List<Pair<String, UIKitSymbolGroupState>>
             ): List<UIKitSymbolColor> {
                 return when(style) {
-                    is UIKitSymbolStyle.Monochrome -> listOf(
-                        UIKitSymbolColor("add_symbol", style.brush, 1f),
-                        UIKitSymbolColor("circle", style.brush, 1f)
-                    )
+                    is UIKitSymbolStyle.Monochrome -> layers.map {
+                        UIKitSymbolColor(it.id, style.brush, 1f)
+                    }
                     UIKitSymbolStyle.MultiColor -> listOf(
                         UIKitSymbolColor("add_symbol", UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush), 1f),
-                        UIKitSymbolColor("circle", UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush), 0.6f),
+                        UIKitSymbolColor("checkmark_symbol", UIKitBrush.solid(getUIKitColors().successGreenColorPrimaryBrush), 1f),
+                        UIKitSymbolColor(
+                            "circle",
+                            if (states.firstOrNull { it.first == "checkmark_symbol" }?.second?.visible ?: false)
+                                UIKitBrush.solid(getUIKitColors().successGreenColorPrimaryBrush)
+                            else
+                                UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush),
+                            0.6f)
                     )
                     is UIKitSymbolStyle.Hierarchical -> listOf(
                         UIKitSymbolColor("add_symbol", style.brush, 1f),
-                        UIKitSymbolColor("circle", style.brush, 0.6f),
+                        UIKitSymbolColor("checkmark_symbol", style.brush, 1f),
+                        UIKitSymbolColor("circle", style.brush, 0.6f)
                     )
                     is UIKitSymbolStyle.Palette -> style.brushes.mapIndexed { index, brush ->
                         UIKitSymbolColor(layers.getOrNull(index)?.id ?: "unknown", brush, 1f)
                     }
+                }
+            }
+
+            override fun stateEffect(
+                state: String,
+                animateStates: List<UIKitSymbolAnimState>?
+            ): UIKitSymbolAnimTree? {
+                return when (state) {
+                    "add" -> {
+                        UIKitSymbolAnimTree().addParallel(
+                            if (animateStates?.firstOrNull { it.id == "checkmark_symbol" }?.visible ?: false) {
+                                UIKitSymbolAnimNode.pathTrimEndTo(
+                                    groupSelector = "checkmark_symbol",
+                                    targetValue = 0f,
+                                    animateSpec = tween(
+                                        240,
+                                        easing = FastOutLinearInEasing
+                                    )
+                                )
+                            } else null
+                        ).addSequential(UIKitSymbolAnimNode.pathTrimStartTo(
+                            groupSelector = "add_symbol.horizontal",
+                            targetValue = 0f,
+                            animateSpec = tween(
+                                240,
+                                easing = LinearOutSlowInEasing
+                            )
+                        )).addParallel(UIKitSymbolAnimNode.pathTrimEndTo(
+                            groupSelector = "add_symbol.horizontal",
+                            targetValue = 1f,
+                            animateSpec = tween(
+                                240,
+                                easing = LinearOutSlowInEasing
+                            )
+                        )).addParallel(UIKitSymbolAnimNode.pathTrimStartTo(
+                            groupSelector = "add_symbol.vertical",
+                            targetValue = 0f,
+                            animateSpec = tween(
+                                240,
+                                easing = LinearOutSlowInEasing
+                            )
+                        )).addParallel(UIKitSymbolAnimNode.pathTrimEndTo(
+                            groupSelector = "add_symbol.vertical",
+                            targetValue = 1f,
+                            animateSpec = tween(
+                                240,
+                                easing = LinearOutSlowInEasing
+                            )
+                        ))
+                    }
+                    "checkmark" -> {
+                        UIKitSymbolAnimTree().addParallel(UIKitSymbolAnimNode.pathTrimStartTo(
+                            groupSelector = "add_symbol.horizontal",
+                            targetValue = 0.5f,
+                            animateSpec = tween(
+                                120,
+                                easing = FastOutLinearInEasing
+                            )
+                        )).addParallel(UIKitSymbolAnimNode.pathTrimEndTo(
+                            groupSelector = "add_symbol.horizontal",
+                            targetValue = 0.5f,
+                            animateSpec = tween(
+                                120,
+                                easing = FastOutLinearInEasing
+                            )
+                        )).addParallel(UIKitSymbolAnimNode.pathTrimStartTo(
+                            groupSelector = "add_symbol.vertical",
+                            targetValue = 0.5f,
+                            animateSpec = tween(
+                                120,
+                                easing = FastOutLinearInEasing
+                            )
+                        )).addParallel(UIKitSymbolAnimNode.pathTrimEndTo(
+                            groupSelector = "add_symbol.vertical",
+                            targetValue = 0.5f,
+                            animateSpec = tween(
+                                120,
+                                easing = FastOutLinearInEasing
+                            )
+                        )).addSequential(UIKitSymbolAnimNode.pathTrimEndTo(
+                            groupSelector = "checkmark_symbol",
+                            targetValue = 1f,
+                            animateSpec = tween(
+                                420,
+                                easing = LinearOutSlowInEasing
+                            )
+                        ))
+                    }
+                    else -> null
                 }
             }
         }

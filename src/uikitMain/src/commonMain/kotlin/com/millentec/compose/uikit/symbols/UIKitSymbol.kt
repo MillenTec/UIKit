@@ -224,9 +224,12 @@ abstract class UIKitSymbol(
      */
     open fun disableEffect(
         states: List<UIKitSymbolAnimState>? = null
-    ): UIKitSymbolAnimTree? {
-        return null
-    }
+    ): UIKitSymbolAnimTree? = null
+
+    open fun stateEffect(
+        state: String,
+        animateStates: List<UIKitSymbolAnimState>? = null
+    ): UIKitSymbolAnimTree? = null
 }
 
 /**

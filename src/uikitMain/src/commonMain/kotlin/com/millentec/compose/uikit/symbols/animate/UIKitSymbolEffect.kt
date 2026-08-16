@@ -57,12 +57,12 @@ open class UIKitSymbolEffect {
 
     open suspend fun execute(
         symbol: UIKitSymbol,
-        states: List<UIKitSymbolAnimState>
+        states: List<UIKitSymbolAnimState>,
     ) {}
 
     open suspend fun initialize(
         symbol: UIKitSymbol,
-        states: List<UIKitSymbolAnimState>
+        states: List<UIKitSymbolAnimState>,
     ) {}
 }
 
@@ -106,7 +106,10 @@ fun UIKitSymbolEffect.customEffect(
             standardExecute(tree, states)
         }
 
-        override suspend fun initialize(symbol: UIKitSymbol, states: List<UIKitSymbolAnimState>) {
+        override suspend fun initialize(
+            symbol: UIKitSymbol,
+            states: List<UIKitSymbolAnimState>
+        ) {
             initialize(symbol, states)
         }
     })
@@ -181,6 +184,37 @@ fun UIKitSymbolEffect.disableEffect(enabled: Boolean): UIKitSymbolEffect {
                 standardExecute(enableTree, states, true)
             } else if (!triggerCurrent && disableTree != null) {
                 standardExecute(disableTree, states, true)
+            }
+        }
+    })
+
+    return this
+}
+
+fun UIKitSymbolEffect.stateEffect(
+    state: String
+): UIKitSymbolEffect {
+    this.addEffect(object: UIKitSymbolEffect() {
+        override val triggerCurrent = state
+        override val initializable: Boolean = true
+
+        override suspend fun initialize(
+            symbol: UIKitSymbol,
+            states: List<UIKitSymbolAnimState>
+        ) {
+            val stateTree = symbol.stateEffect(state, states)
+            stateTree?.let {
+                standardExecute(it, states, true)
+            }
+        }
+
+        override suspend fun execute(
+            symbol: UIKitSymbol,
+            states: List<UIKitSymbolAnimState>
+        ) {
+            val stateTree = symbol.stateEffect(state, states)
+            stateTree?.let {
+                standardExecute(it, states)
             }
         }
     })
