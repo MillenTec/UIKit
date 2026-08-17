@@ -13,7 +13,10 @@ import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.UIKitIcon
 import com.millentec.compose.uikit.foundation.CommonPage
 import com.millentec.compose.uikit.symbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.animate.*
+import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
+import com.millentec.compose.uikit.symbols.animate.bounceEffect
+import com.millentec.compose.uikit.symbols.animate.stateEffect
+import com.millentec.compose.uikit.symbols.animate.visibleEffect
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.symbols.regular.AddCircle
 import com.millentec.compose.uikit.symbols.regular.Speaker
@@ -33,7 +36,6 @@ class Home: CommonPage("home") {
                 val visible0 = remember { mutableStateOf(true) }
                 val visible1 = remember { mutableStateOf(false) }
                 val enabled0 = remember { mutableStateOf(true) }
-                val enabled1 = remember { mutableStateOf(true) }
                 val style = remember { mutableStateOf(false) }
                 val state = remember { mutableStateOf(false) }
                 val bounceTrigger = remember { mutableStateOf(0) }
@@ -48,7 +50,7 @@ class Home: CommonPage("home") {
                         else UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
                         symbolEffect = UIKitSymbolEffect()
                             .visibleEffect(visible0.value)
-                            .disableEffect(enabled0.value)
+                            .stateEffect(if (enabled0.value) "default" else "disabled")
                             .bounceEffect(bounceTrigger.value)
                     )
 
@@ -61,7 +63,6 @@ class Home: CommonPage("home") {
                         else UIKitSymbolStyle.MultiColor,
                         symbolEffect = UIKitSymbolEffect()
                             .visibleEffect(visible1.value)
-                            .disableEffect(enabled1.value)
                             .stateEffect(if (state.value) "checkmark" else "add")
                             .bounceEffect(bounceTrigger.value)
                     )
@@ -88,13 +89,6 @@ class Home: CommonPage("home") {
                         UIKitToggleSwitch(
                             checked = visible1.value,
                             onCheckedChange = { visible1.value = it }
-                        )
-
-                        Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-                        UIKitToggleSwitch(
-                            checked = enabled1.value,
-                            onCheckedChange = { enabled1.value = it }
                         )
 
                         Spacer(Modifier.height(getUIKitLayout().basicSpacing))

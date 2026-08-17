@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.materials.UIKitBrush
 import com.millentec.compose.uikit.symbols.UIKitRegularSymbols
 import com.millentec.compose.uikit.symbols.UIKitSymbol
+import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimNode
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimTree
@@ -35,7 +36,6 @@ val UIKitRegularSymbols.AddCircle: UIKitSymbol
                         group(
                             id = "circle",
                             drawType = UIKitPathDrawType.Fill,
-                            zIndex = 0
                         ) {
                             moveTo(10f, 2f)
                             curveTo(5.6f, 2f, 2f, 5.6f, 2f, 10f)
@@ -51,13 +51,12 @@ val UIKitRegularSymbols.AddCircle: UIKitSymbol
                             close()
                         }
                     },
-                    UIKitSymbolLayer("add_symbol").apply {
+                    UIKitSymbolLayer("add_symbol", 1).apply {
                         group(
                             id = "add_symbol.horizontal",
                             drawType = UIKitPathDrawType.Stroke(
                                 lineWidth = 1f
                             ),
-                            zIndex = 1
                         ) {
                             moveTo(6.5f, 10f)
                             horizontalLineTo(13.5f)
@@ -68,13 +67,12 @@ val UIKitRegularSymbols.AddCircle: UIKitSymbol
                             drawType = UIKitPathDrawType.Stroke(
                                 lineWidth = 1f
                             ),
-                            zIndex = 1
                         ) {
                             moveTo(10f, 6.5f)
                             verticalLineTo(13.5f)
                         }
                     },
-                    UIKitSymbolLayer("checkmark_symbol").apply {
+                    UIKitSymbolLayer("checkmark_symbol", 1).apply {
                         group(
                             id = "checkmark_symbol",
                             drawType = UIKitPathDrawType.Stroke(
@@ -90,6 +88,13 @@ val UIKitRegularSymbols.AddCircle: UIKitSymbol
                         }
                     }
                 )
+
+            override val abilityStatement: List<UIKitSymbolAbility> = listOf(
+                UIKitSymbolAbility.Appear,
+                UIKitSymbolAbility.Disappear,
+                UIKitSymbolAbility.Bounce,
+                UIKitSymbolAbility.MultiState(listOf("add", "checkmark"))
+            )
 
             @Composable
             override fun colorSet(

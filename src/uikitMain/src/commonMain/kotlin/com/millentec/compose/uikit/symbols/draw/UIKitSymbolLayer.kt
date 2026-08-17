@@ -5,13 +5,13 @@ import com.millentec.compose.uikit.symbols.animate.UIKitSymbolGroupState
 data class UIKitSymbolPathGroup(
     val id: String,
     val drawType: UIKitPathDrawType,
-    val zIndex: Int,
     val defaultState: UIKitSymbolGroupState,
     val path: UIKitPath
 )
 
 class UIKitSymbolLayer(
-    val id: String
+    val id: String,
+    val zIndex: Int = 0
 ) {
     private val _groups = mutableListOf<UIKitSymbolPathGroup>()
     val groups: List<UIKitSymbolPathGroup>
@@ -27,14 +27,12 @@ class UIKitSymbolLayer(
     fun group(
         id: String,
         drawType: UIKitPathDrawType,
-        zIndex: Int = 0,
         defaultState: UIKitSymbolGroupState = UIKitSymbolGroupState(),
         path: UIKitPath.() -> Unit
     ) {
         _groups.add(UIKitSymbolPathGroup(
             id = id,
             drawType = drawType,
-            zIndex = zIndex,
             defaultState = defaultState,
             path = UIKitPath().apply(path)
         ))

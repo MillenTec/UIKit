@@ -14,6 +14,13 @@ import androidx.compose.ui.unit.DpSize
 import com.millentec.compose.uikit.symbols.animate.*
 import com.millentec.compose.uikit.symbols.draw.*
 
+sealed class UIKitSymbolAbility {
+    object Appear: UIKitSymbolAbility()
+    object Disappear: UIKitSymbolAbility()
+    object Bounce: UIKitSymbolAbility()
+    data class MultiState(val states: List<String>): UIKitSymbolAbility()
+}
+
 /**
  * 可以继承此类以创建一个 UIKitSymbol
  * @param name 图标名称
@@ -29,6 +36,11 @@ abstract class UIKitSymbol(
      * 图标的各个分层
      */
     abstract val layers: List<UIKitSymbolLayer>
+
+    /**
+     * 图标声明所具备的动画效果能力, 可用于动画调用参考
+     */
+    abstract val abilityStatement: List<UIKitSymbolAbility>?
 
     /**
      * 图标各层的颜色集
@@ -48,13 +60,11 @@ abstract class UIKitSymbol(
         get() {
             if (_groupsCache == null) {
                 val groups = mutableListOf<UIKitSymbolPathGroup>()
-                layers.forEach { layer ->
+                layers.sortedBy { it.zIndex }.forEach { layer ->
                     groups += layer.groups
                 }
 
-                _groupsCache = groups.sortedBy {
-                    it.zIndex
-                }
+                _groupsCache = groups
             }
 
             return _groupsCache!!
@@ -105,50 +115,85 @@ abstract class UIKitSymbol(
         states: List<UIKitSymbolAnimState>? = null
     ): UIKitSymbolAnimTree? {
         val tree = UIKitSymbolAnimTree()
-        val filterGroups = groups.filter {
-            if (states == null) true else {
-                val state = states.firstOrNull { state -> state.id == it.id }
-                state?.visible(
-                    UIKitAnimSelector.entries.filter { item ->
-                        item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.Alpha
-                    }
-                ) ?: true
+
+        // 筛选出至少有一个组可见的层才执行动画
+        val filteredLayers = layers.filter { layer ->
+            layer.groups.any { group ->
+                if (states == null) true else {
+                    val state = states.firstOrNull { state -> state.id == group.id }
+                    state?.visible(
+                        UIKitAnimSelector.entries.filter { item ->
+                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.Alpha
+                        }
+                    ) ?: true
+                }
             }
         }
-        val remainGroups = groups.filter {
-            !filterGroups.contains(it)
+        val remainLayers = layers.filter { layer ->
+            // 筛选后的层列表中的层和原先 layers 中的层不是同一引用! 不能能用 contains 判断
+            !filteredLayers.any { it.id == layer.id }
         }
 
-        filterGroups.sortedByDescending { it.zIndex }.forEachIndexed { index, group ->
-            tree.addParallel(UIKitSymbolAnimNode.scaleTo(
-                group.id,
-                targetValue = 1f,
-                animateSpec = tween(
-                    280 / (groups.size + 1) * 2,
-                    easing = CubicBezierEasing(0f, 0f,0.382f, 1f),
-                    delayMillis = index * 280 / (groups.size + 1)
-                ),
-            )).addParallel(UIKitSymbolAnimNode.alphaTo(
-                group.id,
-                targetValue = 1f,
-                animateSpec = tween(
-                    280 / (groups.size + 1) * 2,
-                    easing = CubicBezierEasing(0f, 0f,0.382f, 1f),
-                    delayMillis = index * 280 / (groups.size + 1)
-                )
-            ))
+        filteredLayers.sortedByDescending { it.zIndex }.forEachIndexed { index, layer ->
+            val filterGroups = layer.groups.filter {
+                if (states == null) true else {
+                    val state = states.firstOrNull { state -> state.id == it.id }
+                    state?.visible(
+                        UIKitAnimSelector.entries.filter { item ->
+                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.Alpha
+                        }
+                    ) ?: true
+                }
+            }
+            val remainGroups = layer.groups.filter {
+                !filterGroups.contains(it)
+            }
+
+            filterGroups.forEach { group ->
+                tree.addParallel(UIKitSymbolAnimNode.scaleTo(
+                    group.id,
+                    targetValue = 1f,
+                    animateSpec = tween(
+                        280 / (filteredLayers.size + 1) * 2,
+                        easing = CubicBezierEasing(0f, 0f,0.382f, 1f),
+                        delayMillis = index * 280 / (filteredLayers.size + 1)
+                    ),
+                )).addParallel(UIKitSymbolAnimNode.alphaTo(
+                    group.id,
+                    targetValue = 1f,
+                    animateSpec = tween(
+                        280 / (filteredLayers.size + 1) * 2,
+                        easing = CubicBezierEasing(0f, 0f,0.382f, 1f),
+                        delayMillis = index * 280 / (filteredLayers.size + 1)
+                    )
+                ))
+            }
+
+            remainGroups.forEach { group ->
+                tree.addParallel(UIKitSymbolAnimNode.scaleTo(
+                    group.id,
+                    targetValue = 1f,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.alphaTo(
+                    group.id,
+                    targetValue = 1f,
+                    animateSpec = null
+                ))
+            }
         }
 
-        remainGroups.forEach { group ->
-            tree.addParallel(UIKitSymbolAnimNode.scaleTo(
-                group.id,
-                targetValue = 1f,
-                animateSpec = null
-            )).addParallel(UIKitSymbolAnimNode.alphaTo(
-                group.id,
-                targetValue = 1f,
-                animateSpec = null
-            ))
+        remainLayers.forEach { layer ->
+            layer.groups.forEach { group ->
+                tree.addParallel(UIKitSymbolAnimNode.scaleTo(
+                    group.id,
+                    targetValue = 1f,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.alphaTo(
+                    group.id,
+                    targetValue = 1f,
+                    animateSpec = null
+                ))
+            }
         }
 
         return tree
@@ -163,70 +208,87 @@ abstract class UIKitSymbol(
         states: List<UIKitSymbolAnimState>? = null
     ): UIKitSymbolAnimTree? {
         val tree = UIKitSymbolAnimTree()
-        val filterGroups = groups.filter {
-            if (states == null) true else {
-                val state = states.firstOrNull { state -> state.id == it.id }
-                state?.visible ?: true
+
+        val filteredLayers = layers.filter { layer ->
+            layer.groups.any { group ->
+                if (states == null) true else {
+                    val state = states.firstOrNull { state -> state.id == group.id }
+                    state?.visible(
+                        UIKitAnimSelector.entries.filter { item ->
+                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.Alpha
+                        }
+                    ) ?: true
+                }
             }
         }
-        val remainGroups = groups.filter {
-            !filterGroups.contains(it)
+        val remainLayers = layers.filter { layer ->
+            !filteredLayers.any { it.id == layer.id }
         }
 
-        filterGroups.forEachIndexed { index, group ->
-            tree.addParallel(UIKitSymbolAnimNode.scaleTo(
-                group.id,
-                targetValue = 0.8f,
-                animateSpec = tween(
-                    280 / (filterGroups.size + 1) * 2,
-                    easing = FastOutLinearInEasing,
-                    delayMillis = index * 280 / (groups.size + 1)
-                ),
-            )).addParallel(UIKitSymbolAnimNode.alphaTo(
-                group.id,
-                targetValue = 0f,
-                animateSpec = tween(
-                    280 / (filterGroups.size + 1) * 2,
-                    easing = FastOutLinearInEasing,
-                    delayMillis = index * 280 / (groups.size + 1)
-                )
-            ))
+        filteredLayers.sortedBy { it.zIndex }.forEachIndexed { index, layer ->
+            val filteredGroups = layer.groups.filter {
+                if (states == null) true else {
+                    val state = states.firstOrNull { state -> state.id == it.id }
+                    state?.visible(
+                        UIKitAnimSelector.entries.filter { item ->
+                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.Alpha
+                        }
+                    ) ?: true
+                }
+            }
+            val remainGroups = layer.groups.filter {
+                !filteredGroups.contains(it)
+            }
+
+            filteredGroups.forEach { group ->
+                tree.addParallel(UIKitSymbolAnimNode.scaleTo(
+                    group.id,
+                    targetValue = 0.8f,
+                    animateSpec = tween(
+                        280 / (filteredLayers.size + 1) * 2,
+                        easing = FastOutLinearInEasing,
+                        delayMillis = index * 280 / (filteredLayers.size + 1)
+                    ),
+                )).addParallel(UIKitSymbolAnimNode.alphaTo(
+                    group.id,
+                    targetValue = 0f,
+                    animateSpec = tween(
+                        280 / (filteredLayers.size + 1) * 2,
+                        easing = FastOutLinearInEasing,
+                        delayMillis = index * 280 / (filteredLayers.size + 1)
+                    )
+                ))
+            }
+
+            remainGroups.forEach { group ->
+                tree.addParallel(UIKitSymbolAnimNode.scaleTo(
+                    group.id,
+                    targetValue = 0.8f,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.alphaTo(
+                    group.id,
+                    targetValue = 0f,
+                    animateSpec = null
+                ))
+            }
         }
 
-        remainGroups.forEach { group ->
-            tree.addParallel(UIKitSymbolAnimNode.scaleTo(
-                group.id,
-                targetValue = 0f,
-                animateSpec = null
-            )).addParallel(UIKitSymbolAnimNode.alphaTo(
-                group.id,
-                targetValue = 0f,
-                animateSpec = null
-            ))
+        remainLayers.forEach { layer ->
+            layer.groups.forEach { group ->
+                tree.addParallel(UIKitSymbolAnimNode.scaleTo(
+                    group.id,
+                    targetValue = 0.8f,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.alphaTo(
+                    group.id,
+                    targetValue = 0f,
+                    animateSpec = null
+                ))
+            }
         }
 
         return tree
     }
-
-    /**
-     * 图标启用的效果, 你不应该尝试调用此方法, 而应该在子类中覆写此方法以供 `UIKitSymbolEffect` 使用, 基类中提供了部分默认动画
-     * @param states 提供的当前动画信息, 你可以通过这里得到某个组当前是否可见以调整动画
-     * @return 用于描述动画的动画树, 支持 `Parallel` 和 `Sequential` 节点, 如果返回 `null` 则表示不支持此动画
-     */
-    open fun enableEffect(
-        states: List<UIKitSymbolAnimState>? = null
-    ): UIKitSymbolAnimTree? {
-        return null
-    }
-
-    /**
-     * 图标禁用的效果, 你不应该尝试调用此方法, 而应该在子类中覆写此方法以供 `UIKitSymbolEffect` 使用, 基类中提供了部分默认动画
-     * @param states 提供的当前动画信息, 你可以通过这里得到某个组当前是否可见以调整动画
-     * @return 用于描述动画的动画树, 支持 `Parallel` 和 `Sequential` 节点, 如果返回 `null` 则表示不支持此动画
-     */
-    open fun disableEffect(
-        states: List<UIKitSymbolAnimState>? = null
-    ): UIKitSymbolAnimTree? = null
 
     open fun stateEffect(
         state: String,
@@ -237,30 +299,43 @@ abstract class UIKitSymbol(
         states: List<UIKitSymbolAnimState>? = null
     ): UIKitSymbolAnimTree? {
         val tree = UIKitSymbolAnimTree()
-        val filterGroups = groups.filter {
-            if (states == null) true else {
-                val state = states.firstOrNull { state -> state.id == it.id }
-                state?.visible(
-                    UIKitAnimSelector.entries.filter { item ->
-                        item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.Alpha
-                    }
-                ) ?: true
-            }
-        }
-
-        filterGroups.sortedBy { it.zIndex }.forEachIndexed { index, group ->
-            tree.addParallel(UIKitSymbolAnimNode.scaleTo(
-                group.id,
-                targetValue = 1f,
-                animateSpec = keyframes {
-                    durationMillis = 575
-                    delayMillis = index * 80
-
-                    1.2f at 200 using CubicBezierEasing(0f, 0f,0.382f, 1f)
-                    0.9f at 450 using CubicBezierEasing(0.382f, 1f, 0f, 0f)
-                    1f at 575 using CubicBezierEasing(0f, 0f,0.382f, 1f)
+        layers.filter {
+            it.groups.any {
+                if (states == null) true else {
+                    val state = states.firstOrNull { state -> state.id == it.id }
+                    state?.visible(
+                        UIKitAnimSelector.entries.filter { item ->
+                            item != UIKitAnimSelector.Scale
+                        }
+                    ) ?: true
                 }
-            ))
+            }
+        }.sortedByDescending { it.zIndex }.forEachIndexed { index, layer ->
+            val filterGroups = layer.groups.filter {
+                if (states == null) true else {
+                    val state = states.firstOrNull { state -> state.id == it.id }
+                    state?.visible(
+                        UIKitAnimSelector.entries.filter { item ->
+                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.Alpha
+                        }
+                    ) ?: true
+                }
+            }
+
+            filterGroups.forEach { group ->
+                tree.addParallel(UIKitSymbolAnimNode.scaleTo(
+                    group.id,
+                    targetValue = 1f,
+                    animateSpec = keyframes {
+                        durationMillis = 575
+                        delayMillis = index * 80
+
+                        1.1f at 200 using CubicBezierEasing(0f, 0f,0.382f, 1f)
+                        0.95f at 400 using CubicBezierEasing(0.382f, 1f, 0f, 0f)
+                        1f at 500 using CubicBezierEasing(0f, 0f,0.382f, 1f)
+                    }
+                ))
+            }
         }
 
         return tree
@@ -282,6 +357,8 @@ class UIKitImageVectorSymbol(
     override val layers: List<UIKitSymbolLayer>
         get() = emptyList()
 
+    override val abilityStatement: List<UIKitSymbolAbility>? = null
+
     @Composable
     override fun colorSet(
         style: UIKitSymbolStyle,
@@ -299,14 +376,6 @@ class UIKitImageVectorSymbol(
     }
 
     override fun disappearEffect(states: List<UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {
-        return null
-    }
-
-    override fun enableEffect(states: List<UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {
-        return null
-    }
-
-    override fun disableEffect(states: List<UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {
         return null
     }
 

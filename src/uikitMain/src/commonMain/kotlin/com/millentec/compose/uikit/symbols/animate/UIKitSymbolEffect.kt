@@ -154,43 +154,6 @@ fun UIKitSymbolEffect.visibleEffect(visible: Boolean): UIKitSymbolEffect {
     return this
 }
 
-fun UIKitSymbolEffect.disableEffect(enabled: Boolean): UIKitSymbolEffect {
-    this.addEffect(object: UIKitSymbolEffect() {
-        override val triggerCurrent = enabled
-        override val initializable: Boolean = true
-
-        override suspend fun execute(
-            symbol: UIKitSymbol,
-            states: List<UIKitSymbolAnimState>
-        ) {
-            val enableTree = symbol.enableEffect(states)
-            val disableTree = symbol.disableEffect(states)
-
-            if (triggerCurrent && enableTree != null) {
-                standardExecute(enableTree, states)
-            } else if (!triggerCurrent && disableTree != null) {
-                standardExecute(disableTree, states)
-            }
-        }
-
-        override suspend fun initialize(
-            symbol: UIKitSymbol,
-            states: List<UIKitSymbolAnimState>
-        ) {
-            val enableTree = symbol.enableEffect(states)
-            val disableTree = symbol.disableEffect(states)
-
-            if (triggerCurrent && enableTree != null) {
-                standardExecute(enableTree, states, true)
-            } else if (!triggerCurrent && disableTree != null) {
-                standardExecute(disableTree, states, true)
-            }
-        }
-    })
-
-    return this
-}
-
 fun UIKitSymbolEffect.stateEffect(
     state: String
 ): UIKitSymbolEffect {

@@ -28,7 +28,6 @@ import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
-import com.millentec.compose.uikit.symbols.animate.disableEffect
 import com.millentec.compose.uikit.symbols.animate.visibleEffect
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitPathNode
@@ -71,7 +70,6 @@ private fun UIKitIconSample() {
         symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
         symbolEffect = UIKitSymbolEffect()
             .visibleEffect(true)
-            .disableEffect(false)
     )
 }
 
