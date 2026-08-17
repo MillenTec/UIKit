@@ -134,16 +134,15 @@ val UIKitRegularSymbols.AddCircle: UIKitSymbol
                 return when (state) {
                     "add" -> {
                         UIKitSymbolAnimTree().addParallel(
-                            if (animateStates?.firstOrNull { it.id == "checkmark_symbol" }?.visible ?: false) {
-                                UIKitSymbolAnimNode.pathTrimEndTo(
-                                    groupSelector = "checkmark_symbol",
-                                    targetValue = 0f,
-                                    animateSpec = tween(
+                            UIKitSymbolAnimNode.pathTrimEndTo(
+                                groupSelector = "checkmark_symbol",
+                                targetValue = 0f,
+                                animateSpec = if (animateStates?.firstOrNull { it.id == "checkmark_symbol" }?.visible ?: false)
+                                    tween(
                                         240,
                                         easing = FastOutLinearInEasing
-                                    )
-                                )
-                            } else null
+                                    ) else null
+                            )
                         ).addSequential(UIKitSymbolAnimNode.pathTrimStartTo(
                             groupSelector = "add_symbol.horizontal",
                             targetValue = 0f,

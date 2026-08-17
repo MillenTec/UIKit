@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Kotlin **Compose Multiplatform** library (a Windows/macOS/Android/iOS "UIKit"-style UI kit) plus a gallery sample app. No README exists.
+Kotlin **Compose Multiplatform** library (a Windows/macOS/Android/iOS "UIKit"-style UI kit) plus a gallery sample app. `README.md` (中文) and `README.en.md` at repo root cover the theme system, layered/animatable icons, and acrylic materials — read them before changing library APIs that appear there.
 
 ## Working directory gotcha
 
@@ -38,11 +38,12 @@ kotlin IconCollector.kts
 
 ## Library conventions
 
-- Theme values come from composables `getUIKitColors()`, `getUIKitShapes()`, `getUIKitTypography()`, etc. in `uikitMain/.../theme/ThemeCurrent.kt` — **not** `MaterialTheme`. Follow this in library components.
+- Theme values come from composables `getUIKitTheme()`, `getUIKitColors()`, `getUIKitShapes()`, `getUIKitTypography()`, etc. in `uikitMain/.../theme/ThemeGetter.kt` (all read `UIKitTheme.LocalTheme.current`) — **not** `MaterialTheme`. Follow this in library components.
 - `expect fun getScreenCornerRadius()` / `getOperatingSystem()` (`Platform.uikit.kt`) have actuals under `uikitMain/src/{androidMain,jvmMain,iosMain}`; sharedExample has its own `Platform.kt`.
 
 ## Environment / build quirks
 
+- Local JDK 21 is expected (README quickstart; Gradle wrapper is 9.5).
 - Dependency resolution and the Gradle wrapper distribution URL point at **Aliyun mirrors** (`settings.gradle.kts`, `gradle-wrapper.properties`); no network/mirror access breaks builds.
 - Gradle configuration cache is enabled; `org.gradle.jvmargs=-Xmx4096M`, `kotlin.daemon.jvmargs=-Xmx3072M`.
 - Kotlin 2.4.0, AGP 9.1.0, Compose Multiplatform 1.11.1, JVM target 11, Gradle 9.5.

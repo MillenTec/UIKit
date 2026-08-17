@@ -119,6 +119,7 @@ private fun UIKitAnimatableIcon(
         })
     }) }
     val cacheSymbolStyle = remember { mutableStateOf<UIKitSymbolStyle?>(null) }
+    val animationScope = rememberCoroutineScope()
 
     LaunchedEffect(colorSet.size) {
         colorsAnimated.clear()
@@ -217,9 +218,13 @@ private fun UIKitAnimatableIcon(
             symbolEffectTriggers[index] = effect.triggerCurrent
 
             if (preTrigger == null && effect.initializable) {
-                effect.initialize(symbol, animStates)
+                animationScope.launch {
+                    effect.initialize(symbol, animStates)
+                }
             } else if (preTrigger != effect.triggerCurrent && preTrigger != null) {
-                effect.execute(symbol, animStates)
+                animationScope.launch {
+                    effect.execute(symbol, animStates)
+                }
             }
         }
     }
