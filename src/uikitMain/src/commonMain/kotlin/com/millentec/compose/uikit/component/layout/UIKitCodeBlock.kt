@@ -49,7 +49,7 @@ private fun Preview() {
             // Some Notes Some Notes Some Notes Some Notes Some Notes Some Notes 
             /* Some Notes */
             /**
-             Some Docs
+             * Some Docs
              */
         }
         """.trimIndent()

@@ -20,7 +20,7 @@ class UIKitNavigation<S>(
     private val _hasHistoryPages = MutableStateFlow(initialPage != homePage)
     val hasHistoryPages: StateFlow<Boolean> = _hasHistoryPages.asStateFlow()
 
-    private val _pageSwitchAnimate = MutableStateFlow(UIKitNavigationAnimate().jump)
+    private val _pageSwitchAnimate = MutableStateFlow(UIKitNavigationAnimate.jump)
     val pageSwitchAnimate = _pageSwitchAnimate.asStateFlow()
 
     fun switchPage(page: S, isAddInHistory: Boolean = true, type: UIKitNavigationType = UIKitNavigationType.Jump){
@@ -34,9 +34,9 @@ class UIKitNavigation<S>(
         }
 
         _pageSwitchAnimate.value = when(type){
-            UIKitNavigationType.Forward -> UIKitNavigationAnimate().forward
-            UIKitNavigationType.Backward -> UIKitNavigationAnimate().backward(_pageDepth.toFloat())
-            else -> UIKitNavigationAnimate().jump
+            UIKitNavigationType.Forward -> UIKitNavigationAnimate.forward
+            UIKitNavigationType.Backward -> UIKitNavigationAnimate.backward(_pageDepth.toFloat())
+            else -> UIKitNavigationAnimate.jump
         }
 
         _page.value = page

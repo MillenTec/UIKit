@@ -30,6 +30,7 @@ import com.millentec.compose.uikit.component.input.UIKitDropdownButton
 import com.millentec.compose.uikit.component.input.UIKitNavigationDock
 import com.millentec.compose.uikit.component.layout.UIKitSurface
 import com.millentec.compose.uikit.component.layout.rememberUIKitAdaptiveCornerContainerState
+import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.Pages.*
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
@@ -43,7 +44,8 @@ import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.viewmodels.MainViewModel
-import com.millentec.compose.uikit.viewmodels.pageIndex
+import com.millentec.compose.uikit.views.pages.*
+import com.millentec.compose.uikit.views.pages.controls.*
 
 @Composable
 @Preview
@@ -87,9 +89,9 @@ fun MainView() {
         }
 
         LaunchedEffect(page) {
-            if (page in 0..2) {
+            if (page.ordinal in 0..2) {
                 MainViewModel.navigationDockVisible(true)
-            } else if (pageIndex.getOrNull(page)?.parent?.value in 0..2) {
+            } else if (page.parent?.ordinal in 0..2) {
                 MainViewModel.navigationDockVisible(true)
             } else {
                 MainViewModel.navigationDockVisible(false)
@@ -104,7 +106,24 @@ fun MainView() {
                 targetState = page,
                 transitionSpec = { navAnimate }
             ) {
-                pageIndex.getOrNull(it)?.Content()
+                when (it) {
+                    Home -> HomePage()
+                    Controls -> ControlsPage()
+                    Designs -> DesignsPage()
+                    Designs_Icons -> IconGalleryPage()
+                    Designs_UIKitSymbols -> UIKitSymbolsGalleryPage()
+                    License -> LicensePage()
+                    ThirdParty -> ThirdPartyPage()
+                    Settings -> SettingsPage()
+                    Settings_Language -> LanguagesPage()
+                    Controls_BasicInputs -> ControlsBasicInputsPage()
+                    Controls_StatusAndInfo -> ControlsStatusAndInfoPage()
+                    Controls_Flyouts -> ControlsFlyoutsPage()
+                    Controls_Layouts -> ControlsLayoutsPage()
+                    Controls_BasicInputs_Button -> BasicInputControls.first { it.page == Controls_BasicInputs_Button }.Content(LocalStrings.current.controls.inputs.button.title)
+                    Controls_BasicInputs_ToggleButton -> BasicInputControls.first { it.page == Controls_BasicInputs_ToggleButton }.Content(LocalStrings.current.controls.inputs.toggleButton.title)
+                    Controls_BasicInputs_ToggleSwitch -> BasicInputControls.first { it.page == Controls_BasicInputs_ToggleSwitch }.Content(LocalStrings.current.controls.inputs.toggleSwitch.title)
+                }
             }
         }
 
@@ -154,13 +173,13 @@ fun MainView() {
                         modifier = Modifier
                             .weight(1f)
                     ) {
-                        val dockItems = remember { mutableStateOf(NavDock.entries[page.coerceIn(0..2)]) }
+                        val dockItems = remember { mutableStateOf(NavDock.entries[page.ordinal.coerceIn(0..2)]) }
 
                         LaunchedEffect(page) {
-                            if (page in 0..2) {
-                                dockItems.value = NavDock.entries[page]
-                            } else if (pageIndex.getOrNull(page)?.parent?.value in 0..2) {
-                                dockItems.value = NavDock.entries[pageIndex.getOrNull(page)?.parent?.value ?: return@LaunchedEffect]
+                            if (page.ordinal in 0..2) {
+                                dockItems.value = NavDock.entries[page.ordinal]
+                            } else if (page.parent?.ordinal in 0..2) {
+                                dockItems.value = NavDock.entries[page.parent?.ordinal ?: return@LaunchedEffect]
                             }
                         }
 
@@ -176,7 +195,7 @@ fun MainView() {
                             shadowEnable = true,
                             checkedIndex = dockItems.value.ordinal,
                             onChecked = {
-                                nav.switchPage(it)
+                                nav.switchPage(Pages.entries[it])
                                 dockItems.value = NavDock.entries[it]
                             },
                             items = remember {
@@ -227,7 +246,7 @@ fun MainView() {
                                     icon = FluentIcons.Scales,
                                     text = strings.navigation.license,
                                     onClick = {
-                                        nav.switchPage(License.ordinal, type = UIKitNavigationType.Forward)
+                                        nav.switchPage(License, type = UIKitNavigationType.Forward)
                                         expanded.value = false
                                     }
                                 ),
@@ -236,7 +255,7 @@ fun MainView() {
                                     icon = FluentIcons.certificate(),
                                     text = strings.navigation.thirdPartyLicenses,
                                     onClick = {
-                                        nav.switchPage(ThirdParty.ordinal, type = UIKitNavigationType.Forward)
+                                        nav.switchPage(ThirdParty, type = UIKitNavigationType.Forward)
                                         expanded.value = false
                                     }
                                 ),
@@ -245,7 +264,7 @@ fun MainView() {
                                     icon = FluentIcons.Settings,
                                     text = strings.navigation.settings,
                                     onClick = {
-                                        nav.switchPage(Settings.ordinal, type = UIKitNavigationType.Forward)
+                                        nav.switchPage(Settings, type = UIKitNavigationType.Forward)
                                         expanded.value = false
                                     }
                                 )

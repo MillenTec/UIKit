@@ -15,20 +15,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.input.*
 import com.millentec.compose.uikit.component.layout.UIKitSettingCard
 import com.millentec.compose.uikit.component.layout.UIKitSettingsExpander
 import com.millentec.compose.uikit.foundation.ControlGalleryBasic
+import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.helper.toHsv
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.theme.*
 
 val BasicInputControls = listOf(
-    object: ControlGalleryBasic("controls_inputs_button") {
+    object: ControlGalleryBasic(Pages.Controls_BasicInputs_Button) {
         private val buttonSize = mutableStateOf(IntSize.Zero)
         private val buttonEnabled = mutableStateOf(true)
         private val buttonBackground = mutableStateOf<Color?>(null)
@@ -245,7 +245,7 @@ val BasicInputControls = listOf(
             """.trimIndent()
         }
     },
-    object: ControlGalleryBasic("controls_inputs_toggle-button") {
+    object: ControlGalleryBasic(Pages.Controls_BasicInputs_ToggleButton) {
         private val buttonSize = mutableStateOf(IntSize.Zero)
         private val buttonEnabled = mutableStateOf(true)
         private val buttonBackground = mutableStateOf<Color?>(null)
@@ -468,7 +468,7 @@ val BasicInputControls = listOf(
             }
         }
     },
-    object: ControlGalleryBasic("controls_inputs_toggle-switch") {
+    object: ControlGalleryBasic(Pages.Controls_BasicInputs_ToggleSwitch) {
         private val buttonEnabled = mutableStateOf(true)
         private val buttonBackground = mutableStateOf<Color?>(null)
 
@@ -593,9 +593,3 @@ val BasicInputControls = listOf(
         }
     }
 )
-
-@Composable
-@Preview
-private fun Preview() {
-    BasicInputControls[2].Content()
-}

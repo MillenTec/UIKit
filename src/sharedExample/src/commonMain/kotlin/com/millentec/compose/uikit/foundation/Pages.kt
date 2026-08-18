@@ -1,16 +1,27 @@
 ﻿package com.millentec.compose.uikit.foundation
 
-enum class Pages {
+@Suppress("EnumEntryName")
+enum class Pages(
+    val parent: Pages? = null
+) {
     Home,
     Controls,
+
     Designs,
-    Icons,
+    Designs_Icons(Designs),
+    Designs_UIKitSymbols(Designs),
+
     License,
     ThirdParty,
     Settings,
-    ControlsBasicInputs,
-    ControlsStatusAndInfo,
-    ControlsFlyouts,
-    ControlsLayouts,
-    SettingsLanguage,
+    Settings_Language(Settings),
+
+    Controls_BasicInputs(Controls),
+    Controls_StatusAndInfo(Controls),
+    Controls_Flyouts(Controls),
+    Controls_Layouts(Controls),
+
+    Controls_BasicInputs_Button(Controls),
+    Controls_BasicInputs_ToggleButton(Controls),
+    Controls_BasicInputs_ToggleSwitch(Controls)
 }

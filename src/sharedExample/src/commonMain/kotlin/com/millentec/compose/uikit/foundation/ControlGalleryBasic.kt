@@ -6,6 +6,7 @@ import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -27,14 +28,12 @@ import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Code
 import com.millentec.compose.uikit.theme.*
+import com.millentec.compose.uikit.viewmodels.MainViewModel
+import com.millentec.compose.uikit.views.LocalNavigationDockHeight
 import com.millentec.compose.uikit.views.pages.StateSelectorItem
 
 open class ControlGalleryBasic(
-    id: String,
-    parent: Int? = 1
-): CommonPage(
-    id,
-    parent
+    val page: Pages,
 ) {
     private val maxWidth = mutableStateOf(Dp.Unspecified)
 
@@ -49,103 +48,140 @@ open class ControlGalleryBasic(
 
     open fun LazyListScope.description() {}
 
-    final override fun LazyListScope.lazyContent() {
-        description()
+    @Composable
+    fun Content(title: String) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(getUIKitColors().contentFillColorPrimaryBrush),
+            contentPadding = PaddingValues(
+                start = getUIKitLayout().x4Spacing,
+                top = getUIKitLayout().x4Spacing,
+                end = getUIKitLayout().x4Spacing,
+            ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current)
+        ) {
+            val nav = MainViewModel.navigation
 
-        item {
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-        }
+            item {
+                Text(
+                    text = title,
+                    style = getUIKitTypography().largeTitle,
+                    color = getUIKitColors().textFillColorPrimaryBrush
+                )
+            }
 
-        item {
-            val densityDpi = LocalDensity.current.density
-            val height = remember { mutableStateOf(Dp.Unspecified) }
+            item {
+                Spacer(Modifier.height(getUIKitLayout().x2Spacing))
+            }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(
-                        max = if (maxWidth.value >= 768.dp) {
-                            512.dp
-                        } else Dp.Unspecified
-                    )
-                    .onSizeChanged {
-                        maxWidth.value = (it.width / densityDpi).dp
-                    }
-            ) {
-                Column(
+            description()
+
+            item {
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+            }
+
+            item {
+                val densityDpi = LocalDensity.current.density
+                val height = remember { mutableStateOf(Dp.Unspecified) }
+
+                Row(
                     modifier = Modifier
-                        .weight(1f)
-                        .height(if (maxWidth.value >= 768.dp)
-                            height.value
-                        else Dp.Unspecified)
-                        .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
-                        .background(getUIKitColors().contentFillColorSecondaryBrush)
-                        .then(if (maxWidth.value >= 768.dp) {
-                            Modifier.verticalScroll(rememberScrollState())
-                        } else Modifier)
-                        .padding(getUIKitLayout().mediumSpacing)
+                        .fillMaxWidth()
+                        .heightIn(
+                            max = if (maxWidth.value >= 768.dp) {
+                                512.dp
+                            } else Dp.Unspecified
+                        )
+                        .onSizeChanged {
+                            maxWidth.value = (it.width / densityDpi).dp
+                        }
                 ) {
-                    ControlView()
-                }
-
-                if (maxWidth.value >= 768.dp) {
-                    Spacer(Modifier.width(getUIKitLayout().basicSpacing))
-
                     Column(
-                        Modifier
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(if (maxWidth.value >= 768.dp)
+                                height.value
+                            else Dp.Unspecified)
                             .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
-                            .width(360.dp)
-                            .onSizeChanged {
-                                height.value = (it.height / densityDpi).dp
-                            }
-                            .verticalScroll(rememberScrollState())
+                            .background(getUIKitColors().contentFillColorSecondaryBrush)
+                            .then(if (maxWidth.value >= 768.dp) {
+                                Modifier.verticalScroll(rememberScrollState())
+                            } else Modifier)
+                            .padding(getUIKitLayout().mediumSpacing)
                     ) {
-                        ControlOption()
+                        ControlView()
+                    }
+
+                    if (maxWidth.value >= 768.dp) {
+                        Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+
+                        Column(
+                            Modifier
+                                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                                .width(360.dp)
+                                .onSizeChanged {
+                                    height.value = (it.height / densityDpi).dp
+                                }
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            ControlOption()
+                        }
                     }
                 }
             }
-        }
 
-        item {
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-        }
+            item {
+                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+            }
 
-        item {
-            val expanded = remember { mutableStateOf(true) }
-            UIKitSettingsExpander(
-                expanded = expanded.value,
-                onClick = {
-                    expanded.value = !expanded.value
-                },
-                title = LocalStrings.current.controls.inputs.common.sourceCode,
-                icon = FluentIcons.Code,
-                contentPadding = PaddingValues(0.dp),
-                headerPadding = PaddingValues(getUIKitLayout().basicSpacing)
-            ) {
-                UIKitCodeViewer(
-                    config = UIKitCodeBlockConfig.kotlin(
-                        when (AppTheme.theme.collectAsState().value) {
-                            ThemeType.System -> {
-                                if (isSystemInDarkTheme()) UIKitCodeBlockColors.IntelliJ
-                                else UIKitCodeBlockColors.IntelliJLight
-                            }
-                            ThemeType.Dark -> UIKitCodeBlockColors.IntelliJ
-                            ThemeType.Light -> UIKitCodeBlockColors.IntelliJLight
-                        }
-                    )
+            item {
+                val expanded = remember { mutableStateOf(true) }
+                UIKitSettingsExpander(
+                    expanded = expanded.value,
+                    onClick = {
+                        expanded.value = !expanded.value
+                    },
+                    title = LocalStrings.current.controls.inputs.common.sourceCode,
+                    icon = FluentIcons.Code,
+                    contentPadding = PaddingValues(0.dp),
+                    headerPadding = PaddingValues(getUIKitLayout().basicSpacing)
                 ) {
-                    exampleCode()
+                    UIKitCodeViewer(
+                        config = UIKitCodeBlockConfig.kotlin(
+                            when (AppTheme.theme.collectAsState().value) {
+                                ThemeType.System -> {
+                                    if (isSystemInDarkTheme()) UIKitCodeBlockColors.IntelliJ
+                                    else UIKitCodeBlockColors.IntelliJLight
+                                }
+                                ThemeType.Dark -> UIKitCodeBlockColors.IntelliJ
+                                ThemeType.Light -> UIKitCodeBlockColors.IntelliJLight
+                            }
+                        )
+                    ) {
+                        exampleCode()
+                    }
                 }
             }
-        }
 
-        if (maxWidth.value <= 768.dp && maxWidth.value != Dp.Unspecified) {
-            item {
-                Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
+            if (maxWidth.value <= 768.dp && maxWidth.value != Dp.Unspecified) {
+                item {
+                    Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
+                }
+
+                item {
+                    ControlOption()
+                }
             }
 
             item {
-                ControlOption()
+                Spacer(
+                    Modifier.height(
+                        maxOf(
+                            LocalNavigationDockHeight.value + getUIKitLayout().mediumSpacing,
+                            getUIKitLayout().x4Spacing
+                        )
+                    )
+                )
             }
         }
     }

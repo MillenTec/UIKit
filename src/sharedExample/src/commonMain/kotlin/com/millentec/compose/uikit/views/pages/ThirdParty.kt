@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.foundation.PageBasic
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.theme.*
 import kotlinx.coroutines.Dispatchers
@@ -25,77 +25,76 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import uikit.sharedexample.generated.resources.Res
 
-class ThirdParty: PageBasic("third-party") {
-    @Composable
-    override fun Content() {
-        val thirdPartyLicenseContents = remember { mutableStateOf(listOf("Loading...")) }
-        val density = LocalDensity.current
+@Composable
+@Preview
+fun ThirdPartyPage() {
+    val thirdPartyLicenseContents = remember { mutableStateOf(listOf("Loading...")) }
+    val density = LocalDensity.current
 
-        LaunchedEffect(Unit) {
-            withContext(Dispatchers.IO) {
-                try {
-                    val bytes = Res.readBytes("files/THIRD_PARTY.txt")
-                    val string = bytes.decodeToString()
-                    if (string.isEmpty()) {
-                        throw Exception("Read or decoded file is blank")
-                    }
-                    thirdPartyLicenseContents.value = string.split('\n')
-                } catch(e: Exception) {
-                    thirdPartyLicenseContents.value = listOf("Loading failed: ${e.message}")
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            try {
+                val bytes = Res.readBytes("files/THIRD_PARTY.txt")
+                val string = bytes.decodeToString()
+                if (string.isEmpty()) {
+                    throw Exception("Read or decoded file is blank")
                 }
+                thirdPartyLicenseContents.value = string.split('\n')
+            } catch(e: Exception) {
+                thirdPartyLicenseContents.value = listOf("Loading failed: ${e.message}")
             }
         }
+    }
 
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(getUIKitColors().contentFillColorPrimaryBrush)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(getUIKitColors().contentFillColorPrimaryBrush)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(
-                        top = (WindowInsets.safeDrawing.getTop(density) / density.density).dp + getUIKitLayout().x4Spacing,
-                        start = (WindowInsets.safeDrawing.getLeft(density, LocalLayoutDirection.current) / density.density).dp + getUIKitLayout().x4Spacing,
-                        end = (WindowInsets.safeDrawing.getRight(density, LocalLayoutDirection.current) / density.density).dp + getUIKitLayout().x4Spacing,
-                        bottom = maxOf(
-                            (WindowInsets.safeDrawing.getBottom(density) / density.density).dp,
-                            getUIKitLayout().x4Spacing
-                        )
+                .padding(
+                    top = (WindowInsets.safeDrawing.getTop(density) / density.density).dp + getUIKitLayout().x4Spacing,
+                    start = (WindowInsets.safeDrawing.getLeft(density, LocalLayoutDirection.current) / density.density).dp + getUIKitLayout().x4Spacing,
+                    end = (WindowInsets.safeDrawing.getRight(density, LocalLayoutDirection.current) / density.density).dp + getUIKitLayout().x4Spacing,
+                    bottom = maxOf(
+                        (WindowInsets.safeDrawing.getBottom(density) / density.density).dp,
+                        getUIKitLayout().x4Spacing
                     )
-            ) {
-                Text(
-                    text = LocalStrings.current.thirdPartyLicenses.title,
-                    style = getUIKitTypography().largeTitle,
-                    color = getUIKitColors().textFillColorPrimaryBrush
                 )
+        ) {
+            Text(
+                text = LocalStrings.current.thirdPartyLicenses.title,
+                style = getUIKitTypography().largeTitle,
+                color = getUIKitColors().textFillColorPrimaryBrush
+            )
 
-                Spacer(modifier = Modifier.height(getUIKitLayout().x2Spacing))
+            Spacer(modifier = Modifier.height(getUIKitLayout().x2Spacing))
 
-                Text(
-                    text = LocalStrings.current.thirdPartyLicenses.description,
-                    style = getUIKitTypography().body,
-                    color = getUIKitColors().textFillColorPrimaryBrush
-                )
+            Text(
+                text = LocalStrings.current.thirdPartyLicenses.description,
+                style = getUIKitTypography().body,
+                color = getUIKitColors().textFillColorPrimaryBrush
+            )
 
-                Spacer(modifier = Modifier.height(getUIKitLayout().basicSpacing))
+            Spacer(modifier = Modifier.height(getUIKitLayout().basicSpacing))
 
-                SelectionContainer {
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(if (isDesktopOS()) getUIKitShapes().regularRounded else getUIKitShapes().largeRounded))
-                            .background(getUIKitColors().contentFillColorSecondaryBrush)
-                            .horizontalScroll(rememberScrollState()),
-                        contentPadding = PaddingValues(getUIKitLayout().x2Spacing),
-                    ) {
-                        items(thirdPartyLicenseContents.value.size) {
-                            Text(
-                                text = thirdPartyLicenseContents.value[it],
-                                style = getUIKitTypography().body,
-                                color = getUIKitColors().textFillColorPrimaryBrush
-                            )
-                        }
+            SelectionContainer {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(if (isDesktopOS()) getUIKitShapes().regularRounded else getUIKitShapes().largeRounded))
+                        .background(getUIKitColors().contentFillColorSecondaryBrush)
+                        .horizontalScroll(rememberScrollState()),
+                    contentPadding = PaddingValues(getUIKitLayout().x2Spacing),
+                ) {
+                    items(thirdPartyLicenseContents.value.size) {
+                        Text(
+                            text = thirdPartyLicenseContents.value[it],
+                            style = getUIKitTypography().body,
+                            color = getUIKitColors().textFillColorPrimaryBrush
+                        )
                     }
                 }
             }

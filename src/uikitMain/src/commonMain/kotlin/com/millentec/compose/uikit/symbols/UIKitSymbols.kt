@@ -1,9 +1,7 @@
 package com.millentec.compose.uikit.symbols
 
 object UIKitSymbols {
-    val regular = UIKitRegularSymbols()
+    val systemUI = UIKitSystemUISymbols()
 }
 
-class UIKitRegularSymbols {
-    internal constructor()
-}
+class UIKitSystemUISymbols { internal constructor() }

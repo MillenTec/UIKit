@@ -1,7 +1,8 @@
 ﻿package com.millentec.compose.uikit.views.pages
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -9,24 +10,45 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.component.input.UIKitRadioButton
-import com.millentec.compose.uikit.foundation.CommonPage
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.i18n.SupportedLanguages
 import com.millentec.compose.uikit.i18n.SupportedLanguages.*
 import com.millentec.compose.uikit.theme.*
+import com.millentec.compose.uikit.viewmodels.MainViewModel
+import com.millentec.compose.uikit.views.LocalNavigationDockHeight
 
 @Composable
 @Preview
-private fun Preview() {
-    Language().Content()
-}
+fun LanguagesPage() {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(getUIKitColors().contentFillColorPrimaryBrush),
+        contentPadding = PaddingValues(
+            start = getUIKitLayout().x4Spacing,
+            top = getUIKitLayout().x4Spacing,
+            end = getUIKitLayout().x4Spacing,
+        ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current)
+    ) {
+        val nav = MainViewModel.navigation
 
-class Language: CommonPage("settings_language") {
-    override fun LazyListScope.lazyContent() {
+        item {
+            Text(
+                text = LocalStrings.current.settings.language.title,
+                style = getUIKitTypography().largeTitle,
+                color = getUIKitColors().textFillColorPrimaryBrush
+            )
+        }
+
+        item {
+            Spacer(Modifier.height(getUIKitLayout().x2Spacing))
+        }
+
         item {
             Text(
                 text = LocalStrings.current.settings.language.description,
@@ -81,6 +103,17 @@ class Language: CommonPage("settings_language") {
                     )
                 }
             }
+        }
+
+        item {
+            Spacer(
+                Modifier.height(
+                    maxOf(
+                        LocalNavigationDockHeight.value + getUIKitLayout().mediumSpacing,
+                        getUIKitLayout().x4Spacing
+                    )
+                )
+            )
         }
     }
 }

@@ -29,11 +29,11 @@ import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
 import com.millentec.compose.uikit.symbols.animate.visibleEffect
+import com.millentec.compose.uikit.symbols.builtin.systemui.AddCircle
+import com.millentec.compose.uikit.symbols.builtin.systemui.Speaker
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitPathNode
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
-import com.millentec.compose.uikit.symbols.regular.AddCircle
-import com.millentec.compose.uikit.symbols.regular.Speaker
 import com.millentec.compose.uikit.theme.getUIKitColors
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -44,7 +44,7 @@ private fun Preview() {
     UIKitIcon(
         modifier = Modifier
             .size(100.dp),
-        symbol = UIKitSymbols.regular.AddCircle,
+        symbol = UIKitSymbols.systemUI.Speaker,
         contentDescription = "AddCircle",
         symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush)
     )
@@ -54,7 +54,7 @@ private fun Preview() {
 @Preview
 private fun Preview2() {
     Icon(
-        imageVector = UIKitSymbols.regular.AddCircle.toComposeVector(Color.White),
+        imageVector = UIKitSymbols.systemUI.AddCircle.toComposeVector(Color.White),
         contentDescription = "AddCircle",
         tint = Color.White,
     )
@@ -65,7 +65,7 @@ private fun UIKitIconSample() {
     UIKitIcon(
         modifier = Modifier
             .size(32.dp),
-        symbol = UIKitSymbols.regular.Speaker,
+        symbol = UIKitSymbols.systemUI.Speaker,
         contentDescription = "Volume",
         symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
         symbolEffect = UIKitSymbolEffect()

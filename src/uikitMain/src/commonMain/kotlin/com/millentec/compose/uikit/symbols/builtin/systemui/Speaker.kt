@@ -1,4 +1,4 @@
-package com.millentec.compose.uikit.symbols.regular
+package com.millentec.compose.uikit.symbols.builtin.systemui
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -9,9 +9,9 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.materials.UIKitBrush
-import com.millentec.compose.uikit.symbols.UIKitRegularSymbols
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
+import com.millentec.compose.uikit.symbols.UIKitSystemUISymbols
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimNode
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimTree
@@ -22,7 +22,7 @@ import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.getUIKitColors
 
-val UIKitRegularSymbols.Speaker: UIKitSymbol
+val UIKitSystemUISymbols.Speaker: UIKitSymbol
     get() {
         if (_Speaker != null)
             return _Speaker!!
