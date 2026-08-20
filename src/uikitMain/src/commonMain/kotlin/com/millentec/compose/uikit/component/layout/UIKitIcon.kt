@@ -4,6 +4,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
@@ -231,6 +232,7 @@ private fun UIKitAnimatableIcon(
 
     Canvas(
         modifier = modifier
+            .aspectRatio(symbol.defaultSize.width / symbol.defaultSize.height)
             .size(symbol.defaultSize.width, symbol.defaultSize.height)
             .semantics {
                 this.contentDescription = contentDescription ?: return@semantics
@@ -439,6 +441,7 @@ private fun UIKitStaticIcon(
 
     Canvas(
         modifier = modifier
+            .aspectRatio(symbol.defaultSize.width / symbol.defaultSize.height)
             .size(symbol.defaultSize.width, symbol.defaultSize.height)
             .semantics {
                 this.contentDescription = contentDescription ?: return@semantics

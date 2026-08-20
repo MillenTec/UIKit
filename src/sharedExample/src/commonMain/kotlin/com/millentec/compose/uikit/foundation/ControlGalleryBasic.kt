@@ -1,36 +1,33 @@
 ﻿package com.millentec.compose.uikit.foundation
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.VectorConverter
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.component.input.UIKitSlider
-import com.millentec.compose.uikit.component.input.UIKitSliderChangeType
 import com.millentec.compose.uikit.component.layout.UIKitCodeViewer
+import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.component.layout.UIKitSettingsExpander
-import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
-import com.millentec.compose.uikit.foundation.helper.uikitClickable
+import com.millentec.compose.uikit.foundation.layout.UIKitCardItem
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Code
 import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.viewmodels.MainViewModel
 import com.millentec.compose.uikit.views.LocalNavigationDockHeight
-import com.millentec.compose.uikit.views.pages.StateSelectorItem
 
 open class ControlGalleryBasic(
     val page: Pages,
@@ -41,7 +38,7 @@ open class ControlGalleryBasic(
     open fun ControlView() {}
 
     @Composable
-    open fun ControlOption() {}
+    open fun controlOption(): List<UIKitCardItem> { return emptyList() }
 
     @Composable
     open fun exampleCode(): String { return "" }
@@ -55,9 +52,13 @@ open class ControlGalleryBasic(
                 .fillMaxSize()
                 .background(getUIKitColors().contentFillColorPrimaryBrush),
             contentPadding = PaddingValues(
-                start = getUIKitLayout().x4Spacing,
-                top = getUIKitLayout().x4Spacing,
-                end = getUIKitLayout().x4Spacing,
+                start = getUIKitLayout().screenSideSpacing,
+                top = getUIKitLayout().screenSideSpacing,
+                end = getUIKitLayout().screenSideSpacing,
+                bottom = maxOf(
+                    LocalNavigationDockHeight.value + getUIKitLayout().screenSideSpacing,
+                    getUIKitLayout().screenSideSpacing
+                )
             ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current)
         ) {
             val nav = MainViewModel.navigation
@@ -71,13 +72,13 @@ open class ControlGalleryBasic(
             }
 
             item {
-                Spacer(Modifier.height(getUIKitLayout().x2Spacing))
+                Spacer(Modifier.height(getUIKitLayout().titleSpacing))
             }
 
             description()
 
             item {
-                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+                Spacer(Modifier.height(getUIKitLayout().sectionSpacing))
             }
 
             item {
@@ -113,7 +114,7 @@ open class ControlGalleryBasic(
                     }
 
                     if (maxWidth.value >= 768.dp) {
-                        Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+                        Spacer(Modifier.width(getUIKitLayout().itemSpacing))
 
                         Column(
                             Modifier
@@ -124,14 +125,16 @@ open class ControlGalleryBasic(
                                 }
                                 .verticalScroll(rememberScrollState())
                         ) {
-                            ControlOption()
+                            UIKitGroupedCard(
+                                items = controlOption()
+                            )
                         }
                     }
                 }
             }
 
             item {
-                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+                Spacer(Modifier.height(getUIKitLayout().itemSpacing))
             }
 
             item {
@@ -165,148 +168,12 @@ open class ControlGalleryBasic(
 
             if (maxWidth.value <= 768.dp && maxWidth.value != Dp.Unspecified) {
                 item {
-                    Spacer(Modifier.height(getUIKitLayout().mediumSpacing))
+                    Spacer(Modifier.height(getUIKitLayout().sectionSpacing))
                 }
 
                 item {
-                    ControlOption()
-                }
-            }
-
-            item {
-                Spacer(
-                    Modifier.height(
-                        maxOf(
-                            LocalNavigationDockHeight.value + getUIKitLayout().mediumSpacing,
-                            getUIKitLayout().x4Spacing
-                        )
-                    )
-                )
-            }
-        }
-    }
-
-    @Composable
-    open fun CommonSlider(
-        state: MutableState<Float>,
-        iconStart: @Composable BoxScope.() -> Unit = {},
-        iconEnd: @Composable BoxScope.() -> Unit = {},
-        maxValue: Float = 1f,
-    ) {
-        val uikitTheme = getUIKitTheme()
-        val isAnimatedChange = remember { mutableStateOf(false) }
-        val value = remember { mutableStateOf(state.value) }
-        val valueAnimated = remember { Animatable(
-            initialValue = value.value,
-            typeConverter = Float.VectorConverter,
-        ) }
-
-        LaunchedEffect(value.value) {
-            if (isAnimatedChange.value) {
-                valueAnimated.animateTo(
-                    targetValue = value.value,
-                    animationSpec = tween(
-                        uikitTheme.animate.motionRegularDurationMillis,
-                        easing = FastOutSlowInEasing
-                    )
-                )
-            } else {
-                valueAnimated.snapTo(value.value)
-            }
-        }
-
-        LaunchedEffect(valueAnimated.value) {
-            state.value = valueAnimated.value
-        }
-
-        Row(
-            modifier = Modifier
-                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
-                .fillMaxWidth()
-                .height(getUIKitLayout().interactiveHotspot)
-                .background(getUIKitColors().contentFillColorSecondaryBrush)
-                .padding(getUIKitLayout().basicSpacing),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(getUIKitTypography().body.lineHeight.value.dp),
-                contentAlignment = Alignment.Center,
-                content = iconStart
-            )
-
-            Spacer(Modifier.width(getUIKitLayout().smallSpacing))
-
-            UIKitSlider(
-                modifier = Modifier
-                    .weight(1f),
-                value = value.value,
-                maxValue = maxValue,
-                onValueChange = { v, type ->
-                    isAnimatedChange.value = type != UIKitSliderChangeType.ThumbDrag
-                    value.value = v
-                },
-            )
-
-            Spacer(Modifier.width(getUIKitLayout().smallSpacing))
-
-            Box(
-                modifier = Modifier
-                    .size(getUIKitTypography().body.lineHeight.value.dp),
-                contentAlignment = Alignment.Center,
-                content = iconEnd
-            )
-        }
-    }
-
-    @Composable
-    open fun StateSelector(
-        states: List<StateSelectorItem>,
-        state: MutableState<Int>,
-        itemWidth: Dp = 148.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState())
-        ) {
-            states.forEachIndexed { index, item ->
-                Column(
-                    modifier = Modifier
-                        .padding(
-                            top = getUIKitLayout().basicSpacing,
-                            bottom = getUIKitLayout().basicSpacing,
-                            end = if (index == states.size - 1) 0.dp else getUIKitLayout().basicSpacing,
-                        )
-                        .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
-                        .width(itemWidth)
-                        .background(getUIKitColors().contentFillColorSecondaryBrush)
-                        .uikitClickable(
-                            onClick = {
-                                state.value = index
-                            },
-                            indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
-                        )
-                        .padding(getUIKitLayout().mediumSpacing),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f),
-                        contentAlignment = Alignment.Center,
-                        content = item.statePreview
-                    )
-
-                    Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-                    Text(
-                        text = item.state,
-                        style = getUIKitTypography().body,
-                        color = getUIKitColors().textFillColorPrimaryBrush,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
+                    UIKitGroupedCard(
+                        items = controlOption()
                     )
                 }
             }

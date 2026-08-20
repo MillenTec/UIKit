@@ -37,9 +37,13 @@ fun HomePage() {
             .fillMaxSize()
             .background(getUIKitColors().contentFillColorPrimaryBrush),
         contentPadding = PaddingValues(
-            start = getUIKitLayout().x4Spacing,
-            top = getUIKitLayout().x4Spacing,
-            end = getUIKitLayout().x4Spacing,
+            start = getUIKitLayout().screenSideSpacing,
+            top = getUIKitLayout().screenSideSpacing,
+            end = getUIKitLayout().screenSideSpacing,
+            bottom = maxOf(
+                LocalNavigationDockHeight.value + getUIKitLayout().screenSideSpacing,
+                getUIKitLayout().screenSideSpacing
+            )
         ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current)
     ) {
         val nav = MainViewModel.navigation
@@ -53,7 +57,7 @@ fun HomePage() {
         }
 
         item {
-            Spacer(Modifier.height(getUIKitLayout().x2Spacing))
+            Spacer(Modifier.height(getUIKitLayout().titleSpacing))
         }
 
         item {
@@ -100,7 +104,7 @@ fun HomePage() {
                             onCheckedChange = { visible0.value = it }
                         )
 
-                        Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+                        Spacer(Modifier.height(getUIKitLayout().itemSpacing))
 
                         UIKitToggleSwitch(
                             checked = enabled0.value,
@@ -108,7 +112,7 @@ fun HomePage() {
                         )
                     }
 
-                    Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+                    Spacer(Modifier.width(getUIKitLayout().itemSpacing))
 
                     Column {
                         UIKitToggleSwitch(
@@ -116,7 +120,7 @@ fun HomePage() {
                             onCheckedChange = { visible1.value = it }
                         )
 
-                        Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+                        Spacer(Modifier.height(getUIKitLayout().itemSpacing))
 
                         UIKitToggleSwitch(
                             checked = state.value,
@@ -124,14 +128,14 @@ fun HomePage() {
                         )
                     }
 
-                    Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+                    Spacer(Modifier.width(getUIKitLayout().itemSpacing))
 
                     UIKitToggleSwitch(
                         checked = style.value,
                         onCheckedChange = { style.value = it }
                     )
 
-                    Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+                    Spacer(Modifier.width(getUIKitLayout().itemSpacing))
 
                     UIKitButton(
                         text = "Bounce",
@@ -141,17 +145,6 @@ fun HomePage() {
                     )
                 }
             }
-        }
-
-        item {
-            Spacer(
-                Modifier.height(
-                    maxOf(
-                        LocalNavigationDockHeight.value + getUIKitLayout().mediumSpacing,
-                        getUIKitLayout().x4Spacing
-                    )
-                )
-            )
         }
     }
 }

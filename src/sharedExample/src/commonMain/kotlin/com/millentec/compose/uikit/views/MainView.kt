@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.App
 import com.millentec.compose.uikit.BackHandler
 import com.millentec.compose.uikit.LocalAcrylicMaterialState
+import com.millentec.compose.uikit.SystemUISymbols
 import com.millentec.compose.uikit.component.input.UIKitDropdownButton
 import com.millentec.compose.uikit.component.input.UIKitNavigationDock
 import com.millentec.compose.uikit.component.layout.UIKitSurface
@@ -111,7 +112,7 @@ fun MainView() {
                     Controls -> ControlsPage()
                     Designs -> DesignsPage()
                     Designs_Icons -> IconGalleryPage()
-                    Designs_UIKitSymbols -> UIKitSymbolsGalleryPage()
+                    Designs_UIKitSymbols -> UIKitSymbolsPage()
                     License -> LicensePage()
                     ThirdParty -> ThirdPartyPage()
                     Settings -> SettingsPage()
@@ -123,6 +124,7 @@ fun MainView() {
                     Controls_BasicInputs_Button -> BasicInputControls.first { it.page == Controls_BasicInputs_Button }.Content(LocalStrings.current.controls.inputs.button.title)
                     Controls_BasicInputs_ToggleButton -> BasicInputControls.first { it.page == Controls_BasicInputs_ToggleButton }.Content(LocalStrings.current.controls.inputs.toggleButton.title)
                     Controls_BasicInputs_ToggleSwitch -> BasicInputControls.first { it.page == Controls_BasicInputs_ToggleSwitch }.Content(LocalStrings.current.controls.inputs.toggleSwitch.title)
+                    Designs_UIKitSymbols_SystemUI -> UIKitSymbolsGalleryPage(SystemUISymbols, "System UI")
                 }
             }
         }
@@ -166,7 +168,7 @@ fun MainView() {
                     )
 
                     LaunchedEffect(state.height) {
-                        LocalNavigationDockHeight.value = state.height + state.margins.calculateBottomPadding()
+                        LocalNavigationDockHeight.value = state.height
                     }
 
                     Box(

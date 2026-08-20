@@ -8,9 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
-import com.millentec.compose.uikit.component.layout.UIKitSettingCard
+import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
+import com.millentec.compose.uikit.foundation.layout.UIKitCardItem
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Symbols
 import com.millentec.compose.uikit.theme.LocalStrings
@@ -28,13 +29,15 @@ fun DesignsPage() {
             .fillMaxSize()
             .background(getUIKitColors().contentFillColorPrimaryBrush),
         contentPadding = PaddingValues(
-            start = getUIKitLayout().x4Spacing,
-            top = getUIKitLayout().x4Spacing,
-            end = getUIKitLayout().x4Spacing,
+            start = getUIKitLayout().screenSideSpacing,
+            top = getUIKitLayout().screenSideSpacing,
+            end = getUIKitLayout().screenSideSpacing,
+            bottom = maxOf(
+                LocalNavigationDockHeight.value + getUIKitLayout().screenSideSpacing,
+                getUIKitLayout().screenSideSpacing
+            )
         ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current)
     ) {
-        val nav = MainViewModel.navigation
-
         item {
             Text(
                 text = LocalStrings.current.designs.title,
@@ -44,39 +47,26 @@ fun DesignsPage() {
         }
 
         item {
-            Spacer(Modifier.height(getUIKitLayout().x2Spacing))
+            Spacer(Modifier.height(getUIKitLayout().titleSpacing))
         }
 
         item {
-            UIKitSettingCard(
-                icon = FluentIcons.Symbols,
-                title = LocalStrings.current.designs.fluentIconsEntrance,
-                onClick = {
-                    MainViewModel.navigation.switchPage(Pages.Designs_Icons, type = UIKitNavigationType.Forward)
-                }
-            )
-        }
-
-        item {
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-        }
-
-        item {
-            UIKitSettingCard(
-                icon = FluentIcons.Symbols,
-                title = "UIKit Symbols",
-                onClick = {
-                    MainViewModel.navigation.switchPage(Pages.Designs_UIKitSymbols, type = UIKitNavigationType.Forward)
-                }
-            )
-        }
-
-        item {
-            Spacer(
-                Modifier.height(
-                    maxOf(
-                        LocalNavigationDockHeight.value + getUIKitLayout().mediumSpacing,
-                        getUIKitLayout().x4Spacing
+            UIKitGroupedCard(
+                items = listOf(
+                    UIKitCardItem.settingCard(
+                        icon = FluentIcons.Symbols,
+                        title = LocalStrings.current.designs.fluentIconsEntrance,
+                        onClick = {
+                            MainViewModel.navigation.switchPage(Pages.Designs_Icons, type = UIKitNavigationType.Forward)
+                        }
+                    ),
+                    UIKitCardItem.divider(),
+                    UIKitCardItem.settingCard(
+                        icon = FluentIcons.Symbols,
+                        title = "UIKit Symbols",
+                        onClick = {
+                            MainViewModel.navigation.switchPage(Pages.Designs_UIKitSymbols, type = UIKitNavigationType.Forward)
+                        }
                     )
                 )
             )

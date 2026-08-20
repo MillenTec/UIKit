@@ -50,6 +50,7 @@ private fun Preview() {
     }
 }
 
+@Deprecated("Use UIKitGroupedCard instead of it.")
 @Composable
 fun UIKitSettingCard(
     modifier: Modifier = Modifier,

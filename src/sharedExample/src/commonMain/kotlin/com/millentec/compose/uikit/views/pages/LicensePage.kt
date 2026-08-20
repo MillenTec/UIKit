@@ -15,11 +15,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.theme.*
+import com.millentec.compose.uikit.views.LocalNavigationDockHeight
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
@@ -55,13 +54,15 @@ fun LicensePage() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    top = (WindowInsets.safeDrawing.getTop(density) / density.density).dp + getUIKitLayout().x4Spacing,
-                    start = (WindowInsets.safeDrawing.getLeft(density, LocalLayoutDirection.current) / density.density).dp + getUIKitLayout().x4Spacing,
-                    end = (WindowInsets.safeDrawing.getRight(density, LocalLayoutDirection.current) / density.density).dp + getUIKitLayout().x4Spacing,
-                    bottom = maxOf(
-                        (WindowInsets.safeDrawing.getBottom(density) / density.density).dp,
-                        getUIKitLayout().x4Spacing
-                    )
+                    PaddingValues(
+                        start = getUIKitLayout().screenSideSpacing,
+                        top = getUIKitLayout().screenSideSpacing,
+                        end = getUIKitLayout().screenSideSpacing,
+                        bottom = maxOf(
+                            LocalNavigationDockHeight.value + getUIKitLayout().screenSideSpacing,
+                            getUIKitLayout().screenSideSpacing
+                        )
+                    ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current)
                 )
         ) {
             Text(
@@ -70,7 +71,7 @@ fun LicensePage() {
                 color = getUIKitColors().textFillColorPrimaryBrush
             )
 
-            Spacer(modifier = Modifier.height(getUIKitLayout().x2Spacing))
+            Spacer(modifier = Modifier.height(getUIKitLayout().titleSpacing))
 
             Text(
                 text = LocalStrings.current.license.description,
@@ -78,7 +79,7 @@ fun LicensePage() {
                 color = getUIKitColors().textFillColorPrimaryBrush
             )
 
-            Spacer(modifier = Modifier.height(getUIKitLayout().basicSpacing))
+            Spacer(modifier = Modifier.height(getUIKitLayout().itemSpacing))
 
             SelectionContainer {
                 LazyColumn(

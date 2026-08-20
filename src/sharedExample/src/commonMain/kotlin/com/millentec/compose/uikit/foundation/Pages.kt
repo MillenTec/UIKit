@@ -11,6 +11,8 @@ enum class Pages(
     Designs_Icons(Designs),
     Designs_UIKitSymbols(Designs),
 
+    Designs_UIKitSymbols_SystemUI(Designs),
+
     License,
     ThirdParty,
     Settings,

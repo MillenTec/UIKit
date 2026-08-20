@@ -16,11 +16,9 @@ data class UIKitAcrylicMaterial(
 
     val lightingEffectsEnabled: Boolean = true,
     val edgeHighlightColor: Brush = Brush.linearGradient(
-        listOf(
-            Color(0xFFFFFFFF),
-            Color(0x00FFFFFF),
-            Color(0xFFFFFFFF)
-        )
+        Pair(0f, Color(0xFFFFFFFF)),
+        Pair(0.5f, Color(0x00FFFFFF)),
+        Pair(1f, Color(0xFFFFFFFF)),
     ),
     val edgeHighlightThickness: Dp = 1.dp
 )
@@ -72,13 +70,11 @@ data class UIKitMaterials(
 
         fun getDark(): UIKitMaterials = UIKitMaterials(
             acrylicMaterial = UIKitAcrylicMaterial(
-                tint = Color(0x4C151517),
+                tint = Color(0x4C1D1D1F),
                 edgeHighlightColor = Brush.linearGradient(
-                    listOf(
-                        Color(0x8DFFFFFF),
-                        Color(0x00FFFFFF),
-                        Color(0x8DFFFFFF)
-                    )
+                    Pair(0f, Color(0x2DFFFFFF)),
+                    Pair(0.5f, Color(0x0DFFFFFF)),
+                    Pair(1f, Color(0x2DFFFFFF)),
                 )
             )
         )

@@ -18,14 +18,15 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.input.*
-import com.millentec.compose.uikit.component.layout.UIKitSettingCard
 import com.millentec.compose.uikit.component.layout.UIKitSettingsExpander
 import com.millentec.compose.uikit.foundation.ControlGalleryBasic
 import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.helper.toHsv
+import com.millentec.compose.uikit.foundation.layout.UIKitCardItem
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.theme.*
+import com.millentec.compose.uikit.views.component.CommonSlider
 
 val BasicInputControls = listOf(
     object: ControlGalleryBasic(Pages.Controls_BasicInputs_Button) {
@@ -156,12 +157,9 @@ val BasicInputControls = listOf(
         }
 
         @Composable
-        override fun ControlOption() {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                UIKitSettingCard(
+        override fun controlOption(): List<UIKitCardItem> {
+            return listOf(
+                UIKitCardItem.settingCard(
                     title = LocalStrings.current.controls.inputs.common.enabled,
                     icon = FluentIcons.checkmarkCircle(getUIKitColors().textFillColorPrimaryBrush, true),
                     onClick = {
@@ -174,55 +172,62 @@ val BasicInputControls = listOf(
                             buttonEnabled.value = it
                         }
                     )
-                }
-
-                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-                CommonSlider(
-                    state = buttonCornerRadius,
-                    iconStart = {
-                        Icon(
-                            modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
-                            imageVector = FluentIcons.Square,
-                            contentDescription = "Rectangle",
-                            tint = getUIKitColors().textFillColorPrimaryBrush
-                        )
-                    },
-                    iconEnd = {
-                        Icon(
-                            modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
-                            imageVector = FluentIcons.Circle,
-                            contentDescription = "Rounded",
-                            tint = getUIKitColors().textFillColorPrimaryBrush
+                },
+                UIKitCardItem.divider(),
+                object : UIKitCardItem() {
+                    @Composable
+                    override fun Content() {
+                        CommonSlider(
+                            state = buttonCornerRadius,
+                            iconStart = {
+                                Icon(
+                                    modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
+                                    imageVector = FluentIcons.Square,
+                                    contentDescription = "Rectangle",
+                                    tint = getUIKitColors().textFillColorPrimaryBrush
+                                )
+                            },
+                            iconEnd = {
+                                Icon(
+                                    modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
+                                    imageVector = FluentIcons.Circle,
+                                    contentDescription = "Rounded",
+                                    tint = getUIKitColors().textFillColorPrimaryBrush
+                                )
+                            }
                         )
                     }
-                )
+                },
+                UIKitCardItem.divider(),
+                object : UIKitCardItem() {
+                    @Composable
+                    override fun Content() {
+                        val backgroundPickerExpanded = remember { mutableStateOf(false) }
+                        UIKitSettingsExpander(
+                            expanded = backgroundPickerExpanded.value,
+                            onClick = {
+                                backgroundPickerExpanded.value = !backgroundPickerExpanded.value
+                            },
+                            title = LocalStrings.current.controls.inputs.common.color,
+                            icon = FluentIcons.Color,
+                            cornerRadius = 0.dp
+                        ) {
+                            val uikitColors = getUIKitColors()
+                            val color = remember { mutableStateOf((buttonBackground.value ?: uikitColors.contentFillColorTertiaryBrush).toHsv()) }
+                            LaunchedEffect(color.value) {
+                                buttonBackground.value = color.value.getColor()
+                            }
 
-                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-                val backgroundPickerExpanded = remember { mutableStateOf(false) }
-                UIKitSettingsExpander(
-                    expanded = backgroundPickerExpanded.value,
-                    onClick = {
-                        backgroundPickerExpanded.value = !backgroundPickerExpanded.value
-                    },
-                    title = LocalStrings.current.controls.inputs.common.color,
-                    icon = FluentIcons.Color
-                ) {
-                    val uikitColors = getUIKitColors()
-                    val color = remember { mutableStateOf((buttonBackground.value ?: uikitColors.contentFillColorTertiaryBrush).toHsv()) }
-                    LaunchedEffect(color.value) {
-                        buttonBackground.value = color.value.getColor()
-                    }
-
-                    UIKitHSVColorPicker(
-                        color = color.value,
-                        onColorChange = {
-                            color.value = it
+                            UIKitHSVColorPicker(
+                                color = color.value,
+                                onColorChange = {
+                                    color.value = it
+                                }
+                            )
                         }
-                    )
+                    }
                 }
-            }
+            )
         }
 
         @Composable
@@ -317,7 +322,7 @@ val BasicInputControls = listOf(
                         }
                     )
 
-                    Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+                    Spacer(Modifier.width(getUIKitLayout().itemSpacing))
 
                     Text(
                         text = if (checked.value)
@@ -328,7 +333,7 @@ val BasicInputControls = listOf(
                     )
                 }
 
-                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+                Spacer(Modifier.height(getUIKitLayout().itemSpacing))
 
                 Text(
                     text = LocalStrings.current.controls.inputs.toggleButton.button1Description,
@@ -365,7 +370,7 @@ val BasicInputControls = listOf(
                         }
                     )
 
-                    Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+                    Spacer(Modifier.width(getUIKitLayout().itemSpacing))
 
                     Text(
                         text = if (checked.value)
@@ -399,12 +404,9 @@ val BasicInputControls = listOf(
         }
 
         @Composable
-        override fun ControlOption() {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                UIKitSettingCard(
+        override fun controlOption(): List<UIKitCardItem> {
+            return listOf(
+                UIKitCardItem.settingCard(
                     title = LocalStrings.current.controls.inputs.common.enabled,
                     icon = FluentIcons.checkmarkCircle(getUIKitColors().textFillColorPrimaryBrush, true),
                     onClick = {
@@ -417,55 +419,62 @@ val BasicInputControls = listOf(
                             buttonEnabled.value = it
                         }
                     )
-                }
-
-                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-                CommonSlider(
-                    state = buttonCornerRadius,
-                    iconStart = {
-                        Icon(
-                            modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
-                            imageVector = FluentIcons.Square,
-                            contentDescription = "Rectangle",
-                            tint = getUIKitColors().textFillColorPrimaryBrush
-                        )
-                    },
-                    iconEnd = {
-                        Icon(
-                            modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
-                            imageVector = FluentIcons.Circle,
-                            contentDescription = "Rounded",
-                            tint = getUIKitColors().textFillColorPrimaryBrush
+                },
+                UIKitCardItem.divider(),
+                object : UIKitCardItem() {
+                    @Composable
+                    override fun Content() {
+                        CommonSlider(
+                            state = buttonCornerRadius,
+                            iconStart = {
+                                Icon(
+                                    modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
+                                    imageVector = FluentIcons.Square,
+                                    contentDescription = "Rectangle",
+                                    tint = getUIKitColors().textFillColorPrimaryBrush
+                                )
+                            },
+                            iconEnd = {
+                                Icon(
+                                    modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
+                                    imageVector = FluentIcons.Circle,
+                                    contentDescription = "Rounded",
+                                    tint = getUIKitColors().textFillColorPrimaryBrush
+                                )
+                            }
                         )
                     }
-                )
+                },
+                UIKitCardItem.divider(),
+                object : UIKitCardItem() {
+                    @Composable
+                    override fun Content() {
+                        val backgroundPickerExpanded = remember { mutableStateOf(false) }
+                        UIKitSettingsExpander(
+                            expanded = backgroundPickerExpanded.value,
+                            onClick = {
+                                backgroundPickerExpanded.value = !backgroundPickerExpanded.value
+                            },
+                            title = LocalStrings.current.controls.inputs.common.color,
+                            icon = FluentIcons.Color,
+                            cornerRadius = 0.dp
+                        ) {
+                            val uikitColors = getUIKitColors()
+                            val color = remember { mutableStateOf((buttonBackground.value ?: uikitColors.contentFillColorTertiaryBrush).toHsv()) }
+                            LaunchedEffect(color.value) {
+                                buttonBackground.value = color.value.getColor()
+                            }
 
-                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-                val backgroundPickerExpanded = remember { mutableStateOf(false) }
-                UIKitSettingsExpander(
-                    expanded = backgroundPickerExpanded.value,
-                    onClick = {
-                        backgroundPickerExpanded.value = !backgroundPickerExpanded.value
-                    },
-                    title = LocalStrings.current.controls.inputs.common.color,
-                    icon = FluentIcons.Color
-                ) {
-                    val uikitColors = getUIKitColors()
-                    val color = remember { mutableStateOf((buttonBackground.value ?: uikitColors.highlightColorPrimaryBrush).toHsv()) }
-                    LaunchedEffect(color.value) {
-                        buttonBackground.value = color.value.getColor()
-                    }
-
-                    UIKitHSVColorPicker(
-                        color = color.value,
-                        onColorChange = {
-                            color.value = it
+                            UIKitHSVColorPicker(
+                                color = color.value,
+                                onColorChange = {
+                                    color.value = it
+                                }
+                            )
                         }
-                    )
+                    }
                 }
-            }
+            )
         }
     },
     object: ControlGalleryBasic(Pages.Controls_BasicInputs_ToggleSwitch) {
@@ -513,7 +522,7 @@ val BasicInputControls = listOf(
                         }
                     )
 
-                    Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+                    Spacer(Modifier.width(getUIKitLayout().itemSpacing))
 
                     Text(
                         text = if (checked.value)
@@ -545,12 +554,9 @@ val BasicInputControls = listOf(
         }
 
         @Composable
-        override fun ControlOption() {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                UIKitSettingCard(
+        override fun controlOption(): List<UIKitCardItem> {
+            return listOf(
+                UIKitCardItem.settingCard(
                     title = LocalStrings.current.controls.inputs.common.enabled,
                     icon = FluentIcons.checkmarkCircle(getUIKitColors().textFillColorPrimaryBrush, true),
                     onClick = {
@@ -563,33 +569,37 @@ val BasicInputControls = listOf(
                             buttonEnabled.value = it
                         }
                     )
-                }
+                },
+                UIKitCardItem.divider(),
+                object : UIKitCardItem() {
+                    @Composable
+                    override fun Content() {
+                        val backgroundPickerExpanded = remember { mutableStateOf(false) }
+                        UIKitSettingsExpander(
+                            expanded = backgroundPickerExpanded.value,
+                            onClick = {
+                                backgroundPickerExpanded.value = !backgroundPickerExpanded.value
+                            },
+                            title = LocalStrings.current.controls.inputs.common.color,
+                            icon = FluentIcons.Color,
+                            cornerRadius = 0.dp
+                        ) {
+                            val uikitColors = getUIKitColors()
+                            val color = remember { mutableStateOf((buttonBackground.value ?: uikitColors.contentFillColorTertiaryBrush).toHsv()) }
+                            LaunchedEffect(color.value) {
+                                buttonBackground.value = color.value.getColor()
+                            }
 
-                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-                val backgroundPickerExpanded = remember { mutableStateOf(false) }
-                UIKitSettingsExpander(
-                    expanded = backgroundPickerExpanded.value,
-                    onClick = {
-                        backgroundPickerExpanded.value = !backgroundPickerExpanded.value
-                    },
-                    title = LocalStrings.current.controls.inputs.common.color,
-                    icon = FluentIcons.Color
-                ) {
-                    val uikitColors = getUIKitColors()
-                    val color = remember { mutableStateOf((buttonBackground.value ?: uikitColors.contentFillColorTertiaryBrush).toHsv()) }
-                    LaunchedEffect(color.value) {
-                        buttonBackground.value = color.value.getColor()
-                    }
-
-                    UIKitHSVColorPicker(
-                        color = color.value,
-                        onColorChange = {
-                            color.value = it
+                            UIKitHSVColorPicker(
+                                color = color.value,
+                                onColorChange = {
+                                    color.value = it
+                                }
+                            )
                         }
-                    )
+                    }
                 }
-            }
+            )
         }
     }
 )

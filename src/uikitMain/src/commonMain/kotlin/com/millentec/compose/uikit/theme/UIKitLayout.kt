@@ -14,5 +14,12 @@ data class UIKitLayout(
     val x5Spacing: Dp = 40.dp,
     val x6Spacing: Dp = 48.dp,
 
+    val screenSideSpacing: Dp = 16.dp,
+    val titleSpacing: Dp = 16.dp,
+    val sectionSpacing: Dp = 24.dp,
+    val subheadSpacing: Dp = 12.dp,
+    val itemSpacing: Dp = 8.dp,
+    val cardPadding: Dp = 12.dp,
+
     val interactiveHotspot: Dp = 44.dp
 )

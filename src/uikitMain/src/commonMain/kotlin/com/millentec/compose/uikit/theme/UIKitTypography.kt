@@ -15,7 +15,7 @@ data class UIKitTypography(
      */
     val display: TextStyle = TextStyle(
         fontSize = 55.sp,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.Bold,
         lineHeight = 66.sp,
         lineHeightStyle = LineHeightStyle(
             alignment = LineHeightStyle.Alignment.Center,
@@ -28,7 +28,7 @@ data class UIKitTypography(
      */
     val largeTitle: TextStyle = TextStyle(
         fontSize = 34.sp,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.Bold,
         lineHeight = 41.sp,
         lineHeightStyle = LineHeightStyle(
             alignment = LineHeightStyle.Alignment.Center,
@@ -37,11 +37,11 @@ data class UIKitTypography(
     ),
 
     /**
-     * 标题, 于正文搭配, 常作为一段正文的标题文字
+     * 第二标题
      */
     val title: TextStyle = TextStyle(
         fontSize = 28.sp,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.Bold,
         lineHeight = 34.sp,
         lineHeightStyle = LineHeightStyle(
             alignment = LineHeightStyle.Alignment.Center,
@@ -50,12 +50,22 @@ data class UIKitTypography(
     ),
 
     /**
-     * 副标题, 一般于大标题搭配做补充陈述
+     * 副标题, 一般作为一个内容块的标题
      */
     val subtitle: TextStyle = TextStyle(
         fontSize = 22.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 28.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.Both
+        )
+    ),
+
+    val headline: TextStyle = TextStyle(
+        fontSize = 17.sp,
+        fontWeight = FontWeight.SemiBold,
+        lineHeight = 22.sp,
         lineHeightStyle = LineHeightStyle(
             alignment = LineHeightStyle.Alignment.Center,
             trim = LineHeightStyle.Trim.Both
@@ -79,9 +89,9 @@ data class UIKitTypography(
      * 脚注, 用于说明补充或视觉优先级低的文本
      */
     val footnote: TextStyle = TextStyle(
-        fontSize = 14.sp,
+        fontSize = 13.sp,
         fontWeight = FontWeight.Normal,
-        lineHeight = 19.sp,
+        lineHeight = 18.sp,
         lineHeightStyle = LineHeightStyle(
             alignment = LineHeightStyle.Alignment.Center,
             trim = LineHeightStyle.Trim.Both

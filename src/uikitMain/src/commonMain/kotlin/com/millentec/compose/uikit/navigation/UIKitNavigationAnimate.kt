@@ -1,7 +1,6 @@
 ﻿package com.millentec.compose.uikit.navigation
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 
@@ -22,7 +21,7 @@ object UIKitNavigationAnimate {
             animationSpec = tween(300, easing = FastOutSlowInEasing)
         ) {
             -300
-        } + fadeOut(tween(300), targetAlpha = 0.2f) + scaleOut(tween(300, easing = EaseInOut), targetScale = 0.96f)
+        } + fadeOut(tween(300), targetAlpha = 0.2f)
     )
 
     fun backward(targetContentZIndex: Float): ContentTransform {

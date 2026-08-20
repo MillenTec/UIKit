@@ -19,7 +19,6 @@ import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.i18n.SupportedLanguages
 import com.millentec.compose.uikit.i18n.SupportedLanguages.*
 import com.millentec.compose.uikit.theme.*
-import com.millentec.compose.uikit.viewmodels.MainViewModel
 import com.millentec.compose.uikit.views.LocalNavigationDockHeight
 
 @Composable
@@ -30,13 +29,15 @@ fun LanguagesPage() {
             .fillMaxSize()
             .background(getUIKitColors().contentFillColorPrimaryBrush),
         contentPadding = PaddingValues(
-            start = getUIKitLayout().x4Spacing,
-            top = getUIKitLayout().x4Spacing,
-            end = getUIKitLayout().x4Spacing,
+            start = getUIKitLayout().screenSideSpacing,
+            top = getUIKitLayout().screenSideSpacing,
+            end = getUIKitLayout().screenSideSpacing,
+            bottom = maxOf(
+                LocalNavigationDockHeight.value + getUIKitLayout().screenSideSpacing,
+                getUIKitLayout().screenSideSpacing
+            )
         ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current)
     ) {
-        val nav = MainViewModel.navigation
-
         item {
             Text(
                 text = LocalStrings.current.settings.language.title,
@@ -46,7 +47,7 @@ fun LanguagesPage() {
         }
 
         item {
-            Spacer(Modifier.height(getUIKitLayout().x2Spacing))
+            Spacer(Modifier.height(getUIKitLayout().titleSpacing))
         }
 
         item {
@@ -58,7 +59,7 @@ fun LanguagesPage() {
         }
 
         item {
-            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+            Spacer(Modifier.height(getUIKitLayout().itemSpacing))
         }
 
         items(SupportedLanguages.entries.size) {
@@ -103,17 +104,6 @@ fun LanguagesPage() {
                     )
                 }
             }
-        }
-
-        item {
-            Spacer(
-                Modifier.height(
-                    maxOf(
-                        LocalNavigationDockHeight.value + getUIKitLayout().mediumSpacing,
-                        getUIKitLayout().x4Spacing
-                    )
-                )
-            )
         }
     }
 }

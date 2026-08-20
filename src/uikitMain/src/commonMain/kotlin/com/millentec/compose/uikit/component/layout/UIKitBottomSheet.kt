@@ -36,7 +36,8 @@ private fun Preview() {
             modifier = Modifier.fillMaxSize(),
             expanded = true,
             state = UIKitSwipeableFlyoutState(),
-            title = "Sheet"
+            title = "Sheet",
+            onDismissRequest = {}
         ) {
             Spacer(Modifier.height(500.dp))
         }
@@ -88,7 +89,7 @@ fun UIKitBottomSheet(
     stripVisible: Boolean = true,
     title: String? = null,
     titleMaxWidth: Dp = (-1).dp,
-    onDismissRequest: (() -> Unit)? = null,
+    onDismissRequest: () -> Unit,
     content: @Composable ColumnScope.() -> Unit
 ) {
     val modifierCurrent by rememberUpdatedState(modifier)

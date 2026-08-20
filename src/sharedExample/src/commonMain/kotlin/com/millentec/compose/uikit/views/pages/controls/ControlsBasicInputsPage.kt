@@ -8,9 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
-import com.millentec.compose.uikit.component.layout.UIKitSettingCard
+import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
+import com.millentec.compose.uikit.foundation.layout.UIKitCardItem
 import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
@@ -26,9 +27,13 @@ fun ControlsBasicInputsPage() {
             .fillMaxSize()
             .background(getUIKitColors().contentFillColorPrimaryBrush),
         contentPadding = PaddingValues(
-            start = getUIKitLayout().x4Spacing,
-            top = getUIKitLayout().x4Spacing,
-            end = getUIKitLayout().x4Spacing,
+            start = getUIKitLayout().screenSideSpacing,
+            top = getUIKitLayout().screenSideSpacing,
+            end = getUIKitLayout().screenSideSpacing,
+            bottom = maxOf(
+                LocalNavigationDockHeight.value + getUIKitLayout().screenSideSpacing,
+                getUIKitLayout().screenSideSpacing
+            )
         ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current)
     ) {
         val nav = MainViewModel.navigation
@@ -42,31 +47,25 @@ fun ControlsBasicInputsPage() {
         }
 
         item {
-            Spacer(Modifier.height(getUIKitLayout().x2Spacing))
-        }
-
-        items(BasicInputControls.size) {
-            UIKitSettingCard(
-                title = when (BasicInputControls[it].page) {
-                    Pages.Controls_BasicInputs_Button -> LocalStrings.current.controls.inputs.buttonEntrance
-                    Pages.Controls_BasicInputs_ToggleButton -> LocalStrings.current.controls.inputs.toggleButtonEntrance
-                    Pages.Controls_BasicInputs_ToggleSwitch -> LocalStrings.current.controls.inputs.toggleSwitchEntrance
-                    else -> "Unknown"
-                },
-                onClick = {
-                    MainViewModel.navigation.switchPage(BasicInputControls[it].page, type = UIKitNavigationType.Forward)
-                },
-            )
+            Spacer(Modifier.height(getUIKitLayout().titleSpacing))
         }
 
         item {
-            Spacer(
-                Modifier.height(
-                    maxOf(
-                        LocalNavigationDockHeight.value + getUIKitLayout().mediumSpacing,
-                        getUIKitLayout().x4Spacing
+            UIKitGroupedCard(
+                items = BasicInputControls.mapIndexed { index, item ->
+                    UIKitCardItem.settingCard(
+                        title = when (BasicInputControls[index].page) {
+                            Pages.Controls_BasicInputs_Button -> LocalStrings.current.controls.inputs.buttonEntrance
+                            Pages.Controls_BasicInputs_ToggleButton -> LocalStrings.current.controls.inputs.toggleButtonEntrance
+                            Pages.Controls_BasicInputs_ToggleSwitch -> LocalStrings.current.controls.inputs.toggleSwitchEntrance
+                            else -> "Unknown"
+                        },
+                        onClick = {
+                            MainViewModel.navigation.switchPage(BasicInputControls[index].page, type = UIKitNavigationType.Forward)
+                        }
                     )
-                )
+                },
+                insertDivider = true
             )
         }
     }

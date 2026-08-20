@@ -17,42 +17,33 @@ import com.millentec.compose.uikit.views.LocalNavigationDockHeight
 
 @Composable
 @Preview
-fun ControlsStatusAndInfoPage() {
+fun ControlsFlyoutsPage() {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(getUIKitColors().contentFillColorPrimaryBrush),
         contentPadding = PaddingValues(
-            start = getUIKitLayout().x4Spacing,
-            top = getUIKitLayout().x4Spacing,
-            end = getUIKitLayout().x4Spacing,
+            start = getUIKitLayout().screenSideSpacing,
+            top = getUIKitLayout().screenSideSpacing,
+            end = getUIKitLayout().screenSideSpacing,
+            bottom = maxOf(
+                LocalNavigationDockHeight.value + getUIKitLayout().screenSideSpacing,
+                getUIKitLayout().screenSideSpacing
+            )
         ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current)
     ) {
         val nav = MainViewModel.navigation
 
         item {
             Text(
-                text = LocalStrings.current.controls.statusAndInfos.title,
+                text = LocalStrings.current.controls.flyouts.title,
                 style = getUIKitTypography().largeTitle,
                 color = getUIKitColors().textFillColorPrimaryBrush
             )
         }
 
         item {
-            Spacer(Modifier.height(getUIKitLayout().x2Spacing))
-        }
-
-
-
-        item {
-            Spacer(
-                Modifier.height(
-                    maxOf(
-                        LocalNavigationDockHeight.value + getUIKitLayout().mediumSpacing,
-                        getUIKitLayout().x4Spacing
-                    )
-                )
-            )
+            Spacer(Modifier.height(getUIKitLayout().titleSpacing))
         }
     }
 }
