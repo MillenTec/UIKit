@@ -11,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
-import com.millentec.compose.uikit.foundation.layout.UIKitCardItem
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Symbols
 import com.millentec.compose.uikit.theme.LocalStrings
@@ -51,25 +50,23 @@ fun DesignsPage() {
         }
 
         item {
-            UIKitGroupedCard(
-                items = listOf(
-                    UIKitCardItem.settingCard(
-                        icon = FluentIcons.Symbols,
-                        title = LocalStrings.current.designs.fluentIconsEntrance,
-                        onClick = {
-                            MainViewModel.navigation.switchPage(Pages.Designs_Icons, type = UIKitNavigationType.Forward)
-                        }
-                    ),
-                    UIKitCardItem.divider(),
-                    UIKitCardItem.settingCard(
-                        icon = FluentIcons.Symbols,
-                        title = "UIKit Symbols",
-                        onClick = {
-                            MainViewModel.navigation.switchPage(Pages.Designs_UIKitSymbols, type = UIKitNavigationType.Forward)
-                        }
-                    )
+            UIKitGroupedCard {
+                SettingCard(
+                    icon = FluentIcons.Symbols,
+                    title = LocalStrings.current.designs.fluentIconsEntrance,
+                    onClick = {
+                        MainViewModel.navigation.switchPage(Pages.Designs_Icons, type = UIKitNavigationType.Forward)
+                    }
                 )
-            )
+                Divider()
+                SettingCard(
+                    icon = FluentIcons.Symbols,
+                    title = "UIKit Symbols",
+                    onClick = {
+                        MainViewModel.navigation.switchPage(Pages.Designs_UIKitSymbols, type = UIKitNavigationType.Forward)
+                    }
+                )
+            }
         }
     }
 }

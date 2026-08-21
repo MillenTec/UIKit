@@ -2,7 +2,21 @@
 
 import androidx.compose.runtime.Composable
 
-open class UIKitItem {
+abstract class UIKitItem {
     @Composable
-    open fun Content() {}
+    abstract fun Content()
+}
+
+open class UIKitItemScope<T> {
+    private val _items = mutableListOf<T>()
+    val items: List<T>
+        get() = _items.toList()
+
+    fun add(item: T): Boolean {
+        return _items.add(item)
+    }
+
+    fun remove(item: T): Boolean {
+        return _items.remove(item)
+    }
 }

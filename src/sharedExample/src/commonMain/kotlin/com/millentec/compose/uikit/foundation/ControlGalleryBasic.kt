@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.layout.UIKitCodeViewer
 import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.component.layout.UIKitSettingsExpander
-import com.millentec.compose.uikit.foundation.layout.UIKitCardItem
+import com.millentec.compose.uikit.foundation.layout.UIKitCardScope
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Code
 import com.millentec.compose.uikit.theme.*
@@ -38,7 +38,7 @@ open class ControlGalleryBasic(
     open fun ControlView() {}
 
     @Composable
-    open fun controlOption(): List<UIKitCardItem> { return emptyList() }
+    open fun UIKitCardScope.ControlOption() {}
 
     @Composable
     open fun exampleCode(): String { return "" }
@@ -125,9 +125,9 @@ open class ControlGalleryBasic(
                                 }
                                 .verticalScroll(rememberScrollState())
                         ) {
-                            UIKitGroupedCard(
-                                items = controlOption()
-                            )
+                            UIKitGroupedCard {
+                                ControlOption()
+                            }
                         }
                     }
                 }
@@ -172,9 +172,9 @@ open class ControlGalleryBasic(
                 }
 
                 item {
-                    UIKitGroupedCard(
-                        items = controlOption()
-                    )
+                    UIKitGroupedCard {
+                        ControlOption()
+                    }
                 }
             }
         }

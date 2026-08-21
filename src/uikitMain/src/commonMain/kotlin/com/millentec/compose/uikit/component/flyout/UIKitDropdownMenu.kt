@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.layout.UIKitVerticalMenu
-import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
+import com.millentec.compose.uikit.foundation.layout.UIKitMenuScope
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
@@ -45,13 +45,12 @@ private fun Preview() {
         ) {
             UIKitDropdownMenu(
                 expanded = true,
-                items = listOf(
-                    UIKitMenuItem.textWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {}),
-                    UIKitMenuItem.text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush),
-                    UIKitMenuItem.icon(FluentIcons.Text, onClick = {}),
-                ),
                 onDismissRequest = {}
-            )
+            ) {
+                TextWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {})
+                Text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush)
+                Icon(FluentIcons.Text, onClick = {}, contentDescription = null)
+            }
         }
     }
 }
@@ -62,7 +61,6 @@ fun UIKitDropdownMenu(
     expanded: Boolean,
     maxLength: Dp = (-1).dp,
     minWidth: Dp = 200.dp,
-    items: List<UIKitMenuItem>,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     cornerRadius: Dp = getUIKitShapes().regularRounded,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().smallSpacing),
@@ -74,6 +72,7 @@ fun UIKitDropdownMenu(
     acrylicMaterialState: AcrylicMaterialState? = null,
     acrylicMaterial: UIKitAcrylicMaterial = getUIKitMaterials().acrylicMaterial,
     shadowEnabled: Boolean = true,
+    content: @Composable UIKitMenuScope.() -> Unit
 ) {
     val positionOnRoot = remember { mutableStateOf(Offset.Zero) }
 
@@ -154,10 +153,10 @@ fun UIKitDropdownMenu(
                 ),
             maxLength = maxLength,
             minWidth = minWidth,
-            items = items,
             background = if (acrylicEffectEnabled && acrylicMaterialState != null) background.copy(0f) else background,
             cornerRadius = cornerRadius,
             contentPadding = contentPadding,
+            content = content
         )
     }
 }

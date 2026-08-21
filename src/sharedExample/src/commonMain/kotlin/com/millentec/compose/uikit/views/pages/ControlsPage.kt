@@ -11,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
-import com.millentec.compose.uikit.foundation.layout.UIKitCardItem
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.LayoutDynamic
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.chatMultiple
@@ -56,41 +55,39 @@ fun ControlsPage() {
         }
 
         item {
-            UIKitGroupedCard(
-                items = listOf(
-                    UIKitCardItem.settingCard(
-                        title = LocalStrings.current.controls.inputsEntrance,
-                        icon = FluentIcons.toggleMultiple(getUIKitColors().textFillColorPrimaryBrush, true),
-                        onClick = {
-                            MainViewModel.navigation.switchPage(Pages.Controls_BasicInputs, type = UIKitNavigationType.Forward)
-                        }
-                    ),
-                    UIKitCardItem.divider(),
-                    UIKitCardItem.settingCard(
-                        title = LocalStrings.current.controls.statusAndInfosEntrance,
-                        icon = FluentIcons.chatMultiple(getUIKitColors().textFillColorPrimaryBrush, true),
-                        onClick = {
-                            MainViewModel.navigation.switchPage(Pages.Controls_StatusAndInfo, type = UIKitNavigationType.Forward)
-                        }
-                    ),
-                    UIKitCardItem.divider(),
-                    UIKitCardItem.settingCard(
-                        title = LocalStrings.current.controls.flyoutsEntrance,
-                        icon = FluentIcons.layerDiagonal(getUIKitColors().textFillColorPrimaryBrush, true),
-                        onClick = {
-                            MainViewModel.navigation.switchPage(Pages.Controls_Flyouts, type = UIKitNavigationType.Forward)
-                        }
-                    ),
-                    UIKitCardItem.divider(),
-                    UIKitCardItem.settingCard(
-                        title = LocalStrings.current.controls.layoutsEntrance,
-                        icon = FluentIcons.LayoutDynamic,
-                        onClick = {
-                            MainViewModel.navigation.switchPage(Pages.Controls_Layouts, type = UIKitNavigationType.Forward)
-                        }
-                    )
+            UIKitGroupedCard {
+                SettingCard(
+                    title = LocalStrings.current.controls.inputsEntrance,
+                    icon = FluentIcons.toggleMultiple(getUIKitColors().textFillColorPrimaryBrush, true),
+                    onClick = {
+                        MainViewModel.navigation.switchPage(Pages.Controls_BasicInputs, type = UIKitNavigationType.Forward)
+                    }
                 )
-            )
+                Divider()
+                SettingCard(
+                    title = LocalStrings.current.controls.statusAndInfosEntrance,
+                    icon = FluentIcons.chatMultiple(getUIKitColors().textFillColorPrimaryBrush, true),
+                    onClick = {
+                        MainViewModel.navigation.switchPage(Pages.Controls_StatusAndInfo, type = UIKitNavigationType.Forward)
+                    }
+                )
+                Divider()
+                SettingCard(
+                    title = LocalStrings.current.controls.flyoutsEntrance,
+                    icon = FluentIcons.layerDiagonal(getUIKitColors().textFillColorPrimaryBrush, true),
+                    onClick = {
+                        MainViewModel.navigation.switchPage(Pages.Controls_Flyouts, type = UIKitNavigationType.Forward)
+                    }
+                )
+                Divider()
+                SettingCard(
+                    title = LocalStrings.current.controls.layoutsEntrance,
+                    icon = FluentIcons.LayoutDynamic,
+                    onClick = {
+                        MainViewModel.navigation.switchPage(Pages.Controls_Layouts, type = UIKitNavigationType.Forward)
+                    }
+                )
+            }
         }
     }
 }

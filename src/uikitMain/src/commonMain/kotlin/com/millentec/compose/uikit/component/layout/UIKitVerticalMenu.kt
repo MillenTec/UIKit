@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
+import com.millentec.compose.uikit.foundation.layout.UIKitMenuScope
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Text
@@ -27,13 +27,12 @@ import com.millentec.compose.uikit.theme.getUIKitShapes
 @Composable
 @Preview
 private fun Preview() {
-    UIKitVerticalMenu(
-        items = listOf(
-            UIKitMenuItem.textWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {}),
-            UIKitMenuItem.text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush),
-            UIKitMenuItem.icon(FluentIcons.Text, onClick = {}),
-        )
-    )
+    UIKitVerticalMenu {
+        TextWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {})
+        Divider()
+        Text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush)
+        Icon(FluentIcons.Text, onClick = {}, contentDescription = null)
+    }
 }
 
 @Composable
@@ -41,11 +40,14 @@ fun UIKitVerticalMenu(
     modifier: Modifier = Modifier,
     maxLength: Dp = (-1).dp,
     minWidth: Dp = 200.dp,
-    items: List<UIKitMenuItem>,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     cornerRadius: Dp = getUIKitShapes().regularRounded,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().smallSpacing),
+    content: @Composable UIKitMenuScope.() -> Unit
 ) {
+    val scope = UIKitMenuScope()
+    scope.content()
+
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(cornerRadius))
@@ -61,10 +63,10 @@ fun UIKitVerticalMenu(
                 animationSpec = tween(getUIKitAnimate().motionRegularDurationMillis, easing = FastOutSlowInEasing)
             ),
     ) {
-        items.forEachIndexed { index, item ->
+        scope.items.forEachIndexed { index, item ->
             item.Content()
 
-            if (index != items.size - 1) {
+            if (index != scope.items.size - 1) {
                 Spacer(Modifier.height(contentPadding.calculateTopPadding()))
             }
         }

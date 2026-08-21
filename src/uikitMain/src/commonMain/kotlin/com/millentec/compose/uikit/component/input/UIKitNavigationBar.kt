@@ -23,7 +23,7 @@ import com.millentec.compose.uikit.component.layout.UIKitAdaptiveCornerContainer
 import com.millentec.compose.uikit.component.layout.UIKitAdaptiveCornerContainerState
 import com.millentec.compose.uikit.component.layout.rememberUIKitAdaptiveCornerContainerState
 import com.millentec.compose.uikit.foundation.layout.UIKitAlignment
-import com.millentec.compose.uikit.foundation.layout.UIKitNavigationDockItem
+import com.millentec.compose.uikit.foundation.layout.UIKitNavigationBarScope
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
@@ -45,34 +45,33 @@ private fun Preview(){
         modifier = Modifier
             .fillMaxSize()
     ) {
-        UIKitNavigationDock(
+        UIKitNavigationBar(
             checkedIndex = 1,
             onChecked = { },
-            items = listOf(
-                UIKitNavigationDockItem.createByStringWithIcon("Text", FluentIcons.Text),
-                UIKitNavigationDockItem.createByStringWithIcon("Accessibility", FluentIcons.Accessibility),
-                UIKitNavigationDockItem.createByStringWithIcon("Settings", FluentIcons.Settings),
-                UIKitNavigationDockItem.createByStringWithIcon("Alert", FluentIcons.Alert)
-            ),
-        )
+        ) {
+            TextWithIcon("Text", FluentIcons.Text)
+            TextWithIcon("Accessibility", FluentIcons.Accessibility)
+            TextWithIcon("Settings", FluentIcons.Settings)
+            TextWithIcon("Alert", FluentIcons.Alert)
+        }
     }
 }
 
 @Composable
-fun UIKitNavigationDock(
+fun UIKitNavigationBar(
     modifier: Modifier = Modifier,
     minHeight: Dp = 56.dp,
     minMargin: Dp = getUIKitLayout().mediumSpacing,
     checkedIndex: Int,
     onChecked: (Int) -> Unit,
-    items: List<UIKitNavigationDockItem>,
     position: UIKitAlignment = UIKitAlignment.BottomCenter,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.3f),
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialState? = null,
     shadowEnable: Boolean = true,
-    maxWidth: Dp = (-1).dp
+    maxWidth: Dp = (-1).dp,
+    content: @Composable UIKitNavigationBarScope.() -> Unit,
 ) {
     val state: UIKitAdaptiveCornerContainerState = rememberUIKitAdaptiveCornerContainerState(
         expectHeight = minHeight,
@@ -84,35 +83,39 @@ fun UIKitNavigationDock(
         fillWidth = true
     )
 
-    UIKitNavigationDock(
+    UIKitNavigationBar(
         modifier = modifier,
         checkedIndex = checkedIndex,
         onChecked = onChecked,
-        items = items,
         background = background,
         indicatorBackground = indicatorBackground,
         state = state,
         acrylicEffectEnabled = acrylicEffectEnabled,
         acrylicState = acrylicState,
         shadowEnable = shadowEnable,
-        maxWidth = maxWidth
+        maxWidth = maxWidth,
+        content = content
     )
 }
 
 @Composable
-fun UIKitNavigationDock(
+fun UIKitNavigationBar(
     modifier: Modifier = Modifier,
     checkedIndex: Int,
     onChecked: (Int) -> Unit,
-    items: List<UIKitNavigationDockItem>,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.3f),
     state: UIKitAdaptiveCornerContainerState,
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialState? = null,
     shadowEnable: Boolean = true,
-    maxWidth: Dp = (-1).dp
+    maxWidth: Dp = (-1).dp,
+    content: @Composable UIKitNavigationBarScope.() -> Unit
 ) {
+    val scope = UIKitNavigationBarScope()
+    scope.content()
+
+    val items by rememberUpdatedState(scope.items)
 
     Box(
         modifier = modifier,
@@ -320,10 +323,6 @@ fun UIKitNavigationDock(
                                 )
                             )
 
-                            LaunchedEffect(checked) {
-                                item.isChecked.value = checked
-                            }
-
                             Column(
                                 modifier = Modifier
                                     .fillMaxHeight()
@@ -351,7 +350,7 @@ fun UIKitNavigationDock(
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
-                                item.Content()
+                                item.Content(checked)
                             }
                         }
                     }

@@ -11,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
-import com.millentec.compose.uikit.foundation.layout.UIKitCardItem
 import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
@@ -51,22 +50,25 @@ fun ControlsBasicInputsPage() {
         }
 
         item {
-            UIKitGroupedCard(
-                items = BasicInputControls.mapIndexed { index, item ->
-                    UIKitCardItem.settingCard(
-                        title = when (BasicInputControls[index].page) {
+            UIKitGroupedCard {
+                BasicInputControls.forEachIndexed { index, item ->
+                    SettingCard(
+                        title = when (item.page) {
                             Pages.Controls_BasicInputs_Button -> LocalStrings.current.controls.inputs.buttonEntrance
                             Pages.Controls_BasicInputs_ToggleButton -> LocalStrings.current.controls.inputs.toggleButtonEntrance
                             Pages.Controls_BasicInputs_ToggleSwitch -> LocalStrings.current.controls.inputs.toggleSwitchEntrance
                             else -> "Unknown"
                         },
                         onClick = {
-                            MainViewModel.navigation.switchPage(BasicInputControls[index].page, type = UIKitNavigationType.Forward)
+                            MainViewModel.navigation.switchPage(item.page, type = UIKitNavigationType.Forward)
                         }
                     )
-                },
-                insertDivider = true
-            )
+
+                    if (index != BasicInputControls.size - 1) {
+                        Divider()
+                    }
+                }
+            }
         }
     }
 }

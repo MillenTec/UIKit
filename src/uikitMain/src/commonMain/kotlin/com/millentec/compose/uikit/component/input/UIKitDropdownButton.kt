@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.flyout.UIKitDropdownMenu
 import com.millentec.compose.uikit.component.flyout.UIKitFlyouter
-import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
+import com.millentec.compose.uikit.foundation.layout.UIKitMenuScope
 import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.theme.*
 
@@ -94,7 +94,7 @@ fun UIKitDropdownButton(
         tint = getUIKitMaterials().acrylicMaterial.tint.copy(0.6f),
         lightingEffectsEnabled = false
     ),
-    items: List<UIKitMenuItem>,
+    content: @Composable UIKitMenuScope.() -> Unit,
     clickableContent: @Composable BoxScope.() -> Unit
 ) {
     val uiKitTheme = getUIKitTheme()
@@ -126,7 +126,6 @@ fun UIKitDropdownButton(
                 )
             } else Modifier),
         expanded = expanded,
-        items = items,
         acrylicEffectEnabled = acrylicEffectEnabled,
         acrylicMaterialState = acrylicMaterialState,
         acrylicMaterial = acrylicMaterial,
@@ -151,5 +150,6 @@ fun UIKitDropdownButton(
             ) + offset
         },
         onDismissRequest = onDismissRequest,
+        content = content
     )
 }

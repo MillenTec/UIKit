@@ -21,8 +21,6 @@ import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
-import com.millentec.compose.uikit.foundation.layout.UIKitCardItem
-import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.theme.*
@@ -65,105 +63,103 @@ fun SettingsPage() {
             val themeOptionsExpanded = remember { mutableStateOf(false) }
             val acrylicEnabled = AppTheme.useAcrylic.collectAsState()
 
-            UIKitGroupedCard(
-                items = listOf(
-                    UIKitCardItem.settingCard(
-                        onClick = {
-                            themeOptionsExpanded.value = !themeOptionsExpanded.value
+            UIKitGroupedCard {
+                SettingCard(
+                    onClick = {
+                        themeOptionsExpanded.value = !themeOptionsExpanded.value
+                    },
+                    title = LocalStrings.current.settings.themeSettingTitle,
+                    icon = FluentIcons.Color,
+                ) {
+                    UIKitDropdownButton(
+                        onDismissRequest = {
+                            themeOptionsExpanded.value = false
                         },
-                        title = LocalStrings.current.settings.themeSettingTitle,
-                        icon = FluentIcons.Color,
-                    ) {
-                        UIKitDropdownButton(
-                            onDismissRequest = {
-                                themeOptionsExpanded.value = false
-                            },
-                            acrylicMaterialState = LocalAcrylicMaterialState.current,
-                            acrylicEffectEnabled = AppTheme.useAcrylic.collectAsState().value,
-                            offset = DpOffset(
-                                x = getUIKitLayout().mediumSpacing,
-                                y = 0.dp
-                            ),
-                            expanded = themeOptionsExpanded.value,
-                            items = listOf(
-                                UIKitMenuItem.textWithIcon(
-                                    text = LocalStrings.current.settings.themeSystem,
-                                    icon = FluentIcons.Person,
-                                    onClick = {
-                                        AppTheme.switchTheme(ThemeType.System)
-                                        themeOptionsExpanded.value = false
-                                    }
-                                ),
-                                UIKitMenuItem.divider(),
-                                UIKitMenuItem.textWithIcon(
-                                    text = LocalStrings.current.settings.themeLight,
-                                    icon = FluentIcons.weatherSunny(),
-                                    onClick = {
-                                        AppTheme.switchTheme(ThemeType.Light)
-                                        themeOptionsExpanded.value = false
-                                    }
-                                ),
-                                UIKitMenuItem.divider(),
-                                UIKitMenuItem.textWithIcon(
-                                    text = LocalStrings.current.settings.themeDark,
-                                    icon = FluentIcons.Moon,
-                                    onClick = {
-                                        AppTheme.switchTheme(ThemeType.Dark)
-                                        themeOptionsExpanded.value = false
-                                    }
-                                )
+                        acrylicMaterialState = LocalAcrylicMaterialState.current,
+                        acrylicEffectEnabled = AppTheme.useAcrylic.collectAsState().value,
+                        offset = DpOffset(
+                            x = getUIKitLayout().mediumSpacing,
+                            y = 0.dp
+                        ),
+                        expanded = themeOptionsExpanded.value,
+                        content = {
+                            TextWithIcon(
+                                text = LocalStrings.current.settings.themeSystem,
+                                icon = FluentIcons.Person,
+                                onClick = {
+                                    AppTheme.switchTheme(ThemeType.System)
+                                    themeOptionsExpanded.value = false
+                                }
                             )
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    text = when(AppTheme.theme.collectAsState().value) {
-                                        System -> LocalStrings.current.settings.themeSystem
-                                        Light -> LocalStrings.current.settings.themeLight
-                                        Dark -> LocalStrings.current.settings.themeDark
-                                    },
-                                    style = getUIKitTypography().footnote,
-                                    color = getUIKitColors().textFillColorPrimaryBrush
-                                )
-
-                                Spacer(Modifier.width(getUIKitLayout().smallSpacing))
-
-                                Icon(
-                                    modifier = Modifier
-                                        .size(getUIKitTypography().footnote.lineHeight.value.dp),
-                                    imageVector = FluentIcons.ChevronArrowDown,
-                                    contentDescription = "Expand Dropdown Menu of Theme",
-                                    tint = getUIKitColors().textFillColorPrimaryBrush
-                                )
-                            }
-                        }
-                    },
-                    UIKitCardItem.divider(),
-                    UIKitCardItem.settingCard(
-                        title = LocalStrings.current.settings.acrylicEnabledSettingTitle,
-                        icon = FluentIcons.Blur,
-                        onClick = {
-                            AppTheme.enableAcrylic(!acrylicEnabled.value)
+                            Divider()
+                            TextWithIcon(
+                                text = LocalStrings.current.settings.themeLight,
+                                icon = FluentIcons.weatherSunny(),
+                                onClick = {
+                                    AppTheme.switchTheme(ThemeType.Light)
+                                    themeOptionsExpanded.value = false
+                                }
+                            )
+                            Divider()
+                            TextWithIcon(
+                                text = LocalStrings.current.settings.themeDark,
+                                icon = FluentIcons.Moon,
+                                onClick = {
+                                    AppTheme.switchTheme(ThemeType.Dark)
+                                    themeOptionsExpanded.value = false
+                                }
+                            )
                         }
                     ) {
-                        UIKitToggleSwitch(
-                            checked = acrylicEnabled.value,
-                            onCheckedChange = {
-                                AppTheme.enableAcrylic(it)
-                            }
-                        )
-                    },
-                    UIKitCardItem.divider(),
-                    UIKitCardItem.settingCard(
-                        title = LocalStrings.current.settings.languageSettingTitle,
-                        icon = FluentIcons.Globe,
-                        onClick = {
-                            MainViewModel.navigation.switchPage(Pages.Settings_Language, type = UIKitNavigationType.Forward)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = when(AppTheme.theme.collectAsState().value) {
+                                    System -> LocalStrings.current.settings.themeSystem
+                                    Light -> LocalStrings.current.settings.themeLight
+                                    Dark -> LocalStrings.current.settings.themeDark
+                                },
+                                style = getUIKitTypography().footnote,
+                                color = getUIKitColors().textFillColorPrimaryBrush
+                            )
+
+                            Spacer(Modifier.width(getUIKitLayout().smallSpacing))
+
+                            Icon(
+                                modifier = Modifier
+                                    .size(getUIKitTypography().footnote.lineHeight.value.dp),
+                                imageVector = FluentIcons.ChevronArrowDown,
+                                contentDescription = "Expand Dropdown Menu of Theme",
+                                tint = getUIKitColors().textFillColorPrimaryBrush
+                            )
+                        }
+                    }
+                }
+                Divider()
+                SettingCard(
+                    title = LocalStrings.current.settings.acrylicEnabledSettingTitle,
+                    icon = FluentIcons.Blur,
+                    onClick = {
+                        AppTheme.enableAcrylic(!acrylicEnabled.value)
+                    }
+                ) {
+                    UIKitToggleSwitch(
+                        checked = acrylicEnabled.value,
+                        onCheckedChange = {
+                            AppTheme.enableAcrylic(it)
                         }
                     )
+                }
+                Divider()
+                SettingCard(
+                    title = LocalStrings.current.settings.languageSettingTitle,
+                    icon = FluentIcons.Globe,
+                    onClick = {
+                        MainViewModel.navigation.switchPage(Pages.Settings_Language, type = UIKitNavigationType.Forward)
+                    }
                 )
-            )
+            }
         }
     }
 }

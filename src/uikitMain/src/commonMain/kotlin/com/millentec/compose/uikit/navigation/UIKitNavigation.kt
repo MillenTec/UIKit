@@ -24,7 +24,7 @@ class UIKitNavigation<S>(
     val pageSwitchAnimate = _pageSwitchAnimate.asStateFlow()
 
     fun switchPage(page: S, isAddInHistory: Boolean = true, type: UIKitNavigationType = UIKitNavigationType.Jump){
-        // 若仅是设置下面的targetContentZIndex为负数的话, 其深度会一直保留, 导致下一次切换是的目标页面于原页面在同一深度(-1)
+        // 若仅是设置下面的 targetContentZIndex 为负数的话, 其深度会一直保留, 导致下一次切换是的目标页面于原页面在同一深度(-1)
         // 故使深度递增, 保证每一次切换时目标页面的深度都低于任何一个页面
         if (type == UIKitNavigationType.Backward){
             if (_pageDepth == Int.MAX_VALUE) _pageDepth = 0

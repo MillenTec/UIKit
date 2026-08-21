@@ -28,7 +28,7 @@ import com.millentec.compose.uikit.BackHandler
 import com.millentec.compose.uikit.LocalAcrylicMaterialState
 import com.millentec.compose.uikit.SystemUISymbols
 import com.millentec.compose.uikit.component.input.UIKitDropdownButton
-import com.millentec.compose.uikit.component.input.UIKitNavigationDock
+import com.millentec.compose.uikit.component.input.UIKitNavigationBar
 import com.millentec.compose.uikit.component.layout.UIKitSurface
 import com.millentec.compose.uikit.component.layout.rememberUIKitAdaptiveCornerContainerState
 import com.millentec.compose.uikit.foundation.Pages
@@ -37,8 +37,6 @@ import com.millentec.compose.uikit.foundation.UIKitNavigationType
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.layout.UIKitAlignment
-import com.millentec.compose.uikit.foundation.layout.UIKitMenuItem
-import com.millentec.compose.uikit.foundation.layout.UIKitNavigationDockItem
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
@@ -185,7 +183,7 @@ fun MainView() {
                             }
                         }
 
-                        UIKitNavigationDock(
+                        UIKitNavigationBar(
                             modifier = Modifier
                                 .onGloballyPositioned {
                                     if (it.isAttached)
@@ -200,23 +198,22 @@ fun MainView() {
                                 nav.switchPage(Pages.entries[it])
                                 dockItems.value = NavDock.entries[it]
                             },
-                            items = remember {
-                                listOf(
-                                    UIKitNavigationDockItem.createByStringWithIcon(
-                                        text = strings.navigation.home,
-                                        icon = FluentIcons.Home
-                                    ),
-                                    UIKitNavigationDockItem.createByStringWithIcon(
-                                        text = strings.navigation.controls,
-                                        icon = FluentIcons.toggleMultiple()
-                                    ),
-                                    UIKitNavigationDockItem.createByStringWithIcon(
-                                        text = strings.navigation.designs,
-                                        icon = FluentIcons.designIdeas()
-                                    )
-                                )
-                            }
-                        )
+                        ) {
+                            TextWithIcon(
+                                text = strings.navigation.home,
+                                icon = FluentIcons.Home
+                            )
+
+                            TextWithIcon(
+                                text = strings.navigation.controls,
+                                icon = FluentIcons.toggleMultiple()
+                            )
+
+                            TextWithIcon(
+                                text = strings.navigation.designs,
+                                icon = FluentIcons.designIdeas()
+                            )
+                        }
                     }
 
                     Spacer(Modifier.width(getUIKitLayout().mediumSpacing))
@@ -243,26 +240,26 @@ fun MainView() {
                             appearPosition = Alignment.BottomEnd,
                             acrylicMaterialState = LocalAcrylicMaterialState.current,
                             acrylicEffectEnabled = AppTheme.useAcrylic.collectAsState().value,
-                            items = listOf(
-                                UIKitMenuItem.textWithIcon(
+                            content = {
+                                TextWithIcon(
                                     icon = FluentIcons.Scales,
                                     text = strings.navigation.license,
                                     onClick = {
                                         nav.switchPage(License, type = UIKitNavigationType.Forward)
                                         expanded.value = false
                                     }
-                                ),
-                                UIKitMenuItem.divider(),
-                                UIKitMenuItem.textWithIcon(
+                                )
+                                Divider()
+                                TextWithIcon(
                                     icon = FluentIcons.certificate(),
                                     text = strings.navigation.thirdPartyLicenses,
                                     onClick = {
                                         nav.switchPage(ThirdParty, type = UIKitNavigationType.Forward)
                                         expanded.value = false
                                     }
-                                ),
-                                UIKitMenuItem.divider(),
-                                UIKitMenuItem.textWithIcon(
+                                )
+                                Divider()
+                                TextWithIcon(
                                     icon = FluentIcons.Settings,
                                     text = strings.navigation.settings,
                                     onClick = {
@@ -270,7 +267,7 @@ fun MainView() {
                                         expanded.value = false
                                     }
                                 )
-                            )
+                            }
                         ) {
                             UIKitSurface(
                                 modifier = Modifier

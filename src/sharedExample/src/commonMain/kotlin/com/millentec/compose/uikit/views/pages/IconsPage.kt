@@ -50,7 +50,6 @@ import com.millentec.compose.uikit.foundation.helper.toHsv
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.layout.UIKitAlignment
-import com.millentec.compose.uikit.foundation.layout.UIKitCardItem
 import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
@@ -214,33 +213,31 @@ private fun OptionsWindow(
                     enter = fadeIn(animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis)),
                     exit = fadeOut(animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis))
                 ) {
-                    UIKitGroupedCard(
-                        items = listOf(
-                            UIKitCardItem.settingCard(
-                                icon = FluentIcons.Tag,
-                                title = LocalStrings.current.designs.fluentIcons.options.name,
-                                onClick = {}
-                            ) {
-                                Text(
-                                    text = state.iconInfo.value?.iconName ?: "Unknown",
-                                    style = getUIKitTypography().body,
-                                    color = getUIKitColors().textFillColorSecondaryBrush
-                                )
-                            },
-                            UIKitCardItem.divider(),
-                            UIKitCardItem.settingCard(
-                                icon = FluentIcons.Resize,
-                                title = LocalStrings.current.designs.fluentIcons.options.size,
-                                onClick = {}
-                            ) {
-                                Text(
-                                    text = state.iconInfo.value?.iconSize ?: "Unknown",
-                                    style = getUIKitTypography().body,
-                                    color = getUIKitColors().textFillColorSecondaryBrush
-                                )
-                            }
-                        )
-                    )
+                    UIKitGroupedCard {
+                        SettingCard(
+                            icon = FluentIcons.Tag,
+                            title = LocalStrings.current.designs.fluentIcons.options.name,
+                            onClick = {}
+                        ) {
+                            Text(
+                                text = state.iconInfo.value?.iconName ?: "Unknown",
+                                style = getUIKitTypography().body,
+                                color = getUIKitColors().textFillColorSecondaryBrush
+                            )
+                        }
+                        Divider()
+                        SettingCard(
+                            icon = FluentIcons.Resize,
+                            title = LocalStrings.current.designs.fluentIcons.options.size,
+                            onClick = {}
+                        ) {
+                            Text(
+                                text = state.iconInfo.value?.iconSize ?: "Unknown",
+                                style = getUIKitTypography().body,
+                                color = getUIKitColors().textFillColorSecondaryBrush
+                            )
+                        }
+                    }
 
                     Spacer(Modifier.height(getUIKitLayout().basicSpacing))
                 }
@@ -1312,35 +1309,33 @@ private fun makeAnimatableIconList(
 
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
-                UIKitGroupedCard(
-                    items = listOf(
-                        UIKitCardItem.settingCard(
-                            title = LocalStrings.current.designs.fluentIcons.options.resetProgressOnError,
-                            onClick = {
-                                resetProgressOnError.value = !resetProgressOnError.value
-                            },
-                            icon = FluentIcons.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
-                        ) {
-                            UIKitToggleSwitch(
-                                checked = resetProgressOnError.value,
-                                onCheckedChange = { resetProgressOnError.value = it },
-                            )
+                UIKitGroupedCard {
+                    SettingCard(
+                        title = LocalStrings.current.designs.fluentIcons.options.resetProgressOnError,
+                        onClick = {
+                            resetProgressOnError.value = !resetProgressOnError.value
                         },
-                        UIKitCardItem.divider(),
-                        UIKitCardItem.settingCard(
-                            title = LocalStrings.current.designs.fluentIcons.options.autoTint,
-                            onClick = {
-                                autoTint.value = !autoTint.value
-                            },
-                            icon = FluentIcons.PaintBrush
-                        ) {
-                            UIKitToggleSwitch(
-                                checked = autoTint.value,
-                                onCheckedChange = { autoTint.value = it },
-                            )
-                        }
-                    )
-                )
+                        icon = FluentIcons.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
+                    ) {
+                        UIKitToggleSwitch(
+                            checked = resetProgressOnError.value,
+                            onCheckedChange = { resetProgressOnError.value = it },
+                        )
+                    }
+                    Divider()
+                    SettingCard(
+                        title = LocalStrings.current.designs.fluentIcons.options.autoTint,
+                        onClick = {
+                            autoTint.value = !autoTint.value
+                        },
+                        icon = FluentIcons.PaintBrush
+                    ) {
+                        UIKitToggleSwitch(
+                            checked = autoTint.value,
+                            onCheckedChange = { autoTint.value = it },
+                        )
+                    }
+                }
             }
         }
 
@@ -1432,35 +1427,33 @@ private fun makeAnimatableIconList(
 
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
-                UIKitGroupedCard(
-                    items = listOf(
-                        UIKitCardItem.settingCard(
-                            title = LocalStrings.current.designs.fluentIcons.options.resetProgressOnError,
-                            onClick = {
-                                resetProgressOnError.value = !resetProgressOnError.value
-                            },
-                            icon = FluentIcons.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
-                        ) {
-                            UIKitToggleSwitch(
-                                checked = resetProgressOnError.value,
-                                onCheckedChange = { resetProgressOnError.value = it },
-                            )
+                UIKitGroupedCard {
+                    SettingCard(
+                        title = LocalStrings.current.designs.fluentIcons.options.resetProgressOnError,
+                        onClick = {
+                            resetProgressOnError.value = !resetProgressOnError.value
                         },
-                        UIKitCardItem.divider(),
-                        UIKitCardItem.settingCard(
-                            title = LocalStrings.current.designs.fluentIcons.options.autoTint,
-                            onClick = {
-                                autoTint.value = !autoTint.value
-                            },
-                            icon = FluentIcons.PaintBrush
-                        ) {
-                            UIKitToggleSwitch(
-                                checked = autoTint.value,
-                                onCheckedChange = { autoTint.value = it },
-                            )
-                        }
-                    )
-                )
+                        icon = FluentIcons.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
+                    ) {
+                        UIKitToggleSwitch(
+                            checked = resetProgressOnError.value,
+                            onCheckedChange = { resetProgressOnError.value = it },
+                        )
+                    }
+                    Divider()
+                    SettingCard(
+                        title = LocalStrings.current.designs.fluentIcons.options.autoTint,
+                        onClick = {
+                            autoTint.value = !autoTint.value
+                        },
+                        icon = FluentIcons.PaintBrush
+                    ) {
+                        UIKitToggleSwitch(
+                            checked = autoTint.value,
+                            onCheckedChange = { autoTint.value = it },
+                        )
+                    }
+                }
             }
         }
 
@@ -1551,35 +1544,33 @@ private fun makeAnimatableIconList(
 
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
-                UIKitGroupedCard(
-                    items = listOf(
-                        UIKitCardItem.settingCard(
-                            title = LocalStrings.current.designs.fluentIcons.options.resetProgressOnError,
-                            onClick = {
-                                resetProgressOnError.value = !resetProgressOnError.value
-                            },
-                            icon = FluentIcons.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
-                        ) {
-                            UIKitToggleSwitch(
-                                checked = resetProgressOnError.value,
-                                onCheckedChange = { resetProgressOnError.value = it },
-                            )
+                UIKitGroupedCard {
+                    SettingCard(
+                        title = LocalStrings.current.designs.fluentIcons.options.resetProgressOnError,
+                        onClick = {
+                            resetProgressOnError.value = !resetProgressOnError.value
                         },
-                        UIKitCardItem.divider(),
-                        UIKitCardItem.settingCard(
-                            title = LocalStrings.current.designs.fluentIcons.options.autoTint,
-                            onClick = {
-                                autoTint.value = !autoTint.value
-                            },
-                            icon = FluentIcons.PaintBrush
-                        ) {
-                            UIKitToggleSwitch(
-                                checked = autoTint.value,
-                                onCheckedChange = { autoTint.value = it },
-                            )
-                        }
-                    )
-                )
+                        icon = FluentIcons.dismissCircle(getUIKitColors().textFillColorPrimaryBrush, true)
+                    ) {
+                        UIKitToggleSwitch(
+                            checked = resetProgressOnError.value,
+                            onCheckedChange = { resetProgressOnError.value = it },
+                        )
+                    }
+                    Divider()
+                    SettingCard(
+                        title = LocalStrings.current.designs.fluentIcons.options.autoTint,
+                        onClick = {
+                            autoTint.value = !autoTint.value
+                        },
+                        icon = FluentIcons.PaintBrush
+                    ) {
+                        UIKitToggleSwitch(
+                            checked = autoTint.value,
+                            onCheckedChange = { autoTint.value = it },
+                        )
+                    }
+                }
             }
         }
 

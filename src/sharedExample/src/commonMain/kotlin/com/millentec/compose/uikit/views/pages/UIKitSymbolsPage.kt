@@ -11,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
-import com.millentec.compose.uikit.foundation.layout.UIKitCardItem
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Apps
 import com.millentec.compose.uikit.theme.getUIKitColors
@@ -52,17 +51,15 @@ fun UIKitSymbolsPage() {
         }
 
         item {
-            UIKitGroupedCard(
-                items = listOf(
-                    UIKitCardItem.settingCard(
-                        title = "System UI",
-                        icon = FluentIcons.Apps,
-                        onClick = {
-                            nav.switchPage(Pages.Designs_UIKitSymbols_SystemUI, type = UIKitNavigationType.Forward)
-                        }
-                    )
+            UIKitGroupedCard {
+                SettingCard(
+                    title = "System UI",
+                    icon = FluentIcons.Apps,
+                    onClick = {
+                        nav.switchPage(Pages.Designs_UIKitSymbols_SystemUI, type = UIKitNavigationType.Forward)
+                    }
                 )
-            )
+            }
         }
     }
 }
