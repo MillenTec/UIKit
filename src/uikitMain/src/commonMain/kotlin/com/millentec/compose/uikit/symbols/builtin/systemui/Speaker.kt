@@ -1,6 +1,7 @@
 package com.millentec.compose.uikit.symbols.builtin.systemui
 
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Size
@@ -12,10 +13,7 @@ import com.millentec.compose.uikit.foundation.materials.UIKitBrush
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
 import com.millentec.compose.uikit.symbols.UIKitSystemUISymbols
-import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimNode
-import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
-import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimTree
-import com.millentec.compose.uikit.symbols.animate.UIKitSymbolGroupState
+import com.millentec.compose.uikit.symbols.animate.*
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
@@ -133,6 +131,7 @@ val UIKitSystemUISymbols.Speaker: UIKitSymbol
                 UIKitSymbolAbility.Appear,
                 UIKitSymbolAbility.Disappear,
                 UIKitSymbolAbility.Bounce,
+                UIKitSymbolAbility.VariableColor,
                 UIKitSymbolAbility.MultiState(listOf("default", "disabled"))
             )
 
@@ -233,6 +232,54 @@ val UIKitSystemUISymbols.Speaker: UIKitSymbol
                     }
                     else -> null
                 }
+            }
+
+            override fun variableColorEffect(states: List<UIKitSymbolAnimState>?): UIKitSymbolInfiniteAnimTree {
+                return UIKitSymbolInfiniteAnimTree(
+                    start = UIKitSymbolAnimTree()
+                        .addParallel(UIKitSymbolAnimNode.alphaTo(
+                            groupSelector = "wave0",
+                            targetValue = 0.6f,
+                            animateSpec = tween(200, easing = LinearEasing),
+                        ))
+                        .addParallel(UIKitSymbolAnimNode.alphaTo(
+                            groupSelector = "wave1",
+                            targetValue = 0.6f,
+                            animateSpec = tween(200, easing = LinearEasing)
+                        )),
+                    body = UIKitSymbolAnimTree()
+                        .addSequential(UIKitSymbolAnimNode.alphaTo(
+                            groupSelector = "wave0",
+                            targetValue = 1f,
+                            animateSpec = tween(200, easing = LinearEasing, delayMillis = 200),
+                        ))
+                        .addSequential(UIKitSymbolAnimNode.alphaTo(
+                            groupSelector = "wave1",
+                            targetValue = 1f,
+                            animateSpec = tween(200, easing = LinearEasing, delayMillis = 200),
+                        ))
+                        .addSequential(UIKitSymbolAnimNode.alphaTo(
+                            groupSelector = "wave0",
+                            targetValue = 0.6f,
+                            animateSpec = tween(200, easing = LinearEasing, delayMillis = 200),
+                        ))
+                        .addParallel(UIKitSymbolAnimNode.alphaTo(
+                            groupSelector = "wave1",
+                            targetValue = 0.6f,
+                            animateSpec = tween(200, easing = LinearEasing, delayMillis = 200),
+                        )),
+                    end = UIKitSymbolAnimTree()
+                        .addParallel(UIKitSymbolAnimNode.alphaTo(
+                            groupSelector = "wave0",
+                            targetValue = 1f,
+                            animateSpec = tween(200, easing = LinearEasing),
+                        ))
+                        .addParallel(UIKitSymbolAnimNode.alphaTo(
+                            groupSelector = "wave1",
+                            targetValue = 1f,
+                            animateSpec = tween(200, easing = LinearEasing),
+                        ))
+                )
             }
         }
 

@@ -15,10 +15,7 @@ import com.millentec.compose.uikit.component.input.UIKitButton
 import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.UIKitIcon
 import com.millentec.compose.uikit.symbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
-import com.millentec.compose.uikit.symbols.animate.bounceEffect
-import com.millentec.compose.uikit.symbols.animate.stateEffect
-import com.millentec.compose.uikit.symbols.animate.visibleEffect
+import com.millentec.compose.uikit.symbols.animate.*
 import com.millentec.compose.uikit.symbols.builtin.systemui.AddCircle
 import com.millentec.compose.uikit.symbols.builtin.systemui.Speaker
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
@@ -68,6 +65,7 @@ fun HomePage() {
                 val style = remember { mutableStateOf(false) }
                 val state = remember { mutableStateOf(false) }
                 val bounceTrigger = remember { mutableStateOf(0) }
+                val isActive = remember { mutableStateOf(false) }
 
                 Row {
                     UIKitIcon(
@@ -80,7 +78,8 @@ fun HomePage() {
                         symbolEffect = UIKitSymbolEffect()
                             .visibleEffect(visible0.value)
                             .stateEffect(if (enabled0.value) "default" else "disabled")
-                            .bounceEffect(bounceTrigger.value)
+                            .bounceEffect(bounceTrigger.value, true)
+                            .variableColorEffect(isActive.value)
                     )
 
                     UIKitIcon(
@@ -94,6 +93,7 @@ fun HomePage() {
                             .visibleEffect(visible1.value)
                             .stateEffect(if (state.value) "checkmark" else "add")
                             .bounceEffect(bounceTrigger.value)
+
                     )
                 }
 
@@ -142,6 +142,13 @@ fun HomePage() {
                         onClick = {
                             bounceTrigger.value++
                         }
+                    )
+
+                    Spacer(Modifier.width(getUIKitLayout().itemSpacing))
+
+                    UIKitToggleSwitch(
+                        checked = isActive.value,
+                        onCheckedChange = { isActive.value = it }
                     )
                 }
             }

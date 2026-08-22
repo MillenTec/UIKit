@@ -2,14 +2,18 @@ package com.millentec.compose.uikit.symbols.animate
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.VectorConverter
+import androidx.compose.ui.geometry.Offset
 import com.millentec.compose.uikit.symbols.animate.UIKitAnimSelector.*
 
 class UIKitSymbolAnimState(
     val id: String,
     initialScale: Float = 1f,
+    initialScaleCenter: Offset = Offset(10f, 10f),
     initialAlpha: Float = 1f,
     initialPathTrimStart: Float = 0f,
     initialPathTrimEnd: Float = 1f,
+    initialRotate: Float = 0f,
+    initialRotateCenter: Offset = Offset(10f, 10f),
 ) {
     val visible: Boolean
         get() = alphaState.value > 0f
@@ -23,6 +27,8 @@ class UIKitSymbolAnimState(
             when (selector) {
                 Empty -> true
                 Scale -> scaleState.value > 0f
+                ScaleCenterX -> true
+                ScaleCenterY -> true
                 Alpha -> alphaState.value > 0f
                 PathTrimStart -> {
                     pathTrimStartState.value - pathTrimEndState.value != 0f
@@ -30,6 +36,9 @@ class UIKitSymbolAnimState(
                 PathTrimEnd -> {
                     pathTrimStartState.value - pathTrimEndState.value != 0f
                 }
+                Rotate -> true
+                RotateCenterX -> true
+                RotateCenterY -> true
             }
         }
 
@@ -52,6 +61,16 @@ class UIKitSymbolAnimState(
         typeConverter = Float.VectorConverter,
     )
 
+    val scaleCenterXState = Animatable(
+        initialValue = initialScaleCenter.x,
+        typeConverter = Float.VectorConverter,
+    )
+
+    val scaleCenterYState = Animatable(
+        initialValue = initialScaleCenter.y,
+        typeConverter = Float.VectorConverter,
+    )
+
     val alphaState = Animatable(
         initialValue = initialAlpha,
         typeConverter = Float.VectorConverter,
@@ -64,6 +83,21 @@ class UIKitSymbolAnimState(
 
     val pathTrimEndState = Animatable(
         initialValue = initialPathTrimEnd,
+        typeConverter = Float.VectorConverter,
+    )
+
+    val rotateState = Animatable(
+        initialValue = initialRotate,
+        typeConverter = Float.VectorConverter,
+    )
+
+    val rotateCenterXState = Animatable(
+        initialValue = initialRotateCenter.x,
+        typeConverter = Float.VectorConverter,
+    )
+
+    val rotateCenterYState = Animatable(
+        initialValue = initialRotateCenter.y,
         typeConverter = Float.VectorConverter,
     )
 }
@@ -86,6 +120,8 @@ data class UIKitSymbolGroupState(
             when (selector) {
                 Empty -> true
                 Scale -> scale > 0f
+                ScaleCenterX -> true
+                ScaleCenterY -> true
                 Alpha -> alpha > 0f
                 PathTrimStart -> {
                     pathTrimStart - pathTrimEnd != 0f
@@ -93,6 +129,9 @@ data class UIKitSymbolGroupState(
                 PathTrimEnd -> {
                     pathTrimStart - pathTrimEnd != 0f
                 }
+                Rotate -> true
+                RotateCenterX -> true
+                RotateCenterY -> true
             }
         }
 

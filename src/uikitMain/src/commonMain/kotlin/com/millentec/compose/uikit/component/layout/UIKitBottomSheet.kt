@@ -151,22 +151,24 @@ fun UIKitBottomSheet(
                             )
                         }
 
-                        if (titleCurrent != null) {
+                        titleCurrent?.let { title ->
                             if (stripVisibleCurrent) {
                                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
                             }
-
+                            
                             Text(
                                 modifier = Modifier
                                     .then(if (titleMaxWidthCurrent != (-1).dp) {
                                         Modifier.widthIn(max = titleMaxWidthCurrent)
                                     } else Modifier),
-                                text = titleCurrent ?: "",
+                                text = title,
                                 style = getUIKitTypography().body,
                                 color = getUIKitColors().textFillColorSecondaryBrush,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                             )
+
+                            Spacer(Modifier.height(getUIKitLayout().basicSpacing))
                         }
                     }
 

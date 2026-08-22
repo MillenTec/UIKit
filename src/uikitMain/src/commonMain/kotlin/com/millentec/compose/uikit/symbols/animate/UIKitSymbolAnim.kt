@@ -49,6 +49,32 @@ data class UIKitSymbolAnimNode(
             )
         }
 
+        fun scaleCenterXTo(
+            groupSelector: String,
+            targetValue: Float,
+            animateSpec: AnimationSpec<Float>?
+        ): UIKitSymbolAnimNode {
+            return UIKitSymbolAnimNode(
+                type = UIKitAnimSelector.ScaleCenterX,
+                groupSelector = groupSelector,
+                targetValue = targetValue,
+                animateSpec = animateSpec
+            )
+        }
+
+        fun scaleCenterYTo(
+            groupSelector: String,
+            targetValue: Float,
+            animateSpec: AnimationSpec<Float>?
+        ): UIKitSymbolAnimNode {
+            return UIKitSymbolAnimNode(
+                type = UIKitAnimSelector.ScaleCenterY,
+                groupSelector = groupSelector,
+                targetValue = targetValue,
+                animateSpec = animateSpec
+            )
+        }
+
         fun alphaTo(
             groupSelector: String,
             targetValue: Float,
@@ -87,5 +113,50 @@ data class UIKitSymbolAnimNode(
                 animateSpec = animateSpec
             )
         }
+
+        fun rotateTo(
+            groupSelector: String,
+            targetValue: Float,
+            animateSpec: AnimationSpec<Float>?
+        ): UIKitSymbolAnimNode {
+            return UIKitSymbolAnimNode(
+                type = UIKitAnimSelector.Rotate,
+                groupSelector = groupSelector,
+                targetValue = targetValue,
+                animateSpec = animateSpec
+            )
+        }
+
+        fun rotateCenterXTo(
+            groupSelector: String,
+            targetValue: Float,
+            animateSpec: AnimationSpec<Float>?
+        ): UIKitSymbolAnimNode {
+            return UIKitSymbolAnimNode(
+                type = UIKitAnimSelector.RotateCenterX,
+                groupSelector = groupSelector,
+                targetValue = targetValue,
+                animateSpec = animateSpec
+            )
+        }
+
+        fun rotateCenterYTo(
+            groupSelector: String,
+            targetValue: Float,
+            animateSpec: AnimationSpec<Float>?
+        ): UIKitSymbolAnimNode {
+            return UIKitSymbolAnimNode(
+                type = UIKitAnimSelector.RotateCenterY,
+                groupSelector = groupSelector,
+                targetValue = targetValue,
+                animateSpec = animateSpec
+            )
+        }
     }
 }
+
+data class UIKitSymbolInfiniteAnimTree(
+    val start: UIKitSymbolAnimTree,
+    val body: UIKitSymbolAnimTree,
+    val end: UIKitSymbolAnimTree,
+)

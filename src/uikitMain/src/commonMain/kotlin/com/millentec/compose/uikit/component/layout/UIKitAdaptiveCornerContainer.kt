@@ -117,7 +117,7 @@ fun rememberUIKitAdaptiveCornerContainerState(
     fallbackCornerRadius: Dp = getUIKitShapes().circular,
     expectHeight: Dp = getUIKitLayout().interactiveHotspot,
     expectWidth: Dp = getUIKitLayout().interactiveHotspot,
-    minMargin: Dp = getUIKitLayout().mediumSpacing,
+    minMargin: Dp = getUIKitLayout().screenSideSpacing,
     maxMargin: Dp = getUIKitLayout().x4Spacing,
     fillWidth: Boolean = true,
     fillHeight: Boolean = false,

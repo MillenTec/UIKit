@@ -19,6 +19,10 @@ sealed class UIKitSymbolAbility {
     object Disappear: UIKitSymbolAbility()
     object Bounce: UIKitSymbolAbility()
     data class MultiState(val states: List<String>): UIKitSymbolAbility()
+
+    object VariableColor: UIKitSymbolAbility()
+
+    object Progressable: UIKitSymbolAbility()
 }
 
 /**
@@ -150,7 +154,15 @@ abstract class UIKitSymbol(
             }
 
             filterGroups.forEach { group ->
-                tree.addParallel(UIKitSymbolAnimNode.scaleTo(
+                tree.addParallel(UIKitSymbolAnimNode.scaleCenterXTo(
+                    group.id,
+                    targetValue = viewportSize.width / 2,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.scaleCenterYTo(
+                    group.id,
+                    targetValue = viewportSize.height / 2,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.scaleTo(
                     group.id,
                     targetValue = 1f,
                     animateSpec = tween(
@@ -170,7 +182,15 @@ abstract class UIKitSymbol(
             }
 
             remainGroups.forEach { group ->
-                tree.addParallel(UIKitSymbolAnimNode.scaleTo(
+                tree.addParallel(UIKitSymbolAnimNode.scaleCenterXTo(
+                    group.id,
+                    targetValue = viewportSize.width / 2,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.scaleCenterYTo(
+                    group.id,
+                    targetValue = viewportSize.height / 2,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.scaleTo(
                     group.id,
                     targetValue = 1f,
                     animateSpec = null
@@ -184,7 +204,15 @@ abstract class UIKitSymbol(
 
         remainLayers.forEach { layer ->
             layer.groups.forEach { group ->
-                tree.addParallel(UIKitSymbolAnimNode.scaleTo(
+                tree.addParallel(UIKitSymbolAnimNode.scaleCenterXTo(
+                    group.id,
+                    targetValue = viewportSize.width / 2,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.scaleCenterYTo(
+                    group.id,
+                    targetValue = viewportSize.height / 2,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.scaleTo(
                     group.id,
                     targetValue = 1f,
                     animateSpec = null
@@ -241,7 +269,15 @@ abstract class UIKitSymbol(
             }
 
             filteredGroups.forEach { group ->
-                tree.addParallel(UIKitSymbolAnimNode.scaleTo(
+                tree.addParallel(UIKitSymbolAnimNode.scaleCenterXTo(
+                    group.id,
+                    targetValue = viewportSize.width / 2,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.scaleCenterYTo(
+                    group.id,
+                    targetValue = viewportSize.height / 2,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.scaleTo(
                     group.id,
                     targetValue = 0.8f,
                     animateSpec = tween(
@@ -261,7 +297,15 @@ abstract class UIKitSymbol(
             }
 
             remainGroups.forEach { group ->
-                tree.addParallel(UIKitSymbolAnimNode.scaleTo(
+                tree.addParallel(UIKitSymbolAnimNode.scaleCenterXTo(
+                    group.id,
+                    targetValue = viewportSize.width / 2,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.scaleCenterYTo(
+                    group.id,
+                    targetValue = viewportSize.height / 2,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.scaleTo(
                     group.id,
                     targetValue = 0.8f,
                     animateSpec = null
@@ -275,7 +319,15 @@ abstract class UIKitSymbol(
 
         remainLayers.forEach { layer ->
             layer.groups.forEach { group ->
-                tree.addParallel(UIKitSymbolAnimNode.scaleTo(
+                tree.addParallel(UIKitSymbolAnimNode.scaleCenterXTo(
+                    group.id,
+                    targetValue = viewportSize.width / 2,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.scaleCenterYTo(
+                    group.id,
+                    targetValue = viewportSize.height / 2,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.scaleTo(
                     group.id,
                     targetValue = 0.8f,
                     animateSpec = null
@@ -296,7 +348,8 @@ abstract class UIKitSymbol(
     ): UIKitSymbolAnimTree? = null
 
     open fun bounceEffect(
-        states: List<UIKitSymbolAnimState>? = null
+        states: List<UIKitSymbolAnimState>? = null,
+        downward: Boolean,
     ): UIKitSymbolAnimTree? {
         val tree = UIKitSymbolAnimTree()
         layers.filter {
@@ -323,15 +376,23 @@ abstract class UIKitSymbol(
             }
 
             filterGroups.forEach { group ->
-                tree.addParallel(UIKitSymbolAnimNode.scaleTo(
+                tree.addParallel(UIKitSymbolAnimNode.scaleCenterXTo(
+                    group.id,
+                    targetValue = viewportSize.width / 2,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.scaleCenterYTo(
+                    group.id,
+                    targetValue = viewportSize.height / 2,
+                    animateSpec = null
+                )).addParallel(UIKitSymbolAnimNode.scaleTo(
                     group.id,
                     targetValue = 1f,
                     animateSpec = keyframes {
                         durationMillis = 575
                         delayMillis = index * 80
 
-                        1.1f at 200 using CubicBezierEasing(0f, 0f,0.382f, 1f)
-                        0.95f at 400 using CubicBezierEasing(0.382f, 1f, 0f, 0f)
+                        (if (downward) 0.9f else 1.1f) at 200 using CubicBezierEasing(0f, 0f,0.382f, 1f)
+                        (if (downward) 1.05f else 0.95f) at 400 using CubicBezierEasing(0.382f, 1f, 0f, 0f)
                         1f at 500 using CubicBezierEasing(0f, 0f,0.382f, 1f)
                     }
                 ))
@@ -340,6 +401,15 @@ abstract class UIKitSymbol(
 
         return tree
     }
+
+    open fun variableColorEffect(
+        states: List<UIKitSymbolAnimState>?
+    ): UIKitSymbolInfiniteAnimTree? = null
+
+    open fun progressibleEffect(
+        progress: Float,
+        states: List<UIKitSymbolAnimState>?,
+    ): UIKitSymbolAnimTree? = null
 }
 
 /**
@@ -379,7 +449,7 @@ class UIKitImageVectorSymbol(
         return null
     }
 
-    override fun bounceEffect(states: List<UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {
+    override fun bounceEffect(states: List<UIKitSymbolAnimState>?, downward: Boolean): UIKitSymbolAnimTree? {
         return null
     }
 }
