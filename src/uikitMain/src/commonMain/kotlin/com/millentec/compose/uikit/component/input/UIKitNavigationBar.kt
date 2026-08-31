@@ -1,9 +1,10 @@
 ﻿package com.millentec.compose.uikit.component.input
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
@@ -23,6 +24,7 @@ import com.millentec.compose.uikit.component.layout.UIKitAdaptiveCornerContainer
 import com.millentec.compose.uikit.component.layout.UIKitAdaptiveCornerContainerState
 import com.millentec.compose.uikit.component.layout.rememberUIKitAdaptiveCornerContainerState
 import com.millentec.compose.uikit.foundation.graphics.AcrylicMaterialState
+import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.layout.UIKitAlignment
 import com.millentec.compose.uikit.foundation.layout.UIKitNavigationBarScope
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
@@ -30,6 +32,7 @@ import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Alert
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Settings
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Text
+import com.millentec.compose.uikit.symbols.UIKitImageVectorSymbol
 import com.millentec.compose.uikit.theme.getUIKitAnimate
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
@@ -49,10 +52,34 @@ private fun Preview(){
             checkedIndex = 1,
             onChecked = { },
         ) {
-            TextWithIcon("Text", FluentIcons.Text)
-            TextWithIcon("Accessibility", FluentIcons.Accessibility)
-            TextWithIcon("Settings", FluentIcons.Settings)
-            TextWithIcon("Alert", FluentIcons.Alert)
+            TextWithIcon(
+                text = "Text",
+                symbol = UIKitImageVectorSymbol(FluentIcons.Text),
+                color = getUIKitColors().textFillColorPrimaryBrush,
+                colorChecked = getUIKitColors().highlightColorPrimaryBrush,
+                contentDescription = "Text",
+            )
+            TextWithIcon(
+                text = "Accessibility",
+                symbol = UIKitImageVectorSymbol(FluentIcons.Accessibility),
+                color = getUIKitColors().textFillColorPrimaryBrush,
+                colorChecked = getUIKitColors().highlightColorPrimaryBrush,
+                contentDescription = "Accessibility",
+            )
+            TextWithIcon(
+                text = "Settings",
+                symbol = UIKitImageVectorSymbol(FluentIcons.Settings),
+                color = getUIKitColors().textFillColorPrimaryBrush,
+                colorChecked = getUIKitColors().highlightColorPrimaryBrush,
+                contentDescription = "Settings",
+            )
+            TextWithIcon(
+                text = "Alert",
+                symbol = UIKitImageVectorSymbol(FluentIcons.Alert),
+                color = getUIKitColors().textFillColorPrimaryBrush,
+                colorChecked = getUIKitColors().highlightColorPrimaryBrush,
+                contentDescription = "Alert",
+            )
         }
     }
 }
@@ -66,7 +93,7 @@ fun UIKitNavigationBar(
     onChecked: (Int) -> Unit,
     position: UIKitAlignment = UIKitAlignment.BottomCenter,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
-    indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.3f),
+    indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.2f),
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialState? = null,
     shadowEnable: Boolean = true,
@@ -104,7 +131,7 @@ fun UIKitNavigationBar(
     checkedIndex: Int,
     onChecked: (Int) -> Unit,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
-    indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.3f),
+    indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.2f),
     state: UIKitAdaptiveCornerContainerState,
     acrylicEffectEnabled: Boolean = true,
     acrylicState: AcrylicMaterialState? = null,
@@ -312,39 +339,20 @@ fun UIKitNavigationBar(
                     ) {
                         items.forEachIndexed { index, item ->
                             val checked = index == checkedIndex
-                            val pressed = remember { mutableStateOf(false) }
-                            val scaleAnimated by animateFloatAsState(
-                                targetValue = if (pressed.value) 0.9f else 1f,
-                                animationSpec = tween(
-                                    getUIKitAnimate().transformRegularDurationMillis,
-                                    easing = FastOutSlowInEasing
-                                )
-                            )
 
                             Column(
                                 modifier = Modifier
                                     .fillMaxHeight()
                                     .weight(1f)
                                     .background(Color.Transparent)
-                                    .then(
-                                        if (checked) Modifier else
-                                            Modifier.pointerInput(Unit) {
-                                                detectTapGestures(
-                                                    onPress = {
-                                                        pressed.value = true
-                                                        tryAwaitRelease()
-                                                        pressed.value = false
-                                                    },
-                                                    onTap = {
-                                                        onChecked(index)
-                                                    }
-                                                )
-                                            })  // 将 padding 置于 pointerInput 之后可以最大化可交互面积
-                                    .padding(getUIKitLayout().smallSpacing)
-                                    .graphicsLayer(
-                                        scaleX = scaleAnimated,
-                                        scaleY = scaleAnimated
-                                    ),
+                                    .then(if (checked) Modifier else
+                                        Modifier.uikitClickable(
+                                            onClick = {
+                                                onChecked(index)
+                                            },
+                                            indicationEnabled = false
+                                        ))  // 将 padding 置于 checkable 之后可以最大化可交互面积
+                                    .padding(getUIKitLayout().smallSpacing),
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally,
                             ) {

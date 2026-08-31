@@ -40,7 +40,14 @@ import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.layout.UIKitAlignment
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Add
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Scales
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Settings
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.certificate
+import com.millentec.compose.uikit.symbols.UIKitSymbols
+import com.millentec.compose.uikit.symbols.builtin.shapes.DesignIdeas
+import com.millentec.compose.uikit.symbols.builtin.systemui.Home
+import com.millentec.compose.uikit.symbols.builtin.systemui.ToggleMultiple
 import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.viewmodels.MainViewModel
 import com.millentec.compose.uikit.views.pages.*
@@ -201,17 +208,17 @@ fun MainView() {
                         ) {
                             TextWithIcon(
                                 text = strings.navigation.home,
-                                icon = FluentIcons.Home
+                                symbol = UIKitSymbols.systemUI.Home
                             )
 
                             TextWithIcon(
                                 text = strings.navigation.controls,
-                                icon = FluentIcons.toggleMultiple()
+                                symbol = UIKitSymbols.systemUI.ToggleMultiple
                             )
 
                             TextWithIcon(
                                 text = strings.navigation.designs,
-                                icon = FluentIcons.designIdeas()
+                                symbol = UIKitSymbols.systemUI.DesignIdeas
                             )
                         }
                     }

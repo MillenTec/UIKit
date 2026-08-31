@@ -11,4 +11,6 @@ enum class UIKitAnimSelector {
     Rotate,
     RotateCenterX,
     RotateCenterY,
+    TranslateX,
+    TranslateY,
 }

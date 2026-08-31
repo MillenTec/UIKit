@@ -7,15 +7,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
+import com.millentec.compose.uikit.component.layout.UIKitIcon
+import com.millentec.compose.uikit.symbols.UIKitImageVectorSymbol
+import com.millentec.compose.uikit.symbols.UIKitSymbol
+import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
+import com.millentec.compose.uikit.symbols.animate.bounceEffect
+import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.getUIKitAnimate
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitTypography
@@ -53,7 +57,7 @@ class UIKitNavigationBarScope : UIKitItemScope<UIKitCheckableItem>() {
 
     @Composable
     fun Icon(
-        icon: ImageVector,
+        symbol: UIKitSymbol,
         color: Color = getUIKitColors().textFillColorPrimaryBrush,
         colorChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
         contentDescription: String?,
@@ -72,21 +76,52 @@ class UIKitNavigationBarScope : UIKitItemScope<UIKitCheckableItem>() {
                     )
                 )
 
-                Icon(
+                val trigger = remember { mutableStateOf(false) }
+                LaunchedEffect(isChecked) {
+                    if (isChecked) {
+                        trigger.value = !trigger.value
+                    }
+                }
+
+                UIKitIcon(
                     modifier = Modifier
                         .fillMaxSize(),
-                    imageVector = icon,
+                    symbol = symbol,
                     contentDescription = contentDescription,
-                    tint = colorAnimated
+                    symbolStyle = UIKitSymbolStyle.Monochrome(colorAnimated),
+                    symbolEffect = UIKitSymbolEffect()
+                        .bounceEffect(trigger.value, -2f)
                 )
             }
         })
     }
 
+    @Deprecated(
+        message = "Use UIKitSymbol overload instead.",
+        replaceWith = ReplaceWith(
+        "Icon( symbol = UIKitImageVectorSymbol(icon), contentDescription = contentDescription, color = color, colorChecked = colorChecked, )",
+        "com.millentec.compose.uikit.symbols.UIKitImageVectorSymbol"
+        )
+    )
+    @Composable
+    fun Icon(
+        icon: ImageVector,
+        color: Color = getUIKitColors().textFillColorPrimaryBrush,
+        colorChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
+        contentDescription: String?,
+    ) {
+        Icon(
+            symbol = UIKitImageVectorSymbol(icon),
+            contentDescription = contentDescription,
+            color = color,
+            colorChecked = colorChecked,
+        )
+    }
+
     @Composable
     fun TextWithIcon(
         text: String,
-        icon: ImageVector,
+        symbol: UIKitSymbol,
         color: Color = getUIKitColors().textFillColorPrimaryBrush,
         colorChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
         contentDescription: String? = text,
@@ -105,17 +140,26 @@ class UIKitNavigationBarScope : UIKitItemScope<UIKitCheckableItem>() {
                     )
                 )
 
+                val trigger = remember { mutableStateOf(false) }
+                LaunchedEffect(isChecked) {
+                    if (isChecked) {
+                        trigger.value = !trigger.value
+                    }
+                }
+
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Icon(
+                    UIKitIcon(
                         modifier = Modifier
                             .weight(1f)
-                            .aspectRatio(icon.defaultWidth / icon.defaultHeight),
-                        imageVector = icon,
+                            .aspectRatio(symbol.defaultSize.width / symbol.defaultSize.height),
+                        symbol = symbol,
                         contentDescription = contentDescription,
-                        tint = colorAnimated,
+                        symbolStyle = UIKitSymbolStyle.Monochrome(colorAnimated),
+                        symbolEffect = UIKitSymbolEffect()
+                            .bounceEffect(trigger.value, -2f)
                     )
 
                     Text(
@@ -128,6 +172,30 @@ class UIKitNavigationBarScope : UIKitItemScope<UIKitCheckableItem>() {
                 }
             }
         })
+    }
+
+    @Deprecated(
+        message = "Use UIKitSymbol overload instead.",
+        replaceWith = ReplaceWith(
+            "TextWithIcon( text = text, symbol = UIKitImageVectorSymbol(icon), color = color, colorChecked = colorChecked, contentDescription = contentDescription, )",
+            "com.millentec.compose.uikit.symbols.UIKitImageVectorSymbol"
+        )
+    )
+    @Composable
+    fun TextWithIcon(
+        text: String,
+        icon: ImageVector,
+        color: Color = getUIKitColors().textFillColorPrimaryBrush,
+        colorChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
+        contentDescription: String? = text,
+    ) {
+        TextWithIcon(
+            text = text,
+            symbol = UIKitImageVectorSymbol(icon),
+            color = color,
+            colorChecked = colorChecked,
+            contentDescription = contentDescription,
+        )
     }
 
     @Suppress("FunctionName")

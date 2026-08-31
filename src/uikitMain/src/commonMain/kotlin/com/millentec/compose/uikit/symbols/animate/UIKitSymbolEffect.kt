@@ -32,6 +32,8 @@ private suspend fun standardExecute(
                         Rotate -> state.rotateState
                         RotateCenterX -> state.scaleCenterXState
                         RotateCenterY -> state.scaleCenterYState
+                        TranslateX -> state.translateXState
+                        TranslateY -> state.translateYState
                     }
 
                     if (snapTo || parallel.animateSpec == null) {

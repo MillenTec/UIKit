@@ -133,7 +133,7 @@ data class UIKitColors(
             textFillColorDisabled = Color(0xFF4D4D4F),
             lineFillColorPrimaryBrush = Color(0xFF303032),
             lineFillColorDisabled = Color(0xFF4D4D4F),
-            highlightColorPrimaryBrush = Color(0xFF0071E3),
+            highlightColorPrimaryBrush = Color(0xFF0091FF),
             successGreenColorPrimaryBrush = Color(0xFF30D158),
             warningYellowColorPrimaryBrush = Color(0xFFFFD600),
             errorRedColorPrimaryBrush = Color(0xFFFF4245),

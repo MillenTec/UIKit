@@ -152,6 +152,32 @@ data class UIKitSymbolAnimNode(
                 animateSpec = animateSpec
             )
         }
+
+        fun translateXTo(
+            groupSelector: String,
+            targetValue: Float,
+            animateSpec: AnimationSpec<Float>?
+        ): UIKitSymbolAnimNode {
+            return UIKitSymbolAnimNode(
+                type = UIKitAnimSelector.TranslateX,
+                groupSelector = groupSelector,
+                targetValue = targetValue,
+                animateSpec = animateSpec
+            )
+        }
+
+        fun translateYTo(
+            groupSelector: String,
+            targetValue: Float,
+            animateSpec: AnimationSpec<Float>?
+        ): UIKitSymbolAnimNode {
+            return UIKitSymbolAnimNode(
+                type = UIKitAnimSelector.TranslateY,
+                groupSelector = groupSelector,
+                targetValue = targetValue,
+                animateSpec = animateSpec
+            )
+        }
     }
 }
 

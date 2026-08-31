@@ -14,6 +14,7 @@ class UIKitSymbolAnimState(
     initialPathTrimEnd: Float = 1f,
     initialRotate: Float = 0f,
     initialRotateCenter: Offset = Offset(10f, 10f),
+    initialTranslate: Offset = Offset(0f, 0f),
 ) {
     val visible: Boolean
         get() = alphaState.value > 0f
@@ -39,6 +40,8 @@ class UIKitSymbolAnimState(
                 Rotate -> true
                 RotateCenterX -> true
                 RotateCenterY -> true
+                TranslateX -> true
+                TranslateY -> true
             }
         }
 
@@ -100,6 +103,16 @@ class UIKitSymbolAnimState(
         initialValue = initialRotateCenter.y,
         typeConverter = Float.VectorConverter,
     )
+
+    val translateXState = Animatable(
+        initialValue = initialTranslate.x,
+        typeConverter = Float.VectorConverter,
+    )
+
+    val translateYState = Animatable(
+        initialValue = initialTranslate.y,
+        typeConverter = Float.VectorConverter,
+    )
 }
 
 data class UIKitSymbolGroupState(
@@ -132,6 +145,8 @@ data class UIKitSymbolGroupState(
                 Rotate -> true
                 RotateCenterX -> true
                 RotateCenterY -> true
+                TranslateX -> true
+                TranslateY -> true
             }
         }
 

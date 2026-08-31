@@ -105,7 +105,8 @@ val UIKitSystemUISymbols.Wifi: UIKitSymbol
                 UIKitSymbolAbility.Appear,
                 UIKitSymbolAbility.Disappear,
                 UIKitSymbolAbility.Bounce,
-                UIKitSymbolAbility.VariableColor
+                UIKitSymbolAbility.VariableColor,
+                UIKitSymbolAbility.MultiState(listOf("default", "disabled"))
             )
 
             override val tags: List<String> = listOf(
