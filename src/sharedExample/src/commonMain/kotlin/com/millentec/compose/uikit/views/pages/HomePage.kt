@@ -17,7 +17,7 @@ import com.millentec.compose.uikit.component.layout.UIKitIcon
 import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.animate.*
 import com.millentec.compose.uikit.symbols.builtin.systemui.AddCircle
-import com.millentec.compose.uikit.symbols.builtin.systemui.Speaker
+import com.millentec.compose.uikit.symbols.builtin.systemui.Wifi
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.theme.getUIKitColors
@@ -71,7 +71,7 @@ fun HomePage() {
                     UIKitIcon(
                         modifier = Modifier
                             .size(100.dp),
-                        symbol = UIKitSymbols.systemUI.Speaker,
+                        symbol = UIKitSymbols.systemUI.Wifi,
                         contentDescription = "Speaker",
                         symbolStyle = if (style.value) UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush)
                         else UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
@@ -79,7 +79,7 @@ fun HomePage() {
                             .visibleEffect(visible0.value)
                             .stateEffect(if (enabled0.value) "default" else "disabled")
                             .bounceEffect(bounceTrigger.value, -1f)
-                            .variableColorEffect(isActive.value)
+                            .variableColorEffect(isActive.value, initialValue = 0f)
                     )
 
                     UIKitIcon(

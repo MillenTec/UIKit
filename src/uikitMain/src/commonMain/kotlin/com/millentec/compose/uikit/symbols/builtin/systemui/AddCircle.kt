@@ -96,6 +96,10 @@ val UIKitSystemUISymbols.AddCircle: UIKitSymbol
                 UIKitSymbolAbility.MultiState(listOf("add", "checkmark"))
             )
 
+            override val tags: List<String> = listOf(
+                "Add"
+            )
+
             @Composable
             override fun colorSet(
                 style: UIKitSymbolStyle,

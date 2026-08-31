@@ -1,26 +1,24 @@
-package com.millentec.compose.uikit.symbols.builtin.systemui
+package com.millentec.compose.uikit.symbols.builtin.media
 
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.graphics.UIKitBrush
+import com.millentec.compose.uikit.symbols.UIKitMediaSymbols
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
-import com.millentec.compose.uikit.symbols.UIKitSystemUISymbols
 import com.millentec.compose.uikit.symbols.animate.*
+import com.millentec.compose.uikit.symbols.builtin.UIKitSymbolDisable
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.getUIKitColors
 
-val UIKitSystemUISymbols.Speaker: UIKitSymbol
+val UIKitMediaSymbols.Speaker: UIKitSymbol
     get() {
         if (_Speaker != null)
             return _Speaker!!
@@ -94,37 +92,7 @@ val UIKitSystemUISymbols.Speaker: UIKitSymbol
                             close()
                         }
                     },
-                    UIKitSymbolLayer("disable", 1).apply {
-                        group(
-                            id = "disable.mask",
-                            drawType = UIKitPathDrawType.MaskStroke(
-                                lineWidth = 1f,
-                                cap = StrokeCap.Round,
-                                join = StrokeJoin.Round
-                            ),
-                            defaultState = UIKitSymbolGroupState(
-                                pathTrimEnd = 0f
-                            )
-                        ) {
-                            moveTo(3.21f, 1.79f)
-                            lineTo(18.2f, 16.8f)
-                        }
-
-                        group(
-                            id = "disable",
-                            drawType = UIKitPathDrawType.Stroke(
-                                lineWidth = 1f,
-                                cap = StrokeCap.Round,
-                                join = StrokeJoin.Round
-                            ),
-                            defaultState = UIKitSymbolGroupState(
-                                pathTrimEnd = 0f
-                            )
-                        ) {
-                            moveTo(2.5f, 2.5f)
-                            lineTo(17.5f, 17.5f)
-                        }
-                    }
+                    UIKitSymbolDisable()
                 )
 
             override val abilityStatement: List<UIKitSymbolAbility> = listOf(
@@ -133,6 +101,10 @@ val UIKitSystemUISymbols.Speaker: UIKitSymbol
                 UIKitSymbolAbility.Bounce,
                 UIKitSymbolAbility.VariableColor,
                 UIKitSymbolAbility.MultiState(listOf("default", "disabled"))
+            )
+
+            override val tags: List<String> = listOf(
+                "Sound", "Audio", "Speaker", "Volume", "Media"
             )
 
             @Composable
@@ -174,111 +146,23 @@ val UIKitSystemUISymbols.Speaker: UIKitSymbol
                 }
             }
 
-            override fun stateEffect(state: String, animateStates: List<UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {
-                return when (state) {
-                    "default" -> {
-                        UIKitSymbolAnimTree().addParallel(
-                            UIKitSymbolAnimNode.pathTrimStartTo(
-                                groupSelector = "disable",
-                                targetValue = 0f,
-                                animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
-                            )
-                        ).addParallel(
-                            UIKitSymbolAnimNode.pathTrimEndTo(
-                                groupSelector = "disable",
-                                targetValue = 0f,
-                                animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
-                            )
-                        ).addParallel(
-                            UIKitSymbolAnimNode.pathTrimStartTo(
-                                groupSelector = "disable.mask",
-                                targetValue = 0f,
-                                animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
-                            )
-                        ).addParallel(
-                            UIKitSymbolAnimNode.pathTrimEndTo(
-                                groupSelector = "disable.mask",
-                                targetValue = 0f,
-                                animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
-                            )
-                        )
-                    }
-                    "disabled" -> {
-                        UIKitSymbolAnimTree().addParallel(
-                            UIKitSymbolAnimNode.pathTrimStartTo(
-                                groupSelector = "disable",
-                                targetValue = 0f,
-                                animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
-                            )
-                        ).addParallel(
-                            UIKitSymbolAnimNode.pathTrimEndTo(
-                                groupSelector = "disable",
-                                targetValue = 1f,
-                                animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
-                            )
-                        ).addParallel(
-                            UIKitSymbolAnimNode.pathTrimStartTo(
-                                groupSelector = "disable.mask",
-                                targetValue = 0f,
-                                animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
-                            )
-                        ).addParallel(
-                            UIKitSymbolAnimNode.pathTrimEndTo(
-                                groupSelector = "disable.mask",
-                                targetValue = 1f,
-                                animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
-                            )
-                        )
-                    }
-                    else -> null
-                }
-            }
-
-            override fun variableColorEffect(states: List<UIKitSymbolAnimState>?): UIKitSymbolInfiniteAnimTree {
+            override fun variableColorEffect(
+                states: List<UIKitSymbolAnimState>?,
+                initialValue: Float,
+                targetValue: Float
+            ): UIKitSymbolInfiniteAnimTree {
                 return UIKitSymbolInfiniteAnimTree(
                     start = UIKitSymbolAnimTree()
-                        .addParallel(UIKitSymbolAnimNode.alphaTo(
-                            groupSelector = "wave0",
-                            targetValue = 0.6f,
-                            animateSpec = tween(200, easing = LinearEasing),
-                        ))
-                        .addParallel(UIKitSymbolAnimNode.alphaTo(
-                            groupSelector = "wave1",
-                            targetValue = 0.6f,
-                            animateSpec = tween(200, easing = LinearEasing)
-                        )),
+                        .addParallel(UIKitSymbolAnimNode.alphaTo(groupSelector = "wave0", targetValue = initialValue, animateSpec = tween(200, easing = LinearEasing)))
+                        .addParallel(UIKitSymbolAnimNode.alphaTo(groupSelector = "wave1", targetValue = initialValue, animateSpec = tween(200, easing = LinearEasing))),
                     body = UIKitSymbolAnimTree()
-                        .addSequential(UIKitSymbolAnimNode.alphaTo(
-                            groupSelector = "wave0",
-                            targetValue = 1f,
-                            animateSpec = tween(200, easing = LinearEasing, delayMillis = 200),
-                        ))
-                        .addSequential(UIKitSymbolAnimNode.alphaTo(
-                            groupSelector = "wave1",
-                            targetValue = 1f,
-                            animateSpec = tween(200, easing = LinearEasing, delayMillis = 200),
-                        ))
-                        .addSequential(UIKitSymbolAnimNode.alphaTo(
-                            groupSelector = "wave0",
-                            targetValue = 0.6f,
-                            animateSpec = tween(200, easing = LinearEasing, delayMillis = 200),
-                        ))
-                        .addParallel(UIKitSymbolAnimNode.alphaTo(
-                            groupSelector = "wave1",
-                            targetValue = 0.6f,
-                            animateSpec = tween(200, easing = LinearEasing, delayMillis = 200),
-                        )),
+                        .addSequential(UIKitSymbolAnimNode.alphaTo(groupSelector = "wave0", targetValue = targetValue, animateSpec = tween(200, easing = LinearEasing, delayMillis = 200)))
+                        .addSequential(UIKitSymbolAnimNode.alphaTo(groupSelector = "wave1", targetValue = targetValue, animateSpec = tween(200, easing = LinearEasing, delayMillis = 200)))
+                        .addSequential(UIKitSymbolAnimNode.alphaTo(groupSelector = "wave0", targetValue = initialValue, animateSpec = tween(200, easing = LinearEasing, delayMillis = 200)))
+                        .addParallel(UIKitSymbolAnimNode.alphaTo(groupSelector = "wave1", targetValue = initialValue, animateSpec = tween(200, easing = LinearEasing, delayMillis = 200))),
                     end = UIKitSymbolAnimTree()
-                        .addParallel(UIKitSymbolAnimNode.alphaTo(
-                            groupSelector = "wave0",
-                            targetValue = 1f,
-                            animateSpec = tween(200, easing = LinearEasing),
-                        ))
-                        .addParallel(UIKitSymbolAnimNode.alphaTo(
-                            groupSelector = "wave1",
-                            targetValue = 1f,
-                            animateSpec = tween(200, easing = LinearEasing),
-                        ))
+                        .addParallel(UIKitSymbolAnimNode.alphaTo(groupSelector = "wave0", targetValue = targetValue, animateSpec = tween(200, easing = LinearEasing)))
+                        .addParallel(UIKitSymbolAnimNode.alphaTo(groupSelector = "wave1", targetValue = targetValue, animateSpec = tween(200, easing = LinearEasing)))
                 )
             }
         }

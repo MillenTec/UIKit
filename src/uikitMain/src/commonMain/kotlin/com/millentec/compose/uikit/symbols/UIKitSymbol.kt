@@ -1,9 +1,6 @@
 package com.millentec.compose.uikit.symbols
 
-import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.keyframes
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -45,6 +42,8 @@ abstract class UIKitSymbol(
      * 图标声明所具备的动画效果能力, 可用于动画调用参考
      */
     abstract val abilityStatement: List<UIKitSymbolAbility>?
+
+    open val tags: List<String> = listOf()
 
     /**
      * 图标各层的颜色集
@@ -345,7 +344,67 @@ abstract class UIKitSymbol(
     open fun stateEffect(
         state: String,
         animateStates: List<UIKitSymbolAnimState>? = null
-    ): UIKitSymbolAnimTree? = null
+    ): UIKitSymbolAnimTree? {
+        return when (state) {
+            "default" -> {
+                if (!layers.any { it.id == "disable" }) return null
+                UIKitSymbolAnimTree().addParallel(
+                    UIKitSymbolAnimNode.pathTrimStartTo(
+                        groupSelector = "disable",
+                        targetValue = 0f,
+                        animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
+                    )
+                ).addParallel(
+                    UIKitSymbolAnimNode.pathTrimEndTo(
+                        groupSelector = "disable",
+                        targetValue = 0f,
+                        animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
+                    )
+                ).addParallel(
+                    UIKitSymbolAnimNode.pathTrimStartTo(
+                        groupSelector = "disable.mask",
+                        targetValue = 0f,
+                        animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
+                    )
+                ).addParallel(
+                    UIKitSymbolAnimNode.pathTrimEndTo(
+                        groupSelector = "disable.mask",
+                        targetValue = 0f,
+                        animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
+                    )
+                )
+            }
+            "disabled" -> {
+                if (!layers.any { it.id == "disable" }) return null
+                UIKitSymbolAnimTree().addParallel(
+                    UIKitSymbolAnimNode.pathTrimStartTo(
+                        groupSelector = "disable",
+                        targetValue = 0f,
+                        animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
+                    )
+                ).addParallel(
+                    UIKitSymbolAnimNode.pathTrimEndTo(
+                        groupSelector = "disable",
+                        targetValue = 1f,
+                        animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
+                    )
+                ).addParallel(
+                    UIKitSymbolAnimNode.pathTrimStartTo(
+                        groupSelector = "disable.mask",
+                        targetValue = 0f,
+                        animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
+                    )
+                ).addParallel(
+                    UIKitSymbolAnimNode.pathTrimEndTo(
+                        groupSelector = "disable.mask",
+                        targetValue = 1f,
+                        animateSpec = tween(durationMillis = 260, easing = FastOutSlowInEasing)
+                    )
+                )
+            }
+            else -> null
+        }
+    }
 
     open fun bounceEffect(
         states: List<UIKitSymbolAnimState>? = null,
@@ -403,7 +462,9 @@ abstract class UIKitSymbol(
     }
 
     open fun variableColorEffect(
-        states: List<UIKitSymbolAnimState>?
+        states: List<UIKitSymbolAnimState>?,
+        initialValue: Float,
+        targetValue: Float
     ): UIKitSymbolInfiniteAnimTree? = null
 
     open fun progressibleEffect(

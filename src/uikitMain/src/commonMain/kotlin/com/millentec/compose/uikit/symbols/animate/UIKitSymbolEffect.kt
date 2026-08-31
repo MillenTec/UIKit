@@ -338,7 +338,9 @@ fun UIKitSymbolEffect.progressibleEffect(
 
 @Composable
 fun UIKitSymbolEffect.variableColorEffect(
-    isActive: Boolean
+    isActive: Boolean,
+    initialValue: Float = 0.3f,
+    targetValue: Float = 1f
 ): UIKitSymbolEffect {
     val uuid = remember { Uuid.random().toString() }
 
@@ -346,21 +348,21 @@ fun UIKitSymbolEffect.variableColorEffect(
         uuid = uuid,
         isActive = isActive,
         start = { symbol, states ->
-            val tree = symbol.variableColorEffect(states)
+            val tree = symbol.variableColorEffect(states, initialValue, targetValue)
 
             tree?.let {
                 standardExecute(it.start, states)
             }
         },
         execute = { symbol, states ->
-            val tree = symbol.variableColorEffect(states)
+            val tree = symbol.variableColorEffect(states, initialValue, targetValue)
 
             tree?.let {
                 standardExecute(it.body, states)
             }
         },
         reset = { symbol, states ->
-            val tree = symbol.variableColorEffect(states)
+            val tree = symbol.variableColorEffect(states, initialValue, targetValue)
 
             tree?.let {
                 standardExecute(it.end, states)
@@ -375,6 +377,8 @@ fun UIKitSymbolEffect.variableColorEffect(
 fun UIKitSymbolEffect.variableColorEffect(
     trigger: Any,
     repeat: Int = 1,
+    initialValue: Float = 0.3f,
+    targetValue: Float = 1f
 ): UIKitSymbolEffect {
     val uuid = remember { Uuid.random().toString() }
 
@@ -385,7 +389,7 @@ fun UIKitSymbolEffect.variableColorEffect(
         initializable = false,
         initialize = null,
         execute = { symbol, states ->
-            val tree = symbol.variableColorEffect(states)
+            val tree = symbol.variableColorEffect(states, initialValue, targetValue)
 
             tree?.let {
                 standardExecute(it.start, states)

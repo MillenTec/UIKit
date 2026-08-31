@@ -32,8 +32,8 @@ import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffectNode
 import com.millentec.compose.uikit.symbols.animate.visibleEffect
+import com.millentec.compose.uikit.symbols.builtin.media.Speaker
 import com.millentec.compose.uikit.symbols.builtin.systemui.AddCircle
-import com.millentec.compose.uikit.symbols.builtin.systemui.Speaker
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitPathNode
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
@@ -47,7 +47,7 @@ private fun Preview() {
     UIKitIcon(
         modifier = Modifier
             .size(100.dp),
-        symbol = UIKitSymbols.systemUI.Speaker,
+        symbol = UIKitSymbols.media.Speaker,
         contentDescription = "AddCircle",
         symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush)
     )
@@ -68,7 +68,7 @@ private fun UIKitIconSample() {
     UIKitIcon(
         modifier = Modifier
             .size(32.dp),
-        symbol = UIKitSymbols.systemUI.Speaker,
+        symbol = UIKitSymbols.media.Speaker,
         contentDescription = "Volume",
         symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
         symbolEffect = UIKitSymbolEffect()
@@ -232,7 +232,7 @@ private fun UIKitAnimatableIcon(
                 LaunchedEffect(effect.isActive) {
                     if (effect.isActive) {
                         effect.start
-                        while (effect.isActive) {
+                        while (true) {
                             effect.execute(symbol, animStates)
                         }
                     } else {
