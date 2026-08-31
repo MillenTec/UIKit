@@ -22,9 +22,9 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.layout.UIKitAdaptiveCornerContainer
 import com.millentec.compose.uikit.component.layout.UIKitAdaptiveCornerContainerState
 import com.millentec.compose.uikit.component.layout.rememberUIKitAdaptiveCornerContainerState
+import com.millentec.compose.uikit.foundation.graphics.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.layout.UIKitAlignment
 import com.millentec.compose.uikit.foundation.layout.UIKitNavigationBarScope
-import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Alert
@@ -131,8 +131,6 @@ fun UIKitNavigationBar(
             horizontalArrangement = Arrangement.Center
         ) {
             UIKitAdaptiveCornerContainer(
-                modifier = Modifier
-                    .weight(1f),
                 state = state,
                 background = background,
                 acrylicEffectEnabled = acrylicEffectEnabled,

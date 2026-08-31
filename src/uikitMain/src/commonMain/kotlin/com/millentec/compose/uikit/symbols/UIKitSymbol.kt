@@ -349,7 +349,7 @@ abstract class UIKitSymbol(
 
     open fun bounceEffect(
         states: List<UIKitSymbolAnimState>? = null,
-        downward: Boolean,
+        coefficient: Float,
     ): UIKitSymbolAnimTree? {
         val tree = UIKitSymbolAnimTree()
         layers.filter {
@@ -391,8 +391,8 @@ abstract class UIKitSymbol(
                         durationMillis = 575
                         delayMillis = index * 80
 
-                        (if (downward) 0.9f else 1.1f) at 200 using CubicBezierEasing(0f, 0f,0.382f, 1f)
-                        (if (downward) 1.05f else 0.95f) at 400 using CubicBezierEasing(0.382f, 1f, 0f, 0f)
+                        1f + 0.1f * coefficient at 200 using CubicBezierEasing(0f, 0f,0.382f, 1f)
+                        1f - 0.05f * coefficient at 400 using CubicBezierEasing(0.382f, 1f, 0f, 0f)
                         1f at 500 using CubicBezierEasing(0f, 0f,0.382f, 1f)
                     }
                 ))
@@ -449,7 +449,7 @@ class UIKitImageVectorSymbol(
         return null
     }
 
-    override fun bounceEffect(states: List<UIKitSymbolAnimState>?, downward: Boolean): UIKitSymbolAnimTree? {
+    override fun bounceEffect(states: List<UIKitSymbolAnimState>?, coefficient: Float): UIKitSymbolAnimTree? {
         return null
     }
 }

@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.foundation.materials.UIKitBrush
+import com.millentec.compose.uikit.foundation.graphics.UIKitBrush
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
 import com.millentec.compose.uikit.symbols.UIKitSystemUISymbols

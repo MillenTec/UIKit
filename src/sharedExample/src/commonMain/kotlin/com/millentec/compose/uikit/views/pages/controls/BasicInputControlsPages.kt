@@ -25,7 +25,10 @@ import com.millentec.compose.uikit.foundation.helper.toHsv
 import com.millentec.compose.uikit.foundation.layout.UIKitCardScope
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
-import com.millentec.compose.uikit.theme.*
+import com.millentec.compose.uikit.theme.LocalStrings
+import com.millentec.compose.uikit.theme.getUIKitColors
+import com.millentec.compose.uikit.theme.getUIKitLayout
+import com.millentec.compose.uikit.theme.getUIKitTypography
 import com.millentec.compose.uikit.views.component.CommonSlider
 
 val BasicInputControls = listOf(
@@ -33,7 +36,6 @@ val BasicInputControls = listOf(
         private val buttonSize = mutableStateOf(IntSize.Zero)
         private val buttonEnabled = mutableStateOf(true)
         private val buttonBackground = mutableStateOf<Color?>(null)
-        private val buttonForeground = mutableStateOf<Color?>(null)
         private val buttonCornerRadius = mutableStateOf(1f)
 
         override fun LazyListScope.description() {
@@ -66,21 +68,6 @@ val BasicInputControls = listOf(
                     val uikitColors = getUIKitColors()
                     val count = remember { mutableStateOf(0) }
 
-                    LaunchedEffect(buttonBackground.value) {
-                        val hsv = buttonBackground.value?.toHsv() ?: return@LaunchedEffect
-                        if (hsv.value >= 0.7f) {
-                            if (hsv.alpha < 0.5f)
-                                buttonForeground.value = uikitColors.textFillColorPrimaryBrush
-                            else
-                                buttonForeground.value = UIKitColors.Black
-                        } else {
-                            if (hsv.alpha < 0.5f)
-                                buttonForeground.value = uikitColors.textFillColorPrimaryBrush
-                            else
-                                buttonForeground.value = UIKitColors.White
-                        }
-                    }
-
                     UIKitButton(
                         modifier = Modifier
                             .onSizeChanged {
@@ -92,8 +79,7 @@ val BasicInputControls = listOf(
                         ),
                         enabled = buttonEnabled.value,
                         colors = UIKitButtonColors.default(
-                            background = buttonBackground.value ?: getUIKitColors().contentFillColorTertiaryBrush,
-                            content = buttonForeground.value ?: getUIKitColors().textFillColorPrimaryBrush
+                            background = buttonBackground.value ?: getUIKitColors().contentFillColorTertiaryBrush
                         ),
                         onClick = {
                             count.value++
@@ -136,8 +122,7 @@ val BasicInputControls = listOf(
                         ),
                         enabled = buttonEnabled.value,
                         colors = UIKitButtonColors.default(
-                            background = buttonBackground.value ?: getUIKitColors().contentFillColorTertiaryBrush,
-                            content = buttonForeground.value ?: getUIKitColors().textFillColorPrimaryBrush
+                            background = buttonBackground.value ?: getUIKitColors().contentFillColorTertiaryBrush
                         ),
                         icon = FluentIcons.Add,
                         onClick = {
@@ -232,8 +217,7 @@ val BasicInputControls = listOf(
                     enabled = ${buttonEnabled.value},
                     shape = RoundedCornerShape(${buttonCornerRadius.value * buttonSize.value.height / LocalDensity.current.density / 2}.dp),
                     colors = UIKitButtonColors.default(
-                        background = Color(0x${(buttonBackground.value ?: getUIKitColors().contentFillColorTertiaryBrush).toArgb().toHexString(HexFormat.UpperCase)}),
-                        content = Color(0x${(buttonForeground.value ?: getUIKitColors().textFillColorPrimaryBrush).toArgb().toHexString(HexFormat.UpperCase)})
+                        background = Color(0x${(buttonBackground.value ?: getUIKitColors().contentFillColorTertiaryBrush).toArgb().toHexString(HexFormat.UpperCase)})
                     ),
                     onClick = {
                         count.value++
@@ -246,7 +230,6 @@ val BasicInputControls = listOf(
         private val buttonSize = mutableStateOf(IntSize.Zero)
         private val buttonEnabled = mutableStateOf(true)
         private val buttonBackground = mutableStateOf<Color?>(null)
-        private val buttonForeground = mutableStateOf<Color?>(null)
         private val buttonCornerRadius = mutableStateOf(1f)
 
         override fun LazyListScope.description() {
@@ -279,21 +262,6 @@ val BasicInputControls = listOf(
                     val uikitColors = getUIKitColors()
                     val checked = remember { mutableStateOf(false) }
 
-                    LaunchedEffect(buttonBackground.value) {
-                        val hsv = buttonBackground.value?.toHsv() ?: return@LaunchedEffect
-                        if (hsv.value >= 0.8f) {
-                            if (hsv.alpha < 0.5f)
-                                buttonForeground.value = uikitColors.textFillColorPrimaryBrush
-                            else
-                                buttonForeground.value = UIKitColors.Black
-                        } else {
-                            if (hsv.alpha < 0.5f)
-                                buttonForeground.value = uikitColors.textFillColorPrimaryBrush
-                            else
-                                buttonForeground.value = UIKitColors.White
-                        }
-                    }
-
                     UIKitToggleButton(
                         modifier = Modifier
                             .onSizeChanged {
@@ -306,8 +274,7 @@ val BasicInputControls = listOf(
                         ),
                         enabled = buttonEnabled.value,
                         colors = UIKitToggleButtonColors.default(
-                            backgroundChecked = buttonBackground.value ?: getUIKitColors().highlightColorPrimaryBrush,
-                            contentChecked = buttonForeground.value ?: UIKitColors.White
+                            backgroundChecked = buttonBackground.value ?: getUIKitColors().highlightColorPrimaryBrush
                         ),
                         onCheckedChange = {
                             checked.value = it
@@ -353,8 +320,7 @@ val BasicInputControls = listOf(
                         ),
                         enabled = buttonEnabled.value,
                         colors = UIKitToggleButtonColors.default(
-                            backgroundChecked = buttonBackground.value ?: getUIKitColors().highlightColorPrimaryBrush,
-                            contentChecked = buttonForeground.value ?: UIKitColors.White
+                            backgroundChecked = buttonBackground.value ?: getUIKitColors().highlightColorPrimaryBrush
                         ),
                         icon = FluentIcons.Checkmark,
                         onCheckedChange = {
@@ -385,8 +351,7 @@ val BasicInputControls = listOf(
                     text = "Button",
                     shape = RoundedCornerShape(${buttonCornerRadius.value * buttonSize.value.height / LocalDensity.current.density / 2}.dp),
                     colors = UIKitToggleButtonColors.default(
-                        backgroundChecked = Color(0x${(buttonBackground.value ?: getUIKitColors().contentFillColorTertiaryBrush).toArgb().toHexString(HexFormat.UpperCase)}),
-                        contentChecked = Color(0x${(buttonForeground.value ?: getUIKitColors().textFillColorPrimaryBrush).toArgb().toHexString(HexFormat.UpperCase)})
+                        backgroundChecked = Color(0x${(buttonBackground.value ?: getUIKitColors().contentFillColorTertiaryBrush).toArgb().toHexString(HexFormat.UpperCase)})
                     ),
                     onCheckedChange = {
                         checked.value = it

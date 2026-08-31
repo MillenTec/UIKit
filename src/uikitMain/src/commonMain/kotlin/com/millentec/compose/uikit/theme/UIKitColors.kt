@@ -1,6 +1,8 @@
 ﻿package com.millentec.compose.uikit.theme
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.millentec.compose.uikit.foundation.graphics.contrast
 
 /**
  * UIKitTheme 主题的颜色部分, 默认为亮色主题, 使用 getDark() 方法获取默认的暗色主题
@@ -77,12 +79,38 @@ data class UIKitColors(
     val pointerHoverInteractionColor: Color = pointerInteractionBrush.copy(0.05f),
 
     val pointerTapInteractionColor: Color = pointerInteractionBrush.copy(0.1f),
+
+    val blueThemedBrush: Color = Color(0xFF0088FF),
+    val greenThemedBrush: Color = Color(0xFF34C759),
+    val yellowThemedBrush: Color = Color(0xFFFFCC00),
+    val redThemedBrush: Color = Color(0xFFFF383C),
+    val mintThemedBrush: Color = Color(0xFF00C8B3),
+    val tealThemedBrush: Color = Color(0xFF00C3D0),
+    val cyanThemedBrush: Color = Color(0xFF00C0E8),
+    val indigoThemedBrush: Color = Color(0xFF6155F5),
+    val purpleThemedBrush: Color = Color(0xFFCB30E0),
+    val pinkThemedBrush: Color = Color(0xFFFF2D55),
+    val brownThemedBrush: Color = Color(0xFFAC7F5E),
+    val orangeThemedBrush: Color = Color(0xFFFF8D28),
 ) {
 
     /**
      * UIKitTheme 主题的颜色部分, 默认为亮色主题, 使用 getDark() 方法获取默认的暗色主题
      */
     companion object {
+        @Composable
+        fun contentColor(background: Color, minContrast: Float = 4.5f): Color {
+            return if (Color.contrast(background, getUIKitColors().textFillColorPrimaryBrush) < minContrast) {
+                getUIKitColors().textFillColorPrimaryBrushReversed
+            } else getUIKitColors().textFillColorPrimaryBrush
+        }
+
+        fun contentColor(background: Color, colors: UIKitColors, minContrast: Float = 4.5f): Color {
+            return if (Color.contrast(background, colors.textFillColorPrimaryBrush) < minContrast) {
+                colors.textFillColorPrimaryBrushReversed
+            } else colors.textFillColorPrimaryBrush
+        }
+
         /**
          * 获取默认的亮色主题
          * @return 包含默认亮色主题的 UIKitColors 实例
@@ -110,13 +138,32 @@ data class UIKitColors(
             warningYellowColorPrimaryBrush = Color(0xFFFFD600),
             errorRedColorPrimaryBrush = Color(0xFFFF4245),
             pointerInteractionBrush = Color(0xFFFFFFFF),
+            blueThemedBrush = Color(0xFF0091FF),
+            yellowThemedBrush = Color(0xFFFFD600),
+            redThemedBrush = Color(0xFFFF4245),
+            mintThemedBrush = Color(0xFF00DAC3),
+            tealThemedBrush = Color(0xFF00D2E0),
+            cyanThemedBrush = Color(0xFF3CD3FE),
+            indigoThemedBrush = Color(0xFF6D7CFF),
+            purpleThemedBrush = Color(0xFFDB34F2),
+            pinkThemedBrush = Color(0xFFFF375F),
+            brownThemedBrush = Color(0xFFB78A66),
+            orangeThemedBrush = Color(0xFFFF9230),
         )
 
         val White = Color(0xFFF5F5F7)
-        val Black = Color(0xFF151517)
-        val Blue = Color(0xFF0071E3)
+        val Black = Color(0xFF1D1D1F)
+        val Blue = Color(0xFF0088FF)
         val Green = Color(0xFF34C759)
         val Yellow = Color(0xFFFFCC00)
         val Red = Color(0xFFFF383C)
+        val Mint = Color(0xFF00C8B3)
+        val Teal = Color(0xFF00C3D0)
+        val Cyan = Color(0xFF00C0E8)
+        val Indigo = Color(0xFF6155F5)
+        val Purple = Color(0xFFCB30E0)
+        val Pink = Color(0xFFFF2D55)
+        val Brown = Color(0xFFAC7F5E)
+        val Orange = Color(0xFFFF8D28)
     }
 }

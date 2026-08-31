@@ -1,6 +1,6 @@
 package com.millentec.compose.uikit.symbols.draw
 
-import com.millentec.compose.uikit.foundation.materials.UIKitBrush
+import com.millentec.compose.uikit.foundation.graphics.UIKitBrush
 
 data class UIKitSymbolColor(
     val selector: String,

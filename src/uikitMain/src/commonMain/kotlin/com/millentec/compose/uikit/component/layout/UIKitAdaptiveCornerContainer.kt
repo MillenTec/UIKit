@@ -24,11 +24,11 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.millentec.compose.uikit.foundation.graphics.AcrylicMaterialState
+import com.millentec.compose.uikit.foundation.graphics.acrylicMaterial
 import com.millentec.compose.uikit.foundation.helper.*
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.layout.UIKitAlignment
-import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
-import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
 import com.millentec.compose.uikit.getScreenCornerRadius
 import com.millentec.compose.uikit.theme.*
 

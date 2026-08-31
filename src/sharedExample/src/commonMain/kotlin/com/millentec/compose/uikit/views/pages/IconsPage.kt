@@ -44,14 +44,14 @@ import com.millentec.compose.uikit.component.input.UIKitSliderChangeType
 import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.*
 import com.millentec.compose.uikit.foundation.UIKitHSVColor
+import com.millentec.compose.uikit.foundation.graphics.acrylicMaterialSource
+import com.millentec.compose.uikit.foundation.graphics.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.mapTo
 import com.millentec.compose.uikit.foundation.helper.toHsv
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.layout.UIKitAlignment
-import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
-import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.animatable.*
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*

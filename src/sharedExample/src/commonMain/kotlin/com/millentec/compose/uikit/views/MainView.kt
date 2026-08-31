@@ -34,11 +34,11 @@ import com.millentec.compose.uikit.component.layout.rememberUIKitAdaptiveCornerC
 import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.Pages.*
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
+import com.millentec.compose.uikit.foundation.graphics.acrylicMaterialSource
+import com.millentec.compose.uikit.foundation.graphics.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.layout.UIKitAlignment
-import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
-import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.theme.*

@@ -1,4 +1,4 @@
-package com.millentec.compose.uikit.foundation.materials
+package com.millentec.compose.uikit.foundation.graphics
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Easing

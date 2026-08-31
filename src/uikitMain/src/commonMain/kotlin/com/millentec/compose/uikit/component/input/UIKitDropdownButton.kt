@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.flyout.UIKitDropdownMenu
 import com.millentec.compose.uikit.component.flyout.UIKitFlyouter
+import com.millentec.compose.uikit.foundation.graphics.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.layout.UIKitMenuScope
-import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
 import com.millentec.compose.uikit.theme.*
 
 @Composable

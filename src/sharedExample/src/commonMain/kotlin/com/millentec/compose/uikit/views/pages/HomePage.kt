@@ -78,7 +78,7 @@ fun HomePage() {
                         symbolEffect = UIKitSymbolEffect()
                             .visibleEffect(visible0.value)
                             .stateEffect(if (enabled0.value) "default" else "disabled")
-                            .bounceEffect(bounceTrigger.value, true)
+                            .bounceEffect(bounceTrigger.value, -1f)
                             .variableColorEffect(isActive.value)
                     )
 

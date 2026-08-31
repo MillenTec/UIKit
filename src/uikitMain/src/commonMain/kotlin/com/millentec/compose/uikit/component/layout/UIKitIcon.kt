@@ -23,8 +23,8 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.foundation.materials.UIKitAnimateBrush
-import com.millentec.compose.uikit.foundation.materials.UIKitBrush
+import com.millentec.compose.uikit.foundation.graphics.UIKitAnimateBrush
+import com.millentec.compose.uikit.foundation.graphics.UIKitBrush
 import com.millentec.compose.uikit.symbols.UIKitImageVectorSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbols

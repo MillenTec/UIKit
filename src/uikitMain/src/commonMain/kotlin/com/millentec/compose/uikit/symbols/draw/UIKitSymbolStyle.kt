@@ -1,7 +1,7 @@
 package com.millentec.compose.uikit.symbols.draw
 
 import androidx.compose.ui.graphics.Color
-import com.millentec.compose.uikit.foundation.materials.UIKitBrush
+import com.millentec.compose.uikit.foundation.graphics.UIKitBrush
 
 sealed class UIKitSymbolStyle {
     data class Monochrome(

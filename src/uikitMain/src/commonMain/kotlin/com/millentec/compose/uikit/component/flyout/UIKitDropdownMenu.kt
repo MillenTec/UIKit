@@ -26,9 +26,9 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.layout.UIKitVerticalMenu
+import com.millentec.compose.uikit.foundation.graphics.AcrylicMaterialState
+import com.millentec.compose.uikit.foundation.graphics.acrylicMaterial
 import com.millentec.compose.uikit.foundation.layout.UIKitMenuScope
-import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
-import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Text

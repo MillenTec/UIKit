@@ -20,10 +20,10 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.tooling.preview.Preview
+import com.millentec.compose.uikit.foundation.graphics.AcrylicMaterialState
+import com.millentec.compose.uikit.foundation.graphics.acrylicMaterial
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
-import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
-import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
 import com.millentec.compose.uikit.theme.*
 
 @Composable

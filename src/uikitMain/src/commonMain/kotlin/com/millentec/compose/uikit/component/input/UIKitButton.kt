@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.layout.UIKitSurface
+import com.millentec.compose.uikit.foundation.graphics.contrast
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
@@ -80,7 +81,9 @@ data class UIKitButtonColors(
         fun default(
             background: Color = getUIKitColors().contentFillColorTertiaryBrush,
             backgroundDisabled: Color = getUIKitColors().contentFillColorBrushDisabled,
-            content: Color = getUIKitColors().textFillColorPrimaryBrush,
+            content: Color = if (Color.contrast(background, getUIKitColors().textFillColorPrimaryBrush) < 4.5f) {
+                getUIKitColors().textFillColorPrimaryBrushReversed
+            } else getUIKitColors().textFillColorPrimaryBrush,
             contentDisabled: Color = getUIKitColors().textFillColorDisabled,
             border: Color = getUIKitColors().lineFillColorPrimaryBrush,
             borderDisabled: Color = getUIKitColors().lineFillColorPrimaryBrush
@@ -187,9 +190,9 @@ fun UIKitButton(
 
 @Composable
 fun UIKitButton(
+    modifier: Modifier = Modifier,
     icon: ImageVector,
     iconSize: DpSize = DpSize(icon.defaultWidth, icon.defaultHeight),
-    modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(getUIKitShapes().circular),
     colors: UIKitButtonColors = UIKitButtonColors.default(),
     hasBorder: Boolean = false,
@@ -223,10 +226,10 @@ fun UIKitButton(
 
 @Composable
 fun UIKitButton(
+    modifier: Modifier = Modifier,
     icon: ImageVector,
     iconSize: DpSize = DpSize(icon.defaultWidth, icon.defaultHeight),
     text: String,
-    modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(getUIKitShapes().circular),
     colors: UIKitButtonColors = UIKitButtonColors.default(),
     hasBorder: Boolean = false,

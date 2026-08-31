@@ -32,10 +32,7 @@ class UIKitCardScope : UIKitItemScope<UIKitItem>() {
         iconColor: Color = getUIKitColors().textFillColorPrimaryBrush,
         description: String? = null,
         background: Color = getUIKitColors().contentFillColorSecondaryBrush,
-        contentPadding: PaddingValues = PaddingValues(
-            horizontal = getUIKitLayout().cardPadding,
-            vertical = getUIKitLayout().itemSpacing
-        ),
+        contentPadding: PaddingValues = PaddingValues(getUIKitLayout().cardPadding),
         content: @Composable BoxScope.() -> Unit = {
             Icon(
                 modifier = Modifier

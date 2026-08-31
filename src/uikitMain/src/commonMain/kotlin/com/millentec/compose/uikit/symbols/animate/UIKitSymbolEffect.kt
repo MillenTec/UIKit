@@ -284,7 +284,7 @@ fun UIKitSymbolEffect.stateEffect(
 @Composable
 fun UIKitSymbolEffect.bounceEffect(
     trigger: Any,
-    downward: Boolean = false,
+    coefficient: Float = 1f,
     repeat: Int = 1,
 ): UIKitSymbolEffect {
     val uuid = remember { Uuid.random().toString() }
@@ -296,7 +296,7 @@ fun UIKitSymbolEffect.bounceEffect(
         initializable = false,
         initialize = null,
         execute = { symbol, states ->
-            val bounceTree = symbol.bounceEffect(states, downward)
+            val bounceTree = symbol.bounceEffect(states, coefficient)
 
             bounceTree?.let {
                 standardExecute(it, states)

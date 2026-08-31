@@ -23,12 +23,12 @@ import com.millentec.compose.uikit.SystemUISymbols
 import com.millentec.compose.uikit.component.flyout.UIKitSwipeableFlyoutState
 import com.millentec.compose.uikit.component.input.UIKitHSVColorPicker
 import com.millentec.compose.uikit.component.layout.*
+import com.millentec.compose.uikit.foundation.graphics.acrylicMaterialSource
+import com.millentec.compose.uikit.foundation.graphics.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.toHsv
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
-import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
-import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.ChevronArrowLeft
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Color

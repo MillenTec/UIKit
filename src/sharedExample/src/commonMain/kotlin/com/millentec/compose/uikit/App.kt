@@ -15,10 +15,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.component.flyout.UIKitFlyouter
+import com.millentec.compose.uikit.foundation.graphics.AcrylicMaterialState
+import com.millentec.compose.uikit.foundation.graphics.acrylicMaterialSource
+import com.millentec.compose.uikit.foundation.graphics.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.foundation.helper.toHsv
-import com.millentec.compose.uikit.foundation.materials.AcrylicMaterialState
-import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
-import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.i18n.SupportedLanguages
 import com.millentec.compose.uikit.i18n.strings.Japanese
 import com.millentec.compose.uikit.i18n.strings.SimplifiedChinese

@@ -20,9 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.foundation.materials.acrylicMaterial
-import com.millentec.compose.uikit.foundation.materials.acrylicMaterialSource
-import com.millentec.compose.uikit.foundation.materials.rememberAcrylicMaterialState
+import com.millentec.compose.uikit.foundation.graphics.acrylicMaterial
+import com.millentec.compose.uikit.foundation.graphics.acrylicMaterialSource
+import com.millentec.compose.uikit.foundation.graphics.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.theme.UIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
 

@@ -3,6 +3,7 @@
 import androidx.compose.animation.*
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import com.millentec.compose.uikit.theme.UIKitColors
 
 object UIKitNavigationAnimate {
     val jump: ContentTransform = ContentTransform(
@@ -12,6 +13,7 @@ object UIKitNavigationAnimate {
             + slideOutVertically(animationSpec = tween(160, easing = FastOutSlowInEasing)) { -24 }
     )
 
+    @OptIn(ExperimentalAnimationApi::class)
     val forward: ContentTransform = ContentTransform(
         targetContentEnter = slideInHorizontally(
             animationSpec = tween(380, easing = FastOutSlowInEasing)
@@ -22,16 +24,23 @@ object UIKitNavigationAnimate {
             animationSpec = tween(380, easing = FastOutSlowInEasing)
         ) {
             -420
-        } + fadeOut(tween(380), targetAlpha = 0.2f)
+        } + veilOut(
+            animationSpec = tween(380, easing = FastOutSlowInEasing),
+            targetColor = UIKitColors.Black.copy(0.2f)
+        )
     )
 
+    @OptIn(ExperimentalAnimationApi::class)
     fun backward(targetContentZIndex: Float): ContentTransform {
         return ContentTransform(
             targetContentEnter = slideInHorizontally(
                 animationSpec = tween(380, easing = FastOutSlowInEasing)
             ) {
                 -420
-            } + fadeIn(tween(380), initialAlpha = 0.2f),
+            } + unveilIn(
+                animationSpec = tween(380, easing = FastOutSlowInEasing),
+                initialColor = UIKitColors.Black.copy(0.2f)
+            ),
             initialContentExit = slideOutHorizontally(
                 animationSpec = tween(380, easing = FastOutSlowInEasing)
             ) {
