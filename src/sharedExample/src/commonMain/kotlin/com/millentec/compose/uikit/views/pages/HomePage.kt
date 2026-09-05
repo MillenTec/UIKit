@@ -12,11 +12,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.input.UIKitButton
+import com.millentec.compose.uikit.component.input.UIKitSlider
 import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.UIKitIcon
 import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.animate.*
-import com.millentec.compose.uikit.symbols.builtin.shapes.DesignIdeas
+import com.millentec.compose.uikit.symbols.builtin.media.Volume
 import com.millentec.compose.uikit.symbols.builtin.systemui.AddCircle
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.LocalStrings
@@ -66,20 +67,22 @@ fun HomePage() {
                 val state = remember { mutableStateOf(false) }
                 val bounceTrigger = remember { mutableStateOf(0) }
                 val isActive = remember { mutableStateOf(false) }
+                val progress = remember { mutableStateOf(1f) }
 
                 Row {
                     UIKitIcon(
                         modifier = Modifier
                             .size(100.dp),
-                        symbol = UIKitSymbols.systemUI.DesignIdeas,
+                        symbol = UIKitSymbols.media.Volume,
                         contentDescription = "Speaker",
                         symbolStyle = if (style.value) UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush)
                         else UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
                         symbolEffect = UIKitSymbolEffect()
                             .visibleEffect(visible0.value)
-                            .stateEffect(if (enabled0.value) "default" else "on-off")
+                            .stateEffect(if (enabled0.value) "default" else "disabled")
                             .bounceEffect(bounceTrigger.value, -1f)
-                            .variableColorEffect(isActive.value, initialValue = 0f)
+                            .variableColorEffect(isActive.value)
+                            .progressibleEffect(progress.value)
                     )
 
                     UIKitIcon(
@@ -151,6 +154,13 @@ fun HomePage() {
                         onCheckedChange = { isActive.value = it }
                     )
                 }
+
+                UIKitSlider(
+                    value = progress.value,
+                    onValueChange = {
+                        progress.value = it
+                    }
+                )
             }
         }
     }

@@ -126,7 +126,7 @@ abstract class UIKitSymbol(
                     val state = states.firstOrNull { state -> state.id == group.id }
                     state?.visible(
                         UIKitAnimSelector.entries.filter { item ->
-                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.Alpha
+                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.AlphaAddition
                         }
                     ) ?: true
                 }
@@ -143,7 +143,7 @@ abstract class UIKitSymbol(
                     val state = states.firstOrNull { state -> state.id == it.id }
                     state?.visible(
                         UIKitAnimSelector.entries.filter { item ->
-                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.Alpha
+                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.AlphaAddition
                         }
                     ) ?: true
                 }
@@ -169,7 +169,7 @@ abstract class UIKitSymbol(
                         easing = CubicBezierEasing(0f, 0f,0.382f, 1f),
                         delayMillis = index * 280 / (filteredLayers.size + 1)
                     ),
-                )).addParallel(UIKitSymbolAnimNode.alphaTo(
+                )).addParallel(UIKitSymbolAnimNode.alphaAdditionTo(
                     group.id,
                     targetValue = 1f,
                     animateSpec = tween(
@@ -193,7 +193,7 @@ abstract class UIKitSymbol(
                     group.id,
                     targetValue = 1f,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.alphaTo(
+                )).addParallel(UIKitSymbolAnimNode.alphaAdditionTo(
                     group.id,
                     targetValue = 1f,
                     animateSpec = null
@@ -215,7 +215,7 @@ abstract class UIKitSymbol(
                     group.id,
                     targetValue = 1f,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.alphaTo(
+                )).addParallel(UIKitSymbolAnimNode.alphaAdditionTo(
                     group.id,
                     targetValue = 1f,
                     animateSpec = null
@@ -242,7 +242,7 @@ abstract class UIKitSymbol(
                     val state = states.firstOrNull { state -> state.id == group.id }
                     state?.visible(
                         UIKitAnimSelector.entries.filter { item ->
-                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.Alpha
+                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.AlphaAddition
                         }
                     ) ?: true
                 }
@@ -258,7 +258,7 @@ abstract class UIKitSymbol(
                     val state = states.firstOrNull { state -> state.id == it.id }
                     state?.visible(
                         UIKitAnimSelector.entries.filter { item ->
-                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.Alpha
+                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.AlphaAddition
                         }
                     ) ?: true
                 }
@@ -284,7 +284,7 @@ abstract class UIKitSymbol(
                         easing = FastOutLinearInEasing,
                         delayMillis = index * 280 / (filteredLayers.size + 1)
                     ),
-                )).addParallel(UIKitSymbolAnimNode.alphaTo(
+                )).addParallel(UIKitSymbolAnimNode.alphaAdditionTo(
                     group.id,
                     targetValue = 0f,
                     animateSpec = tween(
@@ -308,7 +308,7 @@ abstract class UIKitSymbol(
                     group.id,
                     targetValue = 0.8f,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.alphaTo(
+                )).addParallel(UIKitSymbolAnimNode.alphaAdditionTo(
                     group.id,
                     targetValue = 0f,
                     animateSpec = null
@@ -330,7 +330,7 @@ abstract class UIKitSymbol(
                     group.id,
                     targetValue = 0.8f,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.alphaTo(
+                )).addParallel(UIKitSymbolAnimNode.alphaAdditionTo(
                     group.id,
                     targetValue = 0f,
                     animateSpec = null

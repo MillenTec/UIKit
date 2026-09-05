@@ -88,6 +88,10 @@ private fun UIKitAnimatableIcon(
             initialAlpha = it.defaultState.alpha,
             initialPathTrimStart = it.defaultState.pathTrimStart,
             initialPathTrimEnd = it.defaultState.pathTrimEnd,
+            initialScaleCenter = it.defaultState.scaleCenter,
+            initialRotate = it.defaultState.rotate,
+            initialRotateCenter = it.defaultState.rotateCenter,
+            initialTranslate = it.defaultState.translate,
         )
     } }
     val colorSet by rememberUpdatedState(symbol.colorSet(symbolStyle, animStates.map { Pair(it.id, it.snapshot()) }))
@@ -304,7 +308,7 @@ private fun UIKitAnimatableIcon(
                                             drawPath(
                                                 path = path,
                                                 brush = brush.asComposeBrush(),
-                                                alpha = alpha * (animateState.alphaState.value),
+                                                alpha = alpha * animateState.alphaState.value * animateState.alphaAdditionState.value,
                                                 style = Fill
                                             )
                                         }
@@ -329,7 +333,7 @@ private fun UIKitAnimatableIcon(
                                             drawPath(
                                                 path = trimmedPath,
                                                 brush = brush.asComposeBrush(),
-                                                alpha = alpha * animateState.alphaState.value,
+                                                alpha = alpha * animateState.alphaState.value * animateState.alphaAdditionState.value,
                                                 style = Stroke(
                                                     width = group.drawType.lineWidth,
                                                     cap = group.drawType.cap,
@@ -342,7 +346,7 @@ private fun UIKitAnimatableIcon(
                                             drawPath(
                                                 path = path,
                                                 color = Color.Transparent,
-                                                alpha = alpha * animateState.alphaState.value,
+                                                alpha = alpha * animateState.alphaState.value * animateState.alphaAdditionState.value,
                                                 style = Fill,
                                                 blendMode = BlendMode.DstIn
                                             )
@@ -377,7 +381,7 @@ private fun UIKitAnimatableIcon(
                                             drawPath(
                                                 path = trimmedPath,
                                                 color = Color.Transparent,
-                                                alpha = alpha * animateState.alphaState.value,
+                                                alpha = alpha * animateState.alphaState.value * animateState.alphaAdditionState.value,
                                                 style = Stroke(
                                                     width = group.drawType.lineWidth,
                                                     cap = group.drawType.cap,

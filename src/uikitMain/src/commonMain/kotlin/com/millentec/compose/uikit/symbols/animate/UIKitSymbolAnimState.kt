@@ -18,6 +18,7 @@ class UIKitSymbolAnimState(
 ) {
     val visible: Boolean
         get() = alphaState.value > 0f
+                && alphaAdditionState.value > 0f
                 && scaleState.value > 0f
                 && pathTrimStartState.value - pathTrimEndState.value != 0f
 
@@ -31,6 +32,7 @@ class UIKitSymbolAnimState(
                 ScaleCenterX -> true
                 ScaleCenterY -> true
                 Alpha -> alphaState.value > 0f
+                AlphaAddition -> alphaAdditionState.value > 0f
                 PathTrimStart -> {
                     pathTrimStartState.value - pathTrimEndState.value != 0f
                 }
@@ -56,6 +58,11 @@ class UIKitSymbolAnimState(
             alpha = alphaState.value,
             pathTrimStart = pathTrimStartState.value,
             pathTrimEnd = pathTrimEndState.value,
+            scaleCenter = Offset(scaleCenterXState.value, scaleCenterYState.value),
+            alphaAddition = alphaAdditionState.value,
+            rotate = rotateState.value,
+            rotateCenter = Offset(rotateCenterXState.value, rotateCenterYState.value),
+            translate = Offset(translateXState.value, translateYState.value),
         )
     }
 
@@ -75,6 +82,11 @@ class UIKitSymbolAnimState(
     )
 
     val alphaState = Animatable(
+        initialValue = initialAlpha,
+        typeConverter = Float.VectorConverter,
+    )
+
+    val alphaAdditionState = Animatable(
         initialValue = initialAlpha,
         typeConverter = Float.VectorConverter,
     )
@@ -117,9 +129,14 @@ class UIKitSymbolAnimState(
 
 data class UIKitSymbolGroupState(
     val scale: Float = 1f,
+    val scaleCenter: Offset = Offset(10f, 10f),
     val alpha: Float = 1f,
+    val alphaAddition: Float = 1f,
     val pathTrimStart: Float = 0f,
     val pathTrimEnd: Float = 1f,
+    val rotate: Float = 0f,
+    val rotateCenter: Offset = Offset(10f, 10f),
+    val translate: Offset = Offset(0f, 0f),
 ) {
     val visible: Boolean
         get() = alpha > 0f
@@ -136,6 +153,7 @@ data class UIKitSymbolGroupState(
                 ScaleCenterX -> true
                 ScaleCenterY -> true
                 Alpha -> alpha > 0f
+                AlphaAddition -> alphaAddition > 0f
                 PathTrimStart -> {
                     pathTrimStart - pathTrimEnd != 0f
                 }

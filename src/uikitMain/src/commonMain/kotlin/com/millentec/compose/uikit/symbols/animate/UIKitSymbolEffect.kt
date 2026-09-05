@@ -25,6 +25,7 @@ private suspend fun standardExecute(
                         Empty -> return@launch
                         Scale -> state.scaleState
                         Alpha -> state.alphaState
+                        AlphaAddition -> state.alphaAdditionState
                         PathTrimStart -> state.pathTrimStartState
                         PathTrimEnd -> state.pathTrimEndState
                         ScaleCenterX -> state.scaleCenterXState

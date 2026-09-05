@@ -522,9 +522,9 @@ fun UIKitSlider(
     lineWidth: Dp = if (isDesktopOS()) 5.dp else 8.dp,
     thumbSize: DpSize = if (isDesktopOS()) DpSize(18.dp, 18.dp) else DpSize(32.dp, 24.dp),
     maxValue: Float = 1f,
-    hasTick: Boolean = true,
+    adsorbedOntoTick: Boolean = false,
+    hasTick: Boolean = adsorbedOntoTick,
     tickStep: Float = 0.1f,
-    adsorbedOntoTick: Boolean = hasTick,
     colors: UIKitSliderColors = UIKitSliderColors.default()
 ) = UIKitSlider(
     modifier = modifier,

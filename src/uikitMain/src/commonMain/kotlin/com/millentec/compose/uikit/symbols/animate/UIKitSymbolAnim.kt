@@ -75,6 +75,20 @@ data class UIKitSymbolAnimNode(
             )
         }
 
+        // Alpha 作为最常用的可叠加属性且常在 visible 中使用, 单个可控制 Alpha 属性不便于操作, 故新增一个可选的叠加层
+        fun alphaAdditionTo(
+            groupSelector: String,
+            targetValue: Float,
+            animateSpec: AnimationSpec<Float>?
+        ): UIKitSymbolAnimNode {
+            return UIKitSymbolAnimNode(
+                type = UIKitAnimSelector.AlphaAddition,
+                groupSelector = groupSelector,
+                targetValue = targetValue,
+                animateSpec = animateSpec
+            )
+        }
+
         fun alphaTo(
             groupSelector: String,
             targetValue: Float,

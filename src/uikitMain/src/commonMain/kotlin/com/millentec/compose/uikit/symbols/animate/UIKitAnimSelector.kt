@@ -6,6 +6,7 @@ enum class UIKitAnimSelector {
     ScaleCenterX,
     ScaleCenterY,
     Alpha,
+    AlphaAddition,
     PathTrimStart,
     PathTrimEnd,
     Rotate,
