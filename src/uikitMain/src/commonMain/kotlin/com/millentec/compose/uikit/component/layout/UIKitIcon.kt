@@ -232,7 +232,7 @@ private fun UIKitAnimatableIcon(
             is UIKitSymbolEffectNode.UIKitInfiniteEffectNode -> {
                 LaunchedEffect(effect.isActive) {
                     if (effect.isActive) {
-                        effect.start
+                        effect.start(symbol, animStates)
                         while (true) {
                             effect.execute(symbol, animStates)
                         }

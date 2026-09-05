@@ -5,9 +5,9 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.graphics.UIKitBrush
+import com.millentec.compose.uikit.symbols.UIKitShapesSymbols
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
-import com.millentec.compose.uikit.symbols.UIKitSystemUISymbols
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolGroupState
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
@@ -15,7 +15,7 @@ import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.getUIKitColors
 
-val UIKitSystemUISymbols.DesignIdeas: UIKitSymbol
+val UIKitShapesSymbols.DesignIdeas: UIKitSymbol
     get() {
         if (_DesignIdeas != null)
             return _DesignIdeas!!

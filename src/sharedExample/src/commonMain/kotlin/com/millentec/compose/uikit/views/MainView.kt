@@ -218,7 +218,7 @@ fun MainView() {
 
                             TextWithIcon(
                                 text = strings.navigation.designs,
-                                symbol = UIKitSymbols.systemUI.DesignIdeas
+                                symbol = UIKitSymbols.shapes.DesignIdeas
                             )
                         }
                     }

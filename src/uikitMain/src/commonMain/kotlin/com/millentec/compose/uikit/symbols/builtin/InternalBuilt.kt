@@ -13,7 +13,7 @@ internal fun UIKitSymbolDisable(zIndex: Int = 1): UIKitSymbolLayer {
         group(
             id = "disable.mask",
             drawType = UIKitPathDrawType.MaskStroke(
-                lineWidth = 1f,
+                lineWidth = 3f,
                 cap = StrokeCap.Round,
                 join = StrokeJoin.Round
             ),
@@ -21,8 +21,8 @@ internal fun UIKitSymbolDisable(zIndex: Int = 1): UIKitSymbolLayer {
                 pathTrimEnd = 0f
             )
         ) {
-            moveTo(3.21f, 1.79f)
-            lineTo(18.2f, 16.8f)
+            moveTo(2.5f, 2.5f)
+            lineTo(17.5f, 17.5f)
         }
 
         group(

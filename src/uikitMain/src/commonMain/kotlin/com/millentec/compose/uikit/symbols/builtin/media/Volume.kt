@@ -158,7 +158,9 @@ val UIKitMediaSymbols.Volume: UIKitSymbol
                 UIKitSymbolAbility.MultiState(listOf("default", "disabled"))
             )
 
-            override val tags: List<String> = listOf()
+            override val tags: List<String> = listOf(
+                "Sound", "Audio", "Speaker", "Volume", "Media"
+            )
 
             @Composable
             override fun colorSet(
