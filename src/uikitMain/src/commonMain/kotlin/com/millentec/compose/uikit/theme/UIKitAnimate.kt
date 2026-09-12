@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.theme
+package com.millentec.compose.uikit.theme
 
 data class UIKitAnimate(
     val standardSpringDampingRatio: Float = 0.7f,

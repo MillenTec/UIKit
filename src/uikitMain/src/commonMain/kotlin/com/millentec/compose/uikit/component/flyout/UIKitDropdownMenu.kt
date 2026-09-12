@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.component.flyout
+package com.millentec.compose.uikit.component.flyout
 
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring

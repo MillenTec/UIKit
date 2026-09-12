@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.views
+package com.millentec.compose.uikit.views
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility

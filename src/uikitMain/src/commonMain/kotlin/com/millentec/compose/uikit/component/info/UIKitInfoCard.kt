@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.component.info
+package com.millentec.compose.uikit.component.info
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background

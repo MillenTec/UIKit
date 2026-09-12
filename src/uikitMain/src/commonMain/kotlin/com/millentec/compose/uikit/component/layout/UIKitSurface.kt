@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.component.layout
+package com.millentec.compose.uikit.component.layout
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Indication

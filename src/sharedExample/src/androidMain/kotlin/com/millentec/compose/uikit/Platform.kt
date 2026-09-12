@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit
+package com.millentec.compose.uikit
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler

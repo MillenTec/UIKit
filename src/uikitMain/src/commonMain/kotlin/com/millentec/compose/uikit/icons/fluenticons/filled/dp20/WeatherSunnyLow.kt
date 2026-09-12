@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.icons.fluenticons.filled.dp20
+package com.millentec.compose.uikit.icons.fluenticons.filled.dp20
 
 
 import androidx.compose.ui.graphics.Color

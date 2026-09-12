@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.foundation
+package com.millentec.compose.uikit.foundation
 
 import com.millentec.compose.uikit.getOperatingSystem
 

@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.icons.fluenticons.resizeable
+package com.millentec.compose.uikit.icons.fluenticons.resizeable
 
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color

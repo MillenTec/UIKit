@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.views.pages.controls
+package com.millentec.compose.uikit.views.pages.controls
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope

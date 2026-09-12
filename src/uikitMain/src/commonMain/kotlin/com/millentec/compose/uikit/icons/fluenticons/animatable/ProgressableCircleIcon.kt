@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.icons.fluenticons.animatable
+package com.millentec.compose.uikit.icons.fluenticons.animatable
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.defaultMinSize

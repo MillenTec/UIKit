@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.viewmodels
+package com.millentec.compose.uikit.viewmodels
 
 import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.navigation.UIKitNavigation

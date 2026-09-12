@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit
+package com.millentec.compose.uikit
 
 import android.os.Build
 import android.view.RoundedCorner

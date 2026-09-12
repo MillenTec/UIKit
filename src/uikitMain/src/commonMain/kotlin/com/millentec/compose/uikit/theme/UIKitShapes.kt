@@ -1,4 +1,4 @@
-﻿package com.millentec.compose.uikit.theme
+package com.millentec.compose.uikit.theme
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
