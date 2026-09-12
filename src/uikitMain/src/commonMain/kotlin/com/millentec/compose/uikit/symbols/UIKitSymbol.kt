@@ -16,10 +16,9 @@ sealed class UIKitSymbolAbility {
     object Disappear: UIKitSymbolAbility()
     object Bounce: UIKitSymbolAbility()
     data class MultiState(val states: List<String>): UIKitSymbolAbility()
-
     object VariableColor: UIKitSymbolAbility()
-
     object Progressable: UIKitSymbolAbility()
+    object Pulse: UIKitSymbolAbility()
 }
 
 /**
@@ -462,6 +461,12 @@ abstract class UIKitSymbol(
     }
 
     open fun variableColorEffect(
+        states: List<UIKitSymbolAnimState>?,
+        initialValue: Float,
+        targetValue: Float
+    ): UIKitSymbolInfiniteAnimTree? = null
+
+    open fun pulseEffect(
         states: List<UIKitSymbolAnimState>?,
         initialValue: Float,
         targetValue: Float

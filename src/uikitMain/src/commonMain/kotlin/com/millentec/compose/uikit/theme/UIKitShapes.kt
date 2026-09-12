@@ -8,6 +8,7 @@ data class UIKitShapes(
     val smallRounded: Dp = 5.dp,
     val basicRounded: Dp = 8.dp,
     val regularRounded: Dp = 12.dp,
+    val cardRounded: Dp = 16.dp,
     val mediumRounded: Dp = 20.dp,
     val largeRounded: Dp = 32.dp,
 

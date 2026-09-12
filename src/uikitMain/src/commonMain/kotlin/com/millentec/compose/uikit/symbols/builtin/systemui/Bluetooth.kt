@@ -12,6 +12,7 @@ import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
 import com.millentec.compose.uikit.symbols.UIKitSystemUISymbols
 import com.millentec.compose.uikit.symbols.animate.*
+import com.millentec.compose.uikit.symbols.builtin.UIKitSymbolColorSet
 import com.millentec.compose.uikit.symbols.builtin.UIKitSymbolDisable
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
@@ -87,37 +88,21 @@ val UIKitSystemUISymbols.Bluetooth: UIKitSymbol
                 style: UIKitSymbolStyle,
                 states: List<Pair<String, UIKitSymbolGroupState>>
             ): List<UIKitSymbolColor> {
-                return when (style) {
-                    is UIKitSymbolStyle.Hierarchical -> {
-                        val disabled = states.firstOrNull { it.first == "disable" }?.second?.visible == true
-                        listOf(
-                            UIKitSymbolColor("bluetooth", style.brush, if (disabled) 0.6f else 1f),
-                            UIKitSymbolColor("bluetooth_back", style.brush, if (disabled) 0.6f else 1f),
-                            UIKitSymbolColor("disable", style.brush, 1f)
-                        )
-                    }
-                    is UIKitSymbolStyle.Monochrome -> layers.map { layer ->
-                        UIKitSymbolColor(
-                            layer.id,
-                            style.brush,
-                            1f
-                        )
-                    }
-                    UIKitSymbolStyle.MultiColor -> layers.map { layer ->
-                        UIKitSymbolColor(
-                            layer.id,
-                            UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush),
-                            1f
-                        )
-                    }
-                    is UIKitSymbolStyle.Palette -> style.brushes.mapIndexed { index, brush ->
-                        UIKitSymbolColor(
-                            layers.getOrNull(index)?.id ?: "unknown",
-                            brush,
-                            1f
-                        )
-                    }
-                }
+                val disabled = states.firstOrNull { it.first == "disable" }?.second?.visible == true
+                return UIKitSymbolColorSet(
+                    style = style,
+                    layers = layers,
+                    layerInfo = listOf(
+                        Pair("bluetooth", if (disabled) 0.6f else 1f),
+                        Pair("bluetooth_back", if (disabled) 0.6f else 1f),
+                        Pair("disable", 1f)
+                    ),
+                    multiColor = listOf(
+                        UIKitSymbolColor("bluetooth", if (disabled) UIKitBrush.solid(getUIKitColors().lineFillColorDisabled) else UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush), 1f),
+                        UIKitSymbolColor("bluetooth_back", if (disabled) UIKitBrush.solid(getUIKitColors().lineFillColorDisabled) else UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush), 1f),
+                        UIKitSymbolColor("disable", UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush), 1f)
+                    )
+                )
             }
 
             override fun appearEffect(states: List<UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {

@@ -13,6 +13,7 @@ import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Apps
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Archive
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
 import com.millentec.compose.uikit.theme.getUIKitTypography
@@ -51,7 +52,19 @@ fun UIKitSymbolsPage() {
         }
 
         item {
+            Spacer(Modifier.height(getUIKitLayout().titleSpacing))
+        }
+
+        item {
             UIKitGroupedCard {
+                SettingCard(
+                    title = "All",
+                    icon = FluentIcons.Archive,
+                    onClick = {
+                        nav.switchPage(Pages.Designs_UIKitSymbols_All, type = UIKitNavigationType.Forward)
+                    }
+                )
+                Divider()
                 SettingCard(
                     title = "System UI",
                     icon = FluentIcons.Apps,

@@ -5,10 +5,13 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.graphics.UIKitBrush
+import com.millentec.compose.uikit.foundation.helper.lighten
 import com.millentec.compose.uikit.symbols.UIKitShapesSymbols
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolGroupState
+import com.millentec.compose.uikit.symbols.builtin.UIKitSymbolColorSet
+import com.millentec.compose.uikit.symbols.builtin.UIKitSymbolDisable
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
@@ -83,13 +86,15 @@ val UIKitShapesSymbols.Layer: UIKitSymbol
                         curveTo(3.023f, 13.092f, 2.884f, 12.541f, 3.071f, 12.103f)
                         close()
                     }
-                }
+                },
+                UIKitSymbolDisable(3)
             )
 
             override val abilityStatement: List<UIKitSymbolAbility> = listOf(
                 UIKitSymbolAbility.Appear,
                 UIKitSymbolAbility.Disappear,
-                UIKitSymbolAbility.Bounce
+                UIKitSymbolAbility.Bounce,
+                UIKitSymbolAbility.MultiState(listOf("default", "disabled"))
             )
 
             override val tags: List<String> = listOf(
@@ -101,36 +106,48 @@ val UIKitShapesSymbols.Layer: UIKitSymbol
                 style: UIKitSymbolStyle,
                 states: List<Pair<String, UIKitSymbolGroupState>>
             ): List<UIKitSymbolColor> {
-                return when (style) {
-                    is UIKitSymbolStyle.Hierarchical -> {
-                        listOf(
-                            UIKitSymbolColor("layer0", style.brush, 1f),
-                            UIKitSymbolColor("layer1", style.brush, 0.75f),
-                            UIKitSymbolColor("layer2", style.brush, 0.6f),
-                        )
-                    }
-                    is UIKitSymbolStyle.Monochrome -> layers.map { layer ->
+                val disabled = states.firstOrNull { it.first == "disable" }?.second?.visible == true
+                return UIKitSymbolColorSet(
+                    style = style,
+                    layers = layers,
+                    layerInfo = listOf(
+                        Pair("layer0", if (disabled) 0.6f else 1f),
+                        Pair("layer1", if (disabled) 0.6f else 0.75f),
+                        Pair("layer2", if (disabled) 0.6f else 0.6f),
+                    ),
+                    multiColor = listOf(
                         UIKitSymbolColor(
-                            layer.id,
-                            style.brush,
-                            1f
-                        )
-                    }
-                    UIKitSymbolStyle.MultiColor -> layers.map { layer ->
+                            selector = "disable",
+                            brush = UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush),
+                            alpha = 1f
+                        ),
                         UIKitSymbolColor(
-                            layer.id,
-                            UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush),
-                            1f
-                        )
-                    }
-                    is UIKitSymbolStyle.Palette -> style.brushes.mapIndexed { index, brush ->
+                            selector = "layer2",
+                            brush = UIKitBrush.solid(
+                                if (disabled)
+                                    getUIKitColors().lineFillColorDisabled
+                                else getUIKitColors().mintThemedBrush
+                            ),
+                            alpha = 1f
+                        ),
                         UIKitSymbolColor(
-                            layers.getOrNull(index)?.id ?: "unknown",
-                            brush,
-                            1f
-                        )
-                    }
-                }
+                            selector = "layer1",
+                            brush = UIKitBrush.solid(if (disabled)
+                                getUIKitColors().lineFillColorDisabled
+                            else getUIKitColors().mintThemedBrush.lighten(0.1f)),
+                            alpha = 1f
+                        ),
+                        UIKitSymbolColor(
+                            selector = "layer0",
+                            brush = UIKitBrush.solid(
+                                if (disabled)
+                                    getUIKitColors().lineFillColorDisabled
+                                else getUIKitColors().mintThemedBrush.lighten(0.2f)
+                            ),
+                            alpha = 1f
+                        ),
+                    )
+                )
             }
         }
 

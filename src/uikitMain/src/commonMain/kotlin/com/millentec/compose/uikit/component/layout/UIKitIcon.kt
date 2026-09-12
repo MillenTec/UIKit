@@ -5,6 +5,7 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
@@ -137,15 +138,15 @@ private fun UIKitAnimatableIcon(
     LaunchedEffect(symbolStyle) {
         if (symbolStyle != cacheSymbolStyle.value) {
             coroutineScope {
-                colorsAnimated.forEachIndexed { index, color ->
+                colorsAnimated.forEach { color ->
                     launch {
-                        color.second.snapTo(colorSet.getOrNull(index)?.brush ?: color.second.value,)
+                        color.second.snapTo(colorSet.firstOrNull { it.selector == color.first }?.brush ?: color.second.value,)
                     }
                 }
 
-                alphasAnimated.forEachIndexed { index, alpha ->
+                alphasAnimated.forEach { alpha ->
                     launch {
-                        alpha.second.snapTo(colorSet.getOrNull(index)?.alpha ?: alpha.second.value)
+                        alpha.second.snapTo(colorSet.firstOrNull { it.selector == alpha.first }?.alpha ?: alpha.second.value)
                     }
                 }
             }
@@ -156,23 +157,23 @@ private fun UIKitAnimatableIcon(
 
     LaunchedEffect(colorSet) {
         coroutineScope {
-            colorsAnimated.forEachIndexed { index, color ->
+            colorsAnimated.forEach { color ->
                 launch {
-                    val colorCurrent = colorSet.getOrNull(index)?.brush ?: color.second.value
+                    val colorCurrent = colorSet.firstOrNull { it.selector == color.first }?.brush ?: color.second.value
 
                     if (colorCurrent != color.second.value) {
                         color.second.animateTo(
                             colorCurrent,
                             200,
-                            LinearEasing
+                            easing = LinearEasing
                         )
                     }
                 }
             }
 
-            alphasAnimated.forEachIndexed { index, alpha ->
+            alphasAnimated.forEach { alpha ->
                 launch {
-                    val alphaCurrent = colorSet.getOrNull(index)?.alpha ?: alpha.second.value
+                    val alphaCurrent = colorSet.firstOrNull { it.selector == alpha.first }?.alpha ?: alpha.second.value
 
                     if (alphaCurrent != alpha.second.value) {
                         alpha.second.animateTo(
@@ -248,16 +249,18 @@ private fun UIKitAnimatableIcon(
     Canvas(
         modifier = modifier
             .aspectRatio(symbol.defaultSize.width / symbol.defaultSize.height)
-            .size(symbol.defaultSize.width, symbol.defaultSize.height)
+            .defaultMinSize(symbol.defaultSize.width, symbol.defaultSize.height)
             .semantics {
                 this.contentDescription = contentDescription ?: return@semantics
                 this.role = Role.Image
             }
     ) {
         var saveCount = 0
+        val scaleX = size.width / symbol.viewportSize.width
+        val scaleY = size.height / symbol.viewportSize.height
         scale(
-            scaleX = size.width / symbol.viewportSize.width,
-            scaleY = size.height / symbol.viewportSize.height,
+            scaleX = scaleX,
+            scaleY = scaleY,
             pivot = Offset(0f, 0f)
         ) {
             drawContext.canvas.saveLayer(
@@ -285,6 +288,17 @@ private fun UIKitAnimatableIcon(
                     val isRender = animateState != null && animateState.visible
 
                     if (isRender) {
+                        val brushScaled = brush.copy(
+                            start = Offset(
+                                brush.start.x.coerceIn(0f..symbol.viewportSize.width) * 2,
+                                brush.start.y.coerceIn(0f..symbol.viewportSize.height) * 2
+                            ),
+                            end = Offset(
+                                brush.end.x.coerceIn(0f..symbol.viewportSize.width) * 2,
+                                brush.end.y.coerceIn(0f..symbol.viewportSize.height) * 2
+                            )
+                        )
+
                         scale(
                             scale = animateState.scaleState.value,
                             pivot = Offset(
@@ -307,7 +321,7 @@ private fun UIKitAnimatableIcon(
                                         UIKitPathDrawType.Fill -> {
                                             drawPath(
                                                 path = path,
-                                                brush = brush.asComposeBrush(),
+                                                brush = brushScaled.asComposeBrush(),
                                                 alpha = alpha * animateState.alphaState.value * animateState.alphaAdditionState.value,
                                                 style = Fill
                                             )
@@ -332,7 +346,7 @@ private fun UIKitAnimatableIcon(
 
                                             drawPath(
                                                 path = trimmedPath,
-                                                brush = brush.asComposeBrush(),
+                                                brush = brushScaled.asComposeBrush(),
                                                 alpha = alpha * animateState.alphaState.value * animateState.alphaAdditionState.value,
                                                 style = Stroke(
                                                     width = group.drawType.lineWidth,

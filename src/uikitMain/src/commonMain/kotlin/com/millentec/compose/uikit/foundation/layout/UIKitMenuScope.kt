@@ -32,7 +32,7 @@ class UIKitMenuScope: UIKitItemScope<UIKitItem>() {
         color: Color = getUIKitColors().textFillColorPrimaryBrush,
         contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
         background: Color = Color.Transparent,
-        cornerRadius: Dp = maxOf(getUIKitShapes().regularRounded - getUIKitLayout().smallSpacing, getUIKitShapes().smallRounded),
+        cornerRadius: Dp = maxOf(getUIKitShapes().cardRounded - getUIKitLayout().smallSpacing, getUIKitShapes().smallRounded),
     ) {
         add(object : UIKitItem() {
             @Composable
@@ -70,7 +70,7 @@ class UIKitMenuScope: UIKitItemScope<UIKitItem>() {
         color: Color = getUIKitColors().textFillColorPrimaryBrush,
         contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
         background: Color = Color.Transparent,
-        cornerRadius: Dp = maxOf(getUIKitShapes().regularRounded - getUIKitLayout().smallSpacing, getUIKitShapes().smallRounded),
+        cornerRadius: Dp = maxOf(getUIKitShapes().cardRounded - getUIKitLayout().smallSpacing, getUIKitShapes().smallRounded),
     ) {
         add(object : UIKitItem() {
             @Composable
@@ -112,7 +112,7 @@ class UIKitMenuScope: UIKitItemScope<UIKitItem>() {
         iconColor: Color = getUIKitColors().textFillColorPrimaryBrush,
         contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
         background: Color = Color.Transparent,
-        cornerRadius: Dp = maxOf(getUIKitShapes().regularRounded - getUIKitLayout().smallSpacing, getUIKitShapes().smallRounded),
+        cornerRadius: Dp = maxOf(getUIKitShapes().cardRounded - getUIKitLayout().smallSpacing, getUIKitShapes().smallRounded),
     ) {
         add(object : UIKitItem() {
             @Composable

@@ -30,3 +30,14 @@ fun Color.toHsv(): UIKitHSVColor {
 
     return UIKitHSVColor(finalH, s, max, this.alpha)
 }
+
+fun Color.lighten(dv: Float): Color {
+    val hsv = this.toHsv()
+    return hsv
+        .copy(value = (hsv.value + dv).coerceIn(0f..1f))
+        .getColor()
+}
+
+fun Color.darken(dv: Float): Color {
+    return lighten(-dv)
+}

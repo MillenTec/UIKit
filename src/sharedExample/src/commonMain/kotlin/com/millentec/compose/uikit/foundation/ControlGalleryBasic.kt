@@ -103,7 +103,7 @@ open class ControlGalleryBasic(
                             .height(if (maxWidth.value >= 768.dp)
                                 height.value
                             else Dp.Unspecified)
-                            .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                            .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
                             .background(getUIKitColors().contentFillColorSecondaryBrush)
                             .then(if (maxWidth.value >= 768.dp) {
                                 Modifier.verticalScroll(rememberScrollState())
@@ -118,7 +118,7 @@ open class ControlGalleryBasic(
 
                         Column(
                             Modifier
-                                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                                .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
                                 .width(360.dp)
                                 .onSizeChanged {
                                     height.value = (it.height / densityDpi).dp

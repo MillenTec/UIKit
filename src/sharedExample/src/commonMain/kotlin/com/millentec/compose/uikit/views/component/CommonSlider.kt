@@ -51,7 +51,7 @@ fun CommonSlider(
 
     Row(
         modifier = Modifier
-            .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+            .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
             .fillMaxWidth()
             .height(getUIKitLayout().interactiveHotspot)
             .background(getUIKitColors().contentFillColorSecondaryBrush)

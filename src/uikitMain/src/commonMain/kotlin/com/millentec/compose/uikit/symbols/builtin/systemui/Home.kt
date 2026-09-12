@@ -9,6 +9,7 @@ import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
 import com.millentec.compose.uikit.symbols.UIKitSystemUISymbols
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolGroupState
+import com.millentec.compose.uikit.symbols.builtin.UIKitSymbolColorSet
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
@@ -89,34 +90,16 @@ val UIKitSystemUISymbols.Home: UIKitSymbol
                 style: UIKitSymbolStyle,
                 states: List<Pair<String, UIKitSymbolGroupState>>
             ): List<UIKitSymbolColor> {
-                return when (style) {
-                    is UIKitSymbolStyle.Hierarchical -> {
-                        listOf(
-                            UIKitSymbolColor("home", style.brush, 1f)
-                        )
-                    }
-                    is UIKitSymbolStyle.Monochrome -> layers.map { layer ->
-                        UIKitSymbolColor(
-                            layer.id,
-                            style.brush,
-                            1f
-                        )
-                    }
-                    UIKitSymbolStyle.MultiColor -> layers.map { layer ->
-                        UIKitSymbolColor(
-                            layer.id,
-                            UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush),
-                            1f
-                        )
-                    }
-                    is UIKitSymbolStyle.Palette -> style.brushes.mapIndexed { index, brush ->
-                        UIKitSymbolColor(
-                            layers.getOrNull(index)?.id ?: "unknown",
-                            brush,
-                            1f
-                        )
-                    }
-                }
+                return UIKitSymbolColorSet(
+                    style = style,
+                    layers = layers,
+                    layerInfo = listOf(
+                        Pair("home", 1f)
+                    ),
+                    multiColor = listOf(
+                        UIKitSymbolColor("home", UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 1f)
+                    )
+                )
             }
         }
 

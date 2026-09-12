@@ -9,6 +9,7 @@ import com.millentec.compose.uikit.symbols.UIKitShapesSymbols
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolGroupState
+import com.millentec.compose.uikit.symbols.builtin.UIKitSymbolColorSet
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
@@ -161,35 +162,18 @@ val UIKitShapesSymbols.DesignIdeas: UIKitSymbol
                 style: UIKitSymbolStyle,
                 states: List<Pair<String, UIKitSymbolGroupState>>
             ): List<UIKitSymbolColor> {
-                return when (style) {
-                    is UIKitSymbolStyle.Hierarchical -> {
-                        listOf(
-                            UIKitSymbolColor("paintbrush", style.brush, 1f),
-                            UIKitSymbolColor("shapes", style.brush, 0.6f),
-                        )
-                    }
-                    is UIKitSymbolStyle.Monochrome -> layers.map { layer ->
-                        UIKitSymbolColor(
-                            layer.id,
-                            style.brush,
-                            1f
-                        )
-                    }
-                    UIKitSymbolStyle.MultiColor -> layers.map { layer ->
-                        UIKitSymbolColor(
-                            layer.id,
-                            UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush),
-                            1f
-                        )
-                    }
-                    is UIKitSymbolStyle.Palette -> style.brushes.mapIndexed { index, brush ->
-                        UIKitSymbolColor(
-                            layers.getOrNull(index)?.id ?: "unknown",
-                            brush,
-                            1f
-                        )
-                    }
-                }
+                return UIKitSymbolColorSet(
+                    style = style,
+                    layers = layers,
+                    layerInfo = listOf(
+                        Pair("paintbrush", 1f),
+                        Pair("shapes", 0.6f)
+                    ),
+                    multiColor = listOf(
+                        UIKitSymbolColor("paintbrush", UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 1f),
+                        UIKitSymbolColor("shapes", UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 1f)
+                    )
+                )
             }
         }
 

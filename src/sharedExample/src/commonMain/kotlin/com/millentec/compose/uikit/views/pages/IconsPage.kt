@@ -145,7 +145,7 @@ private fun OptionsWindow(
                     Column {
                         Box(
                             modifier = Modifier
-                                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                                .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
                                 .fillMaxWidth()
                                 .background(getUIKitColors().contentFillColorSecondaryBrush)
                                 .padding(getUIKitLayout().mediumSpacing),
@@ -389,7 +389,7 @@ private fun OptionsWindow(
                             Box(
                                 modifier = Modifier
                                     .padding(getUIKitLayout().smallSpacing)
-                                    .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                                    .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
                                     .height(itemHeight)
                                     .background(optionalColor[it].color)
                                     .uikitClickable(
@@ -456,7 +456,7 @@ private fun OptionsWindow(
                             Box(
                                 modifier = Modifier
                                     .padding(getUIKitLayout().smallSpacing)
-                                    .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                                    .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
                                     .height(itemHeight)
                                     .background(optionalColor[it].color)
                                     .uikitClickable(
@@ -517,7 +517,7 @@ private fun IconItem(
         modifier = Modifier
             .aspectRatio(1f)
             .padding(getUIKitLayout().smallSpacing)
-            .clip(RoundedCornerShape(getUIKitShapes().mediumRounded))
+            .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
             .background(background)
             .uikitClickable(
                 onClick = onClick,
@@ -924,7 +924,7 @@ private open class AnimatableIconItem(
 
         Row(
             modifier = Modifier
-                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
                 .fillMaxWidth()
                 .background(getUIKitColors().contentFillColorSecondaryBrush)
                 .padding(getUIKitLayout().basicSpacing)
@@ -1037,7 +1037,7 @@ private open class AnimatableIconItem(
 
         Row(
             modifier = Modifier
-                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
                 .fillMaxWidth()
                 .background(getUIKitColors().contentFillColorSecondaryBrush)
                 .padding(getUIKitLayout().basicSpacing)
@@ -1092,7 +1092,7 @@ private open class AnimatableIconItem(
 
         Row(
             modifier = Modifier
-                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
                 .fillMaxWidth()
                 .background(getUIKitColors().contentFillColorSecondaryBrush)
                 .padding(getUIKitLayout().basicSpacing)
@@ -1148,7 +1148,7 @@ private open class AnimatableIconItem(
     ) {
         Row(
             modifier = Modifier
-                .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
                 .fillMaxWidth()
                 .horizontalScroll(rememberScrollState())
         ) {

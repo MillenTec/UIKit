@@ -405,6 +405,72 @@ fun UIKitSymbolEffect.variableColorEffect(
     return this
 }
 
+@Composable
+fun UIKitSymbolEffect.pulseEffect(
+    isActive: Boolean,
+    initialValue: Float = 0.3f,
+    targetValue: Float = 1f
+): UIKitSymbolEffect {
+    val uuid = remember { Uuid.random().toString() }
+
+    this.addEffect(UIKitSymbolEffectNode.UIKitInfiniteEffectNode(
+        uuid = uuid,
+        isActive = isActive,
+        start = { symbol, states ->
+            val tree = symbol.pulseEffect(states, initialValue, targetValue)
+
+            tree?.let {
+                standardExecute(it.start, states)
+            }
+        },
+        execute = { symbol, states ->
+            val tree = symbol.pulseEffect(states, initialValue, targetValue)
+
+            tree?.let {
+                standardExecute(it.body, states)
+            }
+        },
+        reset = { symbol, states ->
+            val tree = symbol.pulseEffect(states, initialValue, targetValue)
+
+            tree?.let {
+                standardExecute(it.end, states)
+            }
+        }
+    ))
+
+    return this
+}
+
+@Composable
+fun UIKitSymbolEffect.pulseEffect(
+    trigger: Any,
+    repeat: Int = 1,
+    initialValue: Float = 0.3f,
+    targetValue: Float = 1f
+): UIKitSymbolEffect {
+    val uuid = remember { Uuid.random().toString() }
+
+    this.addEffect(UIKitSymbolEffectNode.UIKitDiscreteEffectNode(
+        uuid = uuid,
+        triggerCurrent = trigger,
+        repeat = repeat,
+        initializable = false,
+        initialize = null,
+        execute = { symbol, states ->
+            val tree = symbol.pulseEffect(states, initialValue, targetValue)
+
+            tree?.let {
+                standardExecute(it.start, states)
+                standardExecute(it.body, states)
+                standardExecute(it.end, states)
+            }
+        }
+    ))
+
+    return this
+}
+
 fun UIKitSymbolEffect.then(effect: UIKitSymbolEffect): UIKitSymbolEffect {
     this.addEffects(effect)
     return this

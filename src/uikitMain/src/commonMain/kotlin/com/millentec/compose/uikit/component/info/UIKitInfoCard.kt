@@ -133,7 +133,7 @@ fun UIKitInfoCard(
     visible: Boolean = true,
     closeable: Boolean = true,
     onClose: () -> Unit = {},
-    cornerRadius: Dp = getUIKitShapes().regularRounded,
+    cornerRadius: Dp = getUIKitShapes().cardRounded,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().mediumSpacing),
     body: (@Composable BoxScope.() -> Unit)? = null,
 ) {
@@ -268,7 +268,7 @@ fun UIKitInfoCard(
     visible: Boolean = true,
     closeable: Boolean = true,
     onClose: () -> Unit = {},
-    cornerRadius: Dp = getUIKitShapes().regularRounded,
+    cornerRadius: Dp = getUIKitShapes().cardRounded,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().mediumSpacing),
     body: String,
     bodyColor: Color = getUIKitColors().textFillColorPrimaryBrush

@@ -11,6 +11,7 @@ import com.millentec.compose.uikit.symbols.UIKitMediaSymbols
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
 import com.millentec.compose.uikit.symbols.animate.*
+import com.millentec.compose.uikit.symbols.builtin.UIKitSymbolColorSet
 import com.millentec.compose.uikit.symbols.builtin.UIKitSymbolDisable
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
@@ -167,40 +168,39 @@ val UIKitMediaSymbols.Volume: UIKitSymbol
                 style: UIKitSymbolStyle,
                 states: List<Pair<String, UIKitSymbolGroupState>>
             ): List<UIKitSymbolColor> {
-                return when (style) {
-                    is UIKitSymbolStyle.Hierarchical -> {
-                        val disabled = states.firstOrNull { it.first == "disable" }?.second?.visible == true
-                        listOf(
-                            UIKitSymbolColor("speaker", style.brush, if (disabled) 0.6f else 1f),
-                            UIKitSymbolColor("wave0", style.brush, if (disabled) 0.6f else 0.75f),
-                            UIKitSymbolColor("wave1", style.brush, if (disabled) 0.6f else 0.6f),
-                            UIKitSymbolColor("wave2", style.brush, if (disabled) 0.6f else 0.45f),
-                            UIKitSymbolColor("mute", style.brush, 0.6f),
-                            UIKitSymbolColor("disable", style.brush, 1f)
-                        )
-                    }
-                    is UIKitSymbolStyle.Monochrome -> layers.map { layer ->
+                val disabled = states.firstOrNull { it.first == "disable" }?.second?.visible == true
+                return UIKitSymbolColorSet(
+                    style = style,
+                    layers = layers,
+                    layerInfo = listOf(
+                        Pair("speaker", if (disabled) 0.6f else 1f),
+                        Pair("wave0", if (disabled) 0.6f else 0.75f),
+                        Pair("wave1", if (disabled) 0.6f else 0.6f),
+                        Pair("wave2", if (disabled) 0.6f else 0.45f),
+                        Pair("mute", 0.6f),
+                        Pair("disable", 1f)
+                    ),
+                    multiColor = listOf(
+                        UIKitSymbolColor("speaker", UIKitBrush.solid(if (disabled) getUIKitColors().lineFillColorDisabled else getUIKitColors().highlightColorPrimaryBrush), 1f),
+                        UIKitSymbolColor("mute", UIKitBrush.solid(if (disabled) getUIKitColors().lineFillColorDisabled else getUIKitColors().highlightColorPrimaryBrush), 1f),
+                        UIKitSymbolColor("disable", UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush), 1f),
                         UIKitSymbolColor(
-                            layer.id,
-                            style.brush,
-                            1f
-                        )
-                    }
-                    UIKitSymbolStyle.MultiColor -> layers.map { layer ->
+                            selector = "wave0",
+                            brush = UIKitBrush.solid(if (disabled) getUIKitColors().lineFillColorDisabled else getUIKitColors().highlightColorPrimaryBrush),
+                            alpha = 1f
+                        ),
                         UIKitSymbolColor(
-                            layer.id,
-                            UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush),
-                            1f
-                        )
-                    }
-                    is UIKitSymbolStyle.Palette -> style.brushes.mapIndexed { index, brush ->
+                            selector = "wave1",
+                            brush = UIKitBrush.solid(if (disabled) getUIKitColors().lineFillColorDisabled else getUIKitColors().highlightColorPrimaryBrush),
+                            alpha = 1f
+                        ),
                         UIKitSymbolColor(
-                            layers.getOrNull(index)?.id ?: "unknown",
-                            brush,
-                            1f
-                        )
-                    }
-                }
+                            selector = "wave2",
+                            brush = UIKitBrush.solid(if (disabled) getUIKitColors().lineFillColorDisabled else getUIKitColors().highlightColorPrimaryBrush),
+                            alpha = 1f
+                        ),
+                    )
+                )
             }
 
             override fun variableColorEffect(

@@ -132,7 +132,7 @@ fun UIKitSymbolsGalleryPage(
                 Column(
                     modifier = Modifier
                         .padding(getUIKitLayout().smallSpacing)
-                        .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                        .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
                         .background(symbolConfig.backgroundColor.value)
                         .padding(getUIKitLayout().mediumSpacing),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -341,7 +341,7 @@ private fun CommonOptions(
                             Box(
                                 modifier = Modifier
                                     .padding(getUIKitLayout().smallSpacing)
-                                    .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                                    .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
                                     .height(itemHeight)
                                     .background(optionalColor[it].color)
                                     .uikitClickable(
@@ -411,7 +411,7 @@ private fun CommonOptions(
                             Box(
                                 modifier = Modifier
                                     .padding(getUIKitLayout().smallSpacing)
-                                    .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                                    .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
                                     .height(itemHeight)
                                     .background(optionalColor[it].color)
                                     .uikitClickable(

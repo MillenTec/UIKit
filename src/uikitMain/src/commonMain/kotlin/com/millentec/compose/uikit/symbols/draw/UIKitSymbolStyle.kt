@@ -21,4 +21,8 @@ sealed class UIKitSymbolStyle {
     data class Palette(
         val brushes: List<UIKitBrush>,
     ): UIKitSymbolStyle()
+
+    data class PaletteWithId(
+        val brushes: List<Pair<String, UIKitBrush>>
+    ): UIKitSymbolStyle()
 }

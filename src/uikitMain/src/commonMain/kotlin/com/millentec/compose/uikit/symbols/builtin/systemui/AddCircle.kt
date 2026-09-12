@@ -15,6 +15,7 @@ import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimNode
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimTree
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolGroupState
+import com.millentec.compose.uikit.symbols.builtin.UIKitSymbolColorSet
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
@@ -105,30 +106,25 @@ val UIKitSystemUISymbols.AddCircle: UIKitSymbol
                 style: UIKitSymbolStyle,
                 states: List<Pair<String, UIKitSymbolGroupState>>
             ): List<UIKitSymbolColor> {
-                return when(style) {
-                    is UIKitSymbolStyle.Monochrome -> layers.map {
-                        UIKitSymbolColor(it.id, style.brush, 1f)
-                    }
-                    UIKitSymbolStyle.MultiColor -> listOf(
+                val checked = states.firstOrNull { it.first == "checkmark_symbol" }?.second?.visible == true
+                return UIKitSymbolColorSet(
+                    style = style,
+                    layers = layers,
+                    layerInfo = listOf(
+                        Pair("add_symbol", 1f),
+                        Pair("checkmark_symbol", 1f),
+                        Pair("circle", 0.6f),
+                    ),
+                    multiColor = listOf(
                         UIKitSymbolColor("add_symbol", UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush), 1f),
                         UIKitSymbolColor("checkmark_symbol", UIKitBrush.solid(getUIKitColors().successGreenColorPrimaryBrush), 1f),
-                        UIKitSymbolColor(
-                            "circle",
-                            if (states.firstOrNull { it.first == "checkmark_symbol" }?.second?.visible ?: false)
-                                UIKitBrush.solid(getUIKitColors().successGreenColorPrimaryBrush)
-                            else
-                                UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush),
-                            0.6f)
+                        UIKitSymbolColor("circle", if (!checked)
+                            UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush)
+                        else
+                            UIKitBrush.solid(getUIKitColors().successGreenColorPrimaryBrush), 1f
+                        )
                     )
-                    is UIKitSymbolStyle.Hierarchical -> listOf(
-                        UIKitSymbolColor("add_symbol", style.brush, 1f),
-                        UIKitSymbolColor("checkmark_symbol", style.brush, 1f),
-                        UIKitSymbolColor("circle", style.brush, 0.6f)
-                    )
-                    is UIKitSymbolStyle.Palette -> style.brushes.mapIndexed { index, brush ->
-                        UIKitSymbolColor(layers.getOrNull(index)?.id ?: "unknown", brush, 1f)
-                    }
-                }
+                )
             }
 
             override fun stateEffect(

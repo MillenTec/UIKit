@@ -17,8 +17,8 @@ import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.UIKitIcon
 import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.animate.*
+import com.millentec.compose.uikit.symbols.builtin.media.Volume
 import com.millentec.compose.uikit.symbols.builtin.systemui.AddCircle
-import com.millentec.compose.uikit.symbols.builtin.systemui.Bluetooth
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.theme.getUIKitColors
@@ -68,14 +68,15 @@ fun HomePage() {
                 val bounceTrigger = remember { mutableStateOf(0) }
                 val isActive = remember { mutableStateOf(false) }
                 val progress = remember { mutableStateOf(1f) }
+                val isActive1 = remember { mutableStateOf(false) }
 
                 Row {
                     UIKitIcon(
                         modifier = Modifier
                             .size(100.dp),
-                        symbol = UIKitSymbols.systemUI.Bluetooth,
+                        symbol = UIKitSymbols.media.Volume,
                         contentDescription = "Speaker",
-                        symbolStyle = if (style.value) UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush)
+                        symbolStyle = if (style.value) UIKitSymbolStyle.MultiColor
                         else UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
                         symbolEffect = UIKitSymbolEffect()
                             .visibleEffect(visible0.value)
@@ -83,6 +84,7 @@ fun HomePage() {
                             .bounceEffect(bounceTrigger.value, -1f)
                             .variableColorEffect(isActive.value)
                             .progressibleEffect(progress.value)
+                            .pulseEffect(isActive1.value)
                     )
 
                     UIKitIcon(
@@ -90,8 +92,8 @@ fun HomePage() {
                             .size(100.dp),
                         symbol = UIKitSymbols.systemUI.AddCircle,
                         contentDescription = null,
-                        symbolStyle = if (style.value) UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush)
-                        else UIKitSymbolStyle.MultiColor,
+                        symbolStyle = if (style.value) UIKitSymbolStyle.MultiColor
+                        else UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
                         symbolEffect = UIKitSymbolEffect()
                             .visibleEffect(visible1.value)
                             .stateEffect(if (state.value) "checkmark" else "add")
@@ -112,6 +114,13 @@ fun HomePage() {
                         UIKitToggleSwitch(
                             checked = enabled0.value,
                             onCheckedChange = { enabled0.value = it }
+                        )
+
+                        Spacer(Modifier.height(getUIKitLayout().itemSpacing))
+
+                        UIKitToggleSwitch(
+                            checked = isActive1.value,
+                            onCheckedChange = { isActive1.value = it }
                         )
                     }
 

@@ -13,6 +13,7 @@ import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimNode
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimTree
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolGroupState
+import com.millentec.compose.uikit.symbols.builtin.UIKitSymbolColorSet
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
@@ -34,15 +35,15 @@ val UIKitSystemUISymbols.ToggleMultiple: UIKitSymbol
                         id = "thumb0",
                         drawType = UIKitPathDrawType.Fill
                     ) {
-                        moveTo(3.5f, 2f)
-                        curveToRelative(0.41f, 0f, 0.79f, 0.17f, 1.06f, 0.44f)
-                        reflectiveCurveToRelative(0.44f, 0.65f, 0.44f, 1.06f)
-                        reflectiveCurveToRelative(-0.17f, 0.79f, -0.44f, 1.06f)
+                        moveTo(8f, 5.5f)
+                        curveToRelative(0f, 0.41f, -0.17f, 0.79f, -0.44f, 1.06f)
                         reflectiveCurveToRelative(-0.65f, 0.44f, -1.06f, 0.44f)
                         reflectiveCurveToRelative(-0.79f, -0.17f, -1.06f, -0.44f)
                         reflectiveCurveToRelative(-0.44f, -0.65f, -0.44f, -1.06f)
                         reflectiveCurveToRelative(0.17f, -0.79f, 0.44f, -1.06f)
                         reflectiveCurveToRelative(0.65f, -0.44f, 1.06f, -0.44f)
+                        reflectiveCurveToRelative(0.79f, 0.17f, 1.06f, 0.44f)
+                        reflectiveCurveToRelative(0.44f, 0.65f, 0.44f, 1.06f)
                         close()
                     }
                 },
@@ -51,21 +52,21 @@ val UIKitSystemUISymbols.ToggleMultiple: UIKitSymbol
                         id = "container0",
                         drawType = UIKitPathDrawType.Fill
                     ) {
-                        moveTo(10.5f, 0f)
-                        horizontalLineTo(3.5f)
-                        curveTo(1.6f, 0f, 0f, 1.6f, 0f, 3.5f)
-                        reflectiveCurveToRelative(1.6f, 3.5f, 3.5f, 3.5f)
+                        moveTo(13.5f, 2f)
+                        horizontalLineToRelative(-7f)
+                        curveToRelative(-1.93f, 0f, -3.5f, 1.57f, -3.5f, 3.5f)
+                        reflectiveCurveToRelative(1.57f, 3.5f, 3.5f, 3.5f)
                         horizontalLineToRelative(7f)
-                        curveToRelative(1.9f, 0f, 3.5f, -1.6f, 3.5f, -3.5f)
-                        reflectiveCurveToRelative(-1.6f, -3.5f, -3.5f, -3.5f)
+                        curveToRelative(1.93f, 0f, 3.5f, -1.57f, 3.5f, -3.5f)
+                        reflectiveCurveToRelative(-1.57f, -3.5f, -3.5f, -3.5f)
                         close()
-                        moveTo(10.5f, 6f)
-                        horizontalLineTo(3.5f)
-                        curveToRelative(-1.4f, 0f, -2.5f, -1.1f, -2.5f, -2.5f)
-                        reflectiveCurveTo(2.1f, 1f, 3.5f, 1f)
+                        moveTo(13.5f, 8f)
+                        horizontalLineToRelative(-7f)
+                        curveToRelative(-1.38f, 0f, -2.5f, -1.12f, -2.5f, -2.5f)
+                        reflectiveCurveToRelative(1.12f, -2.5f, 2.5f, -2.5f)
                         horizontalLineToRelative(7f)
-                        curveToRelative(1.4f, 0f, 2.5f, 1.1f, 2.5f, 2.5f)
-                        reflectiveCurveToRelative(-1.1f, 2.5f, -2.5f, 2.5f)
+                        curveToRelative(1.38f, 0f, 2.5f, 1.12f, 2.5f, 2.5f)
+                        reflectiveCurveToRelative(-1.12f, 2.5f, -2.5f, 2.5f)
                         close()
                     }
                 },
@@ -74,15 +75,15 @@ val UIKitSystemUISymbols.ToggleMultiple: UIKitSymbol
                         id = "thumb1",
                         drawType = UIKitPathDrawType.Fill
                     ) {
-                        moveTo(10.5f, 11f)
-                        curveToRelative(0.41f, 0f, 0.79f, 0.17f, 1.06f, 0.44f)
-                        reflectiveCurveToRelative(0.44f, 0.65f, 0.44f, 1.06f)
-                        reflectiveCurveToRelative(-0.17f, 0.79f, -0.44f, 1.06f)
-                        reflectiveCurveToRelative(-0.65f, 0.44f, -1.06f, 0.44f)
-                        reflectiveCurveToRelative(-0.79f, -0.17f, -1.06f, -0.44f)
-                        reflectiveCurveToRelative(-0.44f, -0.65f, -0.44f, -1.06f)
-                        reflectiveCurveToRelative(0.17f, -0.79f, 0.44f, -1.06f)
-                        reflectiveCurveToRelative(0.65f, -0.44f, 1.06f, -0.44f)
+                        moveTo(13.5f, 16f)
+                        curveToRelative(0.41f, 0f, 0.79f, -0.17f, 1.06f, -0.44f)
+                        reflectiveCurveToRelative(0.44f, -0.65f, 0.44f, -1.06f)
+                        reflectiveCurveToRelative(-0.17f, -0.79f, -0.44f, -1.06f)
+                        reflectiveCurveToRelative(-0.65f, -0.44f, -1.06f, -0.44f)
+                        reflectiveCurveToRelative(-0.79f, 0.17f, -1.06f, 0.44f)
+                        reflectiveCurveToRelative(-0.44f, 0.65f, -0.44f, 1.06f)
+                        reflectiveCurveToRelative(0.17f, 0.79f, 0.44f, 1.06f)
+                        reflectiveCurveToRelative(0.65f, 0.44f, 1.06f, 0.44f)
                         close()
                     }
                 },
@@ -91,21 +92,21 @@ val UIKitSystemUISymbols.ToggleMultiple: UIKitSymbol
                         id = "container1",
                         drawType = UIKitPathDrawType.Fill
                     ) {
-                        moveTo(10.5f, 9f)
-                        horizontalLineTo(3.5f)
-                        curveToRelative(-1.9f, 0f, -3.5f, 1.6f, -3.5f, 3.5f)
-                        reflectiveCurveToRelative(1.6f, 3.5f, 3.5f, 3.5f)
+                        moveTo(13.5f, 11f)
+                        horizontalLineToRelative(-7f)
+                        curveToRelative(-1.93f, 0f, -3.5f, 1.57f, -3.5f, 3.5f)
+                        reflectiveCurveToRelative(1.57f, 3.5f, 3.5f, 3.5f)
                         horizontalLineToRelative(7f)
-                        curveToRelative(1.9f, 0f, 3.5f, -1.6f, 3.5f, -3.5f)
-                        reflectiveCurveToRelative(-1.6f, -3.5f, -3.5f, -3.5f)
+                        curveToRelative(1.93f, 0f, 3.5f, -1.57f, 3.5f, -3.5f)
+                        reflectiveCurveToRelative(-1.57f, -3.5f, -3.5f, -3.5f)
                         close()
-                        moveTo(10.5f, 15f)
-                        horizontalLineTo(3.5f)
-                        curveToRelative(-1.4f, 0f, -2.5f, -1.1f, -2.5f, -2.5f)
-                        reflectiveCurveToRelative(1.1f, -2.5f, 2.5f, -2.5f)
+                        moveTo(13.5f, 17f)
+                        horizontalLineToRelative(-7f)
+                        curveToRelative(-1.38f, 0f, -2.5f, -1.12f, -2.5f, -2.5f)
+                        reflectiveCurveToRelative(1.12f, -2.5f, 2.5f, -2.5f)
                         horizontalLineToRelative(7f)
-                        curveToRelative(1.4f, 0f, 2.5f, 1.1f, 2.5f, 2.5f)
-                        reflectiveCurveToRelative(-1.1f, 2.5f, -2.5f, 2.5f)
+                        curveToRelative(1.38f, 0f, 2.5f, 1.12f, 2.5f, 2.5f)
+                        reflectiveCurveToRelative(-1.12f, 2.5f, -2.5f, 2.5f)
                         close()
                     }
                 }
@@ -127,37 +128,19 @@ val UIKitSystemUISymbols.ToggleMultiple: UIKitSymbol
                 style: UIKitSymbolStyle,
                 states: List<Pair<String, UIKitSymbolGroupState>>
             ): List<UIKitSymbolColor> {
-                return when (style) {
-                    is UIKitSymbolStyle.Hierarchical -> {
-                        listOf(
-                            UIKitSymbolColor("thumb0", style.brush, 1f),
-                            UIKitSymbolColor("thumb1", style.brush, 1f),
-                            UIKitSymbolColor("container0", style.brush, 0.6f),
-                            UIKitSymbolColor("container1", style.brush, 0.6f)
-                        )
+                return UIKitSymbolColorSet(
+                    style = style,
+                    layers = layers,
+                    layerInfo = listOf(
+                        Pair("thumb0", 1f),
+                        Pair("thumb1", 1f),
+                        Pair("container0", 0.6f),
+                        Pair("container1", 0.6f),
+                    ),
+                    multiColor = layers.map {
+                        UIKitSymbolColor(it.id, UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 1f)
                     }
-                    is UIKitSymbolStyle.Monochrome -> layers.map { layer ->
-                        UIKitSymbolColor(
-                            layer.id,
-                            style.brush,
-                            1f
-                        )
-                    }
-                    UIKitSymbolStyle.MultiColor -> layers.map { layer ->
-                        UIKitSymbolColor(
-                            layer.id,
-                            UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush),
-                            1f
-                        )
-                    }
-                    is UIKitSymbolStyle.Palette -> style.brushes.mapIndexed { index, brush ->
-                        UIKitSymbolColor(
-                            layers.getOrNull(index)?.id ?: "unknown",
-                            brush,
-                            1f
-                        )
-                    }
-                }
+                )
             }
 
             override fun stateEffect(

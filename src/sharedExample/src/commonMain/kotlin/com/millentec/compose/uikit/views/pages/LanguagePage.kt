@@ -66,7 +66,7 @@ fun LanguagesPage() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
+                    .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
                     .uikitClickable(
                         onClick = {
                             AppSettings.switchLanguage(SupportedLanguages.entries[it])

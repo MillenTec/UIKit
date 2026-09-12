@@ -23,10 +23,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.App
-import com.millentec.compose.uikit.BackHandler
-import com.millentec.compose.uikit.LocalAcrylicMaterialState
-import com.millentec.compose.uikit.SystemUISymbols
+import com.millentec.compose.uikit.*
 import com.millentec.compose.uikit.component.input.UIKitDropdownButton
 import com.millentec.compose.uikit.component.input.UIKitNavigationBar
 import com.millentec.compose.uikit.component.layout.UIKitSurface
@@ -130,6 +127,10 @@ fun MainView() {
                     Controls_BasicInputs_ToggleButton -> BasicInputControls.first { it.page == Controls_BasicInputs_ToggleButton }.Content(LocalStrings.current.controls.inputs.toggleButton.title)
                     Controls_BasicInputs_ToggleSwitch -> BasicInputControls.first { it.page == Controls_BasicInputs_ToggleSwitch }.Content(LocalStrings.current.controls.inputs.toggleSwitch.title)
                     Designs_UIKitSymbols_SystemUI -> UIKitSymbolsGalleryPage(SystemUISymbols, "System UI")
+                    Designs_UIKitSymbols_All -> UIKitSymbolsGalleryPage(
+                        (SystemUISymbols + MediaSymbols + ShapesSymbols).sortedBy { it.name },
+                        "All Symbols"
+                    )
                 }
             }
         }

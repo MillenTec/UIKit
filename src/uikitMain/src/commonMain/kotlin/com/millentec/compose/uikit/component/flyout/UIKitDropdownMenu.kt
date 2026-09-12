@@ -62,7 +62,7 @@ fun UIKitDropdownMenu(
     maxLength: Dp = (-1).dp,
     minWidth: Dp = 200.dp,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
-    cornerRadius: Dp = getUIKitShapes().regularRounded,
+    cornerRadius: Dp = getUIKitShapes().cardRounded,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().smallSpacing),
     alignment: Alignment = Alignment.Center,
     offset: (IntSize, IntSize) -> DpOffset = { rootSize, contentSize -> DpOffset.Zero },

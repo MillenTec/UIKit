@@ -79,7 +79,7 @@ data class UIKitDropdownButtonColors(
 fun UIKitDropdownButton(
     modifier: Modifier = Modifier,
     expanded: Boolean,
-    cornerRadius: Dp = getUIKitShapes().regularRounded,
+    cornerRadius: Dp = getUIKitShapes().cardRounded,
     maxLength: Dp = 360.dp,
     minWidth: Dp = 200.dp,
     offset: DpOffset = DpOffset.Zero,

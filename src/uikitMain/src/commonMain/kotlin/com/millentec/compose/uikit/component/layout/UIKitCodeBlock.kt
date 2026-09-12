@@ -106,7 +106,7 @@ fun UIKitCodeViewer(
     modifier: Modifier = Modifier,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     divider: Color? = getUIKitColors().lineFillColorPrimaryBrush,
-    cornerRadius: Dp = getUIKitShapes().regularRounded,
+    cornerRadius: Dp = getUIKitShapes().cardRounded,
     lineNumberEnabled: Boolean = true,
     warpEnabled: Boolean = false,
     config: UIKitCodeBlockConfig = UIKitCodeBlockConfig.text(),
