@@ -17,9 +17,8 @@ class UIKitSymbolAnimState(
     initialTranslate: Offset = Offset(0f, 0f),
 ) {
     val visible: Boolean
-        get() = alphaState.value > 0f
-                && alphaAdditionState.value > 0f
-                && scaleState.value > 0f
+        get() = alphaState.value * alphaAdditionState.value > 0f
+                && scaleState.value * scaleAdditionState.value > 0f
                 && pathTrimStartState.value - pathTrimEndState.value != 0f
 
     fun visible(
@@ -27,10 +26,8 @@ class UIKitSymbolAnimState(
     ): Boolean {
         val values = filter.map { selector ->
             when (selector) {
-                Empty -> true
                 Scale -> scaleState.value > 0f
-                ScaleCenterX -> true
-                ScaleCenterY -> true
+                ScaleAddition -> scaleAdditionState.value > 0f
                 Alpha -> alphaState.value > 0f
                 AlphaAddition -> alphaAdditionState.value > 0f
                 PathTrimStart -> {
@@ -39,11 +36,7 @@ class UIKitSymbolAnimState(
                 PathTrimEnd -> {
                     pathTrimStartState.value - pathTrimEndState.value != 0f
                 }
-                Rotate -> true
-                RotateCenterX -> true
-                RotateCenterY -> true
-                TranslateX -> true
-                TranslateY -> true
+                else -> true
             }
         }
 
@@ -55,10 +48,12 @@ class UIKitSymbolAnimState(
     fun snapshot(): UIKitSymbolGroupState {
         return UIKitSymbolGroupState(
             scale = scaleState.value,
+            scaleAddition = scaleAdditionState.value,
             alpha = alphaState.value,
             pathTrimStart = pathTrimStartState.value,
             pathTrimEnd = pathTrimEndState.value,
             scaleCenter = Offset(scaleCenterXState.value, scaleCenterYState.value),
+            scaleAdditionCenter = Offset(scaleAdditionCenterX.value, scaleAdditionCenterY.value),
             alphaAddition = alphaAdditionState.value,
             rotate = rotateState.value,
             rotateCenter = Offset(rotateCenterXState.value, rotateCenterYState.value),
@@ -68,6 +63,21 @@ class UIKitSymbolAnimState(
 
     val scaleState = Animatable(
         initialValue = initialScale,
+        typeConverter = Float.VectorConverter,
+    )
+
+    val scaleAdditionState = Animatable(
+        initialValue = 1f,
+        typeConverter = Float.VectorConverter,
+    )
+
+    val scaleAdditionCenterX = Animatable(
+        initialValue = 0f,
+        typeConverter = Float.VectorConverter,
+    )
+
+    val scaleAdditionCenterY = Animatable(
+        initialValue = 0f,
         typeConverter = Float.VectorConverter,
     )
 
@@ -87,7 +97,7 @@ class UIKitSymbolAnimState(
     )
 
     val alphaAdditionState = Animatable(
-        initialValue = initialAlpha,
+        initialValue = 1f,
         typeConverter = Float.VectorConverter,
     )
 
@@ -129,7 +139,9 @@ class UIKitSymbolAnimState(
 
 data class UIKitSymbolGroupState(
     val scale: Float = 1f,
+    val scaleAddition: Float = 1f,
     val scaleCenter: Offset = Offset(10f, 10f),
+    val scaleAdditionCenter: Offset = Offset(10f, 10f),
     val alpha: Float = 1f,
     val alphaAddition: Float = 1f,
     val pathTrimStart: Float = 0f,
@@ -139,8 +151,8 @@ data class UIKitSymbolGroupState(
     val translate: Offset = Offset(0f, 0f),
 ) {
     val visible: Boolean
-        get() = alpha > 0f
-                && scale > 0f
+        get() = alpha * alphaAddition > 0f
+                && scale * scaleAddition > 0f
                 && pathTrimStart - pathTrimEnd != 0f
 
     fun visible(
@@ -148,10 +160,8 @@ data class UIKitSymbolGroupState(
     ): Boolean {
         val values = filter.map { selector ->
             when (selector) {
-                Empty -> true
                 Scale -> scale > 0f
-                ScaleCenterX -> true
-                ScaleCenterY -> true
+                ScaleAddition -> scaleAddition > 0f
                 Alpha -> alpha > 0f
                 AlphaAddition -> alphaAddition > 0f
                 PathTrimStart -> {
@@ -160,11 +170,7 @@ data class UIKitSymbolGroupState(
                 PathTrimEnd -> {
                     pathTrimStart - pathTrimEnd != 0f
                 }
-                Rotate -> true
-                RotateCenterX -> true
-                RotateCenterY -> true
-                TranslateX -> true
-                TranslateY -> true
+                else -> true
             }
         }
 

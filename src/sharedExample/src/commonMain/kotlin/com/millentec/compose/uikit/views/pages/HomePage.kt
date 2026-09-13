@@ -19,6 +19,7 @@ import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.animate.*
 import com.millentec.compose.uikit.symbols.builtin.media.Volume
 import com.millentec.compose.uikit.symbols.builtin.systemui.AddCircle
+import com.millentec.compose.uikit.symbols.builtin.systemui.Bluetooth
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.theme.getUIKitColors
@@ -90,6 +91,22 @@ fun HomePage() {
                     UIKitIcon(
                         modifier = Modifier
                             .size(100.dp),
+                        symbol = UIKitSymbols.systemUI.Bluetooth,
+                        contentDescription = "Bluetooth",
+                        symbolStyle = if (style.value) UIKitSymbolStyle.MultiColor
+                        else UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
+                        symbolEffect = UIKitSymbolEffect()
+                            .visibleEffect(visible0.value)
+                            .stateEffect(if (enabled0.value) "default" else "disabled")
+                            .bounceEffect(bounceTrigger.value, -1f)
+                            .variableColorEffect(isActive.value)
+                            .progressibleEffect(progress.value)
+                            .pulseEffect(isActive1.value)
+                    )
+
+                    UIKitIcon(
+                        modifier = Modifier
+                            .size(100.dp),
                         symbol = UIKitSymbols.systemUI.AddCircle,
                         contentDescription = null,
                         symbolStyle = if (style.value) UIKitSymbolStyle.MultiColor
@@ -114,13 +131,6 @@ fun HomePage() {
                         UIKitToggleSwitch(
                             checked = enabled0.value,
                             onCheckedChange = { enabled0.value = it }
-                        )
-
-                        Spacer(Modifier.height(getUIKitLayout().itemSpacing))
-
-                        UIKitToggleSwitch(
-                            checked = isActive1.value,
-                            onCheckedChange = { isActive1.value = it }
                         )
                     }
 
@@ -163,6 +173,8 @@ fun HomePage() {
                         onCheckedChange = { isActive.value = it }
                     )
                 }
+
+                Spacer(Modifier.width(getUIKitLayout().itemSpacing))
 
                 UIKitSlider(
                     value = progress.value,

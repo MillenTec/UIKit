@@ -100,7 +100,7 @@ val UIKitSystemUISymbols.Computer: UIKitSymbol
             )
 
             override val tags: List<String> = listOf(
-                "Computer", "PC", "Screen", "TV", "Display"
+                "Computer", "PC", "Screen", "TV", "Display", "System"
             )
 
             @Composable

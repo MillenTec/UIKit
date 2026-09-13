@@ -1,8 +1,10 @@
 package com.millentec.compose.uikit.views.pages
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -15,13 +17,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
+import com.millentec.compose.uikit.BackHandler
 import com.millentec.compose.uikit.SystemUISymbols
 import com.millentec.compose.uikit.component.flyout.UIKitSwipeableFlyoutState
 import com.millentec.compose.uikit.component.input.UIKitHSVColorPicker
+import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.*
 import com.millentec.compose.uikit.foundation.graphics.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.graphics.rememberAcrylicMaterialState
@@ -30,17 +35,19 @@ import com.millentec.compose.uikit.foundation.helper.toHsv
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.ChevronArrowLeft
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Color
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.PaintBucket
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.options
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
+import com.millentec.compose.uikit.navigation.UIKitNavigationAnimate
 import com.millentec.compose.uikit.symbols.UIKitSymbol
+import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
 import com.millentec.compose.uikit.symbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.builtin.systemui.AddCircle
+import com.millentec.compose.uikit.symbols.animate.*
+import com.millentec.compose.uikit.symbols.builtin.media.Volume
+import com.millentec.compose.uikit.symbols.builtin.shapes.Layer
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.viewmodels.MainViewModel
 import com.millentec.compose.uikit.views.LocalNavigationDockHeight
+import com.millentec.compose.uikit.views.component.CommonSlider
 import com.millentec.compose.uikit.views.component.StateSelector
 import com.millentec.compose.uikit.views.pages.CommonSymbolStyle.*
 import kotlin.math.ceil
@@ -58,7 +65,7 @@ private enum class CommonSymbolStyle {
     MultiColor
 }
 
-private class SymbolConfig(
+private class CommonConfig(
     style: CommonSymbolStyle,
     tint: Color,
     backgroundColor: Color,
@@ -81,7 +88,7 @@ fun UIKitSymbolsGalleryPage(
 ) {
     val uikitTheme by rememberUpdatedState(getUIKitTheme())
     val acrylicMaterialState = rememberAcrylicMaterialState()
-    val symbolConfig = remember { SymbolConfig(
+    val commonConfig = remember { CommonConfig(
         style = Monochrome,
         tint = uikitTheme.colors.highlightColorPrimaryBrush,
         backgroundColor = uikitTheme.colors.contentFillColorSecondaryBrush
@@ -92,86 +99,207 @@ fun UIKitSymbolsGalleryPage(
     val commonOptionExpanded = remember { mutableStateOf(false) }
     val commonOptionState = remember { UIKitSwipeableFlyoutState() }
 
+    val selectedSymbol = remember { mutableStateOf<UIKitSymbol?>(null) }
+    val symbolConfig = remember(selectedSymbol.value) { SymbolConfig() }
+
+    LaunchedEffect(symbolFilter.value) {
+        selectedSymbol.value = null
+    }
+
     LaunchedEffect(symbolFilter.value) {
         symbolsFiltered.value = symbols.filter(symbolFilter.value)
     }
 
-    BoxWithConstraints(
-        modifier = Modifier
-            .uikitBottomSheetCollaborativeAnimation(commonOptionState)
-    ) {
-        LazyVerticalGrid(
+    BoxWithConstraints {
+        AnimatedContent(
             modifier = Modifier
-                .fillMaxSize()
-                .background(getUIKitColors().contentFillColorPrimaryBrush)
                 .acrylicMaterialSource(acrylicMaterialState),
-            contentPadding = PaddingValues(
-                start = getUIKitLayout().screenSideSpacing,
-                top = getUIKitLayout().interactiveHotspot + getUIKitLayout().screenSideSpacing + getUIKitLayout().mediumSpacing,
-                end = getUIKitLayout().screenSideSpacing,
-                bottom = maxOf(
-                    LocalNavigationDockHeight.value + getUIKitLayout().screenSideSpacing,
-                    getUIKitLayout().screenSideSpacing
-                )
-            ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current),
-            columns = GridCells.Adaptive(128.dp)
+            targetState = selectedSymbol.value,
+            transitionSpec = { UIKitNavigationAnimate.jump }
         ) {
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                Text(
-                    text = title,
-                    style = getUIKitTypography().largeTitle,
-                    color = getUIKitColors().textFillColorPrimaryBrush
+            if (it != null && maxWidth <= 1024.dp) {
+                BackHandler { selectedSymbol.value = null }
+
+                SymbolView(
+                    symbol = it,
+                    commonConfig = commonConfig,
+                    paddingValues = PaddingValues(
+                        start = getUIKitLayout().screenSideSpacing,
+                        top = getUIKitLayout().interactiveHotspot + getUIKitLayout().screenSideSpacing + getUIKitLayout().mediumSpacing,
+                        end = getUIKitLayout().screenSideSpacing,
+                        bottom = maxOf(
+                            LocalNavigationDockHeight.value + getUIKitLayout().screenSideSpacing,
+                            getUIKitLayout().screenSideSpacing
+                        )
+                    ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current),
                 )
-            }
-
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                Spacer(Modifier.height(getUIKitLayout().titleSpacing))
-            }
-
-            items(symbolsFiltered.value.size) {
-                Column(
+            } else {
+                Box(
                     modifier = Modifier
-                        .padding(getUIKitLayout().smallSpacing)
-                        .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
-                        .background(symbolConfig.backgroundColor.value)
-                        .padding(getUIKitLayout().mediumSpacing),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                        .uikitBottomSheetCollaborativeAnimation(commonOptionState)
                 ) {
-                    UIKitIcon(
+                    Row(
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        symbol = symbolsFiltered.value[it],
-                        contentDescription = symbolsFiltered.value[it].name,
-                        symbolEffect = null,
-                        symbolStyle = symbolConfig.symbolStyle
-                    )
+                            .fillMaxSize()
+                    ) {
+                        AnimatedContent(
+                            targetState = selectedSymbol.value,
+                            transitionSpec = { UIKitNavigationAnimate.jump }
+                        ) { state ->
+                            if (state != null && this@BoxWithConstraints.maxWidth > 1024.dp) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .weight(1f),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    UIKitIcon(
+                                        modifier = Modifier
+                                            .fillMaxHeight(0.6f),
+                                        symbol = state,
+                                        contentDescription = "Preview",
+                                        symbolStyle = commonConfig.symbolStyle,
+                                        symbolEffect = UIKitSymbolEffect()
+                                            .visibleEffect(symbolConfig.visible.value)
+                                            .stateEffect((state.abilityStatement?.firstOrNull { it is UIKitSymbolAbility.MultiState } as? UIKitSymbolAbility.MultiState)?.states?.getOrNull(
+                                                symbolConfig.state.value
+                                            ) ?: "default")
+                                            .bounceEffect(symbolConfig.bounceTrigger.value)
+                                            .variableColorEffect(symbolConfig.variableColorActive.value)
+                                            .pulseEffect(symbolConfig.pulseActive.value)
+                                            .progressibleEffect(symbolConfig.progress.value)
+                                    )
+                                }
+                            } else {
+                                LazyVerticalGrid(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(getUIKitColors().contentFillColorPrimaryBrush),
+                                    contentPadding = PaddingValues(
+                                        start = getUIKitLayout().screenSideSpacing,
+                                        top = getUIKitLayout().interactiveHotspot + getUIKitLayout().screenSideSpacing + getUIKitLayout().mediumSpacing,
+                                        end = getUIKitLayout().screenSideSpacing,
+                                        bottom = maxOf(
+                                            LocalNavigationDockHeight.value + getUIKitLayout().screenSideSpacing,
+                                            getUIKitLayout().screenSideSpacing
+                                        )
+                                    ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current),
+                                    columns = GridCells.Adaptive(128.dp)
+                                ) {
+                                    item(span = { GridItemSpan(maxLineSpan) }) {
+                                        Text(
+                                            text = title,
+                                            style = getUIKitTypography().largeTitle,
+                                            color = getUIKitColors().textFillColorPrimaryBrush
+                                        )
+                                    }
 
-                    Spacer(Modifier.height(getUIKitLayout().itemSpacing))
+                                    item(span = { GridItemSpan(maxLineSpan) }) {
+                                        Spacer(Modifier.height(getUIKitLayout().titleSpacing))
+                                    }
 
-                    Text(
-                        text = symbolsFiltered.value[it].name,
-                        style = getUIKitTypography().body,
-                        color = getUIKitColors().textFillColorSecondaryBrush,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
-                    )
+                                    items(symbolsFiltered.value.size) {
+                                        Column(
+                                            modifier = Modifier
+                                                .padding(getUIKitLayout().smallSpacing)
+                                                .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
+                                                .background(commonConfig.backgroundColor.value)
+                                                .uikitClickable(
+                                                    onClick = {
+                                                        selectedSymbol.value = symbolsFiltered.value[it]
+                                                    },
+                                                    indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
+                                                )
+                                                .padding(getUIKitLayout().mediumSpacing),
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                        ) {
+                                            UIKitIcon(
+                                                modifier = Modifier
+                                                    .fillMaxWidth(),
+                                                symbol = symbolsFiltered.value[it],
+                                                contentDescription = symbolsFiltered.value[it].name,
+                                                symbolEffect = null,
+                                                symbolStyle = commonConfig.symbolStyle
+                                            )
+
+                                            Spacer(Modifier.height(getUIKitLayout().itemSpacing))
+
+                                            Text(
+                                                text = symbolsFiltered.value[it].name,
+                                                style = getUIKitTypography().body,
+                                                color = getUIKitColors().textFillColorSecondaryBrush,
+                                                overflow = TextOverflow.Ellipsis,
+                                                maxLines = 1
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (this@BoxWithConstraints.maxWidth > 1024.dp) {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .width(420.dp),
+                                contentPadding = PaddingValues(getUIKitLayout().cardPadding)
+                            ) {
+                                if (selectedSymbol.value != null) {
+                                    selectedSymbol.value?.let { symbol ->
+                                        SymbolOptions(
+                                            commonConfig = commonConfig,
+                                            symbol = symbol,
+                                            config = symbolConfig
+                                        )
+                                    }
+                                } else {
+                                    CommonOptions(
+                                        commonConfig,
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    UIKitBottomSheet(
+                        expanded = commonOptionExpanded.value,
+                        state = commonOptionState,
+                        title = "Options",
+                        minHeight = this@BoxWithConstraints.maxHeight * 0.8f,
+                        maxHeight = this@BoxWithConstraints.maxHeight * 0.8f,
+                        onDismissRequest = {
+                            commonOptionExpanded.value = false
+                        }
+                    ) {
+                        BackHandler { commonOptionExpanded.value = false }
+
+                        LazyColumn(
+                            contentPadding = PaddingValues(getUIKitLayout().x2Spacing)
+                        ) {
+                            CommonOptions(commonConfig)
+                        }
+                    }
                 }
             }
         }
 
         Row(
             modifier = Modifier
-                .padding(PaddingValues(
-                    top = getUIKitLayout().screenSideSpacing,
-                    start = getUIKitLayout().screenSideSpacing,
-                    end = getUIKitLayout().screenSideSpacing
-                ) + WindowInsets.safeDrawing.asPaddingValues())
+                .padding(
+                    PaddingValues(
+                        top = getUIKitLayout().screenSideSpacing,
+                        start = getUIKitLayout().screenSideSpacing,
+                        end = getUIKitLayout().screenSideSpacing
+                    ) + WindowInsets.safeDrawing.asPaddingValues()
+                )
         ) {
             UIKitSurface(
                 modifier = Modifier
                     .size(getUIKitLayout().interactiveHotspot),
                 onClick = {
-                    MainViewModel.navigation.goBack()
+                    if (selectedSymbol.value != null)
+                        selectedSymbol.value = null
+                    else
+                        MainViewModel.navigation.goBack()
                 },
                 shape = RoundedCornerShape(getUIKitShapes().circular),
                 color = getUIKitColors().contentFillColorSecondaryBrush,
@@ -204,25 +332,13 @@ fun UIKitSymbolsGalleryPage(
             ) {
                 Icon(
                     modifier = Modifier
-                        .fillMaxSize(0.6f),
+                        .fillMaxHeight(0.6f)
+                        .aspectRatio(1f),
                     imageVector = FluentIcons.options(),
                     contentDescription = "Common Options",
                     tint = getUIKitColors().textFillColorPrimaryBrush
                 )
             }
-        }
-
-        UIKitBottomSheet(
-            expanded = commonOptionExpanded.value,
-            state = commonOptionState,
-            title = "Options",
-            minHeight = this@BoxWithConstraints.maxHeight * 0.8f,
-            maxHeight = this@BoxWithConstraints.maxHeight * 0.8f,
-            onDismissRequest = {
-                commonOptionExpanded.value = false
-            }
-        ) {
-            CommonOptions(symbolConfig)
         }
     }
 }
@@ -234,206 +350,411 @@ private fun CommonOptionsPreview() {
         modifier = Modifier
             .background(getUIKitColors().contentFillColorPrimaryBrush)
     ) {
-        CommonOptions(
-            SymbolConfig(
-                style = Monochrome,
-                tint = getUIKitColors().highlightColorPrimaryBrush,
-                backgroundColor = getUIKitColors().contentFillColorSecondaryBrush,
-            )
+        val commonConfig = CommonConfig(
+            style = Monochrome,
+            tint = getUIKitColors().highlightColorPrimaryBrush,
+            backgroundColor = getUIKitColors().contentFillColorSecondaryBrush,
         )
+        LazyColumn(
+            contentPadding = PaddingValues(getUIKitLayout().x2Spacing)
+        ) {
+            CommonOptions(
+                commonConfig
+            )
+        }
+    }
+}
+
+private fun LazyListScope.CommonOptions(
+    state: CommonConfig,
+    symbolState: String = "default",
+    sampleSymbol: UIKitSymbol = UIKitSymbols.shapes.Layer
+) {
+    item {
+        val style = remember { mutableStateOf(state.style.value.ordinal) }
+
+        LaunchedEffect(style.value) {
+            state.style.value = CommonSymbolStyle.entries[style.value]
+        }
+
+        StateSelector(
+            states = listOf(
+                StateSelectorItem("Monochrome") {
+                    UIKitIcon(
+                        symbol = sampleSymbol,
+                        contentDescription = "Example",
+                        symbolStyle = UIKitSymbolStyle.Monochrome(state.tint.value),
+                        symbolEffect = UIKitSymbolEffect()
+                            .stateEffect(symbolState)
+                    )
+                },
+                StateSelectorItem("Hierarchical") {
+                    UIKitIcon(
+                        symbol = sampleSymbol,
+                        contentDescription = "Example",
+                        symbolStyle = UIKitSymbolStyle.Hierarchical(state.tint.value),
+                        symbolEffect = UIKitSymbolEffect()
+                            .stateEffect(symbolState)
+                    )
+                },
+                StateSelectorItem("Multi Color") {
+                    UIKitIcon(
+                        symbol = sampleSymbol,
+                        contentDescription = "Example",
+                        symbolStyle = UIKitSymbolStyle.MultiColor,
+                        symbolEffect = UIKitSymbolEffect()
+                            .stateEffect(symbolState)
+                    )
+                }
+            ),
+            state = style
+        )
+    }
+
+    item {
+        Spacer(Modifier.height(getUIKitLayout().itemSpacing))
+    }
+
+    item {
+        val tint = remember { mutableStateOf(state.tint.value.toHsv()) }
+
+        LaunchedEffect(tint.value) {
+            state.tint.value = tint.value.getColor()
+        }
+
+        UIKitGroupedCard {
+            Item {
+                val expanded = remember { mutableStateOf(false) }
+                UIKitSettingsExpander(
+                    expanded = expanded.value,
+                    onClick = {
+                        expanded.value = !expanded.value
+                    },
+                    title = "Tint",
+                    icon = FluentIcons.Color,
+                    cornerRadius = 0.dp
+                ) {
+                    UIKitHSVColorPicker(
+                        color = tint.value,
+                        onColorChange = {
+                            tint.value = it
+                        }
+                    )
+
+                    val itemHeight = 48.dp
+
+                    val optionalColor = listOf(
+                        OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrush, "Primary", getUIKitColors().contentFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrushReversed, "Reversed", getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().highlightColorPrimaryBrush, "Highlight", UIKitColors.getDark().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().successGreenColorPrimaryBrush, "Success", getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().warningYellowColorPrimaryBrush, "Warning", getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().errorRedColorPrimaryBrush, "Error", UIKitColors.getDark().textFillColorPrimaryBrush),
+                    )
+
+                    BoxWithConstraints {
+                        LazyVerticalGrid(
+                            modifier = Modifier
+                                .height(
+                                    (ceil(optionalColor.size / floor(maxWidth / 128.dp)) * itemHeight) + getUIKitLayout().smallSpacing * ceil(optionalColor.size / floor(maxWidth / 128.dp)) * 2
+                                ),
+                            columns = GridCells.Adaptive(128.dp),
+                            userScrollEnabled = false
+                        ) {
+                            items(optionalColor.size) {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(getUIKitLayout().smallSpacing)
+                                        .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
+                                        .height(itemHeight)
+                                        .background(optionalColor[it].color)
+                                        .uikitClickable(
+                                            onClick = {
+                                                tint.value = optionalColor[it].color.toHsv()
+                                            },
+                                            indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
+                                        ),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Text(
+                                        text = optionalColor[it].name,
+                                        style = getUIKitTypography().body,
+                                        color = optionalColor[it].contentColor,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Divider()
+            Item {
+                val background = remember { mutableStateOf(state.backgroundColor.value.toHsv()) }
+
+                LaunchedEffect(background.value) {
+                    state.backgroundColor.value = background.value.getColor()
+                }
+
+                val expanded = remember { mutableStateOf(false) }
+                UIKitSettingsExpander(
+                    expanded = expanded.value,
+                    onClick = {
+                        expanded.value = !expanded.value
+                    },
+                    title = LocalStrings.current.designs.fluentIcons.options.backgroundColor,
+                    icon = FluentIcons.PaintBucket,
+                    cornerRadius = 0.dp
+                ) {
+                    UIKitHSVColorPicker(
+                        color = background.value,
+                        onColorChange = {
+                            background.value = it
+                        }
+                    )
+
+                    Spacer(Modifier.height(getUIKitLayout().basicSpacing))
+
+                    val itemHeight = 48.dp
+
+                    val optionalColor = listOf(
+                        OptionalColorInfo(getUIKitColors().contentFillColorPrimaryBrush, "Primary", getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().contentFillColorSecondaryBrush, "Secondary", getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().highlightColorFourthBrush, "Highlight", getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().successGreenColorFourthBrush, "Success", getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().warningYellowColorFourthBrush, "Warning", getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().errorRedColorFourthBrush, "Error", getUIKitColors().textFillColorPrimaryBrush),
+                    )
+
+                    BoxWithConstraints {
+                        LazyVerticalGrid(
+                            modifier = Modifier
+                                .height(
+                                    (ceil(optionalColor.size / floor(maxWidth / 128.dp)) * itemHeight) + getUIKitLayout().smallSpacing * ceil(optionalColor.size / floor(maxWidth / 128.dp)) * 2
+                                ),
+                            columns = GridCells.Adaptive(128.dp),
+                            userScrollEnabled = false
+                        ) {
+                            items(optionalColor.size) {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(getUIKitLayout().smallSpacing)
+                                        .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
+                                        .height(itemHeight)
+                                        .background(optionalColor[it].color)
+                                        .uikitClickable(
+                                            onClick = {
+                                                background.value = optionalColor[it].color.toHsv()
+                                            },
+                                            indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
+                                        ),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Text(
+                                        text = optionalColor[it].name,
+                                        style = getUIKitTypography().body,
+                                        color = optionalColor[it].contentColor,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+private class SymbolConfig {
+    val state = mutableStateOf(0)
+    val visible = mutableStateOf(true)
+    val bounceTrigger = mutableStateOf(false)
+    val variableColorActive = mutableStateOf(false)
+    val pulseActive = mutableStateOf(false)
+    val progress = mutableStateOf(1f)
+}
+
+private fun LazyListScope.SymbolOptions(
+    commonConfig: CommonConfig,
+    symbol: UIKitSymbol,
+    config: SymbolConfig
+) {
+    item {
+        val states = symbol.abilityStatement?.firstOrNull { it is UIKitSymbolAbility.MultiState } as? UIKitSymbolAbility.MultiState
+        if (states != null && states.states.isNotEmpty()) {
+            StateSelector(
+                states = states.states.map {
+                    StateSelectorItem(
+                        state = it
+                    ) {
+                        UIKitIcon(
+                            symbol = symbol,
+                            contentDescription = "Example",
+                            symbolStyle = commonConfig.symbolStyle,
+                            symbolEffect = UIKitSymbolEffect()
+                                .stateEffect(it)
+                        )
+                    }
+                },
+                state = config.state
+            )
+
+            Spacer(Modifier.height(getUIKitLayout().itemSpacing))
+        }
+    }
+
+    item {
+        UIKitGroupedCard {
+            SettingCard(
+                icon = FluentIcons.Flash,
+                title = "Visible",
+                onClick = {
+                    config.visible.value = !config.visible.value
+                }
+            ) {
+                UIKitToggleSwitch(
+                    checked = config.visible.value,
+                    onCheckedChange = { config.visible.value = it }
+                )
+            }
+            if (symbol.abilityStatement?.any { it is UIKitSymbolAbility.Bounce } == true) {
+                Divider()
+                SettingCard(
+                    title = "Bounce",
+                    icon = FluentIcons.Fire,
+                    onClick = {
+                        config.bounceTrigger.value = !config.bounceTrigger.value
+                    }
+                )
+            }
+            if (symbol.abilityStatement?.any { it is UIKitSymbolAbility.VariableColor } == true) {
+                Divider()
+                SettingCard(
+                    title = "Variable Color",
+                    icon = FluentIcons.Fire,
+                    onClick = {
+                        config.variableColorActive.value = !config.variableColorActive.value
+                    }
+                ) {
+                    UIKitToggleSwitch(
+                        checked = config.variableColorActive.value,
+                        onCheckedChange = { config.variableColorActive.value = it }
+                    )
+                }
+            }
+            if (symbol.abilityStatement?.any { it is UIKitSymbolAbility.Pulse } == true) {
+                Divider()
+                SettingCard(
+                    title = "Pulse",
+                    icon = FluentIcons.Fire,
+                    onClick = {
+                        config.pulseActive.value = !config.pulseActive.value
+                    }
+                ) {
+                    UIKitToggleSwitch(
+                        checked = config.pulseActive.value,
+                        onCheckedChange = { config.pulseActive.value = it }
+                    )
+                }
+            }
+            if (symbol.abilityStatement?.any { it is UIKitSymbolAbility.Progressable } == true) {
+                Divider()
+                Item {
+                    CommonSlider(
+                        state = config.progress
+                    )
+                }
+            }
+        }
+    }
+
+    item {
+        Spacer(Modifier.height(getUIKitLayout().sectionSpacing))
+
+        Text(
+            text = "Common Options",
+            style = getUIKitTypography().subtitle,
+            color = getUIKitColors().textFillColorPrimaryBrush
+        )
+
+        Spacer(Modifier.height(getUIKitLayout().subheadSpacing))
+    }
+
+    CommonOptions(
+        commonConfig,
+        (symbol.abilityStatement?.firstOrNull { it is UIKitSymbolAbility.MultiState } as? UIKitSymbolAbility.MultiState)?.states?.getOrNull(config.state.value) ?:"default",
+        symbol
+    )
+}
+
+@Composable
+@Preview
+private fun SymbolViewPreview() {
+    Box(
+        modifier = Modifier
+            .background(getUIKitColors().contentFillColorPrimaryBrush)
+    ) {
+        SymbolView(UIKitSymbols.media.Volume, CommonConfig(
+            style = Monochrome,
+            tint = getUIKitColors().highlightColorPrimaryBrush,
+            backgroundColor = getUIKitColors().contentFillColorSecondaryBrush
+        ), PaddingValues(getUIKitLayout().screenSideSpacing))
     }
 }
 
 @Composable
-private fun CommonOptions(
-    state: SymbolConfig
+private fun SymbolView(
+    symbol: UIKitSymbol,
+    commonConfig: CommonConfig,
+    paddingValues: PaddingValues,
 ) {
-    val style = remember { mutableStateOf(state.style.value.ordinal) }
-    val tint = remember { mutableStateOf(state.tint.value.toHsv()) }
-    val background = remember { mutableStateOf(state.backgroundColor.value.toHsv()) }
+    val symbolConfig = remember { SymbolConfig() }
 
-    LaunchedEffect(style.value) {
-        state.style.value = CommonSymbolStyle.entries[style.value]
-    }
-
-    LaunchedEffect(tint.value) {
-        state.tint.value = tint.value.getColor()
-    }
-
-    LaunchedEffect(background.value) {
-        state.backgroundColor.value = background.value.getColor()
-    }
-
-    LazyColumn(
-        contentPadding = PaddingValues(getUIKitLayout().x2Spacing)
-    ) {
-        item {
-            StateSelector(
-                states = listOf(
-                    StateSelectorItem("Monochrome") {
-                        UIKitIcon(
-                            symbol = UIKitSymbols.systemUI.AddCircle,
-                            contentDescription = "Example",
-                            symbolStyle = UIKitSymbolStyle.Monochrome(state.tint.value)
-                        )
-                    },
-                    StateSelectorItem("Hierarchical") {
-                        UIKitIcon(
-                            symbol = UIKitSymbols.systemUI.AddCircle,
-                            contentDescription = "Example",
-                            symbolStyle = UIKitSymbolStyle.Hierarchical(state.tint.value)
-                        )
-                    },
-                    StateSelectorItem("Multi Color") {
-                        UIKitIcon(
-                            symbol = UIKitSymbols.systemUI.AddCircle,
-                            contentDescription = "Example",
-                            symbolStyle = UIKitSymbolStyle.MultiColor
-                        )
-                    }
-                ),
-                state = style
+    Column {
+        Box(
+            modifier = Modifier
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                    end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+                )
+                .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
+                .background(commonConfig.backgroundColor.value)
+                .padding(getUIKitLayout().cardPadding)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            UIKitIcon(
+                modifier = Modifier
+                    .fillMaxWidth(0.6f),
+                symbol = symbol,
+                contentDescription = "Preview",
+                symbolStyle = commonConfig.symbolStyle,
+                symbolEffect = UIKitSymbolEffect()
+                    .visibleEffect(symbolConfig.visible.value)
+                    .stateEffect((symbol.abilityStatement?.firstOrNull { it is UIKitSymbolAbility.MultiState } as? UIKitSymbolAbility.MultiState)?.states?.getOrNull(
+                        symbolConfig.state.value
+                    ) ?: "default")
+                    .bounceEffect(symbolConfig.bounceTrigger.value)
+                    .variableColorEffect(symbolConfig.variableColorActive.value)
+                    .pulseEffect(symbolConfig.pulseActive.value)
+                    .progressibleEffect(symbolConfig.progress.value)
             )
         }
 
-        item {
-            Spacer(Modifier.height(getUIKitLayout().itemSpacing))
-        }
+        Spacer(Modifier.height(getUIKitLayout().sectionSpacing))
 
-        item {
-            val expanded = remember { mutableStateOf(false) }
-            UIKitSettingsExpander(
-                expanded = expanded.value,
-                onClick = {
-                    expanded.value = !expanded.value
-                },
-                title = "Tint",
-                icon = FluentIcons.Color
-            ) {
-                UIKitHSVColorPicker(
-                    color = tint.value,
-                    onColorChange = {
-                        tint.value = it
-                    }
-                )
-
-                val itemHeight = 48.dp
-
-                val optionalColor = listOf(
-                    OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrush, "Primary", getUIKitColors().contentFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrushReversed, "Reversed", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().highlightColorPrimaryBrush, "Highlight", UIKitColors.getDark().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().successGreenColorPrimaryBrush, "Success", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().warningYellowColorPrimaryBrush, "Warning", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().errorRedColorPrimaryBrush, "Error", UIKitColors.getDark().textFillColorPrimaryBrush),
-                )
-
-                BoxWithConstraints {
-                    LazyVerticalGrid(
-                        modifier = Modifier
-                            .height(
-                                (ceil(optionalColor.size / floor(maxWidth / 128.dp)) * itemHeight) + getUIKitLayout().smallSpacing * ceil(optionalColor.size / floor(maxWidth / 128.dp)) * 2
-                            ),
-                        columns = GridCells.Adaptive(128.dp),
-                        userScrollEnabled = false
-                    ) {
-                        items(optionalColor.size) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(getUIKitLayout().smallSpacing)
-                                    .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
-                                    .height(itemHeight)
-                                    .background(optionalColor[it].color)
-                                    .uikitClickable(
-                                        onClick = {
-                                            tint.value = optionalColor[it].color.toHsv()
-                                        },
-                                        indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
-                                    ),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                Text(
-                                    text = optionalColor[it].name,
-                                    style = getUIKitTypography().body,
-                                    color = optionalColor[it].contentColor,
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        item {
-            Spacer(Modifier.height(getUIKitLayout().itemSpacing))
-        }
-
-        item {
-            val expanded = remember { mutableStateOf(false) }
-            UIKitSettingsExpander(
-                expanded = expanded.value,
-                onClick = {
-                    expanded.value = !expanded.value
-                },
-                title = LocalStrings.current.designs.fluentIcons.options.backgroundColor,
-                icon = FluentIcons.PaintBucket
-            ) {
-                UIKitHSVColorPicker(
-                    color = background.value,
-                    onColorChange = {
-                        background.value = it
-                    }
-                )
-
-                Spacer(Modifier.height(getUIKitLayout().basicSpacing))
-
-                val itemHeight = 48.dp
-
-                val optionalColor = listOf(
-                    OptionalColorInfo(getUIKitColors().contentFillColorPrimaryBrush, "Primary", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().contentFillColorSecondaryBrush, "Secondary", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().highlightColorFourthBrush, "Highlight", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().successGreenColorFourthBrush, "Success", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().warningYellowColorFourthBrush, "Warning", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().errorRedColorFourthBrush, "Error", getUIKitColors().textFillColorPrimaryBrush),
-                )
-
-                BoxWithConstraints {
-                    LazyVerticalGrid(
-                        modifier = Modifier
-                            .height(
-                                (ceil(optionalColor.size / floor(maxWidth / 128.dp)) * itemHeight) + getUIKitLayout().smallSpacing * ceil(optionalColor.size / floor(maxWidth / 128.dp)) * 2
-                            ),
-                        columns = GridCells.Adaptive(128.dp),
-                        userScrollEnabled = false
-                    ) {
-                        items(optionalColor.size) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(getUIKitLayout().smallSpacing)
-                                    .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
-                                    .height(itemHeight)
-                                    .background(optionalColor[it].color)
-                                    .uikitClickable(
-                                        onClick = {
-                                            background.value = optionalColor[it].color.toHsv()
-                                        },
-                                        indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
-                                    ),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                Text(
-                                    text = optionalColor[it].name,
-                                    style = getUIKitTypography().body,
-                                    color = optionalColor[it].contentColor,
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(getUIKitLayout().itemSpacing))
+        LazyColumn(
+            contentPadding = PaddingValues(
+                start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+                bottom = paddingValues.calculateBottomPadding()
+            )
+        ) {
+            SymbolOptions(
+                commonConfig = commonConfig,
+                symbol = symbol,
+                config = symbolConfig
+            )
         }
     }
 }

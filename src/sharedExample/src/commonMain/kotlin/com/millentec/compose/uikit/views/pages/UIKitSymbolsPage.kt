@@ -13,7 +13,8 @@ import com.millentec.compose.uikit.foundation.Pages
 import com.millentec.compose.uikit.foundation.UIKitNavigationType
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Apps
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Archive
+import com.millentec.compose.uikit.symbols.UIKitSymbols
+import com.millentec.compose.uikit.symbols.builtin.layout.Grid
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
 import com.millentec.compose.uikit.theme.getUIKitTypography
@@ -59,7 +60,7 @@ fun UIKitSymbolsPage() {
             UIKitGroupedCard {
                 SettingCard(
                     title = "All",
-                    icon = FluentIcons.Archive,
+                    icon = UIKitSymbols.layout.Grid.toComposeVector(getUIKitColors().textFillColorPrimaryBrush),
                     onClick = {
                         nav.switchPage(Pages.Designs_UIKitSymbols_All, type = UIKitNavigationType.Forward)
                     }

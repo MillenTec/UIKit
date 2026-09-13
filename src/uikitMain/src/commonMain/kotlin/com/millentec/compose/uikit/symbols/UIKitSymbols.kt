@@ -4,9 +4,10 @@ object UIKitSymbols {
     val media = UIKitMediaSymbols()
     val systemUI = UIKitSystemUISymbols()
     val shapes = UIKitShapesSymbols()
+    val layout = UIKitLayoutSymbols()
 }
 
 class UIKitSystemUISymbols { internal constructor() }
 class UIKitMediaSymbols { internal constructor() }
-
 class UIKitShapesSymbols { internal constructor() }
+class UIKitLayoutSymbols { internal constructor() }

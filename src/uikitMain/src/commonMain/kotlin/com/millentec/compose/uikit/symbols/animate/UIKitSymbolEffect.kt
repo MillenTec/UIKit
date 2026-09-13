@@ -24,15 +24,18 @@ private suspend fun standardExecute(
                     val animatableState = when (parallel.type) {
                         Empty -> return@launch
                         Scale -> state.scaleState
+                        ScaleAddition -> state.scaleAdditionState
                         Alpha -> state.alphaState
                         AlphaAddition -> state.alphaAdditionState
                         PathTrimStart -> state.pathTrimStartState
                         PathTrimEnd -> state.pathTrimEndState
                         ScaleCenterX -> state.scaleCenterXState
                         ScaleCenterY -> state.scaleCenterYState
+                        ScaleAdditionCenterX -> state.scaleAdditionCenterX
+                        ScaleAdditionCenterY -> state.scaleAdditionCenterY
                         Rotate -> state.rotateState
-                        RotateCenterX -> state.scaleCenterXState
-                        RotateCenterY -> state.scaleCenterYState
+                        RotateCenterX -> state.rotateCenterXState
+                        RotateCenterY -> state.rotateCenterYState
                         TranslateX -> state.translateXState
                         TranslateY -> state.translateYState
                     }

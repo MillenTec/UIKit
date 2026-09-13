@@ -76,6 +76,7 @@ val UIKitSystemUISymbols.Bluetooth: UIKitSymbol
                 UIKitSymbolAbility.Appear,
                 UIKitSymbolAbility.Disappear,
                 UIKitSymbolAbility.Bounce,
+                UIKitSymbolAbility.VariableColor,
                 UIKitSymbolAbility.MultiState(listOf("default", "disabled"))
             )
 

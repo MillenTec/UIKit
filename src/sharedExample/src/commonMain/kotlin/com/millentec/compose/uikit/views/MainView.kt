@@ -128,7 +128,7 @@ fun MainView() {
                     Controls_BasicInputs_ToggleSwitch -> BasicInputControls.first { it.page == Controls_BasicInputs_ToggleSwitch }.Content(LocalStrings.current.controls.inputs.toggleSwitch.title)
                     Designs_UIKitSymbols_SystemUI -> UIKitSymbolsGalleryPage(SystemUISymbols, "System UI")
                     Designs_UIKitSymbols_All -> UIKitSymbolsGalleryPage(
-                        (SystemUISymbols + MediaSymbols + ShapesSymbols).sortedBy { it.name },
+                        (SystemUISymbols + MediaSymbols + ShapesSymbols + LayoutSymbols).sortedBy { it.name },
                         "All Symbols"
                     )
                 }

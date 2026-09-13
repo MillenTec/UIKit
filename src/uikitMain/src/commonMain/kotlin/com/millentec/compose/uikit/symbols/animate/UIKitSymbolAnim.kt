@@ -49,6 +49,45 @@ data class UIKitSymbolAnimNode(
             )
         }
 
+        fun scaleAdditionTo(
+            groupSelector: String,
+            targetValue: Float,
+            animateSpec: AnimationSpec<Float>?
+        ): UIKitSymbolAnimNode {
+            return UIKitSymbolAnimNode(
+                type = UIKitAnimSelector.ScaleAddition,
+                groupSelector = groupSelector,
+                targetValue = targetValue,
+                animateSpec = animateSpec
+            )
+        }
+
+        fun scaleAdditionCenterXTo(
+            groupSelector: String,
+            targetValue: Float,
+            animateSpec: AnimationSpec<Float>?
+        ): UIKitSymbolAnimNode {
+            return UIKitSymbolAnimNode(
+                type = UIKitAnimSelector.ScaleAdditionCenterX,
+                groupSelector = groupSelector,
+                targetValue = targetValue,
+                animateSpec = animateSpec
+            )
+        }
+
+        fun scaleAdditionCenterYTo(
+            groupSelector: String,
+            targetValue: Float,
+            animateSpec: AnimationSpec<Float>?
+        ): UIKitSymbolAnimNode {
+            return UIKitSymbolAnimNode(
+                type = UIKitAnimSelector.ScaleAdditionCenterY,
+                groupSelector = groupSelector,
+                targetValue = targetValue,
+                animateSpec = animateSpec
+            )
+        }
+
         fun scaleCenterXTo(
             groupSelector: String,
             targetValue: Float,

@@ -125,7 +125,7 @@ abstract class UIKitSymbol(
                     val state = states.firstOrNull { state -> state.id == group.id }
                     state?.visible(
                         UIKitAnimSelector.entries.filter { item ->
-                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.AlphaAddition
+                            item != UIKitAnimSelector.ScaleAddition && item != UIKitAnimSelector.AlphaAddition
                         }
                     ) ?: true
                 }
@@ -142,7 +142,7 @@ abstract class UIKitSymbol(
                     val state = states.firstOrNull { state -> state.id == it.id }
                     state?.visible(
                         UIKitAnimSelector.entries.filter { item ->
-                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.AlphaAddition
+                            item != UIKitAnimSelector.ScaleAddition && item != UIKitAnimSelector.AlphaAddition
                         }
                     ) ?: true
                 }
@@ -152,15 +152,15 @@ abstract class UIKitSymbol(
             }
 
             filterGroups.forEach { group ->
-                tree.addParallel(UIKitSymbolAnimNode.scaleCenterXTo(
+                tree.addParallel(UIKitSymbolAnimNode.scaleAdditionCenterXTo(
                     group.id,
                     targetValue = viewportSize.width / 2,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.scaleCenterYTo(
+                )).addParallel(UIKitSymbolAnimNode.scaleAdditionCenterYTo(
                     group.id,
                     targetValue = viewportSize.height / 2,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.scaleTo(
+                )).addParallel(UIKitSymbolAnimNode.scaleAdditionTo(
                     group.id,
                     targetValue = 1f,
                     animateSpec = tween(
@@ -180,15 +180,15 @@ abstract class UIKitSymbol(
             }
 
             remainGroups.forEach { group ->
-                tree.addParallel(UIKitSymbolAnimNode.scaleCenterXTo(
+                tree.addParallel(UIKitSymbolAnimNode.scaleAdditionCenterXTo(
                     group.id,
                     targetValue = viewportSize.width / 2,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.scaleCenterYTo(
+                )).addParallel(UIKitSymbolAnimNode.scaleAdditionCenterYTo(
                     group.id,
                     targetValue = viewportSize.height / 2,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.scaleTo(
+                )).addParallel(UIKitSymbolAnimNode.scaleAdditionTo(
                     group.id,
                     targetValue = 1f,
                     animateSpec = null
@@ -202,15 +202,15 @@ abstract class UIKitSymbol(
 
         remainLayers.forEach { layer ->
             layer.groups.forEach { group ->
-                tree.addParallel(UIKitSymbolAnimNode.scaleCenterXTo(
+                tree.addParallel(UIKitSymbolAnimNode.scaleAdditionCenterXTo(
                     group.id,
                     targetValue = viewportSize.width / 2,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.scaleCenterYTo(
+                )).addParallel(UIKitSymbolAnimNode.scaleAdditionCenterYTo(
                     group.id,
                     targetValue = viewportSize.height / 2,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.scaleTo(
+                )).addParallel(UIKitSymbolAnimNode.scaleAdditionTo(
                     group.id,
                     targetValue = 1f,
                     animateSpec = null
@@ -241,7 +241,7 @@ abstract class UIKitSymbol(
                     val state = states.firstOrNull { state -> state.id == group.id }
                     state?.visible(
                         UIKitAnimSelector.entries.filter { item ->
-                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.AlphaAddition
+                            item != UIKitAnimSelector.ScaleAddition && item != UIKitAnimSelector.AlphaAddition
                         }
                     ) ?: true
                 }
@@ -257,7 +257,7 @@ abstract class UIKitSymbol(
                     val state = states.firstOrNull { state -> state.id == it.id }
                     state?.visible(
                         UIKitAnimSelector.entries.filter { item ->
-                            item != UIKitAnimSelector.Scale && item != UIKitAnimSelector.AlphaAddition
+                            item != UIKitAnimSelector.ScaleAddition && item != UIKitAnimSelector.AlphaAddition
                         }
                     ) ?: true
                 }
@@ -267,15 +267,15 @@ abstract class UIKitSymbol(
             }
 
             filteredGroups.forEach { group ->
-                tree.addParallel(UIKitSymbolAnimNode.scaleCenterXTo(
+                tree.addParallel(UIKitSymbolAnimNode.scaleAdditionCenterXTo(
                     group.id,
                     targetValue = viewportSize.width / 2,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.scaleCenterYTo(
+                )).addParallel(UIKitSymbolAnimNode.scaleAdditionCenterYTo(
                     group.id,
                     targetValue = viewportSize.height / 2,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.scaleTo(
+                )).addParallel(UIKitSymbolAnimNode.scaleAdditionTo(
                     group.id,
                     targetValue = 0.8f,
                     animateSpec = tween(
@@ -295,15 +295,15 @@ abstract class UIKitSymbol(
             }
 
             remainGroups.forEach { group ->
-                tree.addParallel(UIKitSymbolAnimNode.scaleCenterXTo(
+                tree.addParallel(UIKitSymbolAnimNode.scaleAdditionCenterXTo(
                     group.id,
                     targetValue = viewportSize.width / 2,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.scaleCenterYTo(
+                )).addParallel(UIKitSymbolAnimNode.scaleAdditionCenterYTo(
                     group.id,
                     targetValue = viewportSize.height / 2,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.scaleTo(
+                )).addParallel(UIKitSymbolAnimNode.scaleAdditionTo(
                     group.id,
                     targetValue = 0.8f,
                     animateSpec = null
@@ -317,15 +317,15 @@ abstract class UIKitSymbol(
 
         remainLayers.forEach { layer ->
             layer.groups.forEach { group ->
-                tree.addParallel(UIKitSymbolAnimNode.scaleCenterXTo(
+                tree.addParallel(UIKitSymbolAnimNode.scaleAdditionCenterXTo(
                     group.id,
                     targetValue = viewportSize.width / 2,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.scaleCenterYTo(
+                )).addParallel(UIKitSymbolAnimNode.scaleAdditionCenterYTo(
                     group.id,
                     targetValue = viewportSize.height / 2,
                     animateSpec = null
-                )).addParallel(UIKitSymbolAnimNode.scaleTo(
+                )).addParallel(UIKitSymbolAnimNode.scaleAdditionTo(
                     group.id,
                     targetValue = 0.8f,
                     animateSpec = null
