@@ -29,7 +29,7 @@ UIKit is currently under development, and not all controls are complete.
 - **Ease of Use and High Customizability:** Most controls offer multi-layered APIs, allowing you to create a beautiful control with default configuration in just a few lines of code, or use lower-level APIs for more extensive customization.
 - **Complete Theming System:** `UIKitTheme` provides six customizable, mutable theme attributes: colors, typography, shapes, layout, animations, and materials. Light and dark configurations are built-in. Simply wrap your application root with `UIKitThemeHost` and provide your theme configuration, and you can access the theme anywhere in your app using `getUIKitTheme`.
 - **Smooth Animation System:** UIKit advocates that everything should have transitions. Animations and transition effects permeate every aspect of UIKit's design.
-- **Rich Icon Set:** UIKit's built-in icons are based on [FluentUI System Icons](https://github.com/microsoft/fluentui-system-icons) and have been further refined, offering a more diverse icon system including **layered icons**, **animated icons**, and more.
+- **Powerful Symbol System:** UIKit Symbols offers powerful animation capabilities and extensibility, and ships with a built-in symbol set based on [FluentUI System Icons](https://github.com/microsoft/fluentui-system-icons), further refined on top of it, providing symbols with **programmable animations**, **layered rendering**, and more.
 
 ### 1.2. Supported Platforms
 | Platform | Support Status |
@@ -120,42 +120,108 @@ fun App() {
 ```
 
 ### 3.2. Icons
-UIKit provides a large set of icons based on [FluentUI System Icons](https://github.com/microsoft/fluentui-system-icons), most of which are available as `ImageVector` for direct use.
+UIKit provides a symbol system called `UIKit Symbols`, inspired by the design of `SF Symbols`, along with a built-in set of symbols based on [FluentUI System Icons](https://github.com/microsoft/fluentui-system-icons), allowing you to draw symbols with complex animation logic in your UI through a simple API.
 
-#### 3.2.1. Static Icons
+> [!TIP]
+> UIKit previously also offered an `ImageVector`-based icon set, **FluentIcons**, which is now being gradually deprecated and migrated to UIKit Symbols. You can use the compatibility layer to convert an `ImageVector` into a usable UIKit Symbol:
+> ```kt
+> UIKitImageVectorSymbol(imageVector)
+> ```
 
-I have manually layered each of these icons one by one. The original FluentUI System Icons are monochromatic, single-layer filled icons. Now you can choose to layer them and fill each layer with different colors.
-
-![Layered vs. single-layer icons](img/readme_icons_layered_compare.svg "Layered vs. Non-layered icons")
-
-You can access all Regular (non-filled) static icons under `FluentIcons`, or all Filled static icons under `FluentIcons.Filled`. Static icons are divided into **layered static icons** and **non-layered static icons**. For non-layered static icons, you can call them directly:
+#### 3.2.1. Overview
+The built-in UIKit Symbols can be accessed through the `UIKitSymbols` entry point:
 ```kt
-FluentIcons.Accessibility
+UIKitSymbols.systemUI.AddCircle
 ```
-Layered static icons offer three levels of API:
+
+Each symbol is a subclass object of the `UIKitSymbol` abstract class, responsible for **storing a description of the drawing behavior**; the actual drawing is performed by the `UIKitIcon` composable:
 ```kt
-// The simplest API, returns a monochromatic, non-layered icon with default color 0xFF1D1D1F
-FluentIcons.addCircle()
-
-// The `color` parameter sets the base color; if `layered` is true, returns a layered icon with different opacity levels applied to each layer. If false, equivalent to the first API but with custom color.
-// For layered icons, this API is generally recommended.
-FluentIcons.addCircle(
-    color = getUIKitColors().highlightColorPrimaryBrush,
-    layered = true
-)
-
-// The lowest-level API, allows specifying a brush for each layer; the number of parameters depends on the actual icon.
-FluentIcons.addCircle(
-    primary = SolidColor(getUIKitColors().highlightColorPrimaryBrush),
-    secondary = SolidColor(getUIKitColors().highlightColorPrimaryBrush.copy(alpha = 0.6f))
+UIKitIcon(
+    modifier = Modifier
+        .size(32.dp),
+    symbol = UIKitSymbols.systemUI.AddCircle,
+    contentDescription = "Add",
+    symbolStyle = UIKitSymbolStyle.MultiColor,
+    symbolEffect = UIKitSymbolEffect()
+        .visibleEffect(true)
 )
 ```
 
-#### 3.2.2. Animatable Icons
-Under `FluentIcons.AnimatableIcons`, you'll find animatable icons. These are not `ImageVector` types but composables driven by `Canvas`. You can set their size using `Modifier.size`, and they scale proportionally.
+#### 3.2.2. Coloring Modes
+The `symbolStyle` parameter is an important parameter of `UIKitIcon`. It determines the **coloring mode** of the symbol. UIKit Symbols provides the following four coloring modes plus one auxiliary coloring mode:
+- **Monochrome:** Monochrome coloring. Accepts a brush that is applied to the symbol as a whole.
+- **Hierarchical:** Hierarchical coloring. Accepts a brush that is applied to the symbol as a whole, while internally applying different opacity levels to each layer. This can **add visual hierarchy** to a symbol or **distinguish visual priority**.
+- **MultiColor:** Multi-color. Uses the symbol's built-in color scheme, giving icons better **semantic coloring** or reflecting the colors of the icon's real-world counterpart.
+- **Palette:** Palette. You can pass a different color for each layer to achieve the **highest level of customization**.
+- **PaletteWithId:** An auxiliary option to the palette, allowing you to color each layer of a symbol more precisely by ID.
 
-#### 3.2.3. Resizable Icons
-Under `FluentIcons.ResizableIcons`, there are icons with adjustable stroke widths. These are of type `ImageVector`.
+#### 3.2.3. Animation Effects
+UIKit Symbols provides the `UIKitSymbolEffect` system for adding animations. You can chain animation effects and pass in triggers. `UIKitSymbolEffect` mainly comes in two different types:
+- **Discrete:** Triggered by a `trigger`; each time the trigger changes, the animation plays once or more.
+  ```kt
+  val trigger = remember { mutableStateOf(0) }
+  UIKitIcon(
+      symbol = UIKitSymbols.shapes.Layer,
+      contentDescription = "Layer",
+      symbolStyle = UIKitSymbolStyle.MultiColor,
+      symbolEffect = UIKitSymbolEffect()
+          .bounceEffect(trigger, repeat = 1)
+  )
+  ```
+- **Infinite:** Controlled by an `isActive` boolean property; while it is true, a periodic animation keeps playing. Some infinite animations also offer discrete versions, which play one or more cycles each time the trigger changes.
+  ```kt
+  UIKitIcon(
+      symbol = UIKitSymbols.media.Volume,
+      contentDescription = "Volume",
+      symbolStyle = UIKitSymbolStyle.MultiColor,
+      symbolEffect = UIKitSymbolEffect()
+          .variableColorEffect(isActive = true)
+  )
+  ```
+
+Internally, animations are orchestrated through `UIKitSymbolAnimTree`, where you can add **sequential and parallel** nodes and chain calls together.
+
+If the built-in animations don't meet your needs, you can pass a custom `UIKitSymbolAnimTree` via `customEffect`.
+
+#### 3.2.4. Custom Symbols
+UIKit Symbols supports customization: simply inherit from the `UIKitSymbol` abstract base class to create a custom symbol. We recommend using an **object** rather than a class as the symbol carrier.
+
+You can create a `UIKitSymbol` subclass object, implement the `layers` property and describe the symbol's vector paths with the DSL inside it, implement the `colorSet` method to define coloring, and declare capabilities via the `abilityStatement` property:
+```kt
+object MySymbol: UIKitSymbol(
+    name = "MySymbol",
+    defaultSize = DpSize(20.dp, 20.dp),
+    viewportSize = Size(20f, 20f),
+) {
+  override val layers: List<UIKitSymbolLayer> = listOf(
+      UIKitSymbolLayer("layer0").apply { 
+          group(
+              id = "group0", 
+              drawType = UIKitPathDrawType.Fill
+          ) {
+              moveTo(10f, 2f)
+              curveTo(5.6f, 2f, 2f, 5.6f, 2f, 10f)
+              // ...
+          }
+      }
+  )
+
+  override val abilityStatement: List<UIKitSymbolAbility> = listOf(
+      UIKitSymbolAbility.Appear
+      // ...
+  )
+
+  @Composable
+  override fun colorSet(
+      style: UIKitSymbolStyle,
+      states: List<Pair<String, UIKitSymbolGroupState>>
+  ): List<UIKitSymbolColor> {
+      // ...
+  }
+}
+```
+
+If you want to add animations to your symbol, you can override the `*Effect` family of methods to return a `UIKitSymbolAnimTree`, or return `null` to indicate that this animation is not supported (in which case calls simply do nothing).
 
 ### 3.3. Materials
 UIKit provides `AcrylicMaterial`, which includes background blur and edge highlights. Default properties can be configured in `UIKitAcrylicMaterial`.

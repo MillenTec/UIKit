@@ -174,7 +174,7 @@ fun MainView() {
                     )
 
                     LaunchedEffect(state.height) {
-                        LocalNavigationDockHeight.value = state.height
+                        LocalNavigationDockHeight.value = state.height + state.margins.calculateBottomPadding()
                     }
 
                     Box(

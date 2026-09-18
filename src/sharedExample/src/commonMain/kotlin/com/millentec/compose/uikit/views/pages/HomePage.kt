@@ -17,7 +17,7 @@ import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.UIKitIcon
 import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.animate.*
-import com.millentec.compose.uikit.symbols.builtin.media.Volume
+import com.millentec.compose.uikit.symbols.builtin.media.VideoCamera
 import com.millentec.compose.uikit.symbols.builtin.systemui.AddCircle
 import com.millentec.compose.uikit.symbols.builtin.systemui.Bluetooth
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
@@ -75,7 +75,7 @@ fun HomePage() {
                     UIKitIcon(
                         modifier = Modifier
                             .size(100.dp),
-                        symbol = UIKitSymbols.media.Volume,
+                        symbol = UIKitSymbols.media.VideoCamera,
                         contentDescription = "Speaker",
                         symbolStyle = if (style.value) UIKitSymbolStyle.MultiColor
                         else UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),

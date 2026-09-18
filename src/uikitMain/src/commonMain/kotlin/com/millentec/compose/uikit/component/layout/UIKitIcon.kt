@@ -233,9 +233,12 @@ private fun UIKitAnimatableIcon(
             is UIKitSymbolEffectNode.UIKitInfiniteEffectNode -> {
                 LaunchedEffect(effect.isActive) {
                     if (effect.isActive) {
-                        effect.start(symbol, animStates)
-                        while (true) {
-                            effect.execute(symbol, animStates)
+                        val isSupported = effect.start(symbol, animStates)
+                        if (isSupported) {
+                            while (true) {
+                                effect.execute(symbol, animStates)
+                                withFrameNanos {  }
+                            }
                         }
                     } else {
                         effect.reset(symbol, animStates)

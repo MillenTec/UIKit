@@ -107,7 +107,7 @@ internal sealed class UIKitSymbolEffectNode {
         val start: suspend (
             symbol: UIKitSymbol,
             states: List<UIKitSymbolAnimState>
-        ) -> Unit,
+        ) -> Boolean,
         val execute: suspend (
             symbol: UIKitSymbol,
             states: List<UIKitSymbolAnimState>
@@ -211,6 +211,7 @@ fun UIKitSymbolEffect.customInfiniteEffect(
         isActive = isActive,
         start = { _, states ->
             standardExecute(tree.start, states)
+            true
         },
         execute = { _, states ->
             standardExecute(tree.body, states)
@@ -359,6 +360,8 @@ fun UIKitSymbolEffect.variableColorEffect(
             tree?.let {
                 standardExecute(it.start, states)
             }
+
+            tree != null
         },
         execute = { symbol, states ->
             val tree = symbol.variableColorEffect(states, initialValue, targetValue)
@@ -425,6 +428,8 @@ fun UIKitSymbolEffect.pulseEffect(
             tree?.let {
                 standardExecute(it.start, states)
             }
+
+            tree != null
         },
         execute = { symbol, states ->
             val tree = symbol.pulseEffect(states, initialValue, targetValue)

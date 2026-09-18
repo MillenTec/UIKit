@@ -5,9 +5,8 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -32,13 +32,12 @@ fun StateSelector(
     state: MutableState<Int>,
     itemWidth: Dp = 148.dp
 ) {
-    Row(
+    LazyRow(
         modifier = Modifier
             .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
             .fillMaxWidth()
-            .horizontalScroll(rememberScrollState())
     ) {
-        states.forEachIndexed { index, item ->
+        items(states.size) { index ->
             val borderColor by animateColorAsState(
                 targetValue = if (index == state.value) getUIKitColors().highlightColorPrimaryBrush else Color.Transparent,
                 animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
@@ -51,6 +50,7 @@ fun StateSelector(
                         bottom = getUIKitLayout().basicSpacing,
                         end = if (index == states.size - 1) 0.dp else getUIKitLayout().basicSpacing,
                     )
+                    .dropShadow(shadow = UIKitShadowMaterial.getMarginal(), shape = RoundedCornerShape(getUIKitShapes().regularRounded))
                     .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
                     .width(itemWidth)
                     .background(getUIKitColors().contentFillColorSecondaryBrush)
@@ -73,13 +73,13 @@ fun StateSelector(
                         .fillMaxWidth()
                         .aspectRatio(1f),
                     contentAlignment = Alignment.Center,
-                    content = item.statePreview
+                    content = states[index].statePreview
                 )
 
                 Spacer(Modifier.height(getUIKitLayout().basicSpacing))
 
                 Text(
-                    text = item.state,
+                    text = states[index].state,
                     style = getUIKitTypography().body,
                     color = getUIKitColors().textFillColorPrimaryBrush,
                     maxLines = 1,
