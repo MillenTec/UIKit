@@ -15,7 +15,7 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -155,20 +155,24 @@ fun Modifier.uikitClickable(
                 interactionSource = interactionSource,
                 indication = null,
             )
-            .drawWithContent {
-                drawContent()
-                drawOutline(
-                    outline = shape.createOutline(
-                        size = size,
-                        layoutDirection = layoutDirection,
-                        density = density
-                    ),
-                    color = animatedColor,
-                    blendMode = if (animatedColor.toHsv().value >= 0.5f)
-                        BlendMode.Lighten
-                    else
-                        BlendMode.Darken
+            .drawWithCache {
+                val outline = shape.createOutline(
+                    size = size,
+                    layoutDirection = layoutDirection,
+                    density = density
                 )
+
+                onDrawWithContent {
+                    drawContent()
+                    drawOutline(
+                        outline = outline,
+                        color = animatedColor,
+                        blendMode = if (animatedColor.toHsv().value >= 0.5f)
+                            BlendMode.Lighten
+                        else
+                            BlendMode.Darken
+                    )
+                }
             }
     } else {
         return this
@@ -195,10 +199,10 @@ class UIKitInteraction {
             )
 
             this
-                .graphicsLayer(
-                    scaleX = scaleAnimated,
-                    scaleY = scaleAnimated,
-                )
+                .graphicsLayer {
+                    scaleX = scaleAnimated
+                    scaleY = scaleAnimated
+                }
                 .then(if (getUIKitColors().contentFillColorPrimaryBrush.toHsv().value <= 0.5f) {
                     Modifier.lighten(
                         degreeAnimated,

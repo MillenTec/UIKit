@@ -13,11 +13,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
@@ -105,8 +106,6 @@ fun UIKitToggleSwitch(
         modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
-        val density = LocalDensity.current
-
         val backgroundColorAnimated by animateColorAsState(
             targetValue = if (!enabled) colors.backgroundDisabled else if (checked) colors.backgroundChecked else colors.background,
             animationSpec = tween(if (enabled) getUIKitAnimate().transformMomentaryDurationMillis else getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
@@ -122,8 +121,11 @@ fun UIKitToggleSwitch(
             animationSpec = tween(if (enabled) getUIKitAnimate().transformMomentaryDurationMillis else getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
         )
 
+        val thumbSizeUnchecked = size.height - getUIKitLayout().basicSpacing
+        val thumbSizeChecked = size.height - getUIKitLayout().smallSpacing
+
         val thumbSizeAnimated by animateDpAsState(
-            targetValue = if (checked) size.height - getUIKitLayout().smallSpacing else size.height - getUIKitLayout().basicSpacing,
+            targetValue = if (checked) thumbSizeChecked else thumbSizeUnchecked,
             animationSpec = tween(getUIKitAnimate().motionFastDurationMillis, easing = FastOutSlowInEasing)
         )
 
@@ -163,10 +165,12 @@ fun UIKitToggleSwitch(
         ) {
             Box(
                 modifier = Modifier
-                    .offset(x = thumbOffsetAnimated.value)
+                    .offset { IntOffset((thumbOffsetAnimated.value).roundToPx(), 0) }
                     .clip(RoundedCornerShape(getUIKitShapes().circular))
                     .size(thumbSizeAnimated)
-                    .background(thumbColorAnimated)
+                    .drawBehind {
+                        drawRect(thumbColorAnimated)
+                    }
             )
         }
     }

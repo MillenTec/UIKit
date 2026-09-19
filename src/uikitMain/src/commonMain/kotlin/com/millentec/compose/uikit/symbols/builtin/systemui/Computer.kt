@@ -134,12 +134,12 @@ val UIKitSystemUISymbols.Computer: UIKitSymbol
             ): UIKitSymbolInfiniteAnimTree {
                 return UIKitSymbolInfiniteAnimTree(
                     start = UIKitSymbolAnimTree()
-                        .addSequential(UIKitSymbolAnimNode.alphaTo("screen", 0.6f, tween(500, easing = LinearEasing))),
+                        .addSequential(UIKitSymbolAnimNode.alphaTo("screen", 0.6f, tween(800, easing = LinearEasing))),
                     body = UIKitSymbolAnimTree()
-                        .addSequential(UIKitSymbolAnimNode.alphaTo("screen", 0.3f, tween(500, easing = LinearEasing, delayMillis = 200)))
-                        .addSequential(UIKitSymbolAnimNode.alphaTo("screen", 0.6f, tween(500, easing = LinearEasing, delayMillis = 200))),
+                        .addSequential(UIKitSymbolAnimNode.alphaTo("screen", 0.2f, tween(800, easing = LinearEasing, delayMillis = 100)))
+                        .addSequential(UIKitSymbolAnimNode.alphaTo("screen", 0.6f, tween(800, easing = LinearEasing, delayMillis = 100))),
                     end = UIKitSymbolAnimTree()
-                        .addSequential(UIKitSymbolAnimNode.alphaTo("screen", 0f, tween(500, easing = LinearEasing)))
+                        .addSequential(UIKitSymbolAnimNode.alphaTo("screen", 0f, tween(800, easing = LinearEasing)))
                 )
             }
         }

@@ -4,6 +4,7 @@ import androidx.compose.animation.core.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
@@ -70,6 +71,35 @@ abstract class UIKitSymbol(
             }
 
             return _groupsCache!!
+        }
+
+    private var _builtPaths: List<Pair<String, Path>>?  = null
+    val builtPaths: List<Pair<String, Path>>
+        get() {
+            if (_builtPaths != null)
+                return _builtPaths!!
+            _builtPaths = groups.map { group ->
+                Pair(group.id, Path().apply {
+                    group.path.nodes.forEach { node ->
+                        when (node) {
+                            UIKitPathNode.Close -> close()
+                            is UIKitPathNode.CurveTo -> cubicTo(
+                                node.x1,
+                                node.y1,
+                                node.x2,
+                                node.y2,
+                                node.x3,
+                                node.y3,
+                            )
+
+                            is UIKitPathNode.LineTo -> lineTo(node.x, node.y)
+                            is UIKitPathNode.MoveTo -> moveTo(node.x, node.y)
+                        }
+                    }
+                })
+            }
+
+            return _builtPaths!!
         }
 
     /**

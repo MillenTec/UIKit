@@ -18,7 +18,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.theme.*
-import com.millentec.compose.uikit.views.LocalNavigationDockHeight
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
@@ -55,13 +54,7 @@ fun ThirdPartyPage() {
                 .fillMaxSize()
                 .padding(
                     PaddingValues(
-                        start = getUIKitLayout().screenSideSpacing,
-                        top = getUIKitLayout().screenSideSpacing,
-                        end = getUIKitLayout().screenSideSpacing,
-                        bottom = maxOf(
-                            LocalNavigationDockHeight.value + getUIKitLayout().screenSideSpacing,
-                            getUIKitLayout().screenSideSpacing
-                        )
+                        getUIKitLayout().screenSideSpacing
                     ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current)
                 )
         ) {
@@ -79,7 +72,7 @@ fun ThirdPartyPage() {
                 color = getUIKitColors().textFillColorPrimaryBrush
             )
 
-            Spacer(modifier = Modifier.height(getUIKitLayout().itemSpacing))
+            Spacer(modifier = Modifier.height(getUIKitLayout().sectionSpacing))
 
             SelectionContainer {
                 LazyColumn(

@@ -67,10 +67,10 @@ fun Modifier.uikitBottomSheetCollaborativeAnimation(
                     size = size
                 )
             }
-            .graphicsLayer(
-                scaleX = (1f - (progress * 0.1f)).coerceIn(0f..1f),
-                scaleY = 1f - (progress * 0.1f).coerceIn(0f..1f),
-            )
+            .graphicsLayer {
+                scaleX = (1f - (progress * 0.1f)).coerceIn(0f..1f)
+                scaleY = 1f - (progress * 0.1f).coerceIn(0f..1f)
+            }
     } else this
 }
 

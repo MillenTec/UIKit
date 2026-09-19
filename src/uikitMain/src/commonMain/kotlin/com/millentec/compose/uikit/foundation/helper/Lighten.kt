@@ -2,7 +2,7 @@ package com.millentec.compose.uikit.foundation.helper
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -15,16 +15,20 @@ fun Modifier.lighten(
     val layoutDirection = LocalLayoutDirection.current
     val density = LocalDensity.current
 
-    return this.drawWithContent {
-        drawContent()
-        drawOutline(
-            outline = shape.createOutline(
-                size = size,
-                layoutDirection = layoutDirection,
-                density = density
-            ),
-            color = Color.White.copy(degree),
-            blendMode = BlendMode.Lighten
+    return this.drawWithCache {
+        val outline = shape.createOutline(
+            size = size,
+            layoutDirection = layoutDirection,
+            density = density
         )
+
+        onDrawWithContent {
+            drawContent()
+            drawOutline(
+                outline = outline,
+                color = Color.White.copy(degree),
+                blendMode = BlendMode.Lighten
+            )
+        }
     }
 }

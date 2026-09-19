@@ -102,26 +102,7 @@ private fun UIKitAnimatableIcon(
     val alphasAnimated = remember { colorSet.map {
         Pair(it.selector, Animatable(it.alpha))
     }.toMutableStateList() }
-    val builtPaths = remember { mutableStateOf(symbol.groups.map { group ->
-        Pair(group.id, Path().apply {
-            group.path.nodes.forEach { node ->
-                when (node) {
-                    UIKitPathNode.Close -> close()
-                    is UIKitPathNode.CurveTo -> cubicTo(
-                        node.x1,
-                        node.y1,
-                        node.x2,
-                        node.y2,
-                        node.x3,
-                        node.y3,
-                    )
-
-                    is UIKitPathNode.LineTo -> lineTo(node.x, node.y)
-                    is UIKitPathNode.MoveTo -> moveTo(node.x, node.y)
-                }
-            }
-        })
-    }) }
+    val builtPaths = remember(symbol) { mutableStateOf(symbol.builtPaths) }
     val cacheSymbolStyle = remember { mutableStateOf<UIKitSymbolStyle?>(null) }
 
     LaunchedEffect(colorSet.size) {
@@ -186,29 +167,6 @@ private fun UIKitAnimatableIcon(
                     }
                 }
             }
-        }
-    }
-
-    LaunchedEffect(symbol) {
-        builtPaths.value = symbol.groups.map { group ->
-            Pair(group.id, Path().apply {
-                group.path.nodes.forEach { node ->
-                    when (node) {
-                        UIKitPathNode.Close -> close()
-                        is UIKitPathNode.CurveTo -> cubicTo(
-                            node.x1,
-                            node.y1,
-                            node.x2,
-                            node.y2,
-                            node.x3,
-                            node.y3,
-                        )
-
-                        is UIKitPathNode.LineTo -> lineTo(node.x, node.y)
-                        is UIKitPathNode.MoveTo -> moveTo(node.x, node.y)
-                    }
-                }
-            })
         }
     }
 

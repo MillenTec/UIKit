@@ -15,11 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -517,24 +513,20 @@ fun UIKitSVPlane(
                 .fillMaxSize()
                 .aspectRatio(1f)
         ) {
-            val width = size.width
-            val height = size.height
-            for (y in 0 until height.toInt()) {
-                val brightness = 1f - y / height
-                val startColor = Color.hsv(hue, 0f, brightness)
-                val endColor = Color.hsv(hue, panelEndSaturationAnimated, brightness)
+            drawRect(color = Color.hsv(hue, 1f, 1f))
 
-                drawRect(
-                    brush = Brush.linearGradient(
-                        0f to startColor,
-                        1f to endColor,
-                        start = Offset(0f, y.toFloat()),
-                        end = Offset(width, y.toFloat())
-                    ),
-                    topLeft = Offset(0f, y.toFloat()),
-                    size = Size(width, 1f)
+            drawRect(
+                brush = Brush.horizontalGradient(
+                    listOf(Color.White, Color.hsv(hue, 1f, 1f).copy(alpha = 0f))
                 )
-            }
+            )
+
+            drawRect(
+                brush = Brush.verticalGradient(
+                    listOf(Color.Black.copy(alpha = 0f), Color.Black)
+                ),
+                blendMode = BlendMode.Multiply
+            )
         }
 
         Box(

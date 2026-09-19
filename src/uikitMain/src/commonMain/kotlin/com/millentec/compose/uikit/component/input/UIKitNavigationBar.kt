@@ -11,15 +11,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.coerceAtLeast
-import androidx.compose.ui.unit.coerceAtMost
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.*
 import com.millentec.compose.uikit.component.layout.UIKitAdaptiveCornerContainer
 import com.millentec.compose.uikit.component.layout.UIKitAdaptiveCornerContainerState
 import com.millentec.compose.uikit.component.layout.rememberUIKitAdaptiveCornerContainerState
@@ -222,23 +220,26 @@ fun UIKitNavigationBar(
 
                     Box(
                         modifier = Modifier
-                            .offset(offsetAnimated.value)
+                            .offset { IntOffset(offsetAnimated.value.roundToPx(), 0) }
                             .padding(getUIKitLayout().smallSpacing)
-                            .graphicsLayer(
-                                scaleX = indicatorScaleAnimated.value,
-                                translationX = if (checkedIndex == itemCount - 1) ((itemWidth * (1f - indicatorScaleAnimated.value)).value * densityDpi) / 2
-                                else -(((itemWidth * (1f - indicatorScaleAnimated.value)).value * densityDpi) / 2)
-                            )
+                            .graphicsLayer {
+                                scaleX = indicatorScaleAnimated.value
+                                translationX =
+                                    if (checkedIndex == itemCount - 1) ((itemWidth * (1f - indicatorScaleAnimated.value)).value * densityDpi) / 2
+                                    else -(((itemWidth * (1f - indicatorScaleAnimated.value)).value * densityDpi) / 2)
+                            }
                             .clip(RoundedCornerShape(state.cornerRadius - getUIKitLayout().smallSpacing))
                             .fillMaxHeight()
                             .width(itemWidth)
-                            .background(indicatorBackground)
+                            .drawBehind {
+                                drawRect(indicatorBackground)
+                            }
                             .pointerInput(Unit) {
                                 detectDragGestures(
                                     onDragStart = {
                                         isDragging.value = true
                                     },
-                                    onDrag = { change, offset ->
+                                    onDrag = { _, offset ->
                                         val newOffset = draggingOffset.value + (offset.x / densityDpi).dp
                                         val maxOverDragScale = 0.8f
                                         val maxOverDragOffset = 100.dp

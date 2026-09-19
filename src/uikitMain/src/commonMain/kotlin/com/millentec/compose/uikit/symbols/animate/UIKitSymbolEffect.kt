@@ -1,6 +1,7 @@
 package com.millentec.compose.uikit.symbols.animate
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.animate.UIKitAnimSelector.*
@@ -350,12 +351,14 @@ fun UIKitSymbolEffect.variableColorEffect(
     targetValue: Float = 1f
 ): UIKitSymbolEffect {
     val uuid = remember { Uuid.random().toString() }
+    val treeCache = remember { mutableStateOf<UIKitSymbolInfiniteAnimTree?>(null) }
 
     this.addEffect(UIKitSymbolEffectNode.UIKitInfiniteEffectNode(
         uuid = uuid,
         isActive = isActive,
         start = { symbol, states ->
-            val tree = symbol.variableColorEffect(states, initialValue, targetValue)
+            treeCache.value = symbol.variableColorEffect(states, initialValue, targetValue)
+            val tree = treeCache.value
 
             tree?.let {
                 standardExecute(it.start, states)
@@ -363,15 +366,15 @@ fun UIKitSymbolEffect.variableColorEffect(
 
             tree != null
         },
-        execute = { symbol, states ->
-            val tree = symbol.variableColorEffect(states, initialValue, targetValue)
+        execute = { _, states ->
+            val tree = treeCache.value
 
             tree?.let {
                 standardExecute(it.body, states)
             }
         },
-        reset = { symbol, states ->
-            val tree = symbol.variableColorEffect(states, initialValue, targetValue)
+        reset = { _, states ->
+            val tree = treeCache.value
 
             tree?.let {
                 standardExecute(it.end, states)
@@ -418,12 +421,14 @@ fun UIKitSymbolEffect.pulseEffect(
     targetValue: Float = 1f
 ): UIKitSymbolEffect {
     val uuid = remember { Uuid.random().toString() }
+    val treeCache = remember(uuid) { mutableStateOf<UIKitSymbolInfiniteAnimTree?>(null) }
 
     this.addEffect(UIKitSymbolEffectNode.UIKitInfiniteEffectNode(
         uuid = uuid,
         isActive = isActive,
         start = { symbol, states ->
-            val tree = symbol.pulseEffect(states, initialValue, targetValue)
+            treeCache.value = symbol.pulseEffect(states, initialValue, targetValue)
+            val tree = treeCache.value
 
             tree?.let {
                 standardExecute(it.start, states)
@@ -431,15 +436,15 @@ fun UIKitSymbolEffect.pulseEffect(
 
             tree != null
         },
-        execute = { symbol, states ->
-            val tree = symbol.pulseEffect(states, initialValue, targetValue)
+        execute = { _, states ->
+            val tree = treeCache.value
 
             tree?.let {
                 standardExecute(it.body, states)
             }
         },
-        reset = { symbol, states ->
-            val tree = symbol.pulseEffect(states, initialValue, targetValue)
+        reset = { _, states ->
+            val tree = treeCache.value
 
             tree?.let {
                 standardExecute(it.end, states)

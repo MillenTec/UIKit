@@ -3,7 +3,6 @@ package com.millentec.compose.uikit.component.input
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -12,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -20,10 +20,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.times
+import androidx.compose.ui.unit.*
 import com.millentec.compose.uikit.component.input.UIKitSliderChangeType.*
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.theme.UIKitShadowMaterial
@@ -127,8 +124,8 @@ fun UIKitBasicSlider(
     adsorptionPoints: List<Dp>? = null,
     isAnimating: Boolean = false,
     decoration: @Composable (
-        Modifier,  // Track 点击处理
-        Modifier  // Thumb 拖动处理
+        trackHandler: Modifier,
+        thumbHandler: Modifier
     ) -> Unit,
 ) {
     val density = LocalDensity.current
@@ -163,10 +160,6 @@ fun UIKitBasicSlider(
         }
     }
 
-    LaunchedEffect(adsorptionPoints) {
-        adsorptionPointsSorted.value = adsorptionPoints?.sorted()
-    }
-
     LaunchedEffect(offset, isDragging) {
         if (!isDragging.value) {
             offsetIncludedDrag.value = offset
@@ -193,7 +186,7 @@ fun UIKitBasicSlider(
         Modifier.pointerInput(Unit) {
             detectTapGestures(
                 onTap = { offset ->
-                    var newOffset = with(density) { offset.x }.toDp()
+                    var newOffset = offset.x.toDp()
                     if (adsorptionEnable && adsorptionPoints != null) {
                         val closestPoint = adsorptionPoints.minByOrNull {
                             abs(newOffset.value - it.value)
@@ -225,9 +218,9 @@ fun UIKitBasicSlider(
                         isDragging.value = true
                         thumbPressed.value = true
                     },
-                    onDrag = { change, offset ->
+                    onDrag = { _, offset ->
                         if (adsorptionEnable && adsorptionPointsSorted.value != null) {
-                            offsetIncludedDrag.value += with(density) { offset.x }.toDp()
+                            offsetIncludedDrag.value += offset.x.toDp()
                             val arr = adsorptionPointsSorted.value ?: throw NullPointerException("Adsorption points (shorted) is null.")
 
                             // 差值大于 0, 则向左拖拽
@@ -426,27 +419,27 @@ fun UIKitSlider(
             adsorptionEnable = adsorbedOntoTick,
             adsorptionPoints = adsorptionPoints,
             isAnimating = thumbOffsetAnimated.isRunning
-        ) { trackInteraction: Modifier, thumbInteraction: Modifier ->
+        ) { trackHandler: Modifier, thumbHandler: Modifier ->
             if (hasTick) {
                 Canvas(
                     modifier = Modifier
-                        .offset(x = thumbSize.width / 2)
+                        .offset { IntOffset((thumbSize.width / 2).roundToPx(), 0) }
                         .height(thumbSize.height)
                 ) {
                     repeat(floor(maxValue / tickStep).toInt() + 1) {
                         val tickValue = it * tickStep
-                        val tickOffset = with(density) { toOffset(tickValue) }.toPx()
+                        val tickOffset = toOffset(tickValue).toPx()
                         drawLine(
                             start = Offset(
                                 x = tickOffset,
-                                y = with(density) { 2.dp }.toPx()
+                                y = 2.dp.toPx()
                             ),
                             end = Offset(
                                 x = tickOffset,
-                                y = size.height - with(density) { 2.dp }.toPx()
+                                y = size.height - 2.dp.toPx()
                             ),
                             color = tickColorAnimated,
-                            strokeWidth = with(density) { 1.dp }.toPx(),
+                            strokeWidth = 1.dp.toPx(),
                             cap = StrokeCap.Round
                         )
                     }
@@ -455,11 +448,11 @@ fun UIKitSlider(
 
             Canvas(
                 modifier = Modifier
-                    .offset(x = thumbSize.width/2)
+                    .offset { IntOffset((thumbSize.width / 2).roundToPx(), 0) }
                     .fillMaxWidth()
                     .height(thumbSize.height)
                     .then(if (enabled) {
-                        trackInteraction
+                        trackHandler
                     } else Modifier)
             ) {
                 drawLine(
@@ -493,21 +486,23 @@ fun UIKitSlider(
 
             Box(
                 modifier = Modifier
-                    .offset(x = thumbOffsetAnimated.value)
+                    .offset { IntOffset(thumbOffsetAnimated.value.roundToPx(), 0) }
                     .size(thumbSize)
                     .then(if (enabled) {
-                        thumbInteraction
+                        thumbHandler
                     } else Modifier)
-                    .graphicsLayer(
-                        scaleX = thumbScaleAnimated,
-                        scaleY = thumbScaleAnimated,
-                    )
+                    .graphicsLayer {
+                        scaleX = thumbScaleAnimated
+                        scaleY = thumbScaleAnimated
+                    }
                     .dropShadow(
                         shadow = UIKitShadowMaterial.getMarginal(),
                         shape = RoundedCornerShape(getUIKitShapes().circular)
                     )
                     .clip(RoundedCornerShape(getUIKitShapes().circular))
-                    .background(thumbColorAnimated)
+                    .drawBehind {
+                        drawRect(thumbColorAnimated)
+                    }
             )
         }
     }
@@ -530,7 +525,7 @@ fun UIKitSlider(
     modifier = modifier,
     enabled = enabled,
     value = value,
-    onValueChange = { value, type ->
+    onValueChange = { value, _ ->
         onValueChange(value)
     },
     lineWidth = lineWidth,

@@ -68,7 +68,7 @@ fun UIKitCodeBlock(
 ) {
     val content = content()
 
-    val annotatedString = buildAnnotatedString {
+    val annotatedString = remember(content, config) { buildAnnotatedString {
         append(content)
 
         config.rules?.let {
@@ -82,7 +82,7 @@ fun UIKitCodeBlock(
                 }
             }
         }
-    }
+    } }
 
     Box(
         modifier = Modifier
