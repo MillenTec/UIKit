@@ -56,7 +56,7 @@ import kotlin.math.floor
 @Composable
 @Preview
 private fun Preview() {
-    UIKitSymbolsGalleryPage(SystemUISymbols, "System UI")
+    UIKitSymbolsGalleryPage(SystemUISymbols, LocalStrings.current.designs.uikitSymbols.systemUiTitle)
 }
 
 private enum class CommonSymbolStyle {
@@ -169,7 +169,7 @@ fun UIKitSymbolsGalleryPage(
                                 modifier = Modifier
                                     .fillMaxHeight(0.6f),
                                 symbol = state,
-                                contentDescription = "Preview",
+                                contentDescription = LocalStrings.current.designs.uikitSymbols.preview,
                                 symbolStyle = commonConfig.symbolStyle,
                                 symbolEffect = UIKitSymbolEffect()
                                     .visibleEffect(symbolConfig.visible.value)
@@ -278,7 +278,7 @@ fun UIKitSymbolsGalleryPage(
                             modifier = Modifier
                                 .fillMaxSize(0.6f),
                             imageVector = FluentIcons.ChevronArrowLeft,
-                            contentDescription = "Go Back",
+                            contentDescription = LocalStrings.current.designs.uikitSymbols.goBack,
                             tint = getUIKitColors().textFillColorPrimaryBrush
                         )
                     }
@@ -302,7 +302,7 @@ fun UIKitSymbolsGalleryPage(
                                 .fillMaxHeight(0.6f)
                                 .aspectRatio(1f),
                             imageVector = FluentIcons.options(),
-                            contentDescription = "Common Options",
+                            contentDescription = LocalStrings.current.designs.uikitSymbols.commonOptions,
                             tint = getUIKitColors().textFillColorPrimaryBrush
                         )
                     }
@@ -335,7 +335,7 @@ fun UIKitSymbolsGalleryPage(
         UIKitBottomSheet(
             expanded = commonOptionExpanded.value,
             state = commonOptionState,
-            title = "Options",
+            title = LocalStrings.current.designs.fluentIcons.options.title,
             minHeight = this@BoxWithConstraints.maxHeight * 0.8f,
             maxHeight = this@BoxWithConstraints.maxHeight * 0.8f,
             onDismissRequest = {
@@ -389,28 +389,28 @@ private fun LazyListScope.CommonOptions(
 
         StateSelector(
             states = listOf(
-                StateSelectorItem("Monochrome") {
+                StateSelectorItem(LocalStrings.current.designs.uikitSymbols.styles.monochrome) {
                     UIKitIcon(
                         symbol = sampleSymbol,
-                        contentDescription = "Example",
+                        contentDescription = LocalStrings.current.designs.uikitSymbols.example,
                         symbolStyle = UIKitSymbolStyle.Monochrome(state.tint.value),
                         symbolEffect = UIKitSymbolEffect()
                             .stateEffect(symbolState)
                     )
                 },
-                StateSelectorItem("Hierarchical") {
+                StateSelectorItem(LocalStrings.current.designs.uikitSymbols.styles.hierarchical) {
                     UIKitIcon(
                         symbol = sampleSymbol,
-                        contentDescription = "Example",
+                        contentDescription = LocalStrings.current.designs.uikitSymbols.example,
                         symbolStyle = UIKitSymbolStyle.Hierarchical(state.tint.value),
                         symbolEffect = UIKitSymbolEffect()
                             .stateEffect(symbolState)
                     )
                 },
-                StateSelectorItem("Multi Color") {
+                StateSelectorItem(LocalStrings.current.designs.uikitSymbols.styles.multiColor) {
                     UIKitIcon(
                         symbol = sampleSymbol,
-                        contentDescription = "Example",
+                        contentDescription = LocalStrings.current.designs.uikitSymbols.example,
                         symbolStyle = UIKitSymbolStyle.MultiColor,
                         symbolEffect = UIKitSymbolEffect()
                             .stateEffect(symbolState)
@@ -440,7 +440,7 @@ private fun LazyListScope.CommonOptions(
                     onClick = {
                         expanded.value = !expanded.value
                     },
-                    title = "Tint",
+                    title = LocalStrings.current.designs.uikitSymbols.tint,
                     icon = FluentIcons.Color,
                     cornerRadius = 0.dp
                 ) {
@@ -454,12 +454,12 @@ private fun LazyListScope.CommonOptions(
                     val itemHeight = 48.dp
 
                     val optionalColor = listOf(
-                        OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrush, "Primary", getUIKitColors().contentFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrushReversed, "Reversed", getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().highlightColorPrimaryBrush, "Highlight", UIKitColors.getDark().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().successGreenColorPrimaryBrush, "Success", getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().warningYellowColorPrimaryBrush, "Warning", getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().errorRedColorPrimaryBrush, "Error", UIKitColors.getDark().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary, getUIKitColors().contentFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrushReversed, LocalStrings.current.designs.fluentIcons.options.colors.reversed, getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().highlightColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight, UIKitColors.getDark().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().successGreenColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.success, getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().warningYellowColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning, getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().errorRedColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.error, UIKitColors.getDark().textFillColorPrimaryBrush),
                     )
 
                     BoxWithConstraints {
@@ -527,12 +527,12 @@ private fun LazyListScope.CommonOptions(
                     val itemHeight = 48.dp
 
                     val optionalColor = listOf(
-                        OptionalColorInfo(getUIKitColors().contentFillColorPrimaryBrush, "Primary", getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().contentFillColorSecondaryBrush, "Secondary", getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().highlightColorFourthBrush, "Highlight", getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().successGreenColorFourthBrush, "Success", getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().warningYellowColorFourthBrush, "Warning", getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().errorRedColorFourthBrush, "Error", getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().contentFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary, getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().contentFillColorSecondaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.secondary, getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().highlightColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight, getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().successGreenColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.success, getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().warningYellowColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning, getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().errorRedColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.error, getUIKitColors().textFillColorPrimaryBrush),
                     )
 
                     BoxWithConstraints {
@@ -598,7 +598,7 @@ private fun LazyListScope.SymbolOptions(
                     ) {
                         UIKitIcon(
                             symbol = symbol,
-                            contentDescription = "Example",
+                            contentDescription = LocalStrings.current.designs.uikitSymbols.example,
                             symbolStyle = commonConfig.symbolStyle,
                             symbolEffect = UIKitSymbolEffect()
                                 .stateEffect(it)
@@ -616,7 +616,7 @@ private fun LazyListScope.SymbolOptions(
         UIKitGroupedCard {
             SettingCard(
                 icon = FluentIcons.Flash,
-                title = "Visible",
+                title = LocalStrings.current.designs.uikitSymbols.effect.visible,
                 onClick = {
                     config.visible.value = !config.visible.value
                 }
@@ -629,7 +629,7 @@ private fun LazyListScope.SymbolOptions(
             if (symbol.abilityStatement?.any { it is UIKitSymbolAbility.Bounce } == true) {
                 Divider()
                 SettingCard(
-                    title = "Bounce",
+                    title = LocalStrings.current.designs.uikitSymbols.effect.bounce,
                     icon = FluentIcons.Fire,
                     onClick = {
                         config.bounceTrigger.value = !config.bounceTrigger.value
@@ -639,7 +639,7 @@ private fun LazyListScope.SymbolOptions(
             if (symbol.abilityStatement?.any { it is UIKitSymbolAbility.VariableColor } == true) {
                 Divider()
                 SettingCard(
-                    title = "Variable Color",
+                    title = LocalStrings.current.designs.uikitSymbols.effect.variableColor,
                     icon = FluentIcons.Fire,
                     onClick = {
                         config.variableColorActive.value = !config.variableColorActive.value
@@ -654,7 +654,7 @@ private fun LazyListScope.SymbolOptions(
             if (symbol.abilityStatement?.any { it is UIKitSymbolAbility.Pulse } == true) {
                 Divider()
                 SettingCard(
-                    title = "Pulse",
+                    title = LocalStrings.current.designs.uikitSymbols.effect.pulse,
                     icon = FluentIcons.Fire,
                     onClick = {
                         config.pulseActive.value = !config.pulseActive.value
@@ -681,7 +681,7 @@ private fun LazyListScope.SymbolOptions(
         Spacer(Modifier.height(getUIKitLayout().sectionSpacing))
 
         Text(
-            text = "Common Options",
+            text = LocalStrings.current.designs.uikitSymbols.commonOptions,
             style = getUIKitTypography().subtitle,
             color = getUIKitColors().textFillColorPrimaryBrush
         )
@@ -738,7 +738,7 @@ private fun SymbolView(
                 modifier = Modifier
                     .fillMaxWidth(0.6f),
                 symbol = symbol,
-                contentDescription = "Preview",
+                contentDescription = LocalStrings.current.designs.uikitSymbols.preview,
                 symbolStyle = commonConfig.symbolStyle,
                 symbolEffect = UIKitSymbolEffect()
                     .visibleEffect(symbolConfig.visible.value)

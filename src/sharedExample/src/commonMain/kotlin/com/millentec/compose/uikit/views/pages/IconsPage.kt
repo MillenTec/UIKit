@@ -220,7 +220,7 @@ private fun OptionsWindow(
                             onClick = {}
                         ) {
                             Text(
-                                text = state.iconInfo.value?.iconName ?: "Unknown",
+                                text = state.iconInfo.value?.iconName ?: LocalStrings.current.designs.fluentIcons.options.unknown,
                                 style = getUIKitTypography().body,
                                 color = getUIKitColors().textFillColorSecondaryBrush
                             )
@@ -232,7 +232,7 @@ private fun OptionsWindow(
                             onClick = {}
                         ) {
                             Text(
-                                text = state.iconInfo.value?.iconSize ?: "Unknown",
+                                text = state.iconInfo.value?.iconSize ?: LocalStrings.current.designs.fluentIcons.options.unknown,
                                 style = getUIKitTypography().body,
                                 color = getUIKitColors().textFillColorSecondaryBrush
                             )
@@ -368,12 +368,12 @@ private fun OptionsWindow(
                 val itemHeight = 48.dp
 
                 val optionalColor = listOf(
-                    OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrush, "Primary", getUIKitColors().contentFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrushReversed, "Reversed", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().highlightColorPrimaryBrush, "Highlight", UIKitColors.getDark().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().successGreenColorPrimaryBrush, "Success", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().warningYellowColorPrimaryBrush, "Warning", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().errorRedColorPrimaryBrush, "Error", UIKitColors.getDark().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary, getUIKitColors().contentFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrushReversed, LocalStrings.current.designs.fluentIcons.options.colors.reversed, getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().highlightColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight, UIKitColors.getDark().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().successGreenColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.success, getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().warningYellowColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning, getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().errorRedColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.error, UIKitColors.getDark().textFillColorPrimaryBrush),
                 )
 
                 BoxWithConstraints {
@@ -435,12 +435,12 @@ private fun OptionsWindow(
                 val itemHeight = 48.dp
 
                 val optionalColor = listOf(
-                    OptionalColorInfo(getUIKitColors().contentFillColorPrimaryBrush, "Primary", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().contentFillColorSecondaryBrush, "Secondary", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().highlightColorFourthBrush, "Highlight", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().successGreenColorFourthBrush, "Success", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().warningYellowColorFourthBrush, "Warning", getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().errorRedColorFourthBrush, "Error", getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().contentFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary, getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().contentFillColorSecondaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.secondary, getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().highlightColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight, getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().successGreenColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.success, getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().warningYellowColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning, getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().errorRedColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.error, getUIKitColors().textFillColorPrimaryBrush),
                 )
 
                 BoxWithConstraints {
@@ -654,7 +654,7 @@ fun IconGalleryPage() {
                         val icon = iconLists.value.regularIconsList.getOrNull(it)
 
                         IconItem(
-                            title = icon?.name ?: "Unknown",
+                            title = icon?.name ?: LocalStrings.current.designs.fluentIcons.options.unknown,
                             onClick = {
                                 checkedIconIndex.value = it
                                 if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetExpanded.value = true
@@ -691,7 +691,7 @@ fun IconGalleryPage() {
                         val icon = iconLists.value.filledIconsList.getOrNull(it)
 
                         IconItem(
-                            title = icon?.name ?: "Unknown",
+                            title = icon?.name ?: LocalStrings.current.designs.fluentIcons.options.unknown,
                             onClick = {
                                 checkedIconIndex.value = it + iconLists.value.regularIconsList.size
                                 if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetExpanded.value = true
@@ -726,9 +726,10 @@ fun IconGalleryPage() {
 
                     items(animatableIconList.size) {
                         val item = animatableIconList.getOrNull(it)
+                        val unknown = LocalStrings.current.designs.fluentIcons.options.unknown
 
                         IconItem(
-                            title = item?.name ?: "Unknown",
+                            title = item?.name ?: unknown,
                             onClick = {
                                 optionsState.iconPreview.value = {
                                     BoxWithConstraints {
@@ -742,8 +743,8 @@ fun IconGalleryPage() {
                                     item?.ExtendedOptions()
                                 }
                                 optionsState.iconInfo.value = IconInfo(
-                                    iconName = item?.name ?: "Unknown",
-                                    iconSize = item?.size ?: "Unknown",
+                                    iconName = item?.name ?: unknown,
+                                    iconSize = item?.size ?: unknown,
                                 )
                                 if (this@BoxWithConstraints.maxWidth <= 1024.dp) bottomSheetExpanded.value = true
                             },
@@ -800,7 +801,7 @@ fun IconGalleryPage() {
                                 modifier = Modifier
                                     .size(getUIKitTypography().largeTitle.lineHeight.value.dp),
                                 imageVector = FluentIcons.options(getUIKitColors().textFillColorPrimaryBrush, true),
-                                contentDescription = "Options",
+                                contentDescription = LocalStrings.current.designs.fluentIcons.options.title,
                                 tint = getUIKitColors().textFillColorPrimaryBrush
                             )
 
@@ -841,7 +842,7 @@ fun IconGalleryPage() {
                         modifier = Modifier
                             .fillMaxSize(0.6f),
                         imageVector = FluentIcons.options(getUIKitColors().textFillColorPrimaryBrush, true),
-                        contentDescription = "Options",
+                        contentDescription = LocalStrings.current.designs.fluentIcons.options.title,
                         tint = getUIKitColors().textFillColorPrimaryBrush
                     )
                 }
@@ -1101,7 +1102,7 @@ private open class AnimatableIconItem(
                 modifier = Modifier
                     .size(getUIKitTypography().body.lineHeight.value.dp),
                 imageVector = FluentIcons.ResizableIcons.shapes(getUIKitColors().textFillColorPrimaryBrush, true, 0.5f),
-                contentDescription = "Thin",
+                contentDescription = LocalStrings.current.designs.fluentIcons.thin,
                 tint = getUIKitColors().textFillColorPrimaryBrush,
             )
 
@@ -1135,7 +1136,7 @@ private open class AnimatableIconItem(
                 modifier = Modifier
                     .size(getUIKitTypography().body.lineHeight.value.dp),
                 imageVector = FluentIcons.ResizableIcons.shapes(getUIKitColors().textFillColorPrimaryBrush, true, 1.5f),
-                contentDescription = "Thin",
+                contentDescription = LocalStrings.current.designs.fluentIcons.thin,
                 tint = getUIKitColors().textFillColorPrimaryBrush,
             )
         }
@@ -1217,7 +1218,7 @@ private fun makeAnimatableIconList(
             Column {
                 StateSelector(
                     states = listOf(
-                        StateSelectorItem("Running") {
+                        StateSelectorItem(LocalStrings.current.designs.fluentIcons.states.running) {
                             FluentIcons.AnimatableIcons.ArrowCircle(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -1230,7 +1231,7 @@ private fun makeAnimatableIconList(
                                 rotate = angle.value
                             )
                         },
-                        StateSelectorItem("Stopped") {
+                        StateSelectorItem(LocalStrings.current.designs.fluentIcons.states.stopped) {
                             FluentIcons.AnimatableIcons.ArrowCircle(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -1243,7 +1244,7 @@ private fun makeAnimatableIconList(
                                 rotate = angle.value
                             )
                         },
-                        StateSelectorItem("Error") {
+                        StateSelectorItem(LocalStrings.current.designs.fluentIcons.states.error) {
                             FluentIcons.AnimatableIcons.ArrowCircle(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -1256,7 +1257,7 @@ private fun makeAnimatableIconList(
                                 rotate = angle.value
                             )
                         },
-                        StateSelectorItem("Success") {
+                        StateSelectorItem(LocalStrings.current.designs.fluentIcons.states.success) {
                             FluentIcons.AnimatableIcons.ArrowCircle(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -1282,7 +1283,7 @@ private fun makeAnimatableIconList(
                                 .fillMaxSize()
                                 .rotate(0f),
                             imageVector = FluentIcons.arrowCircleDown(getUIKitColors().textFillColorPrimaryBrush, true),
-                            contentDescription = "Angle",
+                            contentDescription = LocalStrings.current.designs.fluentIcons.angle,
                             tint = getUIKitColors().textFillColorPrimaryBrush,
                         )
                     },
@@ -1292,7 +1293,7 @@ private fun makeAnimatableIconList(
                                 .fillMaxSize()
                                 .rotate(225f),
                             imageVector = FluentIcons.arrowCircleDown(getUIKitColors().textFillColorPrimaryBrush, true),
-                            contentDescription = "Angle",
+                            contentDescription = LocalStrings.current.designs.fluentIcons.angle,
                             tint = getUIKitColors().textFillColorPrimaryBrush,
                         )
                     },
@@ -1366,7 +1367,7 @@ private fun makeAnimatableIconList(
             Column {
                 StateSelector(
                     states = listOf(
-                        StateSelectorItem("Running") {
+                        StateSelectorItem(LocalStrings.current.designs.fluentIcons.states.running) {
                             FluentIcons.AnimatableIcons.Download(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -1378,7 +1379,7 @@ private fun makeAnimatableIconList(
                                 lineWidth = lineWidthProperty.value
                             )
                         },
-                        StateSelectorItem("Stopped") {
+                        StateSelectorItem(LocalStrings.current.designs.fluentIcons.states.stopped) {
                             FluentIcons.AnimatableIcons.Download(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -1390,7 +1391,7 @@ private fun makeAnimatableIconList(
                                 lineWidth = lineWidthProperty.value
                             )
                         },
-                        StateSelectorItem("Error") {
+                        StateSelectorItem(LocalStrings.current.designs.fluentIcons.states.error) {
                             FluentIcons.AnimatableIcons.Download(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -1402,7 +1403,7 @@ private fun makeAnimatableIconList(
                                 lineWidth = lineWidthProperty.value
                             )
                         },
-                        StateSelectorItem("Success") {
+                        StateSelectorItem(LocalStrings.current.designs.fluentIcons.states.success) {
                             FluentIcons.AnimatableIcons.Download(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -1483,7 +1484,7 @@ private fun makeAnimatableIconList(
             Column {
                 StateSelector(
                     states = listOf(
-                        StateSelectorItem("Running") {
+                        StateSelectorItem(LocalStrings.current.designs.fluentIcons.states.running) {
                             FluentIcons.AnimatableIcons.Upload(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -1495,7 +1496,7 @@ private fun makeAnimatableIconList(
                                 lineWidth = lineWidthProperty.value
                             )
                         },
-                        StateSelectorItem("Stopped") {
+                        StateSelectorItem(LocalStrings.current.designs.fluentIcons.states.stopped) {
                             FluentIcons.AnimatableIcons.Upload(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -1507,7 +1508,7 @@ private fun makeAnimatableIconList(
                                 lineWidth = lineWidthProperty.value
                             )
                         },
-                        StateSelectorItem("Error") {
+                        StateSelectorItem(LocalStrings.current.designs.fluentIcons.states.error) {
                             FluentIcons.AnimatableIcons.Upload(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -1519,7 +1520,7 @@ private fun makeAnimatableIconList(
                                 lineWidth = lineWidthProperty.value
                             )
                         },
-                        StateSelectorItem("Success") {
+                        StateSelectorItem(LocalStrings.current.designs.fluentIcons.states.success) {
                             FluentIcons.AnimatableIcons.Upload(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -1599,7 +1600,7 @@ private fun makeAnimatableIconList(
             Column {
                 StateSelector(
                     states = listOf(
-                        StateSelectorItem("Add") {
+                        StateSelectorItem(LocalStrings.current.designs.fluentIcons.states.add) {
                             FluentIcons.AnimatableIcons.AddCircleFilled(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -1609,7 +1610,7 @@ private fun makeAnimatableIconList(
                                 lineWidth = lineWidthProperty.value
                             )
                         },
-                        StateSelectorItem("Error") {
+                        StateSelectorItem(LocalStrings.current.designs.fluentIcons.states.error) {
                             FluentIcons.AnimatableIcons.AddCircleFilled(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -1619,7 +1620,7 @@ private fun makeAnimatableIconList(
                                 lineWidth = lineWidthProperty.value
                             )
                         },
-                        StateSelectorItem("Success") {
+                        StateSelectorItem(LocalStrings.current.designs.fluentIcons.states.success) {
                             FluentIcons.AnimatableIcons.AddCircleFilled(
                                 modifier = Modifier
                                     .fillMaxSize(),

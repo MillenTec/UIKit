@@ -61,7 +61,7 @@ fun DesignsPage() {
                 Divider()
                 SettingCard(
                     icon = FluentIcons.Symbols,
-                    title = "UIKit Symbols",
+                    title = LocalStrings.current.designs.uikitSymbolsEntrance,
                     onClick = {
                         MainViewModel.navigation.switchPage(Pages.Designs_UIKitSymbols, type = UIKitNavigationType.Forward)
                     }

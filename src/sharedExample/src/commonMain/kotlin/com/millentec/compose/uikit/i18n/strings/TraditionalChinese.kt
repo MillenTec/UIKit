@@ -14,11 +14,19 @@ class TraditionalChinese: Strings {
             get() = "第三方授權"
         override val settings: String
             get() = "設定"
+        override val more: String
+            get() = "更多"
     }
 
     override val home: Strings.Home get() = object : Strings.Home {
         override val title: String
             get() = "首頁"
+        override val description: String
+            get() = "UIKit 是一個現代、極簡的 Compose Multiplatform 元件庫，基於 Fluent Design，並融入了 Apple 的設計理念"
+        override val viewOnGitHub: String
+            get() = "在 GitHub 上檢視"
+        override val viewOnGitHubDescription: String
+            get() = "開啟本專案的 GitHub 儲存庫"
     }
 
     override val controls: Strings.Controls get() = object : Strings.Controls {
@@ -43,6 +51,9 @@ class TraditionalChinese: Strings {
             override val toggleSwitchEntrance: String
                 get() = "切換開關"
 
+            override val unknown: String
+                get() = "未知"
+
             override val common: Strings.Controls.Inputs.Common
                 get() = object : Strings.Controls.Inputs.Common {
                     override val sourceCode: String
@@ -51,6 +62,10 @@ class TraditionalChinese: Strings {
                         get() = "是否啟用"
                     override val color: String
                         get() = "色彩"
+                    override val rectangle: String
+                        get() = "矩形"
+                    override val rounded: String
+                        get() = "圓角"
                 }
 
             override val button: Strings.Controls.Inputs.Button
@@ -130,6 +145,55 @@ class TraditionalChinese: Strings {
             get() = "設計"
         override val fluentIconsEntrance: String
             get() = "Fluent 圖示集"
+        override val uikitSymbolsEntrance: String
+            get() = "UIKit Symbols"
+
+        override val uikitSymbols: Strings.Designs.UiKitSymbols
+            get() = object : Strings.Designs.UiKitSymbols {
+                override val title: String
+                    get() = "UIKit Symbols"
+                override val all: String
+                    get() = "全部"
+                override val allTitle: String
+                    get() = "全部符號"
+                override val systemUi: String
+                    get() = "系統 UI"
+                override val systemUiTitle: String
+                    get() = "系統 UI 符號"
+                override val preview: String
+                    get() = "預覽"
+                override val goBack: String
+                    get() = "返回"
+                override val commonOptions: String
+                    get() = "一般選項"
+                override val example: String
+                    get() = "範例"
+                override val tint: String
+                    get() = "色調"
+
+                override val styles: Strings.Designs.UiKitSymbols.Styles
+                    get() = object : Strings.Designs.UiKitSymbols.Styles {
+                        override val monochrome: String
+                            get() = "單色"
+                        override val hierarchical: String
+                            get() = "分層"
+                        override val multiColor: String
+                            get() = "多色"
+                    }
+
+                override val effect: Strings.Designs.UiKitSymbols.Effect
+                    get() = object : Strings.Designs.UiKitSymbols.Effect {
+                        override val visible: String
+                            get() = "顯示"
+                        override val bounce: String
+                            get() = "彈跳"
+                        override val variableColor: String
+                            get() = "可變色彩"
+                        override val pulse: String
+                            get() = "脈衝"
+                    }
+            }
+
         override val fluentIcons: Strings.Designs.FluentIcons
             get() = object : Strings.Designs.FluentIcons {
                 override val title: String
@@ -140,6 +204,25 @@ class TraditionalChinese: Strings {
                     get() = "填滿"
                 override val animatableIcons: String
                     get() = "動畫圖示"
+
+                override val thin: String
+                    get() = "細"
+                override val angle: String
+                    get() = "角度"
+
+                override val states: Strings.Designs.FluentIcons.States
+                    get() = object : Strings.Designs.FluentIcons.States {
+                        override val running: String
+                            get() = "執行中"
+                        override val stopped: String
+                            get() = "已停止"
+                        override val error: String
+                            get() = "錯誤"
+                        override val success: String
+                            get() = "成功"
+                        override val add: String
+                            get() = "新增"
+                    }
 
                 override val options: Strings.Designs.FluentIcons.Options
                     get() = object : Strings.Designs.FluentIcons.Options {
@@ -165,6 +248,26 @@ class TraditionalChinese: Strings {
                             get() = "自動著色"
                         override val resetProgressOnError: String
                             get() = "在 Error 時重設進度"
+                        override val unknown: String
+                            get() = "未知"
+
+                        override val colors: Strings.Designs.FluentIcons.Options.Colors
+                            get() = object : Strings.Designs.FluentIcons.Options.Colors {
+                                override val primary: String
+                                    get() = "主要"
+                                override val secondary: String
+                                    get() = "次要"
+                                override val reversed: String
+                                    get() = "反轉"
+                                override val highlight: String
+                                    get() = "醒目"
+                                override val success: String
+                                    get() = "成功"
+                                override val warning: String
+                                    get() = "警告"
+                                override val error: String
+                                    get() = "錯誤"
+                            }
                     }
             }
     }
@@ -172,6 +275,10 @@ class TraditionalChinese: Strings {
     override val license: Strings.License get() = object : Strings.License {
         override val title: String
             get() = "開源授權"
+        override val loading: String
+            get() = "載入中..."
+        override fun loadingFailed(detail: String): String =
+            "載入失敗：$detail"
         override val description: String
             get() = "UIKit 使用 MIT 協定發佈，這表示你可以在不受限制的情況下處理本軟體，包括但不限於使用、複製、修改、合併、發佈、散佈、再授權及/或銷售本軟體之副本"
     }
@@ -179,6 +286,10 @@ class TraditionalChinese: Strings {
     override val thirdPartyLicenses: Strings.ThirdPartyLicenses get() = object : Strings.ThirdPartyLicenses {
         override val title: String
             get() = "第三方授權"
+        override val loading: String
+            get() = "載入中..."
+        override fun loadingFailed(detail: String): String =
+            "載入失敗：$detail"
         override val description: String
             get() = "UIKit 同樣離不開開源社群的支持，下面列出了 UIKit 所使用的開源專案"
     }

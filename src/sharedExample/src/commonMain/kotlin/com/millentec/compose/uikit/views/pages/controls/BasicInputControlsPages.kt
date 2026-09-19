@@ -165,7 +165,7 @@ val BasicInputControls = listOf(
                         Icon(
                             modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
                             imageVector = FluentIcons.Square,
-                            contentDescription = "Rectangle",
+                            contentDescription = LocalStrings.current.controls.inputs.common.rectangle,
                             tint = getUIKitColors().textFillColorPrimaryBrush
                         )
                     },
@@ -173,7 +173,7 @@ val BasicInputControls = listOf(
                         Icon(
                             modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
                             imageVector = FluentIcons.Circle,
-                            contentDescription = "Rounded",
+                            contentDescription = LocalStrings.current.controls.inputs.common.rounded,
                             tint = getUIKitColors().textFillColorPrimaryBrush
                         )
                     }
@@ -384,7 +384,7 @@ val BasicInputControls = listOf(
                         Icon(
                             modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
                             imageVector = FluentIcons.Square,
-                            contentDescription = "Rectangle",
+                            contentDescription = LocalStrings.current.controls.inputs.common.rectangle,
                             tint = getUIKitColors().textFillColorPrimaryBrush
                         )
                     },
@@ -392,7 +392,7 @@ val BasicInputControls = listOf(
                         Icon(
                             modifier = Modifier.size(getUIKitTypography().body.lineHeight.value.dp),
                             imageVector = FluentIcons.Circle,
-                            contentDescription = "Rounded",
+                            contentDescription = LocalStrings.current.controls.inputs.common.rounded,
                             tint = getUIKitColors().textFillColorPrimaryBrush
                         )
                     }

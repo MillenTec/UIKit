@@ -5,22 +5,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.component.input.UIKitButton
-import com.millentec.compose.uikit.component.input.UIKitSlider
-import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
-import com.millentec.compose.uikit.component.layout.UIKitIcon
-import com.millentec.compose.uikit.symbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.animate.*
-import com.millentec.compose.uikit.symbols.builtin.media.VideoCamera
-import com.millentec.compose.uikit.symbols.builtin.systemui.AddCircle
-import com.millentec.compose.uikit.symbols.builtin.systemui.Bluetooth
-import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
+import com.millentec.compose.uikit.additionsymbols.GitHubSymbol
+import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
@@ -60,126 +50,26 @@ fun HomePage() {
         }
 
         item {
-            Column {
-                val visible0 = remember { mutableStateOf(true) }
-                val visible1 = remember { mutableStateOf(false) }
-                val enabled0 = remember { mutableStateOf(true) }
-                val style = remember { mutableStateOf(false) }
-                val state = remember { mutableStateOf(false) }
-                val bounceTrigger = remember { mutableStateOf(0) }
-                val isActive = remember { mutableStateOf(false) }
-                val progress = remember { mutableStateOf(1f) }
-                val isActive1 = remember { mutableStateOf(false) }
+            Text(
+                text = LocalStrings.current.home.description,
+                style = getUIKitTypography().body,
+                color = getUIKitColors().textFillColorPrimaryBrush
+            )
+        }
 
-                Row {
-                    UIKitIcon(
-                        modifier = Modifier
-                            .size(100.dp),
-                        symbol = UIKitSymbols.media.VideoCamera,
-                        contentDescription = "Speaker",
-                        symbolStyle = if (style.value) UIKitSymbolStyle.MultiColor
-                        else UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
-                        symbolEffect = UIKitSymbolEffect()
-                            .visibleEffect(visible0.value)
-                            .stateEffect(if (enabled0.value) "default" else "disabled")
-                            .bounceEffect(bounceTrigger.value, -1f)
-                            .variableColorEffect(isActive.value)
-                            .progressibleEffect(progress.value)
-                            .pulseEffect(isActive1.value)
-                    )
-
-                    UIKitIcon(
-                        modifier = Modifier
-                            .size(100.dp),
-                        symbol = UIKitSymbols.systemUI.Bluetooth,
-                        contentDescription = "Bluetooth",
-                        symbolStyle = if (style.value) UIKitSymbolStyle.MultiColor
-                        else UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
-                        symbolEffect = UIKitSymbolEffect()
-                            .visibleEffect(visible0.value)
-                            .stateEffect(if (enabled0.value) "default" else "disabled")
-                            .bounceEffect(bounceTrigger.value, -1f)
-                            .variableColorEffect(isActive.value)
-                            .progressibleEffect(progress.value)
-                            .pulseEffect(isActive1.value)
-                    )
-
-                    UIKitIcon(
-                        modifier = Modifier
-                            .size(100.dp),
-                        symbol = UIKitSymbols.systemUI.AddCircle,
-                        contentDescription = null,
-                        symbolStyle = if (style.value) UIKitSymbolStyle.MultiColor
-                        else UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
-                        symbolEffect = UIKitSymbolEffect()
-                            .visibleEffect(visible1.value)
-                            .stateEffect(if (state.value) "checkmark" else "add")
-                            .bounceEffect(bounceTrigger.value)
-
-                    )
-                }
-
-                Row {
-                    Column {
-                        UIKitToggleSwitch(
-                            checked = visible0.value,
-                            onCheckedChange = { visible0.value = it }
-                        )
-
-                        Spacer(Modifier.height(getUIKitLayout().itemSpacing))
-
-                        UIKitToggleSwitch(
-                            checked = enabled0.value,
-                            onCheckedChange = { enabled0.value = it }
-                        )
-                    }
-
-                    Spacer(Modifier.width(getUIKitLayout().itemSpacing))
-
-                    Column {
-                        UIKitToggleSwitch(
-                            checked = visible1.value,
-                            onCheckedChange = { visible1.value = it }
-                        )
-
-                        Spacer(Modifier.height(getUIKitLayout().itemSpacing))
-
-                        UIKitToggleSwitch(
-                            checked = state.value,
-                            onCheckedChange = { state.value = it }
-                        )
-                    }
-
-                    Spacer(Modifier.width(getUIKitLayout().itemSpacing))
-
-                    UIKitToggleSwitch(
-                        checked = style.value,
-                        onCheckedChange = { style.value = it }
-                    )
-
-                    Spacer(Modifier.width(getUIKitLayout().itemSpacing))
-
-                    UIKitButton(
-                        text = "Bounce",
-                        onClick = {
-                            bounceTrigger.value++
-                        }
-                    )
-
-                    Spacer(Modifier.width(getUIKitLayout().itemSpacing))
-
-                    UIKitToggleSwitch(
-                        checked = isActive.value,
-                        onCheckedChange = { isActive.value = it }
-                    )
-                }
-
-                Spacer(Modifier.width(getUIKitLayout().itemSpacing))
-
-                UIKitSlider(
-                    value = progress.value,
-                    onValueChange = {
-                        progress.value = it
+        item {
+            Spacer(Modifier.height(getUIKitLayout().sectionSpacing))
+        }
+        
+        item {
+            val uriHandler = LocalUriHandler.current
+            UIKitGroupedCard {
+                SettingCard(
+                    title = LocalStrings.current.home.viewOnGitHub,
+                    icon = GitHubSymbol.toComposeVector(getUIKitColors().textFillColorPrimaryBrush),
+                    description = LocalStrings.current.home.viewOnGitHubDescription,
+                    onClick = {
+                        uriHandler.openUri("https://github.com/MillenTec/UIKit")
                     }
                 )
             }

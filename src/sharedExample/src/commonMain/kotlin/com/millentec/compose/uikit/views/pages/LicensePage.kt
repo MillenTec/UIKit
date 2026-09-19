@@ -26,7 +26,8 @@ import uikit.sharedexample.generated.resources.Res
 @Composable
 @Preview
 fun LicensePage() {
-    val licenseContents = remember { mutableStateOf(listOf("Loading...")) }
+    val strings = LocalStrings.current
+    val licenseContents = remember { mutableStateOf(listOf(strings.license.loading)) }
     val density = LocalDensity.current
 
     LaunchedEffect(Unit) {
@@ -39,7 +40,7 @@ fun LicensePage() {
                 }
                 licenseContents.value = string.split('\n')
             } catch(e: Exception) {
-                licenseContents.value = listOf("Loading failed: ${e.message}")
+                licenseContents.value = listOf(strings.license.loadingFailed(e.message ?: ""))
             }
         }
     }

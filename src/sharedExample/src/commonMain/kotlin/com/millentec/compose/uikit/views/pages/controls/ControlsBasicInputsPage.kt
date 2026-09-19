@@ -57,7 +57,7 @@ fun ControlsBasicInputsPage() {
                             Pages.Controls_BasicInputs_Button -> LocalStrings.current.controls.inputs.buttonEntrance
                             Pages.Controls_BasicInputs_ToggleButton -> LocalStrings.current.controls.inputs.toggleButtonEntrance
                             Pages.Controls_BasicInputs_ToggleSwitch -> LocalStrings.current.controls.inputs.toggleSwitchEntrance
-                            else -> "Unknown"
+                            else -> LocalStrings.current.controls.inputs.unknown
                         },
                         onClick = {
                             MainViewModel.navigation.switchPage(item.page, type = UIKitNavigationType.Forward)

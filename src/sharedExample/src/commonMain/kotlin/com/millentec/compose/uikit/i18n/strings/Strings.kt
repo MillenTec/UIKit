@@ -15,12 +15,20 @@ interface Strings {
             get() = "Third-Party Licenses"
         val settings: String
             get() = "Settings"
+        val more: String
+            get() = "More"
     }
 
     val home: Home get() = object : Home {}
     interface Home {
         val title: String
             get() = "Home"
+        val description: String
+            get() = "UIKit is a modern, minimalist Compose Multiplatform component library built on Fluent Design while incorporating Apple design principles."
+        val viewOnGitHub: String
+            get() = "View on GitHub"
+        val viewOnGitHubDescription: String
+            get() = "Open the GitHub repository of this project."
     }
 
     val controls: Controls get() = object : Controls {}
@@ -47,6 +55,9 @@ interface Strings {
             val toggleSwitchEntrance: String
                 get() = "Toggle Switch"
 
+            val unknown: String
+                get() = "Unknown"
+
             val common: Common get() = object : Common {}
             interface Common {
                 val sourceCode: String
@@ -55,6 +66,10 @@ interface Strings {
                     get() = "Enabled"
                 val color: String
                     get() = "Color"
+                val rectangle: String
+                    get() = "Rectangle"
+                val rounded: String
+                    get() = "Rounded"
             }
 
             val button: Button get() = object : Button {}
@@ -135,6 +150,54 @@ interface Strings {
             get() = "Designs"
         val fluentIconsEntrance: String
             get() = "Fluent Icons"
+        val uikitSymbolsEntrance: String
+            get() = "UIKit Symbols"
+
+        val uikitSymbols: UiKitSymbols get() = object : UiKitSymbols {}
+        interface UiKitSymbols {
+            val title: String
+                get() = "UIKit Symbols"
+            val all: String
+                get() = "All"
+            val allTitle: String
+                get() = "All Symbols"
+            val systemUi: String
+                get() = "System UI"
+            val systemUiTitle: String
+                get() = "System UI"
+            val preview: String
+                get() = "Preview"
+            val goBack: String
+                get() = "Go Back"
+            val commonOptions: String
+                get() = "Common Options"
+            val example: String
+                get() = "Example"
+            val tint: String
+                get() = "Tint"
+
+            val styles: Styles get() = object : Styles {}
+            interface Styles {
+                val monochrome: String
+                    get() = "Monochrome"
+                val hierarchical: String
+                    get() = "Hierarchical"
+                val multiColor: String
+                    get() = "Multi Color"
+            }
+
+            val effect: Effect get() = object : Effect {}
+            interface Effect {
+                val visible: String
+                    get() = "Visible"
+                val bounce: String
+                    get() = "Bounce"
+                val variableColor: String
+                    get() = "Variable Color"
+                val pulse: String
+                    get() = "Pulse"
+            }
+        }
 
         val fluentIcons: FluentIcons get() = object : FluentIcons {}
         interface FluentIcons {
@@ -146,6 +209,25 @@ interface Strings {
                 get() = "Filled"
             val animatableIcons: String
                 get() = "Animatable"
+
+            val thin: String
+                get() = "Thin"
+            val angle: String
+                get() = "Angle"
+
+            val states: States get() = object : States {}
+            interface States {
+                val running: String
+                    get() = "Running"
+                val stopped: String
+                    get() = "Stopped"
+                val error: String
+                    get() = "Error"
+                val success: String
+                    get() = "Success"
+                val add: String
+                    get() = "Add"
+            }
 
             val options: Options get() = object : Options {}
             interface Options {
@@ -171,6 +253,26 @@ interface Strings {
                     get() = "Auto Tint"
                 val resetProgressOnError: String
                     get() = "Reset Progress on Error"
+                val unknown: String
+                    get() = "Unknown"
+
+                val colors: Colors get() = object : Colors {}
+                interface Colors {
+                    val primary: String
+                        get() = "Primary"
+                    val secondary: String
+                        get() = "Secondary"
+                    val reversed: String
+                        get() = "Reversed"
+                    val highlight: String
+                        get() = "Highlight"
+                    val success: String
+                        get() = "Success"
+                    val warning: String
+                        get() = "Warning"
+                    val error: String
+                        get() = "Error"
+                }
             }
         }
     }
@@ -179,6 +281,10 @@ interface Strings {
     interface License {
         val title: String
             get() = "Open Source License"
+        val loading: String
+            get() = "Loading..."
+        fun loadingFailed(detail: String): String =
+            "Loading failed: $detail"
         val description: String
             get() = "UIKit is distributed under the MIT license, which grants you the freedom to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software."
     }
@@ -187,6 +293,10 @@ interface Strings {
     interface ThirdPartyLicenses {
         val title: String
             get() = "Third-Party Licenses"
+        val loading: String
+            get() = "Loading..."
+        fun loadingFailed(detail: String): String =
+            "Loading failed: $detail"
         val description: String
             get() = "UIKit also relies on the support of the open source community. Listed below are the open source projects used by UIKit."
     }

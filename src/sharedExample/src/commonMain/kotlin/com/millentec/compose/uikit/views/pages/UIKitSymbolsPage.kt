@@ -15,6 +15,7 @@ import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Apps
 import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.builtin.layout.Grid
+import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
 import com.millentec.compose.uikit.theme.getUIKitTypography
@@ -42,7 +43,7 @@ fun UIKitSymbolsPage() {
 
         item {
             Text(
-                text = "UIKit Symbols",
+                text = LocalStrings.current.designs.uikitSymbols.title,
                 style = getUIKitTypography().largeTitle,
                 color = getUIKitColors().textFillColorPrimaryBrush
             )
@@ -59,7 +60,7 @@ fun UIKitSymbolsPage() {
         item {
             UIKitGroupedCard {
                 SettingCard(
-                    title = "All",
+                    title = LocalStrings.current.designs.uikitSymbols.all,
                     icon = UIKitSymbols.layout.Grid.toComposeVector(getUIKitColors().textFillColorPrimaryBrush),
                     onClick = {
                         nav.switchPage(Pages.Designs_UIKitSymbols_All, type = UIKitNavigationType.Forward)
@@ -67,7 +68,7 @@ fun UIKitSymbolsPage() {
                 )
                 Divider()
                 SettingCard(
-                    title = "System UI",
+                    title = LocalStrings.current.designs.uikitSymbols.systemUi,
                     icon = FluentIcons.Apps,
                     onClick = {
                         nav.switchPage(Pages.Designs_UIKitSymbols_SystemUI, type = UIKitNavigationType.Forward)

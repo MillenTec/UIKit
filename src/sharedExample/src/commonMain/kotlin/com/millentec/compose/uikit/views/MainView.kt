@@ -126,10 +126,10 @@ fun MainView() {
                     Controls_BasicInputs_Button -> BasicInputControls.first { it.page == Controls_BasicInputs_Button }.Content(LocalStrings.current.controls.inputs.button.title)
                     Controls_BasicInputs_ToggleButton -> BasicInputControls.first { it.page == Controls_BasicInputs_ToggleButton }.Content(LocalStrings.current.controls.inputs.toggleButton.title)
                     Controls_BasicInputs_ToggleSwitch -> BasicInputControls.first { it.page == Controls_BasicInputs_ToggleSwitch }.Content(LocalStrings.current.controls.inputs.toggleSwitch.title)
-                    Designs_UIKitSymbols_SystemUI -> UIKitSymbolsGalleryPage(SystemUISymbols, "System UI")
+                    Designs_UIKitSymbols_SystemUI -> UIKitSymbolsGalleryPage(SystemUISymbols, LocalStrings.current.designs.uikitSymbols.systemUiTitle)
                     Designs_UIKitSymbols_All -> UIKitSymbolsGalleryPage(
                         (SystemUISymbols + MediaSymbols + ShapesSymbols + LayoutSymbols).sortedBy { it.name },
-                        "All Symbols"
+                        LocalStrings.current.designs.uikitSymbols.allTitle
                     )
                 }
             }
@@ -306,7 +306,7 @@ fun MainView() {
                                         .fillMaxSize(0.6f)
                                         .rotate(iconRotateAnimated.value),
                                     imageVector = FluentIcons.Add,
-                                    contentDescription = "More",
+                                    contentDescription = strings.navigation.more,
                                     tint = getUIKitColors().textFillColorPrimaryBrush
                                 )
                             }

@@ -26,7 +26,8 @@ import uikit.sharedexample.generated.resources.Res
 @Composable
 @Preview
 fun ThirdPartyPage() {
-    val thirdPartyLicenseContents = remember { mutableStateOf(listOf("Loading...")) }
+    val strings = LocalStrings.current
+    val thirdPartyLicenseContents = remember { mutableStateOf(listOf(strings.thirdPartyLicenses.loading)) }
     val density = LocalDensity.current
 
     LaunchedEffect(Unit) {
@@ -39,7 +40,7 @@ fun ThirdPartyPage() {
                 }
                 thirdPartyLicenseContents.value = string.split('\n')
             } catch(e: Exception) {
-                thirdPartyLicenseContents.value = listOf("Loading failed: ${e.message}")
+                thirdPartyLicenseContents.value = listOf(strings.thirdPartyLicenses.loadingFailed(e.message ?: ""))
             }
         }
     }
