@@ -46,7 +46,7 @@ fun UIKitGroupedCard(
     modifier: Modifier = Modifier,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     cornerRadius: Dp = getUIKitShapes().cardRounded,
-    shadowEnabled: Boolean = true,
+    shadowEnabled: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     content: @Composable UIKitCardScope.() -> Unit
 ) {

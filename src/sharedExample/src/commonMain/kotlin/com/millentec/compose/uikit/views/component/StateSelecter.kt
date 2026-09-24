@@ -15,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -50,7 +49,6 @@ fun StateSelector(
                         bottom = getUIKitLayout().basicSpacing,
                         end = if (index == states.size - 1) 0.dp else getUIKitLayout().basicSpacing,
                     )
-                    .dropShadow(shadow = UIKitShadowMaterial.getPrimary(), shape = RoundedCornerShape(getUIKitShapes().regularRounded))
                     .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
                     .width(itemWidth)
                     .background(getUIKitColors().contentFillColorSecondaryBrush)

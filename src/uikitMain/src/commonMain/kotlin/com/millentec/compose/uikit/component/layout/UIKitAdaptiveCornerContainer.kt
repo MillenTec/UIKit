@@ -204,7 +204,7 @@ fun UIKitAdaptiveCornerContainer(
     indication: Indication? = if (isDesktopOS()) null else UIKitInteraction.ripple(),
     interaction: (@Composable Modifier.(State<Boolean>, State<Boolean>, State<Shape>) -> Modifier)? = null,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
-    acrylicEffectEnabled: Boolean = true,
+    acrylicEffectEnabled: Boolean = false,
     acrylicState: AcrylicMaterialState? = null,
     shadowEnable: Boolean = true,
     content: @Composable BoxScope.() -> Unit
@@ -247,7 +247,7 @@ fun UIKitAdaptiveCornerContainer(
     modifier: Modifier = Modifier,
     state: UIKitAdaptiveCornerContainerState,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
-    acrylicEffectEnabled: Boolean = true,
+    acrylicEffectEnabled: Boolean = false,
     acrylicState: AcrylicMaterialState? = null,
     shadowEnable: Boolean = true,
     content: @Composable BoxScope.() -> Unit
