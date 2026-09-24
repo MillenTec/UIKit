@@ -210,7 +210,6 @@ fun UIKitAdaptiveCornerContainer(
     content: @Composable BoxScope.() -> Unit
 ) {
     Box(
-        modifier = modifier,
         contentAlignment = state.alignment
     ) {
         Box(
@@ -235,7 +234,8 @@ fun UIKitAdaptiveCornerContainer(
                 .then(if (acrylicEffectEnabled && acrylicState != null) Modifier.acrylicMaterial(
                     state = acrylicState,
                     shape = RoundedCornerShape(state.cornerRadius)
-                ) else Modifier),
+                ) else Modifier)
+                .then(modifier),
             contentAlignment = Alignment.Center,
             content = content
         )

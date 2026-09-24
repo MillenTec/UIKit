@@ -133,7 +133,7 @@ fun UIKitSwipeableFlyout(
         onDismissRequest = onDismissRequestCurrent,
         alignment = alignment,
         clipToBounds = true,
-        offset = { root, content ->
+        offset = { _, content ->
             contentSize.value = content
             DpOffset(0.dp, 0.dp)
         }
@@ -141,12 +141,14 @@ fun UIKitSwipeableFlyout(
         Box(
             Modifier
                 .drawWithContent {
+                    // RTL 下水平方向的隐藏/露出位移需镜像, 与 uikitSwipeable 回调及拖拽映射的 RTL 语义保持一致
+                    val horizontalSign = if (layoutDirection == LayoutDirection.Rtl) -1f else 1f
                     translate(
-                        left = size.width * swipeDirectionCurrent.horizontalBias,
+                        left = size.width * swipeDirectionCurrent.horizontalBias * horizontalSign,
                         top = size.height * swipeDirectionCurrent.verticalBias
                     ) {
                         translate(
-                            left = -(contentOffsetRatioAnimated.value.x * size.width) * swipeDirectionCurrent.horizontalBias,
+                            left = -(contentOffsetRatioAnimated.value.x * size.width) * swipeDirectionCurrent.horizontalBias * horizontalSign,
                             top = -(contentOffsetRatioAnimated.value.y * size.height) * swipeDirectionCurrent.verticalBias
                         ) {
                             this@drawWithContent.drawContent()
@@ -159,8 +161,10 @@ fun UIKitSwipeableFlyout(
                     Modifier
                         .uikitSwipeable(
                             onDrag = {
+                                // 与绘制位移同镜像, 保证拖拽方向与视觉露出/隐藏方向一致
+                                val horizontalSign = if (layoutDirection == LayoutDirection.Rtl) -1f else 1f
                                 val offsetWithBias = Offset(
-                                    x = it.x * swipeDirectionCurrent.horizontalBias,
+                                    x = it.x * swipeDirectionCurrent.horizontalBias * horizontalSign,
                                     y = it.y * swipeDirectionCurrent.verticalBias
                                 )
 

@@ -47,7 +47,6 @@ import com.millentec.compose.uikit.foundation.UIKitHSVColor
 import com.millentec.compose.uikit.foundation.graphics.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.graphics.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
-import com.millentec.compose.uikit.foundation.helper.mapTo
 import com.millentec.compose.uikit.foundation.helper.toHsv
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
@@ -942,7 +941,7 @@ private open class AnimatableIconItem(
                 modifier = Modifier
                     .weight(1f),
                 value = value.value,
-                maxValue = maxValue,
+                valueRange = 0f..maxValue,
                 onValueChange = { v, type ->
                     isAnimatedChange.value = type != UIKitSliderChangeType.ThumbDrag
                     value.value = v
@@ -1111,22 +1110,14 @@ private open class AnimatableIconItem(
             UIKitSlider(
                 modifier = Modifier
                     .weight(1f),
-                value = lineWidth.value.value.mapTo(
-                    from = 0.5f..3f,
-                    to = 0f..1f
-                ).toFloat(),
+                value = lineWidth.value.value,
                 hasTick = true,
-                tickStep = 0.2f,
+                tickStep = 0.5f,
                 adsorbedOntoTick = false,
-                maxValue = 1f,
+                valueRange = 0.5f..3f,
                 onValueChange = { value, type ->
-                    val valueDp = value.mapTo(
-                        from = 0f..1f,
-                        to = 0.5f..3f
-                    ).dp
-
                     isAnimatedChange.value = type != UIKitSliderChangeType.ThumbDrag
-                    lineWidth.value = valueDp
+                    lineWidth.value = value.dp
                 },
             )
 

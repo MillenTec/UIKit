@@ -73,7 +73,7 @@ data class UIKitMaterials(
                 tint = Color(0x4C1D1D1F),
                 edgeHighlightColor = Brush.linearGradient(
                     Pair(0f, Color(0x2DFFFFFF)),
-                    Pair(0.5f, Color(0x0DFFFFFF)),
+                    Pair(0.5f, Color(0x1DFFFFFF)),
                     Pair(1f, Color(0x2DFFFFFF)),
                 )
             )

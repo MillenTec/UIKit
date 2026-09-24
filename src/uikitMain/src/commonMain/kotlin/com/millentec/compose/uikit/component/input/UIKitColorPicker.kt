@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.millentec.compose.uikit.foundation.UIKitHSVColor
@@ -62,13 +63,17 @@ fun UIKitHueSlider(
         val valueChangeType = remember { mutableStateOf<UIKitSliderChangeType?>(null) }
 
         val maxWidthCurrent by rememberUpdatedState(maxWidth)
+        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
         fun toOffset(value: Float): Dp {
-            return value / 360f * maxWidthCurrent
+            // NaN 输入按 0 处理, 行程无限 (宽度未约束) 时收在 0, 防止 NaN/Infinity 进入 Animatable 导致崩溃
+            val fraction = if (value.isNaN()) 0f else value / 360f
+            return if (maxWidthCurrent.value.isFinite()) fraction.coerceIn(0f, 1f) * maxWidthCurrent else 0.dp
         }
 
         fun toValue(offset: Dp): Float {
-            return offset / maxWidthCurrent * 360f
+            val fraction = (offset / maxWidthCurrent).coerceIn(0f, 1f)
+            return (if (fraction.isNaN()) 0f else fraction) * 360f
         }
 
         val thumbPressed = remember { mutableStateOf(false) }
@@ -181,7 +186,10 @@ fun UIKitHueSlider(
                             Color.hsv(240f, saturationAnimated, valueAnimated),
                             Color.hsv(300f, saturationAnimated, valueAnimated),
                             Color.hsv(360f, saturationAnimated, valueAnimated)
-                        )
+                        ),
+                        // RTL 下行程镜像, 渐变需同步反向以保持颜色与拇指位置一致
+                        startX = if (isRtl) size.width else 0f,
+                        endX = if (isRtl) 0f else size.width
                     ),
                     strokeWidth = (lineWidth * density.density).value,
                     cap = StrokeCap.Round,
@@ -243,13 +251,17 @@ fun UIKitAlphaSlider(
         val valueChangeType = remember { mutableStateOf<UIKitSliderChangeType?>(null) }
 
         val maxWidthCurrent by rememberUpdatedState(maxWidth)
+        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
         fun toOffset(value: Float): Dp {
-            return value / 1f * maxWidthCurrent
+            // NaN 输入按 0 处理, 行程无限 (宽度未约束) 时收在 0, 防止 NaN/Infinity 进入 Animatable 导致崩溃
+            val fraction = if (value.isNaN()) 0f else value / 1f
+            return if (maxWidthCurrent.value.isFinite()) fraction.coerceIn(0f, 1f) * maxWidthCurrent else 0.dp
         }
 
         fun toValue(offset: Dp): Float {
-            return offset / maxWidthCurrent * 1f
+            val fraction = (offset / maxWidthCurrent).coerceIn(0f, 1f)
+            return (if (fraction.isNaN()) 0f else fraction) * 1f
         }
 
         val colorAnimated by animateColorAsState(
@@ -352,7 +364,10 @@ fun UIKitAlphaSlider(
                         colors = listOf(
                             colorAnimated.copy(0f),
                             colorAnimated.copy(1f),
-                        )
+                        ),
+                        // RTL 下行程镜像, 渐变需同步反向以保持颜色与拇指位置一致
+                        startX = if (isRtl) size.width else 0f,
+                        endX = if (isRtl) 0f else size.width
                     ),
                     strokeWidth = (lineWidth * density.density).value,
                     cap = StrokeCap.Round,
@@ -412,7 +427,6 @@ fun UIKitSVPlane(
         contentAlignment = Alignment.Center
     ) {
         val uikitAnimate = getUIKitAnimate()
-        val density = LocalDensity.current
         val hue = hue.coerceIn(0f..360f)
         val saturation = saturation.coerceIn(0f..1f)
         val value = value.coerceIn(0f..1f)
@@ -459,11 +473,6 @@ fun UIKitSVPlane(
 
         val currentSV = remember(offsetAnimated.value) { mutableStateOf(toValue(offsetAnimated.value)) }
 
-        val panelEndSaturationAnimated by animateFloatAsState(
-            targetValue = if (enabled) 1f else 0f,
-            animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
-        )
-
         Canvas(
             modifier = Modifier
                 .offset(
@@ -476,8 +485,8 @@ fun UIKitSVPlane(
                             detectTapGestures(
                                 onTap = {
                                     val dpOffset = DpOffset(
-                                        x = with(density) { it.x }.toDp(),
-                                        y = with(density) { it.y }.toDp()
+                                        x = it.x.toDp(),
+                                        y = it.y.toDp()
                                     )
                                     animatedTransitionEnable.value = true
                                     onValueChange(toValue(dpOffset))
@@ -486,10 +495,10 @@ fun UIKitSVPlane(
                         }
                         .pointerInput(Unit) {
                             detectDragGestures(
-                                onDrag = { change, offset ->
+                                onDrag = { _, offset ->
                                     val dpOffset = DpOffset(
-                                        x = with(density) { offset.x }.toDp(),
-                                        y = with(density) { offset.y }.toDp()
+                                        x = offset.x.toDp(),
+                                        y = offset.y.toDp()
                                     )
                                     val newValue = toValue(
                                         toOffset(saturationCurrent, valueCurrent) + dpOffset

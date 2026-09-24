@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.millentec.compose.uikit.component.layout.UIKitAdaptiveCornerContainer
@@ -163,6 +164,8 @@ fun UIKitNavigationBar(
                 shadowEnable = shadowEnable
             ) {
                 BoxWithConstraints {
+                    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+                    val isRtlCurrent by rememberUpdatedState(isRtl)
                     val itemWidth = (this.maxWidth - getUIKitLayout().smallSpacing * 2) / items.size
                     val targetOffset = itemWidth * checkedIndex
                     val draggingOffset = remember { mutableStateOf(0.dp) }
@@ -224,9 +227,12 @@ fun UIKitNavigationBar(
                             .padding(getUIKitLayout().smallSpacing)
                             .graphicsLayer {
                                 scaleX = indicatorScaleAnimated.value
+                                // RTL 下条目顺序镜像, 指示器缩放时的边缘锚定方向需随之镜像
+                                val directionSign = if (isRtl) -1f else 1f
+                                val halfShrink = ((itemWidth * (1f - indicatorScaleAnimated.value)).value * densityDpi) / 2
                                 translationX =
-                                    if (checkedIndex == itemCount - 1) ((itemWidth * (1f - indicatorScaleAnimated.value)).value * densityDpi) / 2
-                                    else -(((itemWidth * (1f - indicatorScaleAnimated.value)).value * densityDpi) / 2)
+                                    if (checkedIndex == itemCount - 1) halfShrink * directionSign
+                                    else -halfShrink * directionSign
                             }
                             .clip(RoundedCornerShape(state.cornerRadius - getUIKitLayout().smallSpacing))
                             .fillMaxHeight()
@@ -240,7 +246,9 @@ fun UIKitNavigationBar(
                                         isDragging.value = true
                                     },
                                     onDrag = { _, offset ->
-                                        val newOffset = draggingOffset.value + (offset.x / densityDpi).dp
+                                        // RTL 下条目顺序镜像, 拖拽增量需沿行程轴 (序号增大方向) 反向
+                                        val dragDelta = if (isRtlCurrent) -offset.x else offset.x
+                                        val newOffset = draggingOffset.value + (dragDelta / densityDpi).dp
                                         val maxOverDragScale = 0.8f
                                         val maxOverDragOffset = 100.dp
 
