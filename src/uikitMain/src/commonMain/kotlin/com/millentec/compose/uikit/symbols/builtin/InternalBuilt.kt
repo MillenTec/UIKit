@@ -3,6 +3,7 @@
 package com.millentec.compose.uikit.symbols.builtin
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import com.millentec.compose.uikit.foundation.graphics.UIKitBrush
@@ -54,35 +55,51 @@ internal fun UIKitSymbolColorSet(
     layerInfo: List<Pair<String, Float>>,
     multiColor: List<UIKitSymbolColor>
 ): List<UIKitSymbolColor> {
-    return when (style) {
-        is UIKitSymbolStyle.Hierarchical -> layers.map { layer ->
-            UIKitSymbolColor(
-                selector = layer.id,
-                brush = style.brush,
-                alpha = layerInfo.firstOrNull { it.first == layer.id }?.second ?: 1f
-            )
-        }
-        is UIKitSymbolStyle.Monochrome -> layers.map { layer ->
-            UIKitSymbolColor(
-                layer.id,
-                brush = style.brush,
-                1f
-            )
-        }
-        UIKitSymbolStyle.MultiColor -> multiColor
-        is UIKitSymbolStyle.Palette -> layers.mapIndexed { index, layer ->
-            UIKitSymbolColor(
-                selector = layer.id,
-                brush = style.brushes.getOrElse(index) { UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush) },
-                alpha = 1f
-            )
-        }
-        is UIKitSymbolStyle.PaletteWithId -> layers.map { layer ->
-            UIKitSymbolColor(
-                selector = layer.id,
-                brush = style.brushes.firstOrNull { it.first == layer.id }?.second ?: UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush),
-                alpha = 1f
-            )
+    val uikitColors = getUIKitColors()
+    val colors = remember(style, layers, layerInfo, multiColor) {
+        when (style) {
+            is UIKitSymbolStyle.Hierarchical -> layers.map { layer ->
+                UIKitSymbolColor(
+                    selector = layer.id,
+                    brush = style.brush,
+                    alpha = layerInfo.firstOrNull { it.first == layer.id }?.second ?: 1f
+                )
+            }
+            is UIKitSymbolStyle.Monochrome -> layers.map { layer ->
+                UIKitSymbolColor(
+                    layer.id,
+                    brush = style.brush,
+                    1f
+                )
+            }
+            UIKitSymbolStyle.MultiColor -> multiColor
+            is UIKitSymbolStyle.Palette -> {
+                var preColor: UIKitBrush? = null
+
+                layers.filter { it.groups.any { group ->
+                    group.drawType != UIKitPathDrawType.MaskFilled || group.drawType !is UIKitPathDrawType.MaskStroke }
+                }.sortedByDescending { it.zIndex }.mapIndexed { index, layer ->
+                    val color = style.brushes.getOrElse(index) {
+                        preColor ?: UIKitBrush.solid(uikitColors.textFillColorPrimaryBrush)
+                    }
+                    preColor = color
+
+                    UIKitSymbolColor(
+                        selector = layer.id,
+                        brush = color,
+                        alpha = 1f
+                    )
+                }
+            }
+            is UIKitSymbolStyle.PaletteWithId -> layers.map { layer ->
+                UIKitSymbolColor(
+                    selector = layer.id,
+                    brush = style.brushes.firstOrNull { it.first == layer.id }?.second ?: UIKitBrush.solid(uikitColors.textFillColorPrimaryBrush),
+                    alpha = 1f
+                )
+            }
         }
     }
+
+    return colors
 }

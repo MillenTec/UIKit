@@ -5,7 +5,6 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
@@ -43,8 +42,8 @@ import kotlinx.coroutines.launch
 @Preview
 private fun Preview() {
     UIKitIcon(
-        modifier = Modifier
-            .size(100.dp),
+//        modifier = Modifier
+//            .size(100.dp),
         symbol = UIKitSymbols.media.Speaker,
         contentDescription = "AddCircle",
         symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush)
@@ -208,13 +207,15 @@ private fun UIKitAnimatableIcon(
     }
 
     Canvas(
-        modifier = modifier
-            .aspectRatio(symbol.defaultSize.width / symbol.defaultSize.height)
-            .defaultMinSize(symbol.defaultSize.width, symbol.defaultSize.height)
-            .semantics {
-                this.contentDescription = contentDescription ?: return@semantics
-                this.role = Role.Image
-            }
+        modifier = modifier.then(
+            Modifier
+                .aspectRatio(symbol.defaultSize.width / symbol.defaultSize.height)
+                .size(symbol.defaultSize.width, symbol.defaultSize.height)
+                .semantics {
+                    this.contentDescription = contentDescription ?: return@semantics
+                    this.role = Role.Image
+                }
+        )
     ) {
         var saveCount = 0
         val scaleX = size.width / symbol.viewportSize.width
@@ -456,13 +457,15 @@ private fun UIKitStaticIcon(
     }
 
     Canvas(
-        modifier = modifier
-            .aspectRatio(symbol.defaultSize.width / symbol.defaultSize.height)
-            .size(symbol.defaultSize.width, symbol.defaultSize.height)
-            .semantics {
-                this.contentDescription = contentDescription ?: return@semantics
-                this.role = Role.Image
-            }
+        modifier = modifier.then(
+            Modifier
+                .aspectRatio(symbol.defaultSize.width / symbol.defaultSize.height)
+                .size(symbol.defaultSize.width, symbol.defaultSize.height)
+                .semantics {
+                    this.contentDescription = contentDescription ?: return@semantics
+                    this.role = Role.Image
+                }
+        )
     ) {
         var saveCount = 0
         scale(
