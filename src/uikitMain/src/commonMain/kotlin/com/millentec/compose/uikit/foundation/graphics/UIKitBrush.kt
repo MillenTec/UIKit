@@ -56,10 +56,10 @@ data class UIKitBrush(
 }
 
 /*
- * AIGC: 该类部分内容使用人工智能生成
- * - Time: 2026.9.6-13:02
+ * AIGC: 使用了人工智能制作了 Brush 动画部分
+ * - Time: 2026-09-06 13:02
  * - Model: MiMo V2.5
- * - Type: Agent
+ * - Type: Agent (OpenCode)
  * - State: Reviewed
  */
 class UIKitAnimateBrush(

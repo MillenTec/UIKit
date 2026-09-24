@@ -214,6 +214,10 @@ fun UIKitSymbolsGalleryPage(
                                 Column(
                                     modifier = Modifier
                                         .padding(getUIKitLayout().smallSpacing)
+                                        .dropShadow(
+                                            RoundedCornerShape(getUIKitShapes().cardRounded),
+                                            UIKitShadowMaterial.getPrimary()
+                                        )
                                         .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
                                         .background(commonConfig.backgroundColor.value)
                                         .uikitClickable(

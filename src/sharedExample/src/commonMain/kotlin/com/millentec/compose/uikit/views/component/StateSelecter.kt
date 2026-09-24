@@ -50,7 +50,7 @@ fun StateSelector(
                         bottom = getUIKitLayout().basicSpacing,
                         end = if (index == states.size - 1) 0.dp else getUIKitLayout().basicSpacing,
                     )
-                    .dropShadow(shadow = UIKitShadowMaterial.getMarginal(), shape = RoundedCornerShape(getUIKitShapes().regularRounded))
+                    .dropShadow(shadow = UIKitShadowMaterial.getPrimary(), shape = RoundedCornerShape(getUIKitShapes().regularRounded))
                     .clip(RoundedCornerShape(getUIKitShapes().regularRounded))
                     .width(itemWidth)
                     .background(getUIKitColors().contentFillColorSecondaryBrush)
