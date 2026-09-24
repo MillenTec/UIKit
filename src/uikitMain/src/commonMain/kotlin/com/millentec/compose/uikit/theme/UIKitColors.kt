@@ -44,35 +44,35 @@ data class UIKitColors(
 
     val highlightColorPrimaryBrush: Color = Color(0xFF0071E3),
 
-    val highlightColorSecondaryBrush: Color = highlightColorPrimaryBrush.copy(0.6f),
+    val highlightColorSecondaryBrush: Color = Color(0xFF5B99EC),
 
-    val highlightColorTertiaryBrush: Color = highlightColorPrimaryBrush.copy(0.3f),
+    val highlightColorTertiaryBrush: Color = Color(0xFF8FB8F2),
 
-    val highlightColorFourthBrush: Color = highlightColorPrimaryBrush.copy(0.15f),
+    val highlightColorFourthBrush: Color = Color(0xFFD7E3F6),
 
     val successGreenColorPrimaryBrush: Color = Color(0xFF34C759),
 
-    val successGreenColorSecondaryBrush: Color = successGreenColorPrimaryBrush.copy(0.6f),
+    val successGreenColorSecondaryBrush: Color = Color(0xFF7AD588),
 
-    val successGreenColorTertiaryBrush: Color = successGreenColorPrimaryBrush.copy(0.3f),
+    val successGreenColorTertiaryBrush: Color = Color(0xFFA6E1AE),
 
-    val successGreenColorFourthBrush: Color = successGreenColorPrimaryBrush.copy(0.15f),
+    val successGreenColorFourthBrush: Color = Color(0xFFDFEFE2),
 
     val warningYellowColorPrimaryBrush: Color = Color(0xFFFFCC00),
 
-    val warningYellowColorSecondaryBrush: Color = warningYellowColorPrimaryBrush.copy(0.6f),
+    val warningYellowColorSecondaryBrush: Color = Color(0xFFFCD974),
 
-    val warningYellowColorTertiaryBrush: Color = warningYellowColorPrimaryBrush.copy(0.3f),
+    val warningYellowColorTertiaryBrush: Color = Color(0xFFFAE3A4),
 
-    val warningYellowColorFourthBrush: Color = warningYellowColorPrimaryBrush.copy(0.15f),
+    val warningYellowColorFourthBrush: Color = Color(0xFFF7F0E0),
 
     val errorRedColorPrimaryBrush: Color = Color(0xFFFF383C),
 
-    val errorRedColorSecondaryBrush: Color = errorRedColorPrimaryBrush.copy(0.6f),
+    val errorRedColorSecondaryBrush: Color = Color(0xFFFF8077),
 
-    val errorRedColorTertiaryBrush: Color = errorRedColorPrimaryBrush.copy(0.3f),
+    val errorRedColorTertiaryBrush: Color = Color(0xFFFFAAA2),
 
-    val errorRedColorFourthBrush: Color = errorRedColorPrimaryBrush.copy(0.15f),
+    val errorRedColorFourthBrush: Color = Color(0xFFFCDFDD),
 
     val pointerInteractionBrush: Color = Color(0xFF000000),
 
@@ -134,9 +134,21 @@ data class UIKitColors(
             lineFillColorPrimaryBrush = Color(0xFF303032),
             lineFillColorDisabled = Color(0xFF4D4D4F),
             highlightColorPrimaryBrush = Color(0xFF0091FF),
+            highlightColorSecondaryBrush = Color(0xFF1879D0),
+            highlightColorTertiaryBrush = Color(0xFF1F5F9E),
+            highlightColorFourthBrush = Color(0xFF1E334C),
             successGreenColorPrimaryBrush = Color(0xFF30D158),
+            successGreenColorSecondaryBrush = Color(0xFF34A34E),
+            successGreenColorTertiaryBrush = Color(0xFF317D41),
+            successGreenColorFourthBrush = Color(0xFF243E29),
             warningYellowColorPrimaryBrush = Color(0xFFFFD600),
+            warningYellowColorSecondaryBrush = Color(0xFFCFA721),
+            warningYellowColorTertiaryBrush = Color(0xFF9D802A),
+            warningYellowColorFourthBrush = Color(0xFF493F24),
             errorRedColorPrimaryBrush = Color(0xFFFF4245),
+            errorRedColorSecondaryBrush = Color(0xFFD03737),
+            errorRedColorTertiaryBrush = Color(0xFF9F3231),
+            errorRedColorFourthBrush = Color(0xFF4C2423),
             pointerInteractionBrush = Color(0xFFFFFFFF),
             blueThemedBrush = Color(0xFF0091FF),
             yellowThemedBrush = Color(0xFFFFD600),

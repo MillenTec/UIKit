@@ -5,15 +5,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.additionsymbols.GitHubSymbol
-import com.millentec.compose.uikit.component.input.UIKitSlider
 import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.theme.getUIKitColors
@@ -77,21 +73,6 @@ fun HomePage() {
                     }
                 )
             }
-        }
-
-        item {
-            val value = remember { mutableStateOf(0f) }
-            UIKitSlider(
-                modifier = Modifier
-                    .height(150.dp)
-                    .width(40.dp),
-                value = value.value,
-                isVertical = true,
-                adsorbedOntoTick = true,
-                onValueChange = {
-                    value.value = it
-                }
-            )
         }
     }
 }

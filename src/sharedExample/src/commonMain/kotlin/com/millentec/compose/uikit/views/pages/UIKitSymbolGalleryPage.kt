@@ -29,6 +29,7 @@ import com.millentec.compose.uikit.component.flyout.UIKitSwipeableFlyoutState
 import com.millentec.compose.uikit.component.input.UIKitHSVColorPicker
 import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.*
+import com.millentec.compose.uikit.foundation.graphics.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.graphics.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.toHsv
@@ -119,8 +120,8 @@ fun UIKitSymbolsGalleryPage(
             ) {
                 AnimatedContent(
                     modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth(),
+                        .fillMaxSize()
+                        .acrylicMaterialSource(acrylicMaterialState),
                     targetState = selectedSymbol.value,
                     transitionSpec = { UIKitNavigationAnimate.jump }
                 ) { state ->
@@ -454,12 +455,12 @@ private fun LazyListScope.CommonOptions(
                     val itemHeight = 48.dp
 
                     val optionalColor = listOf(
-                        OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary, getUIKitColors().contentFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrushReversed, LocalStrings.current.designs.fluentIcons.options.colors.reversed, getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().highlightColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight, UIKitColors.getDark().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().successGreenColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.success, getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().warningYellowColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning, getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().errorRedColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.error, UIKitColors.getDark().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary),
+                        OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrushReversed, LocalStrings.current.designs.fluentIcons.options.colors.reversed),
+                        OptionalColorInfo(getUIKitColors().highlightColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight),
+                        OptionalColorInfo(getUIKitColors().successGreenColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.success),
+                        OptionalColorInfo(getUIKitColors().warningYellowColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning),
+                        OptionalColorInfo(getUIKitColors().errorRedColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.error),
                     )
 
                     BoxWithConstraints {
@@ -489,7 +490,7 @@ private fun LazyListScope.CommonOptions(
                                     Text(
                                         text = optionalColor[it].name,
                                         style = getUIKitTypography().body,
-                                        color = optionalColor[it].contentColor,
+                                        color = UIKitColors.contentColor(optionalColor[it].color),
                                     )
                                 }
                             }
@@ -527,12 +528,12 @@ private fun LazyListScope.CommonOptions(
                     val itemHeight = 48.dp
 
                     val optionalColor = listOf(
-                        OptionalColorInfo(getUIKitColors().contentFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary, getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().contentFillColorSecondaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.secondary, getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().highlightColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight, getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().successGreenColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.success, getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().warningYellowColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning, getUIKitColors().textFillColorPrimaryBrush),
-                        OptionalColorInfo(getUIKitColors().errorRedColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.error, getUIKitColors().textFillColorPrimaryBrush),
+                        OptionalColorInfo(getUIKitColors().contentFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary),
+                        OptionalColorInfo(getUIKitColors().contentFillColorSecondaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.secondary),
+                        OptionalColorInfo(getUIKitColors().highlightColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight),
+                        OptionalColorInfo(getUIKitColors().successGreenColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.success),
+                        OptionalColorInfo(getUIKitColors().warningYellowColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning),
+                        OptionalColorInfo(getUIKitColors().errorRedColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.error),
                     )
 
                     BoxWithConstraints {
@@ -562,7 +563,7 @@ private fun LazyListScope.CommonOptions(
                                     Text(
                                         text = optionalColor[it].name,
                                         style = getUIKitTypography().body,
-                                        color = optionalColor[it].contentColor,
+                                        color = UIKitColors.contentColor(optionalColor[it].color),
                                     )
                                 }
                             }

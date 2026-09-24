@@ -110,8 +110,7 @@ private fun OptionsWindowPreview() {
 
 data class OptionalColorInfo(
     val color: Color,
-    val name: String,
-    val contentColor: Color
+    val name: String
 )
 
 @Composable
@@ -367,12 +366,12 @@ private fun OptionsWindow(
                 val itemHeight = 48.dp
 
                 val optionalColor = listOf(
-                    OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary, getUIKitColors().contentFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrushReversed, LocalStrings.current.designs.fluentIcons.options.colors.reversed, getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().highlightColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight, UIKitColors.getDark().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().successGreenColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.success, getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().warningYellowColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning, getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().errorRedColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.error, UIKitColors.getDark().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary),
+                    OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrushReversed, LocalStrings.current.designs.fluentIcons.options.colors.reversed),
+                    OptionalColorInfo(getUIKitColors().highlightColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight),
+                    OptionalColorInfo(getUIKitColors().successGreenColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.success),
+                    OptionalColorInfo(getUIKitColors().warningYellowColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning),
+                    OptionalColorInfo(getUIKitColors().errorRedColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.error),
                 )
 
                 BoxWithConstraints {
@@ -402,7 +401,7 @@ private fun OptionsWindow(
                                 Text(
                                     text = optionalColor[it].name,
                                     style = getUIKitTypography().body,
-                                    color = optionalColor[it].contentColor,
+                                    color = UIKitColors.contentColor(optionalColor[it].color),
                                 )
                             }
                         }
@@ -434,12 +433,12 @@ private fun OptionsWindow(
                 val itemHeight = 48.dp
 
                 val optionalColor = listOf(
-                    OptionalColorInfo(getUIKitColors().contentFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary, getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().contentFillColorSecondaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.secondary, getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().highlightColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight, getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().successGreenColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.success, getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().warningYellowColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning, getUIKitColors().textFillColorPrimaryBrush),
-                    OptionalColorInfo(getUIKitColors().errorRedColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.error, getUIKitColors().textFillColorPrimaryBrush),
+                    OptionalColorInfo(getUIKitColors().contentFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary),
+                    OptionalColorInfo(getUIKitColors().contentFillColorSecondaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.secondary),
+                    OptionalColorInfo(getUIKitColors().highlightColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight),
+                    OptionalColorInfo(getUIKitColors().successGreenColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.success),
+                    OptionalColorInfo(getUIKitColors().warningYellowColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning),
+                    OptionalColorInfo(getUIKitColors().errorRedColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.error),
                 )
 
                 BoxWithConstraints {
@@ -469,7 +468,7 @@ private fun OptionsWindow(
                                 Text(
                                     text = optionalColor[it].name,
                                     style = getUIKitTypography().body,
-                                    color = optionalColor[it].contentColor,
+                                    color = UIKitColors.contentColor(optionalColor[it].color),
                                 )
                             }
                         }

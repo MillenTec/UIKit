@@ -7,7 +7,14 @@ object UIKitSymbols {
     val layout = UIKitLayoutSymbols()
 }
 
-class UIKitSystemUISymbols { internal constructor() }
+class UIKitSystemUISymbols {
+    internal constructor()
+    val filled = UIKitSystemUIFilledSymbols()
+
+    class UIKitSystemUIFilledSymbols {
+        internal constructor()
+    }
+}
 class UIKitMediaSymbols { internal constructor() }
 class UIKitShapesSymbols { internal constructor() }
 class UIKitLayoutSymbols { internal constructor() }

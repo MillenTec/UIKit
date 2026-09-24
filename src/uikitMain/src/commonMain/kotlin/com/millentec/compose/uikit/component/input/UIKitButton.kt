@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.layout.UIKitSurface
-import com.millentec.compose.uikit.foundation.graphics.contrast
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
@@ -81,9 +80,7 @@ data class UIKitButtonColors(
         fun default(
             background: Color = getUIKitColors().contentFillColorTertiaryBrush,
             backgroundDisabled: Color = getUIKitColors().contentFillColorBrushDisabled,
-            content: Color = if (Color.contrast(background, getUIKitColors().textFillColorPrimaryBrush) < 4.5f) {
-                getUIKitColors().textFillColorPrimaryBrushReversed
-            } else getUIKitColors().textFillColorPrimaryBrush,
+            content: Color = UIKitColors.contentColor(background),
             contentDisabled: Color = getUIKitColors().textFillColorDisabled,
             border: Color = getUIKitColors().lineFillColorPrimaryBrush,
             borderDisabled: Color = getUIKitColors().lineFillColorPrimaryBrush

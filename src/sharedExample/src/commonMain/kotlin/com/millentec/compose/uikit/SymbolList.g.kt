@@ -8,6 +8,7 @@ import com.millentec.compose.uikit.symbols.builtin.media.Volume
 import com.millentec.compose.uikit.symbols.builtin.shapes.DesignIdeas
 import com.millentec.compose.uikit.symbols.builtin.shapes.Layer
 import com.millentec.compose.uikit.symbols.builtin.systemui.*
+import com.millentec.compose.uikit.symbols.builtin.systemui.filled.DismissCircle
 
 val LayoutSymbols = listOf(
         UIKitSymbols.layout.Grid
@@ -29,6 +30,7 @@ val SystemUISymbols = listOf(
 UIKitSymbols.systemUI.Bluetooth,
 UIKitSymbols.systemUI.Computer,
 UIKitSymbols.systemUI.EyeView,
+UIKitSymbols.systemUI.filled.DismissCircle,
 UIKitSymbols.systemUI.Home,
 UIKitSymbols.systemUI.ToggleMultiple,
 UIKitSymbols.systemUI.Wifi
