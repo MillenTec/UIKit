@@ -85,15 +85,15 @@ fun UIKitDropdownButton(
     offset: DpOffset = DpOffset.Zero,
     onDismissRequest: (() -> Unit)? = null,
     colors: UIKitDropdownButtonColors = UIKitDropdownButtonColors.default(),
-    hasBorder: Boolean = true,
-    borderWidth: Dp = 1.dp,
     appearPosition: Alignment? = null,
-    acrylicEffectEnabled: Boolean = true,
+    acrylicEffectEnabled: Boolean = false,
     acrylicMaterialState: AcrylicMaterialState? = null,
     acrylicMaterial: UIKitAcrylicMaterial = getUIKitMaterials().acrylicMaterial.copy(
         tint = getUIKitMaterials().acrylicMaterial.tint.copy(0.6f),
         lightingEffectsEnabled = false
     ),
+    hasBorder: Boolean = !acrylicEffectEnabled,
+    borderWidth: Dp = 1.dp,
     content: @Composable UIKitMenuScope.() -> Unit,
     clickableContent: @Composable BoxScope.() -> Unit
 ) {
