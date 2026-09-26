@@ -1,12 +1,14 @@
 package com.millentec.compose.uikit.foundation.graphics
 
-import androidx.compose.foundation.border
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import com.millentec.compose.uikit.theme.UIKitAcrylicMaterial
 import com.millentec.compose.uikit.theme.getUIKitMaterials
@@ -43,19 +45,42 @@ fun Modifier.acrylicMaterial(
     enabled: Boolean = true,
     shape: Shape = RectangleShape,
     acrylicMaterial: UIKitAcrylicMaterial = getUIKitMaterials().acrylicMaterial
-) = this.cloudy(
-    enabled = enabled,
-    shape = shape,
-    sky = state._sky,
-    tint = acrylicMaterial.tint,
-    radius = (acrylicMaterial.radius * LocalDensity.current.density).value.toInt(),
-    cpuBlurEnabled = getUIKitMaterials().acrylicMaterial.cpuComputationEnabled
-).then(if (acrylicMaterial.lightingEffectsEnabled)
-    this.border(
-        width = acrylicMaterial.edgeHighlightThickness,
-        brush = acrylicMaterial.edgeHighlightColor,
-        shape = shape
-    ) else this)
+): Modifier {
+    val density = LocalDensity.current
+    val layoutDirection = LocalLayoutDirection.current
+
+    return this.cloudy(
+        enabled = enabled,
+        shape = shape,
+        sky = state._sky,
+        tint = acrylicMaterial.tint,
+        radius = (acrylicMaterial.radius * LocalDensity.current.density).value.toInt(),
+        cpuBlurEnabled = getUIKitMaterials().acrylicMaterial.cpuComputationEnabled
+    ).then(
+        if (acrylicMaterial.lightingEffectsEnabled)
+        this.drawWithContent {
+            drawContent()
+
+            val borderPath = Path().apply { addOutline(shape.createOutline(size, layoutDirection, density)) }
+            val brush = Brush.linearGradient(
+                colorStops = acrylicMaterial.edgeHighlightStops.toTypedArray(),
+                start = Offset(
+                    x = size.width / 2f - size.width * 0.1f,
+                    y = size.height + size.height * 0.35f
+                ),
+                end = Offset(
+                    x = size.width / 2f + size.width * 0.1f,
+                    y = 0f - size.height * 0.35f
+                )
+            )
+
+            drawPath(
+                brush = brush,
+                path = borderPath,
+                style = Stroke(width = acrylicMaterial.edgeHighlightThickness.toPx())
+            )
+        } else this)
+}
 
 @Composable
 fun Modifier.acrylicMaterialSource(

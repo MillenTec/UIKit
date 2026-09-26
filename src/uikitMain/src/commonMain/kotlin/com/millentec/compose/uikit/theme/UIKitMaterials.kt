@@ -2,7 +2,6 @@ package com.millentec.compose.uikit.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.unit.Dp
@@ -15,10 +14,22 @@ data class UIKitAcrylicMaterial(
     val cpuComputationEnabled: Boolean = false,
 
     val lightingEffectsEnabled: Boolean = true,
-    val edgeHighlightColor: Brush = Brush.linearGradient(
-        Pair(0f, Color(0xFFFFFFFF)),
-        Pair(0.5f, Color(0x00FFFFFF)),
-        Pair(1f, Color(0xFFFFFFFF)),
+    val edgeHighlightStops: List<Pair<Float, Color>> = listOf(
+        Pair(0f, Color(255f, 255f, 255f, 1f)),
+        Pair(0.02f, Color(255f, 255f, 255f, 0.95f)),
+        Pair(0.12f, Color(255f, 255f, 255f, 0.67f)),
+        Pair(0.22f, Color(255f, 255f, 255f, 0.43f)),
+        Pair(0.31f, Color(255f, 255f, 255f, 0.24f)),
+        Pair(0.39f, Color(255f, 255f, 255f, 0.11f)),
+        Pair(0.46f, Color(255f, 255f, 255f, 0.03f)),
+        Pair(0.5f, Color(255f, 255f, 255f, 0f)),
+        Pair(0.54f, Color(255f, 255f, 255f, 0.03f)),
+        Pair(0.61f, Color(255f, 255f, 255f, 0.11f)),
+        Pair(0.69f, Color(255f, 255f, 255f, 0.24f)),
+        Pair(0.78f, Color(255f, 255f, 255f, 0.43f)),
+        Pair(0.88f, Color(255f, 255f, 255f, 0.67f)),
+        Pair(0.98f, Color(255f, 255f, 255f, 0.95f)),
+        Pair(1f, Color(255f, 255f, 255f, 1f))
     ),
     val edgeHighlightThickness: Dp = 1.dp
 )
@@ -66,15 +77,29 @@ data class UIKitMaterials(
     val shadowMaterial: UIKitShadowMaterial = UIKitShadowMaterial(),
 ) {
     companion object {
+        private const val HIGHLIGHT_ALPHA_COEFF = 0.5f
+
         fun getLight(): UIKitMaterials = UIKitMaterials()
 
         fun getDark(): UIKitMaterials = UIKitMaterials(
             acrylicMaterial = UIKitAcrylicMaterial(
                 tint = Color(0x4C1D1D1F),
-                edgeHighlightColor = Brush.linearGradient(
-                    Pair(0f, Color(0x2DFFFFFF)),
-                    Pair(0.5f, Color(0x1DFFFFFF)),
-                    Pair(1f, Color(0x2DFFFFFF)),
+                edgeHighlightStops = listOf(
+                    Pair(0f, Color(255f, 255f, 255f, 1f * HIGHLIGHT_ALPHA_COEFF)),
+                    Pair(0.02f, Color(255f, 255f, 255f, 0.95f * HIGHLIGHT_ALPHA_COEFF)),
+                    Pair(0.12f, Color(255f, 255f, 255f, 0.67f * HIGHLIGHT_ALPHA_COEFF)),
+                    Pair(0.22f, Color(255f, 255f, 255f, 0.43f * HIGHLIGHT_ALPHA_COEFF)),
+                    Pair(0.31f, Color(255f, 255f, 255f, 0.24f * HIGHLIGHT_ALPHA_COEFF)),
+                    Pair(0.39f, Color(255f, 255f, 255f, 0.11f * HIGHLIGHT_ALPHA_COEFF)),
+                    Pair(0.46f, Color(255f, 255f, 255f, 0.03f * HIGHLIGHT_ALPHA_COEFF)),
+                    Pair(0.5f, Color(255f, 255f, 255f, 0f * HIGHLIGHT_ALPHA_COEFF)),
+                    Pair(0.54f, Color(255f, 255f, 255f, 0.03f * HIGHLIGHT_ALPHA_COEFF)),
+                    Pair(0.61f, Color(255f, 255f, 255f, 0.11f * HIGHLIGHT_ALPHA_COEFF)),
+                    Pair(0.69f, Color(255f, 255f, 255f, 0.24f * HIGHLIGHT_ALPHA_COEFF)),
+                    Pair(0.78f, Color(255f, 255f, 255f, 0.43f * HIGHLIGHT_ALPHA_COEFF)),
+                    Pair(0.88f, Color(255f, 255f, 255f, 0.67f * HIGHLIGHT_ALPHA_COEFF)),
+                    Pair(0.98f, Color(255f, 255f, 255f, 0.95f * HIGHLIGHT_ALPHA_COEFF)),
+                    Pair(1f, Color(255f, 255f, 255f, 1f * HIGHLIGHT_ALPHA_COEFF))
                 )
             )
         )
