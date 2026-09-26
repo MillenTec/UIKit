@@ -1,16 +1,15 @@
 package com.millentec.compose.uikit.foundation.helper
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Indication
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.HoverInteraction
-import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.PressInteraction
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -21,35 +20,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import com.millentec.compose.uikit.theme.getUIKitAnimate
 import com.millentec.compose.uikit.theme.getUIKitColors
-
-@Composable
-fun InteractionSource.collectIsPressedAsState(): State<Boolean> {
-    val isPressed = remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        interactions.collect { interaction ->
-            when (interaction) {
-                is PressInteraction.Press -> isPressed.value = true
-                is PressInteraction.Cancel -> isPressed.value = false
-                is PressInteraction.Release -> isPressed.value = false
-            }
-        }
-    }
-    return isPressed
-}
-
-@Composable
-fun InteractionSource.collectIsHoveredAsState(): State<Boolean> {
-    val isHovered = remember { mutableStateOf(false) }
-    LaunchedEffect(this) {
-        interactions.collect { interaction ->
-            when (interaction) {
-                is HoverInteraction.Enter -> isHovered.value = true
-                is HoverInteraction.Exit -> isHovered.value = false
-            }
-        }
-    }
-    return isHovered
-}
 
 @Composable
 fun Modifier.uikitClickable(
@@ -195,7 +165,10 @@ class UIKitInteraction {
 
             val scaleAnimated by animateFloatAsState(
                 targetValue = if (isPress.value) 0.9f else 1f,
-                animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = FastOutSlowInEasing)
+                animationSpec = spring(
+                    dampingRatio = getUIKitAnimate().standardSpringDampingRatio,
+                    stiffness = getUIKitAnimate().standardSpringStiffness
+                )
             )
 
             this

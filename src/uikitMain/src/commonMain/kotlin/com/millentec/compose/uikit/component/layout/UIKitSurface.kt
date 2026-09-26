@@ -65,6 +65,14 @@ fun UIKitSurface(
                     Modifier.dropShadow(shape, shadow)
                 else Modifier
             )
+            .uikitClickable(
+                enabled = enabled,
+                onClick = onClick,
+                interactionSource = interactionSource,
+                indication = indication,
+                interaction = interaction,
+                shape = shape
+            )
             .clip(shape)
             .background(color)
             .then(if (acrylicEffectEnabled && acrylicMaterialState != null) {
@@ -73,14 +81,7 @@ fun UIKitSurface(
                     shape = shape,
                     acrylicMaterial = acrylicMaterial,
                 )
-            } else Modifier)
-            .uikitClickable(
-                enabled = enabled,
-                onClick = onClick,
-                interactionSource = interactionSource,
-                indication = indication,
-                interaction = interaction
-            ),
+            } else Modifier),
         propagateMinConstraints = true
     ) {
         Box(
