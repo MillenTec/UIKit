@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.millentec.compose.uikit.component.flyout.UIKitFlyoutOptions
 import com.millentec.compose.uikit.component.flyout.UIKitFlyouter
 import com.millentec.compose.uikit.component.flyout.UIKitSwipeableFlyout
 import com.millentec.compose.uikit.component.flyout.UIKitSwipeableFlyoutState
@@ -90,6 +91,7 @@ fun UIKitBottomSheet(
     title: String? = null,
     titleMaxWidth: Dp = (-1).dp,
     onDismissRequest: () -> Unit,
+    flyoutOptions: UIKitFlyoutOptions = UIKitFlyoutOptions.Default,
     content: @Composable ColumnScope.() -> Unit
 ) {
     val modifierCurrent by rememberUpdatedState(modifier)
@@ -109,6 +111,7 @@ fun UIKitBottomSheet(
         state = state,
         visible = expanded,
         onDismissRequest = onDismissRequest,
+        options = flyoutOptions,
         alignment = Alignment.BottomCenter,
         swipeDirection = UIKitAlignment.BottomCenter
     ) {

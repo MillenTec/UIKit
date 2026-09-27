@@ -20,11 +20,6 @@ data class UIKitTheme(
      * UIKitTheme 主题管理
      */
     companion object {
-        /**
-         * 当前的主题实例
-         */
-        val LocalTheme = compositionLocalOf { UIKitTheme() }
-
         fun getLight(): UIKitTheme = UIKitTheme()
 
         fun getDark(): UIKitTheme = UIKitTheme(
@@ -33,3 +28,5 @@ data class UIKitTheme(
         )
     }
 }
+
+val LocalUIKitTheme = compositionLocalOf { UIKitTheme() }

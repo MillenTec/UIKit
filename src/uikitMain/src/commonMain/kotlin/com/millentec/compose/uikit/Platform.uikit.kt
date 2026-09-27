@@ -11,3 +11,6 @@ import com.millentec.compose.uikit.foundation.OperatingSystem
 expect fun getScreenCornerRadius(): Float
 
 expect fun getOperatingSystem(): OperatingSystem
+
+@Composable
+expect fun BackHandler(enabled: Boolean = true, onBack: () -> Unit)

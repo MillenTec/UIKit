@@ -39,7 +39,7 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
-            implementation("org.jetbrains.compose.ui:ui-backhandler:1.11.1")
+            implementation(libs.ui.backhandler)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)

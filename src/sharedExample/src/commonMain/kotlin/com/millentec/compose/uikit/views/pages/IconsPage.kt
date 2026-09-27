@@ -35,7 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
-import com.millentec.compose.uikit.BackHandler
 import com.millentec.compose.uikit.IconGalleryList
 import com.millentec.compose.uikit.component.flyout.UIKitSwipeableFlyoutState
 import com.millentec.compose.uikit.component.input.UIKitHSVColorPicker
@@ -860,10 +859,6 @@ fun IconGalleryPage() {
             OptionsWindow(
                 optionsState
             )
-        }
-
-        BackHandler(bottomSheetExpanded.value) {
-            bottomSheetExpanded.value = false
         }
     }
 }

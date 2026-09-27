@@ -2,6 +2,7 @@ package com.millentec.compose.uikit
 
 import android.os.Build
 import android.view.RoundedCorner
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.millentec.compose.uikit.foundation.OperatingSystem
@@ -34,4 +35,11 @@ actual fun getScreenCornerRadius(): Float {
 
 actual fun getOperatingSystem(): OperatingSystem {
     return OperatingSystem.Android
+}
+
+@Composable
+actual fun BackHandler(enabled: Boolean, onBack: () -> Unit) {
+    BackHandler(enabled = enabled) {
+        onBack()
+    }
 }

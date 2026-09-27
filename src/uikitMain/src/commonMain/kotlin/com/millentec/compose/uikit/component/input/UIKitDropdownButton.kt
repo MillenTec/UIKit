@@ -89,8 +89,7 @@ fun UIKitDropdownButton(
     acrylicEffectEnabled: Boolean = false,
     acrylicMaterialState: AcrylicMaterialState? = null,
     acrylicMaterial: UIKitAcrylicMaterial = getUIKitMaterials().acrylicMaterial.copy(
-        tint = getUIKitMaterials().acrylicMaterial.tint.copy(0.6f),
-        lightingEffectsEnabled = false
+        tint = getUIKitMaterials().acrylicMaterial.tint.copy(0.6f)
     ),
     hasBorder: Boolean = !acrylicEffectEnabled,
     borderWidth: Dp = 1.dp,

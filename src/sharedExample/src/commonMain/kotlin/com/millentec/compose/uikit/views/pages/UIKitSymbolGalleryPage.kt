@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,6 +18,10 @@ import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,6 +41,7 @@ import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.navigation.UIKitNavigationAnimate
+import com.millentec.compose.uikit.symbols.UIKitImageVectorSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
 import com.millentec.compose.uikit.symbols.UIKitSymbols
@@ -184,66 +188,129 @@ fun UIKitSymbolsGalleryPage(
                             )
                         }
                     } else {
-                        LazyVerticalGrid(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(getUIKitColors().contentFillColorPrimaryBrush),
-                            contentPadding = PaddingValues(
-                                start = getUIKitLayout().screenSideSpacing,
-                                top = getUIKitLayout().interactiveHotspot + getUIKitLayout().screenSideSpacing + getUIKitLayout().mediumSpacing,
-                                end = getUIKitLayout().screenSideSpacing,
-                                bottom = maxOf(
-                                    LocalNavigationDockHeight.value + getUIKitLayout().screenSideSpacing,
-                                    getUIKitLayout().screenSideSpacing
+                        if (symbolsFiltered.value.isEmpty()) {
+                            Column (
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(getUIKitColors().contentFillColorPrimaryBrush),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                UIKitIcon(
+                                    modifier = Modifier
+                                        .size(
+                                            minOf(this@BoxWithConstraints.maxWidth,
+                                                this@BoxWithConstraints.maxHeight) * 0.3f
+                                        ),
+                                    symbol = UIKitImageVectorSymbol(FluentIcons.dismissCircle(
+                                        getUIKitColors().errorRedColorPrimaryBrush,
+                                        true
+                                    )),
+                                    symbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().errorRedColorPrimaryBrush),
+                                    contentDescription = "No Symbol Found"
                                 )
-                            ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current),
-                            columns = GridCells.Adaptive(128.dp)
-                        ) {
-                            item(span = { GridItemSpan(maxLineSpan) }) {
+
+                                Spacer(Modifier.height(getUIKitLayout().itemSpacing))
+
                                 Text(
-                                    text = title,
-                                    style = getUIKitTypography().largeTitle,
+                                    text = "No matching symbols found.",
+                                    style = getUIKitTypography().subtitle,
                                     color = getUIKitColors().textFillColorPrimaryBrush
                                 )
-                            }
 
-                            item(span = { GridItemSpan(maxLineSpan) }) {
-                                Spacer(Modifier.height(getUIKitLayout().titleSpacing))
-                            }
+                                Spacer(Modifier.height(getUIKitLayout().itemSpacing))
 
-                            items(symbolsFiltered.value.size) {
-                                Column(
-                                    modifier = Modifier
-                                        .padding(getUIKitLayout().smallSpacing)
-                                        .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
-                                        .background(commonConfig.backgroundColor.value)
-                                        .uikitClickable(
-                                            onClick = {
-                                                selectedSymbol.value = symbolsFiltered.value[it]
-                                            },
-                                            indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
-                                        )
-                                        .padding(getUIKitLayout().mediumSpacing),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                ) {
-                                    UIKitIcon(
-                                        modifier = Modifier
-                                            .fillMaxWidth(),
-                                        symbol = symbolsFiltered.value[it],
-                                        contentDescription = symbolsFiltered.value[it].name,
-                                        symbolEffect = null,
-                                        symbolStyle = commonConfig.symbolStyle
+                                Text(
+                                    text = buildAnnotatedString {
+                                        val text = "Try other keywords, or reset the keywords."
+                                        val linkText = "reset the keywords"
+                                        val linkMatch = linkText.toRegex().find(text)
+
+                                        append("Try other keywords, or reset the keywords.")
+                                        linkMatch?.let {
+                                            addLink(
+                                                start = it.range.first,
+                                                end = it.range.last + 1,
+                                                clickable = LinkAnnotation.Clickable(
+                                                    tag = "Reset keywords",
+                                                    styles = TextLinkStyles(
+                                                        style = SpanStyle(
+                                                            color = getUIKitColors().highlightColorSecondaryBrush
+                                                        )
+                                                    ),
+                                                    linkInteractionListener = {
+                                                        symbolFilter.value = { true }
+                                                    }
+                                                )
+                                            )
+                                        }
+                                    },
+                                    style = getUIKitTypography().body,
+                                    color = getUIKitColors().textFillColorSecondaryBrush
+                                )
+                            }
+                        } else {
+                            LazyVerticalGrid(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(getUIKitColors().contentFillColorPrimaryBrush),
+                                contentPadding = PaddingValues(
+                                    start = getUIKitLayout().screenSideSpacing,
+                                    top = getUIKitLayout().interactiveHotspot + getUIKitLayout().screenSideSpacing + getUIKitLayout().mediumSpacing,
+                                    end = getUIKitLayout().screenSideSpacing,
+                                    bottom = maxOf(
+                                        LocalNavigationDockHeight.value + getUIKitLayout().screenSideSpacing,
+                                        getUIKitLayout().screenSideSpacing
                                     )
-
-                                    Spacer(Modifier.height(getUIKitLayout().itemSpacing))
-
+                                ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current),
+                                columns = GridCells.Adaptive(128.dp)
+                            ) {
+                                item(span = { GridItemSpan(maxLineSpan) }) {
                                     Text(
-                                        text = symbolsFiltered.value[it].name,
-                                        style = getUIKitTypography().body,
-                                        color = getUIKitColors().textFillColorSecondaryBrush,
-                                        overflow = TextOverflow.Ellipsis,
-                                        maxLines = 1
+                                        text = title,
+                                        style = getUIKitTypography().largeTitle,
+                                        color = getUIKitColors().textFillColorPrimaryBrush
                                     )
+                                }
+
+                                item(span = { GridItemSpan(maxLineSpan) }) {
+                                    Spacer(Modifier.height(getUIKitLayout().titleSpacing))
+                                }
+
+                                items(symbolsFiltered.value.size) {
+                                    Column(
+                                        modifier = Modifier
+                                            .padding(getUIKitLayout().smallSpacing)
+                                            .clip(RoundedCornerShape(getUIKitShapes().cardRounded))
+                                            .background(commonConfig.backgroundColor.value)
+                                            .uikitClickable(
+                                                onClick = {
+                                                    selectedSymbol.value = symbolsFiltered.value[it]
+                                                },
+                                                indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
+                                            )
+                                            .padding(getUIKitLayout().mediumSpacing),
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                    ) {
+                                        UIKitIcon(
+                                            modifier = Modifier
+                                                .fillMaxWidth(),
+                                            symbol = symbolsFiltered.value[it],
+                                            contentDescription = symbolsFiltered.value[it].name,
+                                            symbolEffect = null,
+                                            symbolStyle = commonConfig.symbolStyle
+                                        )
+
+                                        Spacer(Modifier.height(getUIKitLayout().itemSpacing))
+
+                                        Text(
+                                            text = symbolsFiltered.value[it].name,
+                                            style = getUIKitTypography().body,
+                                            color = getUIKitColors().textFillColorSecondaryBrush,
+                                            overflow = TextOverflow.Ellipsis,
+                                            maxLines = 1
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -260,52 +327,51 @@ fun UIKitSymbolsGalleryPage(
                             ) + WindowInsets.safeDrawing.asPaddingValues()
                         )
                 ) {
-                    UIKitSurface(
-                        modifier = Modifier
-                            .size(getUIKitLayout().interactiveHotspot),
-                        onClick = {
-                            if (selectedSymbol.value != null)
-                                selectedSymbol.value = null
-                            else
-                                MainViewModel.navigation.goBack()
-                        },
-                        shape = RoundedCornerShape(getUIKitShapes().circular),
-                        color = getUIKitColors().contentFillColorSecondaryBrush,
-                        acrylicEffectEnabled = true,
-                        acrylicMaterialState = acrylicMaterialState,
-                        shadow = UIKitShadowMaterial.getMarginal()
+                    UIKitHActionButtons(
+                        acrylicEnabled = true,
+                        acrylicState = acrylicMaterialState
                     ) {
-                        Icon(
-                            modifier = Modifier
-                                .fillMaxSize(0.6f),
-                            imageVector = FluentIcons.ChevronArrowLeft,
+                        Button(
+                            symbol = UIKitImageVectorSymbol(FluentIcons.ChevronArrowLeft),
                             contentDescription = LocalStrings.current.designs.uikitSymbols.goBack,
-                            tint = getUIKitColors().textFillColorPrimaryBrush
+                            onClick = {
+                                if (selectedSymbol.value != null)
+                                    selectedSymbol.value = null
+                                else
+                                    MainViewModel.navigation.goBack()
+                            }
                         )
                     }
 
-                    Spacer(Modifier.weight(1f))
+                    Spacer(Modifier.width(getUIKitLayout().mediumSpacing))
 
-                    UIKitSurface(
+                    Row(
                         modifier = Modifier
-                            .size(getUIKitLayout().interactiveHotspot),
-                        onClick = {
-                            commonOptionExpanded.value = !commonOptionExpanded.value
-                        },
-                        shape = RoundedCornerShape(getUIKitShapes().circular),
-                        color = getUIKitColors().contentFillColorSecondaryBrush,
-                        acrylicEffectEnabled = true,
-                        acrylicMaterialState = acrylicMaterialState,
-                        shadow = UIKitShadowMaterial.getMarginal()
+                            .weight(1f),
+                        horizontalArrangement = Arrangement.End
                     ) {
-                        Icon(
-                            modifier = Modifier
-                                .fillMaxHeight(0.6f)
-                                .aspectRatio(1f),
-                            imageVector = FluentIcons.options(),
-                            contentDescription = LocalStrings.current.designs.uikitSymbols.commonOptions,
-                            tint = getUIKitColors().textFillColorPrimaryBrush
-                        )
+                        UIKitHActionButtons(
+                            acrylicEnabled = true,
+                            acrylicState = acrylicMaterialState,
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            SearchBar(
+                                onSearch = { input ->
+                                    symbolFilter.value = { symbol ->
+                                        symbol.name.contains(input, ignoreCase = true)
+                                                || symbol.tags.any { it.contains(input, ignoreCase = true) }
+                                    }
+                                }
+                            )
+
+                            Button(
+                                symbol = UIKitImageVectorSymbol(FluentIcons.options()),
+                                contentDescription = LocalStrings.current.designs.uikitSymbols.commonOptions,
+                                onClick = {
+                                    commonOptionExpanded.value = !commonOptionExpanded.value
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -343,8 +409,6 @@ fun UIKitSymbolsGalleryPage(
                 commonOptionExpanded.value = false
             }
         ) {
-            BackHandler { commonOptionExpanded.value = false }
-
             LazyColumn(
                 contentPadding = PaddingValues(getUIKitLayout().x2Spacing)
             ) {

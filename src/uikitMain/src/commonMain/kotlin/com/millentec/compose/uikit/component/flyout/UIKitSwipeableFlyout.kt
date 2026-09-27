@@ -52,6 +52,7 @@ fun UIKitSwipeableFlyout(
     state: UIKitSwipeableFlyoutState,
     visible: Boolean,
     onDismissRequest: (() -> Unit)? = null,
+    options: UIKitFlyoutOptions = UIKitFlyoutOptions.Default,
     alignment: Alignment = Alignment.BottomCenter,
     swipeDirection: UIKitAlignment = UIKitAlignment.BottomCenter,
     content: @Composable (Modifier) -> Unit
@@ -129,7 +130,7 @@ fun UIKitSwipeableFlyout(
 
     UIKitPopup(
         enabled = stateCurrent.progress.value > 0f,
-        dismissOnClickOutside = visibleCurrent,
+        options = options,
         onDismissRequest = onDismissRequestCurrent,
         alignment = alignment,
         clipToBounds = true,

@@ -23,7 +23,7 @@ import com.millentec.compose.uikit.theme.getUIKitLayout
 import com.millentec.compose.uikit.theme.getUIKitShapes
 import com.millentec.compose.uikit.theme.getUIKitTypography
 
-class UIKitMenuScope: UIKitItemScope<UIKitItem>() {
+class UIKitMenuScope {
     @Composable
     fun Text(
         text: String,
@@ -34,31 +34,26 @@ class UIKitMenuScope: UIKitItemScope<UIKitItem>() {
         background: Color = Color.Transparent,
         cornerRadius: Dp = maxOf(getUIKitShapes().cardRounded - getUIKitLayout().smallSpacing, getUIKitShapes().smallRounded),
     ) {
-        add(object : UIKitItem() {
-            @Composable
-            override fun Content() {
-                Column(
-                    modifier = Modifier
-                        .defaultMinSize(minHeight = minHeight)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(cornerRadius))
-                        .background(background)
-                        .uikitClickable(
-                            onClick = onClick,
-                            indication = if (isDesktopOS()) null else UIKitInteraction.ripple(),
-                        )
-                        .padding(contentPadding),
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    Text(
-                        text = text,
-                        style = getUIKitTypography().body,
-                        color = color,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                }
-            }
-        })
+        Column(
+            modifier = Modifier
+                .defaultMinSize(minHeight = minHeight)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(cornerRadius))
+                .background(background)
+                .uikitClickable(
+                    onClick = onClick,
+                    indication = if (isDesktopOS()) null else UIKitInteraction.ripple(),
+                )
+                .padding(contentPadding),
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                text = text,
+                style = getUIKitTypography().body,
+                color = color,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
     }
 
     @Composable
@@ -72,33 +67,28 @@ class UIKitMenuScope: UIKitItemScope<UIKitItem>() {
         background: Color = Color.Transparent,
         cornerRadius: Dp = maxOf(getUIKitShapes().cardRounded - getUIKitLayout().smallSpacing, getUIKitShapes().smallRounded),
     ) {
-        add(object : UIKitItem() {
-            @Composable
-            override fun Content() {
-                Column(
-                    modifier = Modifier
-                        .defaultMinSize(minHeight = minHeight)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(cornerRadius))
-                        .background(background)
-                        .uikitClickable(
-                            onClick = onClick,
-                            indication = if (isDesktopOS()) null else UIKitInteraction.ripple(),
-                            shape = RoundedCornerShape(cornerRadius)
-                        )
-                        .padding(contentPadding),
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .size(getUIKitTypography().body.lineHeight.value.dp),
-                        imageVector = icon,
-                        contentDescription = contentDescription,
-                        tint = color
-                    )
-                }
-            }
-        })
+        Column(
+            modifier = Modifier
+                .defaultMinSize(minHeight = minHeight)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(cornerRadius))
+                .background(background)
+                .uikitClickable(
+                    onClick = onClick,
+                    indication = if (isDesktopOS()) null else UIKitInteraction.ripple(),
+                    shape = RoundedCornerShape(cornerRadius)
+                )
+                .padding(contentPadding),
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Icon(
+                modifier = Modifier
+                    .size(getUIKitTypography().body.lineHeight.value.dp),
+                imageVector = icon,
+                contentDescription = contentDescription,
+                tint = color
+            )
+        }
     }
 
     @Composable
@@ -114,42 +104,37 @@ class UIKitMenuScope: UIKitItemScope<UIKitItem>() {
         background: Color = Color.Transparent,
         cornerRadius: Dp = maxOf(getUIKitShapes().cardRounded - getUIKitLayout().smallSpacing, getUIKitShapes().smallRounded),
     ) {
-        add(object : UIKitItem() {
-            @Composable
-            override fun Content() {
-                Row(
-                    modifier = Modifier
-                        .defaultMinSize(minHeight = minHeight)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(cornerRadius))
-                        .background(background)
-                        .uikitClickable(
-                            onClick = onClick,
-                            indication = if (isDesktopOS()) null else UIKitInteraction.ripple(),
-                            shape = RoundedCornerShape(cornerRadius)
-                        )
-                        .padding(contentPadding),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .size(getUIKitTypography().body.lineHeight.value.dp),
-                        imageVector = icon,
-                        contentDescription = contentDescription,
-                        tint = iconColor
-                    )
+        Row(
+            modifier = Modifier
+                .defaultMinSize(minHeight = minHeight)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(cornerRadius))
+                .background(background)
+                .uikitClickable(
+                    onClick = onClick,
+                    indication = if (isDesktopOS()) null else UIKitInteraction.ripple(),
+                    shape = RoundedCornerShape(cornerRadius)
+                )
+                .padding(contentPadding),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                modifier = Modifier
+                    .size(getUIKitTypography().body.lineHeight.value.dp),
+                imageVector = icon,
+                contentDescription = contentDescription,
+                tint = iconColor
+            )
 
-                    Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+            Spacer(Modifier.width(getUIKitLayout().basicSpacing))
 
-                    Text(
-                        text = text,
-                        style = getUIKitTypography().body,
-                        color = textColor,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                }
-            }
-        })
+            Text(
+                text = text,
+                style = getUIKitTypography().body,
+                color = textColor,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
     }
 
     @Composable
@@ -158,33 +143,23 @@ class UIKitMenuScope: UIKitItemScope<UIKitItem>() {
         width: Dp = 1.dp,
         spacing: Dp = 0.dp,
     ) {
-        add(object : UIKitItem() {
-            @Composable
-            override fun Content() {
-                Row(
-                    modifier = Modifier
-                        .height(spacing)
-                        .padding(horizontal = getUIKitLayout().basicSpacing),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    HorizontalDivider(
-                        color = color,
-                        thickness = width,
-                    )
-                }
-            }
-        })
+        Row(
+            modifier = Modifier
+                .height(spacing)
+                .padding(horizontal = getUIKitLayout().basicSpacing),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            HorizontalDivider(
+                color = color,
+                thickness = width,
+            )
+        }
     }
 
-    @Suppress("FunctionName")
+    @Composable
     fun Item(
-        content: @Composable UIKitItem.() -> Unit,
+        content: @Composable () -> Unit,
     ) {
-        add(object : UIKitItem() {
-            @Composable
-            override fun Content() {
-                this.content()
-            }
-        })
+        content()
     }
 }

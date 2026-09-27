@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -45,9 +46,6 @@ fun UIKitVerticalMenu(
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().smallSpacing),
     content: @Composable UIKitMenuScope.() -> Unit
 ) {
-    val scope = UIKitMenuScope()
-    scope.content()
-
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(cornerRadius))
@@ -62,13 +60,9 @@ fun UIKitVerticalMenu(
             .animateContentSize(
                 animationSpec = tween(getUIKitAnimate().motionRegularDurationMillis, easing = FastOutSlowInEasing)
             ),
+        verticalArrangement = Arrangement.spacedBy(contentPadding.calculateTopPadding())
     ) {
-        scope.items.forEachIndexed { index, item ->
-            item.Content()
-
-            if (index != scope.items.size - 1) {
-                Spacer(Modifier.height(contentPadding.calculateTopPadding()))
-            }
-        }
+        val scope = remember { UIKitMenuScope() }
+        scope.content()
     }
 }

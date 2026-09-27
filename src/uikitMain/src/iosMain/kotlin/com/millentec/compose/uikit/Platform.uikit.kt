@@ -11,3 +11,6 @@ actual fun getScreenCornerRadius(): Float {
 actual fun getOperatingSystem(): OperatingSystem {
     return OperatingSystem.iOS
 }
+
+@Composable
+actual fun BackHandler(enabled: Boolean, onBack: () -> Unit) {}

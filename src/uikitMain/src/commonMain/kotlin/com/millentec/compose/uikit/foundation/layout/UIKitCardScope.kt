@@ -21,7 +21,7 @@ import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
 import com.millentec.compose.uikit.theme.getUIKitTypography
 
-class UIKitCardScope : UIKitItemScope<UIKitItem>() {
+class UIKitCardScope {
     @Composable
     fun SettingCard(
         modifier: Modifier = Modifier,
@@ -43,65 +43,60 @@ class UIKitCardScope : UIKitItemScope<UIKitItem>() {
             )
         }
     ) {
-        add(object : UIKitItem() {
-            @Composable
-            override fun Content() {
-                Box(
-                    modifier = modifier
-                        .defaultMinSize(minHeight = getUIKitLayout().interactiveHotspot),
-                    propagateMinConstraints = true
-                ) {
-                    Row(
+        Box(
+            modifier = modifier
+                .defaultMinSize(minHeight = getUIKitLayout().interactiveHotspot),
+            propagateMinConstraints = true
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(background)
+                    .uikitClickable(
+                        onClick = onClick,
+                        enabled = enabled,
+                        indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
+                    )
+                    .padding(contentPadding),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                if (icon != null) {
+                    Icon(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(background)
-                            .uikitClickable(
-                                onClick = onClick,
-                                enabled = enabled,
-                                indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
-                            )
-                            .padding(contentPadding),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        if (icon != null) {
-                            Icon(
-                                modifier = Modifier
-                                    .size(getUIKitTypography().body.lineHeight.value.dp),
-                                imageVector = icon,
-                                contentDescription = title,
-                                tint = iconColor
-                            )
+                            .size(getUIKitTypography().body.lineHeight.value.dp),
+                        imageVector = icon,
+                        contentDescription = title,
+                        tint = iconColor
+                    )
 
-                            Spacer(Modifier.width(getUIKitLayout().basicSpacing))
-                        }
+                    Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+                }
 
-                        Column(
-                            modifier = Modifier
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = title,
-                                style = getUIKitTypography().body,
-                                color = getUIKitColors().textFillColorPrimaryBrush
-                            )
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                ) {
+                    Text(
+                        text = title,
+                        style = getUIKitTypography().body,
+                        color = getUIKitColors().textFillColorPrimaryBrush
+                    )
 
-                            if (description != null) {
-                                Text(
-                                    text = description,
-                                    style = getUIKitTypography().footnote,
-                                    color = getUIKitColors().textFillColorSecondaryBrush
-                                )
-                            }
-                        }
-
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            content = content
+                    if (description != null) {
+                        Text(
+                            text = description,
+                            style = getUIKitTypography().footnote,
+                            color = getUIKitColors().textFillColorSecondaryBrush
                         )
                     }
                 }
+
+                Box(
+                    contentAlignment = Alignment.Center,
+                    content = content
+                )
             }
-        })
+        }
     }
 
     @Composable
@@ -109,26 +104,16 @@ class UIKitCardScope : UIKitItemScope<UIKitItem>() {
         color: Color = getUIKitColors().lineFillColorPrimaryBrush,
         lineWidth: Dp = 1.dp,
     ) {
-        add(object : UIKitItem() {
-            @Composable
-            override fun Content() {
-                HorizontalDivider(
-                    color = color,
-                    thickness = lineWidth,
-                )
-            }
-        })
+        HorizontalDivider(
+            color = color,
+            thickness = lineWidth,
+        )
     }
 
-    @Suppress("FunctionName")
+    @Composable
     fun Item(
-        content: @Composable UIKitItem.() -> Unit
+        content: @Composable () -> Unit
     ) {
-        add(object : UIKitItem() {
-            @Composable
-            override fun Content() {
-                this.content()
-            }
-        })
+        content()
     }
 }

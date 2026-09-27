@@ -52,6 +52,7 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
+            implementation(libs.ui.backhandler)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)

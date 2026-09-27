@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
@@ -50,9 +51,7 @@ fun UIKitGroupedCard(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     content: @Composable UIKitCardScope.() -> Unit
 ) {
-    val scope = UIKitCardScope()
-    scope.content()
-
+    val scope = remember { UIKitCardScope() }
     Column(
         modifier = modifier
             .then(if (shadowEnabled) {
@@ -65,8 +64,6 @@ fun UIKitGroupedCard(
             .background(background)
             .padding(contentPadding),
     ) {
-        scope.items.forEach { item ->
-            item.Content()
-        }
+        scope.content()
     }
 }

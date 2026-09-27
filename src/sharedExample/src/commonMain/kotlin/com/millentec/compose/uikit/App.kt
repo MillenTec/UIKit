@@ -14,10 +14,10 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
-import com.millentec.compose.uikit.component.flyout.UIKitFlyouter
 import com.millentec.compose.uikit.foundation.graphics.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.graphics.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.graphics.rememberAcrylicMaterialState
+import com.millentec.compose.uikit.foundation.helper.UIKitHost
 import com.millentec.compose.uikit.foundation.helper.toHsv
 import com.millentec.compose.uikit.i18n.SupportedLanguages
 import com.millentec.compose.uikit.i18n.strings.Japanese
@@ -32,49 +32,49 @@ val LocalAcrylicMaterialState = compositionLocalOf<AcrylicMaterialState> { error
 @Composable
 @Preview
 fun App() {
-    UIKitThemeHost(
-        when(AppTheme.theme.collectAsState().value) {
-            ThemeType.System -> if (isSystemInDarkTheme()) UIKitTheme.getDark() else UIKitTheme.getLight()
-            ThemeType.Light -> UIKitTheme.getLight()
-            ThemeType.Dark -> UIKitTheme.getDark()
-        }
-    ) {
-        CompositionLocalProvider(LocalAcrylicMaterialState provides rememberAcrylicMaterialState()) {
-            CompositionLocalProvider(LocalStrings provides when(AppSettings.languages.collectAsState().value) {
+    CompositionLocalProvider(LocalAcrylicMaterialState provides rememberAcrylicMaterialState()) {
+        CompositionLocalProvider(
+            LocalStrings provides when (AppSettings.languages.collectAsState().value) {
                 SupportedLanguages.EnUS -> UnitedStatesEnglish()
                 SupportedLanguages.ZhCN -> SimplifiedChinese()
                 SupportedLanguages.ZhTW -> TraditionalChinese()
                 SupportedLanguages.JaJP -> Japanese()
-            }) {
-                UIKitFlyouter {
-                    val uikitTheme = getUIKitTheme()
-                    val statusBarHeight = WindowInsets.statusBars.getTop(LocalDensity.current)
+            }
+        ) {
+            UIKitHost(
+                when (AppTheme.theme.collectAsState().value) {
+                    ThemeType.System -> if (isSystemInDarkTheme()) UIKitTheme.getDark() else UIKitTheme.getLight()
+                    ThemeType.Light -> UIKitTheme.getLight()
+                    ThemeType.Dark -> UIKitTheme.getDark()
+                }
+            ) {
+                val uikitTheme = getUIKitTheme()
+                val statusBarHeight = WindowInsets.statusBars.getTop(LocalDensity.current)
 
-                    IsStatusBarDarkMode(getUIKitColors().contentFillColorPrimaryBrush.toHsv().value <= 0.5f)
+                IsStatusBarDarkMode(getUIKitColors().contentFillColorPrimaryBrush.toHsv().value <= 0.5f)
 
-                    Box(
-                        modifier = Modifier
-                            .acrylicMaterialSource(LocalAcrylicMaterialState.current)
-                            .drawWithContent {
-                                drawContent()
-                                drawRect(
-                                    brush = Brush.verticalGradient(
-                                        colors = listOf(
-                                            uikitTheme.colors.contentFillColorPrimaryBrush.copy(0.8f),
-                                            uikitTheme.colors.contentFillColorSecondaryBrush.copy(0f),
-                                        ),
-                                        startY = 0f,
-                                        endY = statusBarHeight.toFloat()
+                Box(
+                    modifier = Modifier
+                        .acrylicMaterialSource(LocalAcrylicMaterialState.current)
+                        .drawWithContent {
+                            drawContent()
+                            drawRect(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        uikitTheme.colors.contentFillColorPrimaryBrush.copy(0.8f),
+                                        uikitTheme.colors.contentFillColorSecondaryBrush.copy(0f),
                                     ),
-                                    size = Size(
-                                        width = size.width,
-                                        height = statusBarHeight.toFloat()
-                                    )
+                                    startY = 0f,
+                                    endY = statusBarHeight.toFloat()
+                                ),
+                                size = Size(
+                                    width = size.width,
+                                    height = statusBarHeight.toFloat()
                                 )
-                            }
-                    ) {
-                        MainView()
-                    }
+                            )
+                        }
+                ) {
+                    MainView()
                 }
             }
         }

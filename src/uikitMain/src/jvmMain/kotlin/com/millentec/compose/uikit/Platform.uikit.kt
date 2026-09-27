@@ -15,3 +15,6 @@ actual fun getOperatingSystem(): OperatingSystem {
     else if (hostOs.isMacOS) OperatingSystem.macOS
     else OperatingSystem.Unknown
 }
+
+@Composable
+actual fun BackHandler(enabled: Boolean, onBack: () -> Unit) {}

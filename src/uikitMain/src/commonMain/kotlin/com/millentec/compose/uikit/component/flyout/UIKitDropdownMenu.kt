@@ -138,7 +138,9 @@ fun UIKitDropdownMenu(
             }
         ),
         onDismissRequest = onDismissRequest,
-        dismissOnClickOutside = expanded,
+        options = UIKitFlyoutOptions(
+            dismissOnClickOutside = expanded
+        )
     ) {
         UIKitVerticalMenu(
             modifier = modifier

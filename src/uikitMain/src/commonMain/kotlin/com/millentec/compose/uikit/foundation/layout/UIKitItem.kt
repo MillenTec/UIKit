@@ -1,12 +1,5 @@
 package com.millentec.compose.uikit.foundation.layout
 
-import androidx.compose.runtime.Composable
-
-abstract class UIKitItem {
-    @Composable
-    abstract fun Content()
-}
-
 open class UIKitItemScope<T> {
     private val _items = mutableListOf<T>()
     val items: List<T>
