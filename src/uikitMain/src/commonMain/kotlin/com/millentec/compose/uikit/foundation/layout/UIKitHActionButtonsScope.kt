@@ -22,15 +22,16 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.input.UIKitTextField
 import com.millentec.compose.uikit.component.input.UIKitTextFieldColors
 import com.millentec.compose.uikit.component.input.UIKitTextFieldOptions
-import com.millentec.compose.uikit.component.layout.UIKitIcon
+import com.millentec.compose.uikit.component.media.UIKitIcon
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.state.UIKitInputControlState
 import com.millentec.compose.uikit.foundation.state.rememberUIKitInputControlState
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Search
+import com.millentec.compose.uikit.symbols.UIKitImageVectorSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbol
-import com.millentec.compose.uikit.symbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.builtin.systemui.Search
 import com.millentec.compose.uikit.theme.getUIKitAnimate
 import com.millentec.compose.uikit.theme.getUIKitColors
 
@@ -111,7 +112,7 @@ class UIKitHActionButtonsScope {
                     UIKitIcon(
                         modifier = Modifier
                             .fillMaxSize(0.6f),
-                        symbol = UIKitSymbols.systemUI.Search,
+                        symbol = UIKitImageVectorSymbol(FluentIcons.Search),
                         contentDescription = "Search"
                     )
                 }
@@ -127,7 +128,7 @@ class UIKitHActionButtonsScope {
                     value = value,
                     watermark = watermark,
                     onValueChange = onValueChange,
-                    symbol = UIKitSymbols.systemUI.Search,
+                    symbol = UIKitImageVectorSymbol(FluentIcons.Search),
                     options = textFieldOptions,
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Search

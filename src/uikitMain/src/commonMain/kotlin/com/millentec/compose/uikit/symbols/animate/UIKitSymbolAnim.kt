@@ -1,6 +1,7 @@
 package com.millentec.compose.uikit.symbols.animate
 
 import androidx.compose.animation.core.AnimationSpec
+import com.millentec.compose.uikit.symbols.draw.UIKitSymbolSelector
 
 class UIKitSymbolAnimTree {
     private val _tree: MutableList<MutableList<UIKitSymbolAnimNode>> = mutableListOf()
@@ -31,84 +32,84 @@ class UIKitSymbolAnimTree {
 
 data class UIKitSymbolAnimNode(
     val type: UIKitAnimSelector,
-    val groupSelector: String,
+    val selector: UIKitSymbolSelector,
     val targetValue: Float,
     val animateSpec: AnimationSpec<Float>?
 ) {
     companion object {
         fun scaleTo(
-            groupSelector: String,
+            selector: UIKitSymbolSelector,
             targetValue: Float,
             animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.Scale,
-                groupSelector = groupSelector,
+                selector = selector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )
         }
 
         fun scaleAdditionTo(
-            groupSelector: String,
+            selector: UIKitSymbolSelector,
             targetValue: Float,
             animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.ScaleAddition,
-                groupSelector = groupSelector,
+                selector = selector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )
         }
 
         fun scaleAdditionCenterXTo(
-            groupSelector: String,
+            selector: UIKitSymbolSelector,
             targetValue: Float,
             animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.ScaleAdditionCenterX,
-                groupSelector = groupSelector,
+                selector = selector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )
         }
 
         fun scaleAdditionCenterYTo(
-            groupSelector: String,
+            selector: UIKitSymbolSelector,
             targetValue: Float,
             animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.ScaleAdditionCenterY,
-                groupSelector = groupSelector,
+                selector = selector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )
         }
 
         fun scaleCenterXTo(
-            groupSelector: String,
+            selector: UIKitSymbolSelector,
             targetValue: Float,
             animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.ScaleCenterX,
-                groupSelector = groupSelector,
+                selector = selector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )
         }
 
         fun scaleCenterYTo(
-            groupSelector: String,
+            selector: UIKitSymbolSelector,
             targetValue: Float,
             animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.ScaleCenterY,
-                groupSelector = groupSelector,
+                selector = selector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )
@@ -116,117 +117,117 @@ data class UIKitSymbolAnimNode(
 
         // Alpha 作为最常用的可叠加属性且常在 visible 中使用, 单个可控制 Alpha 属性不便于操作, 故新增一个可选的叠加层
         fun alphaAdditionTo(
-            groupSelector: String,
+            selector: UIKitSymbolSelector,
             targetValue: Float,
             animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.AlphaAddition,
-                groupSelector = groupSelector,
+                selector = selector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )
         }
 
         fun alphaTo(
-            groupSelector: String,
+            selector: UIKitSymbolSelector,
             targetValue: Float,
             animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.Alpha,
-                groupSelector = groupSelector,
+                selector = selector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )
         }
 
         fun pathTrimStartTo(
-            groupSelector: String,
+            selector: UIKitSymbolSelector,
             targetValue: Float,
             animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.PathTrimStart,
-                groupSelector = groupSelector,
+                selector = selector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )
         }
 
         fun pathTrimEndTo(
-            groupSelector: String,
+            selector: UIKitSymbolSelector,
             targetValue: Float,
             animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.PathTrimEnd,
-                groupSelector = groupSelector,
+                selector = selector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )
         }
 
         fun rotateTo(
-            groupSelector: String,
+            selector: UIKitSymbolSelector,
             targetValue: Float,
             animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.Rotate,
-                groupSelector = groupSelector,
+                selector = selector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )
         }
 
         fun rotateCenterXTo(
-            groupSelector: String,
+            selector: UIKitSymbolSelector,
             targetValue: Float,
             animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.RotateCenterX,
-                groupSelector = groupSelector,
+                selector = selector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )
         }
 
         fun rotateCenterYTo(
-            groupSelector: String,
+            selector: UIKitSymbolSelector,
             targetValue: Float,
             animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.RotateCenterY,
-                groupSelector = groupSelector,
+                selector = selector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )
         }
 
         fun translateXTo(
-            groupSelector: String,
+            selector: UIKitSymbolSelector,
             targetValue: Float,
             animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.TranslateX,
-                groupSelector = groupSelector,
+                selector = selector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )
         }
 
         fun translateYTo(
-            groupSelector: String,
+            selector: UIKitSymbolSelector,
             targetValue: Float,
             animateSpec: AnimationSpec<Float>?
         ): UIKitSymbolAnimNode {
             return UIKitSymbolAnimNode(
                 type = UIKitAnimSelector.TranslateY,
-                groupSelector = groupSelector,
+                selector = selector,
                 targetValue = targetValue,
                 animateSpec = animateSpec
             )

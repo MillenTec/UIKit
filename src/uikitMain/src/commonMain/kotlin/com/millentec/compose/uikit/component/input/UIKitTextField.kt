@@ -44,14 +44,16 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.BackHandler
-import com.millentec.compose.uikit.component.layout.UIKitIcon
+import com.millentec.compose.uikit.component.media.UIKitIcon
 import com.millentec.compose.uikit.foundation.graphics.UIKitBrush
 import com.millentec.compose.uikit.foundation.helper.onClickOutside
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
+import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.dismissCircle
+import com.millentec.compose.uikit.symbols.UIKitImageVectorSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.builtin.systemui.Bluetooth
-import com.millentec.compose.uikit.symbols.builtin.systemui.filled.DismissCircle
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.*
 
@@ -441,7 +443,7 @@ fun UIKitTextField(
                                     )
                                 })
                                 .size(textStyle.lineHeight.value.dp),
-                            symbol = UIKitSymbols.systemUI.filled.DismissCircle,
+                            symbol = UIKitImageVectorSymbol(FluentIcons.dismissCircle()),
                             symbolStyle = UIKitSymbolStyle.Palette(
                                 UIKitBrush.solid(getUIKitColors().textFillColorSecondaryBrush),
                                 UIKitBrush.solid(getUIKitColors().textFillColorSecondaryBrush.copy(alphaAnimated))

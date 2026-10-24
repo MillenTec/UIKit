@@ -25,27 +25,25 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.graphics.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.graphics.acrylicMaterial
 import com.millentec.compose.uikit.foundation.layout.UIKitHActionButtonsScope
-import com.millentec.compose.uikit.symbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.builtin.systemui.Home
 import com.millentec.compose.uikit.theme.*
 
 @Composable
 @Preview
 private fun Preview() {
-    UIKitHActionButtons(
-
-    ) {
-        Button(
-            symbol = UIKitSymbols.systemUI.Home,
-            contentDescription = "Home",
-            onClick = { }
-        )
-
-        SearchBar(
-            watermark = "Search...",
-            onSearch = {}
-        )
-    }
+//    UIKitHActionButtons(
+//
+//    ) {
+//        Button(
+//            symbol = UIKitSymbols.systemUI.Home,
+//            contentDescription = "Home",
+//            onClick = { }
+//        )
+//
+//        SearchBar(
+//            watermark = "Search...",
+//            onSearch = {}
+//        )
+//    }
 }
 
 @Composable

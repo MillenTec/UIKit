@@ -8,10 +8,7 @@ import com.millentec.compose.uikit.foundation.graphics.UIKitBrush
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolGroupState
-import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
-import com.millentec.compose.uikit.symbols.draw.UIKitSymbolColor
-import com.millentec.compose.uikit.symbols.draw.UIKitSymbolLayer
-import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
+import com.millentec.compose.uikit.symbols.draw.*
 import com.millentec.compose.uikit.theme.getUIKitColors
 
 val GitHubSymbol: UIKitSymbol
@@ -20,12 +17,13 @@ val GitHubSymbol: UIKitSymbol
             return _GitHubSymbol!!
         _GitHubSymbol = object : UIKitSymbol(
             name = "GitHubSymbol",
+            uid = "ext.gallery.github",
             defaultSize = DpSize(20.dp, 20.dp),
             viewportSize = Size(20f, 20f)
         ) {
-            override val layers: List<UIKitSymbolLayer> = listOf(
-                UIKitSymbolLayer("github").apply {
-                    group(
+            override fun UIKitSymbolDrawer.onDraw() {
+                addLayer("github") {
+                    addGroup(
                         id = "github",
                         drawType = UIKitPathDrawType.Fill
                     ) {
@@ -61,7 +59,7 @@ val GitHubSymbol: UIKitSymbol
                         close()
                     }
                 }
-            )
+            }
 
             override val abilityStatement: List<UIKitSymbolAbility> = listOf()
 
@@ -70,44 +68,29 @@ val GitHubSymbol: UIKitSymbol
             @Composable
             override fun colorSet(
                 style: UIKitSymbolStyle,
-                states: List<Pair<String, UIKitSymbolGroupState>>
-            ): List<UIKitSymbolColor> {
-                return when (style) {
-                    is UIKitSymbolStyle.Hierarchical -> layers.map { layer ->
-                        UIKitSymbolColor(
-                            selector = layer.id,
-                            brush = style.brush,
-                            alpha = 1f
-                        )
-                    }
-                    is UIKitSymbolStyle.Monochrome -> layers.map { layer ->
-                        UIKitSymbolColor(
-                            layer.id,
-                            brush = style.brush,
-                            1f
-                        )
-                    }
-                    UIKitSymbolStyle.MultiColor -> layers.map { layer ->
-                        UIKitSymbolColor(
-                            layer.id,
-                            brush = UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush),
-                            1f
-                        )
-                    }
-                    is UIKitSymbolStyle.Palette -> layers.mapIndexed { index, layer ->
-                        UIKitSymbolColor(
-                            selector = layer.id,
-                            brush = style.brushes.getOrElse(index) { UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush) },
-                            alpha = 1f
-                        )
-                    }
-                    is UIKitSymbolStyle.PaletteWithId -> layers.map { layer ->
-                        UIKitSymbolColor(
-                            selector = layer.id,
-                            brush = style.brushes.firstOrNull { it.first == layer.id }?.second ?: UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush),
-                            alpha = 1f
-                        )
-                    }
+                states: Map<UIKitSymbolSelector, UIKitSymbolGroupState>
+            ): Map<UIKitSymbolSelector, UIKitSymbolColor> {
+                return when(style) {
+                    is UIKitSymbolStyle.Hierarchical -> mapOf(Pair(
+                        UIKitSymbolSelector(this, null, null),
+                        UIKitSymbolColor(style.brush, 1f)
+                    ))
+                    is UIKitSymbolStyle.Monochrome -> mapOf(Pair(
+                        UIKitSymbolSelector(this, null, null),
+                        UIKitSymbolColor(style.brush, 1f)
+                    ))
+                    UIKitSymbolStyle.MultiColor -> mapOf(Pair(
+                        UIKitSymbolSelector(this, null, null),
+                        UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 1f)
+                    ))
+                    is UIKitSymbolStyle.Palette -> mapOf(Pair(
+                        UIKitSymbolSelector(this, null, null),
+                        UIKitSymbolColor(style.brushes.getOrElse(0) { UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush) }, 1f)
+                    ))
+                    is UIKitSymbolStyle.PaletteWithId -> mapOf(Pair(
+                        UIKitSymbolSelector(this, null, null),
+                        UIKitSymbolColor(style.brushes.getOrNull(0)?.second ?: UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 1f)
+                    ))
                 }
             }
         }

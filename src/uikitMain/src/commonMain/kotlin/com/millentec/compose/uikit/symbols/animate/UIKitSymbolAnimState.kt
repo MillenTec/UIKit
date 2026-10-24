@@ -6,7 +6,6 @@ import androidx.compose.ui.geometry.Offset
 import com.millentec.compose.uikit.symbols.animate.UIKitAnimSelector.*
 
 class UIKitSymbolAnimState(
-    val id: String,
     initialScale: Float = 1f,
     initialScaleCenter: Offset = Offset(10f, 10f),
     initialAlpha: Float = 1f,

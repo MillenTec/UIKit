@@ -23,7 +23,9 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.millentec.compose.uikit.*
+import com.millentec.compose.uikit.App
+import com.millentec.compose.uikit.BackHandler
+import com.millentec.compose.uikit.LocalAcrylicMaterialState
 import com.millentec.compose.uikit.component.input.UIKitDropdownButton
 import com.millentec.compose.uikit.component.input.UIKitNavigationBar
 import com.millentec.compose.uikit.component.layout.UIKitSurface
@@ -37,14 +39,8 @@ import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.foundation.layout.UIKitAlignment
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Add
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Scales
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Settings
-import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.certificate
-import com.millentec.compose.uikit.symbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.builtin.shapes.DesignIdeas
-import com.millentec.compose.uikit.symbols.builtin.systemui.Home
-import com.millentec.compose.uikit.symbols.builtin.systemui.ToggleMultiple
+import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
+import com.millentec.compose.uikit.symbols.UIKitImageVectorSymbol
 import com.millentec.compose.uikit.theme.*
 import com.millentec.compose.uikit.viewmodels.MainViewModel
 import com.millentec.compose.uikit.views.pages.*
@@ -126,11 +122,11 @@ fun MainView() {
                     Controls_BasicInputs_Button -> BasicInputControls.first { it.page == Controls_BasicInputs_Button }.Content(LocalStrings.current.controls.inputs.button.title)
                     Controls_BasicInputs_ToggleButton -> BasicInputControls.first { it.page == Controls_BasicInputs_ToggleButton }.Content(LocalStrings.current.controls.inputs.toggleButton.title)
                     Controls_BasicInputs_ToggleSwitch -> BasicInputControls.first { it.page == Controls_BasicInputs_ToggleSwitch }.Content(LocalStrings.current.controls.inputs.toggleSwitch.title)
-                    Designs_UIKitSymbols_SystemUI -> UIKitSymbolsGalleryPage(SystemUISymbols, LocalStrings.current.designs.uikitSymbols.systemUiTitle)
-                    Designs_UIKitSymbols_All -> UIKitSymbolsGalleryPage(
+                    Designs_UIKitSymbols_SystemUI -> /*UIKitSymbolsGalleryPage(SystemUISymbols, LocalStrings.current.designs.uikitSymbols.systemUiTitle)*/{}
+                    Designs_UIKitSymbols_All -> /*UIKitSymbolsGalleryPage(
                         (SystemUISymbols + MediaSymbols + ShapesSymbols + LayoutSymbols).sortedBy { it.name },
                         LocalStrings.current.designs.uikitSymbols.allTitle
-                    )
+                    )*/{}
                 }
             }
         }
@@ -209,17 +205,17 @@ fun MainView() {
                         ) {
                             TextWithIcon(
                                 text = strings.navigation.home,
-                                symbol = UIKitSymbols.systemUI.Home
+                                symbol = UIKitImageVectorSymbol(FluentIcons.Home)
                             )
 
                             TextWithIcon(
                                 text = strings.navigation.controls,
-                                symbol = UIKitSymbols.systemUI.ToggleMultiple
+                                symbol = UIKitImageVectorSymbol(FluentIcons.toggleMultiple())
                             )
 
                             TextWithIcon(
                                 text = strings.navigation.designs,
-                                symbol = UIKitSymbols.shapes.DesignIdeas
+                                symbol = UIKitImageVectorSymbol(FluentIcons.designIdeas())
                             )
                         }
                     }

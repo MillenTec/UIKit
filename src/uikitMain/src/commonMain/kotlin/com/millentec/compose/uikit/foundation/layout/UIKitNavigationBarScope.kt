@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
-import com.millentec.compose.uikit.component.layout.UIKitIcon
+import com.millentec.compose.uikit.component.media.UIKitIcon
 import com.millentec.compose.uikit.symbols.UIKitImageVectorSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect

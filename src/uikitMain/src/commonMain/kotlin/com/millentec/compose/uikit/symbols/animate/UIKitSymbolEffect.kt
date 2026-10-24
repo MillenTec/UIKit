@@ -5,49 +5,54 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.millentec.compose.uikit.symbols.UIKitSymbol
 import com.millentec.compose.uikit.symbols.animate.UIKitAnimSelector.*
+import com.millentec.compose.uikit.symbols.draw.UIKitSymbolSelector
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.uuid.Uuid
 
 private suspend fun standardExecute(
     tree: UIKitSymbolAnimTree,
-    states: List<UIKitSymbolAnimState>,
+    states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>,
     snapTo: Boolean = false
 ) {
     tree.tree.forEach { sequential ->
         coroutineScope {
             sequential.forEach { parallel ->
-                launch {
-                    val state = states.firstOrNull {
-                        it.id == parallel.groupSelector
-                    } ?: return@launch
+                val states = states.filter {
+                    (it.key.symbol == parallel.selector.symbol || it.key.symbol == null)
+                            && (it.key.layer == parallel.selector.layer || it.key.layer == null)
+                            && (it.key.group == parallel.selector.group || it.key.group == null)
+                }
 
-                    val animatableState = when (parallel.type) {
-                        Empty -> return@launch
-                        Scale -> state.scaleState
-                        ScaleAddition -> state.scaleAdditionState
-                        Alpha -> state.alphaState
-                        AlphaAddition -> state.alphaAdditionState
-                        PathTrimStart -> state.pathTrimStartState
-                        PathTrimEnd -> state.pathTrimEndState
-                        ScaleCenterX -> state.scaleCenterXState
-                        ScaleCenterY -> state.scaleCenterYState
-                        ScaleAdditionCenterX -> state.scaleAdditionCenterX
-                        ScaleAdditionCenterY -> state.scaleAdditionCenterY
-                        Rotate -> state.rotateState
-                        RotateCenterX -> state.rotateCenterXState
-                        RotateCenterY -> state.rotateCenterYState
-                        TranslateX -> state.translateXState
-                        TranslateY -> state.translateYState
-                    }
+                states.forEach { state ->
+                    launch {
+                        val animatableState = when (parallel.type) {
+                            Empty -> return@launch
+                            Scale -> state.value.scaleState
+                            ScaleAddition -> state.value.scaleAdditionState
+                            Alpha -> state.value.alphaState
+                            AlphaAddition -> state.value.alphaAdditionState
+                            PathTrimStart -> state.value.pathTrimStartState
+                            PathTrimEnd -> state.value.pathTrimEndState
+                            ScaleCenterX -> state.value.scaleCenterXState
+                            ScaleCenterY -> state.value.scaleCenterYState
+                            ScaleAdditionCenterX -> state.value.scaleAdditionCenterX
+                            ScaleAdditionCenterY -> state.value.scaleAdditionCenterY
+                            Rotate -> state.value.rotateState
+                            RotateCenterX -> state.value.rotateCenterXState
+                            RotateCenterY -> state.value.rotateCenterYState
+                            TranslateX -> state.value.translateXState
+                            TranslateY -> state.value.translateYState
+                        }
 
-                    if (snapTo || parallel.animateSpec == null) {
-                        animatableState.snapTo(parallel.targetValue)
-                    } else {
-                        animatableState.animateTo(
-                            targetValue = parallel.targetValue,
-                            animationSpec = parallel.animateSpec
-                        )
+                        if (snapTo || parallel.animateSpec == null) {
+                            animatableState.snapTo(parallel.targetValue)
+                        } else {
+                            animatableState.animateTo(
+                                targetValue = parallel.targetValue,
+                                animationSpec = parallel.animateSpec
+                            )
+                        }
                     }
                 }
             }
@@ -87,11 +92,11 @@ internal sealed class UIKitSymbolEffectNode {
         val initializable: Boolean,
         val initialize: (suspend (
             symbol: UIKitSymbol,
-            states: List<UIKitSymbolAnimState>
+            states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>
         ) -> Unit)?,
         val execute: suspend (
             symbol: UIKitSymbol,
-            states: List<UIKitSymbolAnimState>
+            states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>
         ) -> Unit
     ): UIKitSymbolEffectNode()
 
@@ -107,15 +112,15 @@ internal sealed class UIKitSymbolEffectNode {
         val isActive: Boolean,
         val start: suspend (
             symbol: UIKitSymbol,
-            states: List<UIKitSymbolAnimState>
+            states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>
         ) -> Boolean,
         val execute: suspend (
             symbol: UIKitSymbol,
-            states: List<UIKitSymbolAnimState>
+            states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>
         ) -> Unit,
         val reset: suspend (
             symbol: UIKitSymbol,
-            states: List<UIKitSymbolAnimState>
+            states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>
         ) -> Unit
     ): UIKitSymbolEffectNode()
 
@@ -181,7 +186,7 @@ fun <T> UIKitSymbolEffect.customEffect(
     repeat: Int = 1,
     initialize: suspend (
         symbol: UIKitSymbol,
-        states: List<UIKitSymbolAnimState>
+        states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>
     ) -> Unit
 ): UIKitSymbolEffect {
     val uuid = remember { Uuid.random().toString() }
@@ -254,34 +259,6 @@ fun UIKitSymbolEffect.visibleEffect(
                 standardExecute(appearTree, states)
             } else if (!visible && disappearTree != null) {
                 standardExecute(disappearTree, states)
-            }
-        },
-    ))
-
-    return this
-}
-
-@Composable
-fun UIKitSymbolEffect.stateEffect(
-    state: String
-): UIKitSymbolEffect {
-    val uuid = remember { Uuid.random().toString() }
-
-    this.addEffect(UIKitSymbolEffectNode.UIKitDiscreteEffectNode(
-        uuid = uuid,
-        triggerCurrent = state,
-        repeat = 1,
-        initializable = true,
-        initialize = { symbol, states ->
-            val stateTree = symbol.stateEffect(state, states)
-            stateTree?.let {
-                standardExecute(it, states, true)
-            }
-        },
-        execute = { symbol, states ->
-            val stateTree = symbol.stateEffect(state, states)
-            stateTree?.let {
-                standardExecute(it, states)
             }
         },
     ))
