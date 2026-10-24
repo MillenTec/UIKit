@@ -116,7 +116,7 @@ abstract class UIKitSymbol(
     fun findAllGroups(selector: UIKitSymbolSelector): Map<UIKitSymbolSelector, UIKitSymbolPathGroup> {
         return groups.filter {
             (it.key.symbol == selector.symbol || selector.symbol == null)
-                    && (it.key.layer == selector.layer || selector.symbol == null)
+                    && (it.key.layer == selector.layer || selector.layer == null)
                     && (it.key.group == selector.group || selector.group == null)
         }
     }

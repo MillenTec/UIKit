@@ -19,9 +19,9 @@ private suspend fun standardExecute(
         coroutineScope {
             sequential.forEach { parallel ->
                 val states = states.filter {
-                    (it.key.symbol == parallel.selector.symbol || it.key.symbol == null)
-                            && (it.key.layer == parallel.selector.layer || it.key.layer == null)
-                            && (it.key.group == parallel.selector.group || it.key.group == null)
+                    (it.key.symbol == parallel.selector.symbol || parallel.selector.symbol == null)
+                            && (it.key.layer == parallel.selector.layer || parallel.selector.layer == null)
+                            && (it.key.group == parallel.selector.group || parallel.selector.group == null)
                 }
 
                 states.forEach { state ->

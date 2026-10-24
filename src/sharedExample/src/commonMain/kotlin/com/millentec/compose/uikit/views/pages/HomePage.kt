@@ -5,15 +5,23 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.additionsymbols.GitHubSymbol
+import com.millentec.compose.uikit.component.input.UIKitButton
+import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.component.media.UIKitIcon
 import com.millentec.compose.uikit.symbols.UIKitSymbols
+import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
+import com.millentec.compose.uikit.symbols.animate.bounceEffect
+import com.millentec.compose.uikit.symbols.animate.variableColorEffect
+import com.millentec.compose.uikit.symbols.animate.visibleEffect
 import com.millentec.compose.uikit.symbols.builtin.systemui.Bluetooth
 import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.theme.getUIKitColors
@@ -80,12 +88,40 @@ fun HomePage() {
         }
 
         item {
+            val isActive0 = remember { mutableStateOf(false) }
+            val visible = remember { mutableStateOf(true) }
+            val bounceTigger = remember { mutableStateOf(false) }
+
             UIKitIcon(
                 modifier = Modifier
                     .size(100.dp),
                 symbol = UIKitSymbols.systemUI.Bluetooth,
+                symbolEffect = UIKitSymbolEffect()
+                    .bounceEffect(bounceTigger.value)
+                    .visibleEffect(visible.value)
+                    .variableColorEffect(isActive0.value),
                 contentDescription = null
             )
+
+            Row {
+                UIKitToggleSwitch(
+                    checked = isActive0.value,
+                    onCheckedChange = {
+                        isActive0.value = !isActive0.value
+                    }
+                )
+
+                UIKitToggleSwitch(
+                    checked = visible.value,
+                    onCheckedChange = {
+                        visible.value = !visible.value
+                    }
+                )
+
+                UIKitButton("Bounce", onClick = {
+                    bounceTigger.value = !bounceTigger.value
+                })
+            }
         }
     }
 }

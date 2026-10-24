@@ -53,8 +53,7 @@ val UIKitSystemUISymbols.Bluetooth: UIKitSymbol
                         id = "bluetooth",
                         drawType = UIKitPathDrawType.Stroke(
                             lineWidth = 1f
-                        ),
-                        defaultState = UIKitSymbolGroupState(alpha = 0f)
+                        )
                     ) {
                         moveTo(5.5f, 13.5f)
                         lineToRelative(7.96f, -6.96f)
@@ -108,66 +107,46 @@ val UIKitSystemUISymbols.Bluetooth: UIKitSymbol
 
             override fun appearEffect(states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {
                 return UIKitSymbolAnimTree()
-                    .addParallel(
-                        UIKitSymbolAnimNode.alphaAdditionTo(
-                            selector = UIKitSymbolSelector(this, null, null),
-                            targetValue = 1f,
-                            animateSpec = null
-                        )
-                    )
-                    .addParallel(
-                        UIKitSymbolAnimNode.pathTrimStartTo(
-                            selector = UIKitSymbolSelector(this, "bluetooth", "bluetooth"),
-                            targetValue = 0f,
-                            animateSpec = null
-                        )
-                    )
-                    .addParallel(
-                        UIKitSymbolAnimNode.pathTrimEndTo(
-                            selector = UIKitSymbolSelector(this, "bluetooth", "bluetooth"),
-                            targetValue = 0f,
-                            animateSpec = null
-                        )
-                    )
-                    .addSequential(
-                        UIKitSymbolAnimNode.alphaAdditionTo(
-                            selector = UIKitSymbolSelector(this, "bluetooth", "bluetooth"),
-                            targetValue = 1f,
-                            animateSpec = tween(200, easing = LinearOutSlowInEasing)
-                        )
-                    )
-                    .addParallel(
-                        UIKitSymbolAnimNode.scaleTo(
-                            selector = UIKitSymbolSelector(this, null, null),
-                            targetValue = 1f,
-                            animateSpec = tween(200, easing = LinearOutSlowInEasing)
-                        )
-                    )
+                    .addParallel(UIKitSymbolAnimNode.alphaAdditionTo(
+                        selector = UIKitSymbolSelector(this, null, null),
+                        targetValue = 1f,
+                        animateSpec = null))
+                    .addParallel(UIKitSymbolAnimNode.pathTrimStartTo(
+                        selector = UIKitSymbolSelector(this, "bluetooth", "bluetooth"),
+                        targetValue = 0f,
+                        animateSpec = null))
+                    .addParallel(UIKitSymbolAnimNode.pathTrimEndTo(
+                        selector = UIKitSymbolSelector(this, "bluetooth", "bluetooth"),
+                        targetValue = 0f,
+                        animateSpec = null))
+                    .addSequential(UIKitSymbolAnimNode.alphaAdditionTo(
+                        selector = UIKitSymbolSelector(this, "bluetooth", "bluetooth"),
+                        targetValue = 1f,
+                        animateSpec = tween(200, easing = LinearOutSlowInEasing)))
+                    .addParallel(UIKitSymbolAnimNode.scaleTo(
+                        selector = UIKitSymbolSelector(this, null, null),
+                        targetValue = 1f,
+                        animateSpec = tween(200, easing = LinearOutSlowInEasing)))
+                    .addParallel(UIKitSymbolAnimNode.pathTrimEndTo(
+                        selector = UIKitSymbolSelector(this, "bluetooth", "bluetooth"),
+                        targetValue = 1f,
+                        animateSpec = tween(800, easing = FastOutSlowInEasing)))
             }
 
             override fun disappearEffect(states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {
                 return UIKitSymbolAnimTree()
-                    .addParallel(
-                        UIKitSymbolAnimNode.pathTrimStartTo(
-                            selector = UIKitSymbolSelector(this, "bluetooth", "bluetooth"),
-                            targetValue = 0f,
-                            animateSpec = null
-                        )
-                    )
-                    .addParallel(
-                        UIKitSymbolAnimNode.pathTrimEndTo(
-                            selector = UIKitSymbolSelector(this, "bluetooth", "bluetooth"),
-                            targetValue = 1f,
-                            animateSpec = null
-                        )
-                    )
-                    .addSequential(
-                        UIKitSymbolAnimNode.pathTrimStartTo(
-                            selector = UIKitSymbolSelector(this, "bluetooth", "bluetooth"),
-                            targetValue = 1f,
-                            animateSpec = tween(800, easing = FastOutSlowInEasing)
-                        )
-                    )
+                    .addParallel(UIKitSymbolAnimNode.pathTrimStartTo(
+                        selector = UIKitSymbolSelector(this, "bluetooth", "bluetooth"),
+                        targetValue = 0f,
+                        animateSpec = null))
+                    .addParallel(UIKitSymbolAnimNode.pathTrimEndTo(
+                        selector = UIKitSymbolSelector(this, "bluetooth", "bluetooth"),
+                        targetValue = 1f,
+                        animateSpec = null))
+                    .addSequential(UIKitSymbolAnimNode.pathTrimStartTo(
+                        selector = UIKitSymbolSelector(this, "bluetooth", "bluetooth"),
+                        targetValue = 1f,
+                        animateSpec = tween(800, easing = FastOutSlowInEasing)))
             }
 
             override fun variableColorEffect(

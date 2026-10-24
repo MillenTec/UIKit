@@ -73,7 +73,7 @@ internal fun UIKitSymbol.UIKitSymbolColorSet(
             is UIKitSymbolStyle.Palette -> {
                 var preColor: UIKitBrush? = null
                 groupsOrdered.filter {
-                    it.second.drawType != UIKitPathDrawType.MaskFilled || it.second.drawType !is UIKitPathDrawType.MaskStroke
+                    it.second.drawType != UIKitPathDrawType.MaskFilled && it.second.drawType !is UIKitPathDrawType.MaskStroke
                 }.reversed().mapIndexed { index, group ->
                     val color = style.brushes.getOrElse(index) {
                         preColor ?: UIKitBrush.solid(uikitColors.textFillColorPrimaryBrush)

@@ -250,20 +250,20 @@ private fun UIKitAnimatableIcon(
                 saveCount++
             }
 
-            symbol.groups.forEach { group ->
+            symbol.groupsOrdered.forEach { group ->
                 val brush = colorsAnimated.entries.firstOrNull {
-                    (it.key.symbol == group.key.symbol || it.key.symbol == null)
-                            && (it.key.layer == group.key.layer || it.key.layer == null)
-                            && (it.key.group == group.key.group || it.key.group == null)
+                    (it.key.symbol == group.first.symbol || it.key.symbol == null)
+                            && (it.key.layer == group.first.layer || it.key.layer == null)
+                            && (it.key.group == group.first.group || it.key.group == null)
                 }?.value?.value ?: UIKitBrush.solid(Color.Transparent)
                 val alpha = alphasAnimated.entries.firstOrNull {
-                    (it.key.symbol == group.key.symbol || it.key.symbol == null)
-                            && (it.key.layer == group.key.layer || it.key.layer == null)
-                            && (it.key.group == group.key.group || it.key.group == null)
+                    (it.key.symbol == group.first.symbol || it.key.symbol == null)
+                            && (it.key.layer == group.first.layer || it.key.layer == null)
+                            && (it.key.group == group.first.group || it.key.group == null)
                 }?.value?.value ?: 0f
 
-                val animateState = animStates[group.key]
-                val path = builtPaths.value[group.key] ?: Path()
+                val animateState = animStates[group.first]
+                val path = builtPaths.value[group.first] ?: Path()
 
                 val isRender = animateState != null && animateState.visible
 
@@ -304,7 +304,7 @@ private fun UIKitAnimatableIcon(
                                         y = animateState.rotateCenterYState.value
                                     )
                                 ) {
-                                    when (val drawType = group.value.drawType) {
+                                    when (val drawType = group.second.drawType) {
                                         UIKitPathDrawType.Fill -> {
                                             drawPath(
                                                 path = path,
@@ -422,7 +422,7 @@ private fun UIKitStaticIcon(
     contentDescription: String?,
     symbolStyle: UIKitSymbolStyle
 ) {
-    val defaultStates = remember { symbol.groups.map { Pair(it.key, it.value.defaultState) }.toMutableStateMap() }
+    val defaultStates = remember(symbol) { symbol.groups.map { Pair(it.key, it.value.defaultState) }.toMutableStateMap() }
     val colorSet by rememberUpdatedState(symbol.colorSet(symbolStyle, defaultStates))
     val builtPaths = remember(symbol) { mutableStateOf(symbol.builtPaths) }
 
@@ -443,44 +443,59 @@ private fun UIKitStaticIcon(
             scaleY = size.height / symbol.viewportSize.height,
             pivot = Offset(0f, 0f)
         ) {
-            drawContext.canvas.saveLayer(
-                bounds = Rect(
-                    Offset.Zero,
-                    symbol.viewportSize,
-                ),
-                paint = Paint()
-            )
-            saveCount++
+            if (symbol.groups.any {
+                    it.value.drawType is UIKitPathDrawType.MaskFilled || it.value.drawType is UIKitPathDrawType.MaskStroke
+                }) {
+                drawContext.canvas.saveLayer(
+                    bounds = Rect(
+                        Offset.Zero,
+                        symbol.viewportSize,
+                    ),
+                    paint = Paint()
+                )
+                saveCount++
+            }
 
-            symbol.groups.forEach { group ->
+            symbol.groupsOrdered.forEach { group ->
                 val brush = colorSet.entries.firstOrNull {
-                    (it.key.symbol == group.key.symbol || it.key.symbol == null)
-                            && (it.key.layer == group.key.layer || it.key.layer == null)
-                            && (it.key.group == group.key.group || it.key.group == null)
+                    (it.key.symbol == group.first.symbol || it.key.symbol == null)
+                            && (it.key.layer == group.first.layer || it.key.layer == null)
+                            && (it.key.group == group.first.group || it.key.group == null)
                 }?.value?.brush ?: UIKitBrush.solid(Color.Transparent)
                 val alpha = colorSet.entries.firstOrNull {
-                    (it.key.symbol == group.key.symbol || it.key.symbol == null)
-                            && (it.key.layer == group.key.layer || it.key.layer == null)
-                            && (it.key.group == group.key.group || it.key.group == null)
+                    (it.key.symbol == group.first.symbol || it.key.symbol == null)
+                            && (it.key.layer == group.first.layer || it.key.layer == null)
+                            && (it.key.group == group.first.group || it.key.group == null)
                 }?.value?.alpha ?: 0f
 
-                val path = builtPaths.value[group.key] ?: Path()
-                val isRender = group.value.defaultState.visible
+                val path = builtPaths.value[group.first] ?: Path()
+                val isRender = group.second.defaultState.visible
 
                 if (isRender) {
+                    val brushScaled = brush.copy(
+                        start = Offset(
+                            brush.start.x.coerceIn(0f..symbol.viewportSize.width) * 2,
+                            brush.start.y.coerceIn(0f..symbol.viewportSize.height) * 2
+                        ),
+                        end = Offset(
+                            brush.end.x.coerceIn(0f..symbol.viewportSize.width) * 2,
+                            brush.end.y.coerceIn(0f..symbol.viewportSize.height) * 2
+                        )
+                    )
+
                     scale(
-                        scale = group.value.defaultState.scale,
+                        scale = group.second.defaultState.scale,
                         pivot = Offset(
                             x = symbol.viewportSize.width / 2,
                             y = symbol.viewportSize.height / 2,
                         )
                     ) {
-                        when (val drawType = group.value.drawType) {
+                        when (val drawType = group.second.drawType) {
                             UIKitPathDrawType.Fill -> {
                                 drawPath(
                                     path = path,
-                                    brush = brush.asComposeBrush(),
-                                    alpha = alpha * group.value.defaultState.alpha,
+                                    brush = brushScaled.asComposeBrush(),
+                                    alpha = alpha * group.second.defaultState.alpha,
                                     style = Fill
                                 )
                             }
@@ -496,16 +511,16 @@ private fun UIKitStaticIcon(
 
                                 val trimmedPath = Path()
                                 pathMeasure.getSegment(
-                                    group.value.defaultState.pathTrimStart * length,
-                                    group.value.defaultState.pathTrimEnd * length,
+                                    group.second.defaultState.pathTrimStart * length,
+                                    group.second.defaultState.pathTrimEnd * length,
                                     trimmedPath,
                                     true
                                 )
 
                                 drawPath(
                                     path = trimmedPath,
-                                    brush = brush.asComposeBrush(),
-                                    alpha = alpha * group.value.defaultState.alpha,
+                                    brush = brushScaled.asComposeBrush(),
+                                    alpha = alpha * group.second.defaultState.alpha,
                                     style = Stroke(
                                         width = drawType.lineWidth,
                                         cap = drawType.cap,
@@ -518,7 +533,7 @@ private fun UIKitStaticIcon(
                                 drawPath(
                                     path = path,
                                     color = Color.Transparent,
-                                    alpha = alpha * group.value.defaultState.alpha,
+                                    alpha = alpha * group.second.defaultState.alpha,
                                     style = Fill,
                                     blendMode = BlendMode.DstIn
                                 )
@@ -544,8 +559,8 @@ private fun UIKitStaticIcon(
 
                                 val trimmedPath = Path()
                                 pathMeasure.getSegment(
-                                    group.value.defaultState.pathTrimStart * length,
-                                    group.value.defaultState.pathTrimEnd * length,
+                                    group.second.defaultState.pathTrimStart * length,
+                                    group.second.defaultState.pathTrimEnd * length,
                                     trimmedPath,
                                     true
                                 )
@@ -553,7 +568,7 @@ private fun UIKitStaticIcon(
                                 drawPath(
                                     path = trimmedPath,
                                     color = Color.Transparent,
-                                    alpha = alpha * group.value.defaultState.alpha,
+                                    alpha = alpha * group.second.defaultState.alpha,
                                     style = Stroke(
                                         width = drawType.lineWidth,
                                         cap = drawType.cap,
