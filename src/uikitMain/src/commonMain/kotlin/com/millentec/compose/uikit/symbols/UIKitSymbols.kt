@@ -3,8 +3,10 @@ package com.millentec.compose.uikit.symbols
 object UIKitSymbols {
     val media = UIKitMediaSymbols()
     val systemUI = UIKitSystemUISymbols()
-    val shapes = UIKitShapesSymbols()
+    val graphic = UIKitGraphicSymbols()
     val layout = UIKitLayoutSymbols()
+    val language = UIKitLanguageSymbols()
+    val arrow = UIKitArrowSymbols()
 }
 
 class UIKitSystemUISymbols {
@@ -16,5 +18,7 @@ class UIKitSystemUISymbols {
     }
 }
 class UIKitMediaSymbols { internal constructor() }
-class UIKitShapesSymbols { internal constructor() }
+class UIKitGraphicSymbols { internal constructor() }
 class UIKitLayoutSymbols { internal constructor() }
+class UIKitLanguageSymbols { internal constructor() }
+class UIKitArrowSymbols { internal constructor() }

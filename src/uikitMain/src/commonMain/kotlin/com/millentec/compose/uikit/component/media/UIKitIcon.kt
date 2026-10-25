@@ -24,6 +24,7 @@ import com.millentec.compose.uikit.foundation.graphics.UIKitAnimateBrush
 import com.millentec.compose.uikit.foundation.graphics.UIKitBrush
 import com.millentec.compose.uikit.symbols.UIKitImageVectorSymbol
 import com.millentec.compose.uikit.symbols.UIKitSymbol
+import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
 import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
@@ -78,6 +79,7 @@ private fun UIKitAnimatableIcon(
     contentDescription: String?,
     symbolStyle: UIKitSymbolStyle,
     symbolEffect: UIKitSymbolEffect,
+    weight: Float
 ) {
     val animStates = remember(symbol) {
         symbol.groups.map {
@@ -114,7 +116,7 @@ private fun UIKitAnimatableIcon(
     val builtPaths = remember(symbol) { mutableStateOf(symbol.builtPaths) }
     val cacheSymbolStyle = remember { mutableStateOf<UIKitSymbolStyle?>(null) }
 
-    LaunchedEffect(colorSet) {
+    LaunchedEffect(colorSet.size, symbol) {
         colorsAnimated.clear()
         colorsAnimated.putAll(colorSet.map {
             Pair(it.key, UIKitAnimateBrush(it.value.brush))
@@ -217,6 +219,9 @@ private fun UIKitAnimatableIcon(
             UIKitSymbolEffectNode.UIKitEmptyEffectNode -> {}
         }
     }
+
+    val variableWeightSupported = symbol.abilityStatement?.contains(UIKitSymbolAbility.VariableWeight) == true
+    val weight = if (variableWeightSupported) weight else 1f
 
     Canvas(
         modifier = modifier.then(
@@ -336,7 +341,7 @@ private fun UIKitAnimatableIcon(
                                                 brush = brushScaled.asComposeBrush(),
                                                 alpha = alpha * animateState.alphaState.value * animateState.alphaAdditionState.value,
                                                 style = Stroke(
-                                                    width = drawType.lineWidth,
+                                                    width = drawType.lineWidth * weight,
                                                     cap = drawType.cap,
                                                     join = drawType.join,
                                                 )
@@ -384,7 +389,7 @@ private fun UIKitAnimatableIcon(
                                                 color = Color.Transparent,
                                                 alpha = alpha * animateState.alphaState.value * animateState.alphaAdditionState.value,
                                                 style = Stroke(
-                                                    width = drawType.lineWidth,
+                                                    width = drawType.lineWidth * weight,
                                                     cap = drawType.cap,
                                                     join = drawType.join,
                                                 ),
@@ -420,11 +425,15 @@ private fun UIKitStaticIcon(
     modifier: Modifier = Modifier,
     symbol: UIKitSymbol,
     contentDescription: String?,
-    symbolStyle: UIKitSymbolStyle
+    symbolStyle: UIKitSymbolStyle,
+    weight: Float
 ) {
     val defaultStates = remember(symbol) { symbol.groups.map { Pair(it.key, it.value.defaultState) }.toMutableStateMap() }
     val colorSet by rememberUpdatedState(symbol.colorSet(symbolStyle, defaultStates))
     val builtPaths = remember(symbol) { mutableStateOf(symbol.builtPaths) }
+
+    val variableWeightSupported = symbol.abilityStatement?.contains(UIKitSymbolAbility.VariableWeight) == true
+    val weight = if (variableWeightSupported) weight else 1f
 
     Canvas(
         modifier = modifier.then(
@@ -522,7 +531,7 @@ private fun UIKitStaticIcon(
                                     brush = brushScaled.asComposeBrush(),
                                     alpha = alpha * group.second.defaultState.alpha,
                                     style = Stroke(
-                                        width = drawType.lineWidth,
+                                        width = drawType.lineWidth * weight,
                                         cap = drawType.cap,
                                         join = drawType.join,
                                     )
@@ -570,7 +579,7 @@ private fun UIKitStaticIcon(
                                     color = Color.Transparent,
                                     alpha = alpha * group.second.defaultState.alpha,
                                     style = Stroke(
-                                        width = drawType.lineWidth,
+                                        width = drawType.lineWidth * weight,
                                         cap = drawType.cap,
                                         join = drawType.join,
                                     ),
@@ -620,6 +629,7 @@ private fun UIKitImageVectorIcon(
  * @param contentDescription 用于无障碍功能的图标语义信息, 传入 null 则不包含语义信息
  * @param symbolStyle 图标的着色模式
  * @param symbolEffect 图标动态效果, 传入 null 则无动态效果, 按图标的默认配置渲染
+ * @param weight 字重, 倍数值, 默认为 1f; 仅在声明支持 VariableWeight 的图标中生效
  * @sample UIKitIconSample
  */
 @Composable
@@ -629,6 +639,7 @@ fun UIKitIcon(
     contentDescription: String?,
     symbolStyle: UIKitSymbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush),
     symbolEffect: UIKitSymbolEffect? = null,
+    weight: Float = 1f,
 ) {
     if (symbol is UIKitImageVectorSymbol) {
         val tint = when (symbolStyle) {
@@ -648,6 +659,7 @@ fun UIKitIcon(
             symbol = symbol,
             contentDescription = contentDescription,
             symbolStyle = symbolStyle,
+            weight = weight
         )
     } else {
         UIKitAnimatableIcon(
@@ -656,6 +668,7 @@ fun UIKitIcon(
             contentDescription = contentDescription,
             symbolStyle = symbolStyle,
             symbolEffect = symbolEffect,
+            weight = weight
         )
     }
 }

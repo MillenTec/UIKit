@@ -16,10 +16,14 @@ import com.millentec.compose.uikit.symbols.animate.*
 import com.millentec.compose.uikit.symbols.draw.*
 
 sealed class UIKitSymbolAbility {
+    object VariableWeight: UIKitSymbolAbility()
     object Appear: UIKitSymbolAbility()
     object Disappear: UIKitSymbolAbility()
     object Bounce: UIKitSymbolAbility()
-    data class MultiState(val states: List<String>): UIKitSymbolAbility()
+    object Replace: UIKitSymbolAbility()
+    data class MagicReplace(val targets: List<UIKitSymbol>): UIKitSymbolAbility() {
+        constructor(vararg targets: UIKitSymbol): this(targets.toList())
+    }
     object VariableColor: UIKitSymbolAbility()
     object Progressable: UIKitSymbolAbility()
     object Pulse: UIKitSymbolAbility()
@@ -317,7 +321,7 @@ abstract class UIKitSymbol(
         }
 
         val layerGroups = visibleGroups.groupBy { it.first.layer }.values.toList()
-        layerGroups.reversed().forEachIndexed { indexLayer, groups ->
+        layerGroups.forEachIndexed { indexLayer, groups ->
             groups.forEach {
                 tree.addParallel(UIKitSymbolAnimNode.scaleCenterXTo(
                     it.first,

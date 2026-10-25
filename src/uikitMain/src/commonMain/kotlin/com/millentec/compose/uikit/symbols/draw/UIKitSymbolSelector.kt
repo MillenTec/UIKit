@@ -8,8 +8,8 @@ data class UIKitSymbolSelector(
     val group: String?
 ) {
     constructor(
-        symbol: UIKitSymbol?,
+        symbol: UIKitSymbol,
         layer: String?,
         group: String?
-    ): this(symbol?.uid, layer, group)
+    ): this(symbol.uid, layer, group)
 }

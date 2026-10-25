@@ -47,7 +47,6 @@ val UIKitSystemUISymbols.Bluetooth: UIKitSymbol
                         lineToRelative(-7.96f, -6.96f)
                     }
                 }
-
                 addLayer("bluetooth", 1) {
                     addGroup(
                         id = "bluetooth",
@@ -69,17 +68,19 @@ val UIKitSystemUISymbols.Bluetooth: UIKitSymbol
                 }
             }
 
-            override val abilityStatement: List<UIKitSymbolAbility> = listOf(
-                UIKitSymbolAbility.Appear,
-                UIKitSymbolAbility.Disappear,
-                UIKitSymbolAbility.Bounce,
-                UIKitSymbolAbility.VariableColor,
-                UIKitSymbolAbility.MultiState(listOf("default", "disabled"))
-            )
+            override val abilityStatement: List<UIKitSymbolAbility>
+                get() = listOf(
+                    UIKitSymbolAbility.Appear,
+                    UIKitSymbolAbility.Disappear,
+                    UIKitSymbolAbility.Bounce,
+                    UIKitSymbolAbility.VariableColor,
+                    UIKitSymbolAbility.VariableWeight
+                )
 
-            override val tags: List<String> = listOf(
-                "Bluetooth", "Link", "Connect"
-            )
+            override val tags: List<String>
+                get() = listOf(
+                    "Bluetooth", "Link", "Connect"
+                )
 
             @Composable
             override fun colorSet(
@@ -105,7 +106,9 @@ val UIKitSystemUISymbols.Bluetooth: UIKitSymbol
                 )
             }
 
-            override fun appearEffect(states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {
+            override fun appearEffect(
+                states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>?
+            ): UIKitSymbolAnimTree {
                 return UIKitSymbolAnimTree()
                     .addParallel(UIKitSymbolAnimNode.alphaAdditionTo(
                         selector = UIKitSymbolSelector(this, null, null),
@@ -133,7 +136,9 @@ val UIKitSystemUISymbols.Bluetooth: UIKitSymbol
                         animateSpec = tween(800, easing = FastOutSlowInEasing)))
             }
 
-            override fun disappearEffect(states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>?): UIKitSymbolAnimTree? {
+            override fun disappearEffect(
+                states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>?
+            ): UIKitSymbolAnimTree {
                 return UIKitSymbolAnimTree()
                     .addParallel(UIKitSymbolAnimNode.pathTrimStartTo(
                         selector = UIKitSymbolSelector(this, "bluetooth", "bluetooth"),

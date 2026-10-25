@@ -14,15 +14,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.additionsymbols.GitHubSymbol
 import com.millentec.compose.uikit.component.input.UIKitButton
+import com.millentec.compose.uikit.component.input.UIKitSlider
 import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.component.media.UIKitIcon
 import com.millentec.compose.uikit.symbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
-import com.millentec.compose.uikit.symbols.animate.bounceEffect
-import com.millentec.compose.uikit.symbols.animate.variableColorEffect
-import com.millentec.compose.uikit.symbols.animate.visibleEffect
-import com.millentec.compose.uikit.symbols.builtin.systemui.Bluetooth
+import com.millentec.compose.uikit.symbols.animate.*
+import com.millentec.compose.uikit.symbols.builtin.arrow.ArrowCircleDown
+import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
@@ -91,16 +90,21 @@ fun HomePage() {
             val isActive0 = remember { mutableStateOf(false) }
             val visible = remember { mutableStateOf(true) }
             val bounceTigger = remember { mutableStateOf(false) }
+            val weight = remember { mutableStateOf(1f) }
+            val progress = remember { mutableStateOf(1f) }
 
             UIKitIcon(
                 modifier = Modifier
                     .size(100.dp),
-                symbol = UIKitSymbols.systemUI.Bluetooth,
+                symbol = UIKitSymbols.arrow.ArrowCircleDown,
+                symbolStyle = UIKitSymbolStyle.MultiColor,
                 symbolEffect = UIKitSymbolEffect()
                     .bounceEffect(bounceTigger.value)
                     .visibleEffect(visible.value)
-                    .variableColorEffect(isActive0.value),
-                contentDescription = null
+                    .variableColorEffect(isActive0.value)
+                    .progressibleEffect(progress.value),
+                contentDescription = null,
+                weight = weight.value,
             )
 
             Row {
@@ -122,6 +126,22 @@ fun HomePage() {
                     bounceTigger.value = !bounceTigger.value
                 })
             }
+
+            UIKitSlider(
+                value = weight.value,
+                onValueChange = {
+                    weight.value = it
+                },
+                valueRange = 0f..2f
+            )
+
+            UIKitSlider(
+                value = progress.value,
+                onValueChange = {
+                    progress.value = it
+                },
+                valueRange = 0f..1f
+            )
         }
     }
 }
