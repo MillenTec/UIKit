@@ -270,7 +270,7 @@ private fun UIKitAnimatableIcon(
                 val animateState = animStates[group.first]
                 val path = builtPaths.value[group.first] ?: Path()
 
-                val isRender = animateState != null && animateState.visible
+                val isRender = animateState != null && animateState.visible && weight > 0f
 
                 if (isRender) {
                     val brushScaled = brush.copy(
@@ -478,7 +478,7 @@ private fun UIKitStaticIcon(
                 }?.value?.alpha ?: 0f
 
                 val path = builtPaths.value[group.first] ?: Path()
-                val isRender = group.second.defaultState.visible
+                val isRender = group.second.defaultState.visible && weight > 0f
 
                 if (isRender) {
                     val brushScaled = brush.copy(

@@ -20,7 +20,7 @@ import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.component.media.UIKitIcon
 import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.animate.*
-import com.millentec.compose.uikit.symbols.builtin.arrow.ArrowCircleDown
+import com.millentec.compose.uikit.symbols.builtin.academic.Code
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.theme.getUIKitColors
@@ -96,7 +96,7 @@ fun HomePage() {
             UIKitIcon(
                 modifier = Modifier
                     .size(100.dp),
-                symbol = UIKitSymbols.arrow.ArrowCircleDown,
+                symbol = UIKitSymbols.academic.Code,
                 symbolStyle = UIKitSymbolStyle.MultiColor,
                 symbolEffect = UIKitSymbolEffect()
                     .bounceEffect(bounceTigger.value)
