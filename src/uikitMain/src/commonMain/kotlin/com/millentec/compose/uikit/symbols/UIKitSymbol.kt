@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.symbols.animate.*
 import com.millentec.compose.uikit.symbols.draw.*
 
@@ -401,4 +402,24 @@ class UIKitImageVectorSymbol(
         states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>?,
         coefficient: Float
     ): UIKitSymbolAnimTree? = null
+}
+
+object UIKitEmptySymbol: UIKitSymbol(
+    name = "Empty",
+    uid = "empty",
+    defaultSize = DpSize(0.dp, 0.dp),
+    viewportSize = Size(0f, 0f)
+) {
+    override fun UIKitSymbolDrawer.onDraw() {}
+
+    override val abilityStatement: List<UIKitSymbolAbility>?
+        get() = emptyList()
+
+    @Composable
+    override fun colorSet(
+        style: UIKitSymbolStyle,
+        states: Map<UIKitSymbolSelector, UIKitSymbolGroupState>
+    ): Map<UIKitSymbolSelector, UIKitSymbolColor> {
+        return emptyMap()
+    }
 }

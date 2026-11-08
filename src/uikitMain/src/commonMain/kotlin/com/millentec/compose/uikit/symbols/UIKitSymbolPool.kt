@@ -12,13 +12,13 @@ package com.millentec.compose.uikit.symbols
  * - 若将其下的某个特定符号泄漏到外部, 仅会导致该符号缓存无法被回收
  */
 open class UIKitSymbolPool {
-    val media = UIKitMediaSymbols(this)
-    val systemUI = UIKitSystemUISymbols(this)
-    val graphic = UIKitGraphicSymbols(this)
-    val layout = UIKitLayoutSymbols(this)
-    val language = UIKitLanguageSymbols(this)
-    val arrow = UIKitArrowSymbols(this)
-    val academic = UIKitAcademicSymbols(this)
+    val media = UIKitMediaSymbols()
+    val systemUI = UIKitSystemUISymbols()
+    val graphic = UIKitGraphicSymbols()
+    val layout = UIKitLayoutSymbols()
+    val language = UIKitLanguageSymbols()
+    val arrow = UIKitArrowSymbols()
+    val academic = UIKitAcademicSymbols()
 
     companion object {
         val Default: UIKitSymbolPool

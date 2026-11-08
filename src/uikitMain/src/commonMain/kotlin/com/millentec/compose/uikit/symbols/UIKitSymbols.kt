@@ -1,42 +1,29 @@
 package com.millentec.compose.uikit.symbols
 
-object UIKitSymbols: UIKitSymbolPool()
-
-class UIKitSystemUISymbols internal constructor(
-    internal val pool: UIKitSymbolPool
-) {
-    val filled = UIKitSystemUIFilledSymbols()
-
-    class UIKitSystemUIFilledSymbols internal constructor()
+object UIKitSymbols: UIKitSymbolPool() {
+    operator fun get(key: String): UIKitSymbol {
+        return this.entries.get(key, this) ?: UIKitEmptySymbol
+    }
 }
 
-class UIKitMediaSymbols internal constructor(
-    internal val pool: UIKitSymbolPool
-) {
-    val filled = UIKitMediaFilledSymbols(pool)
+class UIKitSystemUISymbols internal constructor()
 
-    class UIKitMediaFilledSymbols internal constructor(
-        internal val pool: UIKitSymbolPool
-    )
-}
-class UIKitGraphicSymbols internal constructor(
-    internal val pool: UIKitSymbolPool
-) {
-    val filled = UIKitGraphicFilledSymbols(pool)
+class UIKitMediaSymbols internal constructor() {
+    val filled = UIKitMediaFilledSymbols()
 
-    class UIKitGraphicFilledSymbols internal constructor(
-        internal val pool: UIKitSymbolPool
-    )
+    class UIKitMediaFilledSymbols internal constructor()
 }
-class UIKitLayoutSymbols internal constructor(
-    internal val pool: UIKitSymbolPool
-)
-class UIKitLanguageSymbols internal constructor(
-    internal val pool: UIKitSymbolPool
-)
-class UIKitArrowSymbols internal constructor(
-    internal val pool: UIKitSymbolPool
-)
-class UIKitAcademicSymbols internal constructor(
-    internal val pool: UIKitSymbolPool
-)
+
+class UIKitGraphicSymbols internal constructor() {
+    val filled = UIKitGraphicFilledSymbols()
+
+    class UIKitGraphicFilledSymbols internal constructor()
+}
+
+class UIKitLayoutSymbols internal constructor()
+
+class UIKitLanguageSymbols internal constructor()
+
+class UIKitArrowSymbols internal constructor()
+
+class UIKitAcademicSymbols internal constructor()

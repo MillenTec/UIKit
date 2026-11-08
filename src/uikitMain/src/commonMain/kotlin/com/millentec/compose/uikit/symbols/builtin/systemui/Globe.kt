@@ -62,9 +62,9 @@ val UIKitSystemUISymbols.Globe: UIKitSymbol
                         lineTo(16.88f, 7f)
                     }
                 }
-                addLayer("globe_border") {
+                addLayer("globe_circle") {
                     addGroup(
-                        id = "border",
+                        id = "circle",
                         drawType = UIKitPathDrawType.Stroke(lineWidth = 1f)
                     ) {
                         moveTo(17.5f, 10f)
@@ -103,11 +103,21 @@ val UIKitSystemUISymbols.Globe: UIKitSymbol
                 return UIKitSymbolColorSet(
                     style = style,
                     layerInfo = mapOf(
-                        Pair(UIKitSymbolSelector(null, "globe", null), 1f)
+                        Pair(UIKitSymbolSelector(null, "globe_curves", null), 1f),
+                        Pair(UIKitSymbolSelector(null, "globe_h_lines", null), 1f),
+                        Pair(UIKitSymbolSelector(null, "globe_circle", null), 1f)
                     ),
                     multiColor = mapOf(
                         Pair(
-                            UIKitSymbolSelector(null, "globe", null),
+                            UIKitSymbolSelector(null, "globe_curves", null),
+                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 1f)
+                        ),
+                        Pair(
+                            UIKitSymbolSelector(null, "globe_h_lines", null),
+                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 1f)
+                        ),
+                        Pair(
+                            UIKitSymbolSelector(null, "globe_circle", null),
                             UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 1f)
                         )
                     )
@@ -119,11 +129,11 @@ val UIKitSystemUISymbols.Globe: UIKitSymbol
             ): UIKitSymbolAnimTree {
                 return UIKitSymbolAnimTree()
                     .addParallel(UIKitSymbolAnimNode.pathTrimStartTo(
-                        selector = UIKitSymbolSelector(this, "globe_border", null),
+                        selector = UIKitSymbolSelector(this, "globe_circle", null),
                         targetValue = 0f,
                         animateSpec = null))
                     .addParallel(UIKitSymbolAnimNode.pathTrimEndTo(
-                        selector = UIKitSymbolSelector(this, "globe_border", null),
+                        selector = UIKitSymbolSelector(this, "globe_circle", null),
                         targetValue = 0f,
                         animateSpec = null))
                     .addParallel(UIKitSymbolAnimNode.pathTrimStartTo(
@@ -143,7 +153,7 @@ val UIKitSystemUISymbols.Globe: UIKitSymbol
                         targetValue = 0.5f,
                         animateSpec = null))
                     .addSequential(UIKitSymbolAnimNode.pathTrimEndTo(
-                        selector = UIKitSymbolSelector(this, "globe_border", null),
+                        selector = UIKitSymbolSelector(this, "globe_circle", null),
                         targetValue = 1f,
                         animateSpec = tween(800, easing = FastOutSlowInEasing)))
                     .addParallel(UIKitSymbolAnimNode.pathTrimEndTo(
@@ -165,11 +175,11 @@ val UIKitSystemUISymbols.Globe: UIKitSymbol
             ): UIKitSymbolAnimTree {
                 return UIKitSymbolAnimTree()
                     .addParallel(UIKitSymbolAnimNode.pathTrimStartTo(
-                        selector = UIKitSymbolSelector(this, "globe_border", null),
+                        selector = UIKitSymbolSelector(this, "globe_circle", null),
                         targetValue = 0f,
                         animateSpec = null))
                     .addParallel(UIKitSymbolAnimNode.pathTrimEndTo(
-                        selector = UIKitSymbolSelector(this, "globe_border", null),
+                        selector = UIKitSymbolSelector(this, "globe_circle", null),
                         targetValue = 1f,
                         animateSpec = null))
                     .addParallel(UIKitSymbolAnimNode.pathTrimStartTo(
@@ -189,7 +199,7 @@ val UIKitSystemUISymbols.Globe: UIKitSymbol
                         targetValue = 1f,
                         animateSpec = null))
                     .addSequential(UIKitSymbolAnimNode.pathTrimStartTo(
-                        selector = UIKitSymbolSelector(this, "globe_border", null),
+                        selector = UIKitSymbolSelector(this, "globe_circle", null),
                         targetValue = 1f,
                         animateSpec = tween(500, easing = FastOutLinearInEasing)))
                     .addParallel(UIKitSymbolAnimNode.pathTrimStartTo(

@@ -18,10 +18,12 @@ import com.millentec.compose.uikit.component.input.UIKitSlider
 import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.component.media.UIKitIcon
+import com.millentec.compose.uikit.symbols.UIKitEmptySymbol
+import com.millentec.compose.uikit.symbols.UIKitSymbolPool
 import com.millentec.compose.uikit.symbols.UIKitSymbols
 import com.millentec.compose.uikit.symbols.animate.*
-import com.millentec.compose.uikit.symbols.builtin.academic.Code
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
+import com.millentec.compose.uikit.symbols.entries
 import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
@@ -96,7 +98,7 @@ fun HomePage() {
             UIKitIcon(
                 modifier = Modifier
                     .size(100.dp),
-                symbol = UIKitSymbols.academic.Code,
+                symbol = UIKitSymbols.entries.firstOrNull(UIKitSymbolPool.Default) { key, _ -> key == "ic.sys.globe" } ?: UIKitEmptySymbol,
                 symbolStyle = UIKitSymbolStyle.MultiColor,
                 symbolEffect = UIKitSymbolEffect()
                     .bounceEffect(bounceTigger.value)

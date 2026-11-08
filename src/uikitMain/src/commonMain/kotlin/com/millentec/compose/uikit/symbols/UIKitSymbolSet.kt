@@ -25,16 +25,16 @@ class UIKitSymbolSet internal constructor(
 
     fun any(
         pool: UIKitSymbolPool,
-        predicate: (Pair<String, UIKitSymbol>) -> Boolean
+        predicate: (String, UIKitSymbol) -> Boolean
     ): Boolean {
-        return suppliers.entries.any { predicate(Pair(it.key, it.value.invoke(pool))) }
+        return suppliers.entries.any { predicate(it.key, it.value.invoke(pool)) }
     }
 
     fun all(
         pool: UIKitSymbolPool,
-        predicate: (Pair<String, UIKitSymbol>) -> Boolean
+        predicate: (key: String, symbol: UIKitSymbol) -> Boolean
     ): Boolean {
-        return suppliers.entries.all { predicate(Pair(it.key, it.value.invoke(pool))) }
+        return suppliers.entries.all { predicate(it.key, it.value.invoke(pool)) }
     }
 
     fun contains(key: String): Boolean {
@@ -43,25 +43,35 @@ class UIKitSymbolSet internal constructor(
 
     fun forEach(
         pool: UIKitSymbolPool,
-        action: (Pair<String, UIKitSymbol>) -> Unit
+        action: (key: String, symbol: UIKitSymbol) -> Unit
     ) {
-        suppliers.entries.forEach { action(Pair(it.key, it.value.invoke(pool))) }
+        suppliers.entries.forEach { action(it.key, it.value.invoke(pool)) }
     }
 
     fun filter(
         pool: UIKitSymbolPool,
-        predicate: (Pair<String, UIKitSymbol>) -> Boolean
+        predicate: (key: String, symbol: UIKitSymbol) -> Boolean
     ): Map<String, UIKitSymbol> {
         return suppliers.entries
-            .filter { predicate(Pair(it.key, it.value.invoke(pool))) }
+            .filter { predicate(it.key, it.value.invoke(pool)) }
             .associate { Pair(it.key, it.value.invoke(pool)) }
+    }
+
+    fun firstOrNull(
+        pool: UIKitSymbolPool,
+        predicate: (key: String, symbol: UIKitSymbol) -> Boolean
+    ): UIKitSymbol? {
+        return suppliers.entries
+            .firstOrNull { predicate(it.key, it.value.invoke(pool)) }
+            ?.value
+            ?.invoke(pool)
     }
 
     fun <T> map(
         pool: UIKitSymbolPool,
-        transform: (Pair<String, UIKitSymbol>) -> T
+        transform: (key: String, symbol: UIKitSymbol) -> T
     ): List<T> {
         return suppliers.entries
-            .map { transform(Pair(it.key, it.value.invoke(pool))) }
+            .map { transform(it.key, it.value.invoke(pool)) }
     }
 }

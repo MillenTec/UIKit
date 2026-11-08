@@ -22,10 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.graphics.UIKitAnimateBrush
 import com.millentec.compose.uikit.foundation.graphics.UIKitBrush
-import com.millentec.compose.uikit.symbols.UIKitImageVectorSymbol
-import com.millentec.compose.uikit.symbols.UIKitSymbol
-import com.millentec.compose.uikit.symbols.UIKitSymbolAbility
-import com.millentec.compose.uikit.symbols.UIKitSymbols
+import com.millentec.compose.uikit.symbols.*
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffectNode
@@ -641,7 +638,9 @@ fun UIKitIcon(
     symbolEffect: UIKitSymbolEffect? = null,
     weight: Float = 1f,
 ) {
-    if (symbol is UIKitImageVectorSymbol) {
+    if (symbol == UIKitEmptySymbol) {
+        return
+    } else if (symbol is UIKitImageVectorSymbol) {
         val tint = when (symbolStyle) {
             is UIKitSymbolStyle.Monochrome -> symbolStyle.brush.colorStops.getOrNull(0)?.second ?: Color.Unspecified
             else -> Color.Unspecified

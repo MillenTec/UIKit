@@ -2,7 +2,7 @@
  * AIGC: 使用了人工智能优化并修复分段式滑块, 适配 Ltr 布局以及竖向滑块功能
  * - Time: 2026-09-06 16:24
  * - Model: GLM 5.3 Flash
- * - Type: Agent (ZCode)
+ * - Harness: ZCode
  * - State: Reviewed
  */
 
