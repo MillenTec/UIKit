@@ -1,36 +1,42 @@
 package com.millentec.compose.uikit.symbols
 
-object UIKitSymbols {
-    val media = UIKitMediaSymbols()
-    val systemUI = UIKitSystemUISymbols()
-    val graphic = UIKitGraphicSymbols()
-    val layout = UIKitLayoutSymbols()
-    val language = UIKitLanguageSymbols()
-    val arrow = UIKitArrowSymbols()
-    val academic = UIKitAcademicSymbols()
-}
+object UIKitSymbols: UIKitSymbolPool()
 
-class UIKitSystemUISymbols {
-    internal constructor()
+class UIKitSystemUISymbols internal constructor(
+    internal val pool: UIKitSymbolPool
+) {
     val filled = UIKitSystemUIFilledSymbols()
 
-    class UIKitSystemUIFilledSymbols {
-        internal constructor()
-    }
+    class UIKitSystemUIFilledSymbols internal constructor()
 }
-class UIKitMediaSymbols {
-    val filled = UIKitMediaFilledSymbols()
-    internal constructor()
 
-    class UIKitMediaFilledSymbols { internal constructor() }
-}
-class UIKitGraphicSymbols {
-    internal constructor()
-    val filled = UIKitGraphicFilledSymbols()
+class UIKitMediaSymbols internal constructor(
+    internal val pool: UIKitSymbolPool
+) {
+    val filled = UIKitMediaFilledSymbols(pool)
 
-    class UIKitGraphicFilledSymbols { internal constructor() }
+    class UIKitMediaFilledSymbols internal constructor(
+        internal val pool: UIKitSymbolPool
+    )
 }
-class UIKitLayoutSymbols { internal constructor() }
-class UIKitLanguageSymbols { internal constructor() }
-class UIKitArrowSymbols { internal constructor() }
-class UIKitAcademicSymbols { internal constructor() }
+class UIKitGraphicSymbols internal constructor(
+    internal val pool: UIKitSymbolPool
+) {
+    val filled = UIKitGraphicFilledSymbols(pool)
+
+    class UIKitGraphicFilledSymbols internal constructor(
+        internal val pool: UIKitSymbolPool
+    )
+}
+class UIKitLayoutSymbols internal constructor(
+    internal val pool: UIKitSymbolPool
+)
+class UIKitLanguageSymbols internal constructor(
+    internal val pool: UIKitSymbolPool
+)
+class UIKitArrowSymbols internal constructor(
+    internal val pool: UIKitSymbolPool
+)
+class UIKitAcademicSymbols internal constructor(
+    internal val pool: UIKitSymbolPool
+)
