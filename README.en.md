@@ -55,14 +55,14 @@ You can open this project using JetBrains IntelliJ IDEA, ensuring that `JDK`, `G
 
 After Gradle finishes loading, you can run the `*Example` module directly or use UIKit in your own project.
 
-UIKit is not yet published to `Maven Central`. You can publish it locally and reference it:
+UIKit is not yet published to `Maven`. You can publish it locally and reference it:
 ```sh
 git clone https://github.com/MillenTec/UIKit.git
 cd UIKit/src
 ./gradlew :uikitMain:publishToMavenLocal
 ```
 Then, in the project where you want to reference UIKit:
-```kt
+```kotlin
 // settings.gradle.kts - repository configuration
 repositories {
     mavenLocal()
@@ -80,7 +80,7 @@ Then re-sync your Gradle project to verify that UIKit works correctly.
 ## 3. Design
 ### 3.1. Theming System
 In `UIKitTheme`, you can use `getLight()` or `getDark()` to retrieve the default light or dark theme and pass it to `UIKitThemeHost`. Creating a `UIKitTheme` instance directly defaults to the light theme.
-```kt
+```kotlin
 @Composable
 fun App() {
     UIKitThemeHost(UIKitTheme.getLight()) {
@@ -95,7 +95,7 @@ fun App() {
 `UIKitThemeHost` is essentially a `CompositionLocalProvider`. Accessing theme values with `getUIKitColors()` is equivalent to `UIKitTheme.LocalTheme.current.colors`. If no `UIKitThemeHost` wrapper is present in the upper layers of your app, `getUIKitTheme` defaults to the light theme.
 
 You can create an observable property in your application and pass it to `UIKitThemeHost`, updating it to change the theme:
-```kt
+```kotlin
 @Composable
 fun App() {
     val checked = remember { mutableStateOf(false) }
@@ -119,35 +119,73 @@ fun App() {
 }
 ```
 
-### 3.2. Icons
+### 3.2. Symbols
 UIKit provides a symbol system called `UIKit Symbols`, inspired by the design of `SF Symbols`, along with a built-in set of symbols based on [FluentUI System Icons](https://github.com/microsoft/fluentui-system-icons), allowing you to draw symbols with complex animation logic in your UI through a simple API.
 
 > [!TIP]
 > UIKit previously also offered an `ImageVector`-based icon set, **FluentIcons**, which is now being gradually deprecated and migrated to UIKit Symbols. You can use the compatibility layer to convert an `ImageVector` into a usable UIKit Symbol:
-> ```kt
+> ```kotlin
 > UIKitImageVectorSymbol(imageVector)
 > ```
 
 #### 3.2.1. Overview
 The built-in UIKit Symbols can be accessed through the `UIKitSymbols` entry point:
-```kt
-UIKitSymbols.systemUI.AddCircle
+```kotlin
+UIKitSymbols.systemUI.Apps
 ```
 
 Each symbol is a subclass object of the `UIKitSymbol` abstract class, responsible for **storing a description of the drawing behavior**; the actual drawing is performed by the `UIKitIcon` composable:
-```kt
+```kotlin
 UIKitIcon(
     modifier = Modifier
         .size(32.dp),
-    symbol = UIKitSymbols.systemUI.AddCircle,
-    contentDescription = "Add",
+    symbol = UIKitSymbols.systemUI.Apps,
+    contentDescription = "Apps",
     symbolStyle = UIKitSymbolStyle.MultiColor,
     symbolEffect = UIKitSymbolEffect()
         .visibleEffect(true)
 )
 ```
 
-#### 3.2.2. Coloring Modes
+#### 3.2.2. Drawing Implementation and Performance
+**Drawing**
+
+The `onDraw` DSL extension method on `UIKitSymbol` objects describes all paths of the symbol. When you first access the `groups` property, all path `UIKitPath` instances are built at once; when you first access the `builtPath` property, the `UIKitPath` is built into a `Path` and drawn on the Canvas.
+
+**Selection**
+
+The smallest unit in `UIKitSymbol` is `UIKitSymbolPathGroup`, but `Layer` exists for use in DSL and selectors to simplify the API. You can use `UIKitSymbolSelector` to select any one or more **groups or group derivatives** that match the conditions. The Selector uses **symbol**, **layer**, **group** three-level positioning. When a level is passed as `null` in the Selector, it means you don't care about that level, and you can find **any group** at that level.
+
+> The method used in UIKit to match groups is as follows:
+> ```kotlin
+> fun <V> Map<UIKitSymbolSelector, V>.matchSelector(selector: UIKitSymbolSelector): Map.Entry<UIKitSymbolSelector, V>? {
+>     return this.entries.firstOrNull {
+>         (it.key.symbol == selector.symbol || it.key.symbol == null)
+>             && (it.key.layer == selector.layer || it.key.layer == null)
+>             && (it.key.group == selector.group || it.key.group == null)
+>     }
+> }
+> ```
+> For example, `UIKitSymbolSelector(someSymbol, null, "group")` can capture `(someSymbol, "layer0", "group")`, `(someSymbol, "layer1", "group")`.
+
+All groups or group derivatives in `UIKitSymbol` are stored in a `Map` keyed by `UIKitSymbolSelector`, so when retrieving a **specified group or group derivative** in a **determined Map**, using the Key once avoids the performance overhead of repeated traversal searches.
+
+**Lazy Loading**
+
+Symbols in `UIKitSymbols` use **lazy loading**: symbol objects are created only when accessed, and various constructions within symbols are also lazily built and cached.
+
+In Symbols, I provide `UIKitSymbolPool` as a symbol cache pool. Symbols that are called are **cached in the pool**, so calling the same symbol repeatedly within the same pool does not require repeated construction.
+
+`UIKitSymbols` is actually a **static implementation** of `UIKitSymbolPool`. Symbols called through it are **globally cached**, and `UIKitSymbolPool.Default` is equivalent to `UIKitSymbols`.
+
+In actual usage, if you need to call iterator functions such as `UIKitSymbols.entries.forEach`, you will need to pass in a pool. You can create a new pool for iteration to avoid globally activating symbols during iteration and occupying too much memory.
+
+> [!IMPORTANT]
+> You should use your created pool **within a local scope**. Assigning the pool or symbols in the pool to a long-lived scope may cause the **pool and symbols to fail to be properly recycled**, occupying memory space.
+> - If the entire `UIKitSymbolPool` instance is leaked, **the pool and all symbols in it** cannot be properly recycled.
+> - If a certain symbol in the leaked pool is leaked, then **that symbol** cannot be properly recycled.
+
+#### 3.2.3. Coloring Modes
 The `symbolStyle` parameter is an important parameter of `UIKitIcon`. It determines the **coloring mode** of the symbol. UIKit Symbols provides the following four coloring modes plus one auxiliary coloring mode:
 - **Monochrome:** Monochrome coloring. Accepts a brush that is applied to the symbol as a whole.
 - **Hierarchical:** Hierarchical coloring. Accepts a brush that is applied to the symbol as a whole, while internally applying different opacity levels to each layer. This can **add visual hierarchy** to a symbol or **distinguish visual priority**.
@@ -155,10 +193,10 @@ The `symbolStyle` parameter is an important parameter of `UIKitIcon`. It determi
 - **Palette:** Palette. You can pass a different color for each layer to achieve the **highest level of customization**.
 - **PaletteWithId:** An auxiliary option to the palette, allowing you to color each layer of a symbol more precisely by ID.
 
-#### 3.2.3. Animation Effects
+#### 3.2.4. Animation Effects
 UIKit Symbols provides the `UIKitSymbolEffect` system for adding animations. You can chain animation effects and pass in triggers. `UIKitSymbolEffect` mainly comes in two different types:
 - **Discrete:** Triggered by a `trigger`; each time the trigger changes, the animation plays once or more.
-  ```kt
+  ```kotlin
   val trigger = remember { mutableStateOf(0) }
   UIKitIcon(
       symbol = UIKitSymbols.shapes.Layer,
@@ -169,7 +207,7 @@ UIKit Symbols provides the `UIKitSymbolEffect` system for adding animations. You
   )
   ```
 - **Infinite:** Controlled by an `isActive` boolean property; while it is true, a periodic animation keeps playing. Some infinite animations also offer discrete versions, which play one or more cycles each time the trigger changes.
-  ```kt
+  ```kotlin
   UIKitIcon(
       symbol = UIKitSymbols.media.Volume,
       contentDescription = "Volume",
@@ -183,41 +221,42 @@ Internally, animations are orchestrated through `UIKitSymbolAnimTree`, where you
 
 If the built-in animations don't meet your needs, you can pass a custom `UIKitSymbolAnimTree` via `customEffect`.
 
-#### 3.2.4. Custom Symbols
+#### 3.2.5. Custom Symbols
 UIKit Symbols supports customization: simply inherit from the `UIKitSymbol` abstract base class to create a custom symbol. We recommend using an **object** rather than a class as the symbol carrier.
 
-You can create a `UIKitSymbol` subclass object, implement the `layers` property and describe the symbol's vector paths with the DSL inside it, implement the `colorSet` method to define coloring, and declare capabilities via the `abilityStatement` property:
-```kt
+You can create a `UIKitSymbol` subclass object, implement the `onDraw` method and describe the symbol's vector paths with the DSL inside it, implement the `colorSet` method to define coloring, and declare capabilities via the `abilityStatement` property:
+```kotlin
 object MySymbol: UIKitSymbol(
     name = "MySymbol",
+    uid = "ext.my_symbol"
     defaultSize = DpSize(20.dp, 20.dp),
     viewportSize = Size(20f, 20f),
 ) {
-  override val layers: List<UIKitSymbolLayer> = listOf(
-      UIKitSymbolLayer("layer0").apply { 
-          group(
-              id = "group0", 
-              drawType = UIKitPathDrawType.Fill
-          ) {
-              moveTo(10f, 2f)
-              curveTo(5.6f, 2f, 2f, 5.6f, 2f, 10f)
-              // ...
-          }
-      }
-  )
+    override fun UIKitSymbolDrawer.onDraw() {
+        addLayer("layer0") {
+            addGroup(
+                id = "group0",
+                drawType = UIKitPathDrawType.Fill
+            ) {
+                moveTo(10f, 2f)
+                curveTo(5.6f, 2f, 2f, 5.6f, 2f, 10f)
+                // ...
+            }
+        }
+    }
 
-  override val abilityStatement: List<UIKitSymbolAbility> = listOf(
-      UIKitSymbolAbility.Appear
-      // ...
-  )
+    override val abilityStatement: List<UIKitSymbolAbility>
+        get() = listOf(
+            // ...
+        )
 
-  @Composable
-  override fun colorSet(
-      style: UIKitSymbolStyle,
-      states: List<Pair<String, UIKitSymbolGroupState>>
-  ): List<UIKitSymbolColor> {
-      // ...
-  }
+    @Composable
+    override fun colorSet(
+        style: UIKitSymbolStyle,
+        states: Map<UIKitSymbolSelector, UIKitSymbolGroupState>
+    ): Map<UIKitSymbolSelector, UIKitSymbolColor> {
+        // ...
+    }
 }
 ```
 
@@ -233,7 +272,7 @@ Background blur is powered by the open-source library [Cloudy](https://github.co
 > The background image used in the acrylic effect demo is from [Pixabay](https://pixabay.com/zh/photos/beach-cliff-bay-sea-ocean-418742/) ([License Summary](https://pixabay.com/service/license-summary/)).
 
 To use acrylic material, first create a state with `rememberAcrylicMaterialState`, set a source, and apply the material to a container:
-```kt
+```kotlin
 Box {
     val state = rememberAcrylicMaterialState()
 
@@ -255,7 +294,7 @@ Box {
 
 > [!IMPORTANT]
 > Do not use an `AcrylicMaterial` with the same state as its source inside the child hierarchy of `AcrylicMaterialSource`. In other words, an `AcrylicMaterial` cannot have itself as its source, as this will cause a crash:
-> ```kt
+> ```kotlin
 > Box {
 >    val state = rememberAcrylicMaterialState()
 >

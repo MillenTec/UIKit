@@ -26,7 +26,7 @@ UIKit 是一个以 Fluent Design 为基础，融合了 Apple 设计精神的一�
 - **快捷调用与高自定义性：** 大部分控件提供了多层 API，既可以使用简单几行代码创建一个漂亮的默认配置控件，也可以使用更底层的 API 实现更多属性的自定义
 - **完整的主题体系：** `UIKitTheme` 提供了颜色、排版、形状、布局、动画、材质六项可自定义的可变主题，默认内置了亮色与暗色配置，你只需使用 `UIKitThemeHost` 包裹你的应用根并传入主题配置，你就可以在应用的任何地方使用 `getUIKitTheme` 获取并使用主题
 - **流畅的动画系统：** UIKit 主张一切都拥有过渡，动画与过渡动画渗透了 UIKit 的每一处设计
-- **强大的符号系统：** UIKit Symbols 提供了强大的动画能力与扩展性，并提供了一套基于 [FluentUI System Icons](https://github.com/microsoft/fluentui-system-icons) 的内置符号集，并在其基础上深入设计，为符号提供了**可编程动画**、**分层渲染**等功能
+- **强大的符号系统：** UIKit Symbols 提供了强大的动画能力与扩展性，并提供了一套基于 [FluentUI System Icons](https://github.com/microsoft/fluentui-system-icons) 的内置符号集，并在其基础上深入设计，为符号提供了 **可扩展** 的 **可编程动画**、**分层渲染** 等能力
 
 ### 1.2.支持的平台
 | 平台 | 支持情况 |
@@ -59,7 +59,7 @@ cd UIKit/src
 ./gradlew :uikitMain:publishToMavenLocal
 ```
 然后在你需要引用 UIKit 的项目中：
-```kt
+```kotlin
 // settings.gradle.kts - 仓库配置
 repositories {
     mavenLocal()
@@ -77,7 +77,7 @@ dependencies {
 ## 3.设计
 ### 3.1.主题系统
 在 UIKitTheme 中，你可以通过 `getLight()` 或 `getDark()` 来获取默认的亮色或暗色主题并传入 UIKitThemeHost 中，直接创建 UIKitTheme 实例即默认为亮色主题
-```kt
+```kotlin
 @Composable
 fun App() {
     UIKitThemeHost(UIKitTheme.getLight()) {
@@ -92,7 +92,7 @@ fun App() {
 UIKitThemeHost 本质是一个 `CompositionLocalProvider`，访问主题的 `getUIKitColors()` 写法等价于 `UIKitTheme.LocalTheme.current.colors`；若在应用上层没有使用 UIKitThemeHost 包裹，那么 `getUIKitTheme` 默认为亮色
 
 你可以在你的应用程序中创建一个可观察属性并将其传入 UIKitThemeHost，通过改变它以改变主题
-```kt
+```kotlin
 @Composable
 fun App() {
     val checked = remember { mutableStateOf(false) }
@@ -116,46 +116,82 @@ fun App() {
 }
 ```
 
-### 3.2.图标
+### 3.2.符号
 UIKit 提供了一套受 `SF Symbols` 设计启发的符号系统 `UIKit Symbols`，并内置了基于 [FluentUI System Icons](https://github.com/microsoft/fluentui-system-icons) 的符号，使得你可以通过简单的 API 在 UI 中绘制各种复杂动画逻辑的符号
 
 > [!TIP]
 > 此前还提供一套基于 `ImageVector` 的 **FluentIcons** 图标集，现将逐步弃用转移至 UIKit Symbols，你可以通过兼容层将 ImageVector 转换并创建为可用的 UIKit Symbol
-> ```kt
+> ```kotlin
 > UIKitImageVectorSymbol(imageVector)
 > ```
 
-#### 3.2.1.概述
+#### 3.2.1.使用概述
 内置的 UIKit Symbols 可以通过 `UIKitSymbols` 入口调用
-```kt
-UIKitSymbols.systemUI.AddCircle
+```kotlin
+UIKitSymbols.systemUI.Apps
 ```
 
-每个符号都是 `UIKitSymbol` 抽象类的子类对象，它们负责**存储对于绘制行为的描述**，图标的绘制由 `UIKitIcon` 可组合项进行
-```kt
+每个符号都是 `UIKitSymbol` 抽象类的子类对象，它们负责 **存储对于绘制行为的描述**，符号的绘制由 `UIKitIcon` 可组合项进行
+```kotlin
 UIKitIcon(
     modifier = Modifier
         .size(32.dp),
-    symbol = UIKitSymbols.systemUI.AddCircle,
-    contentDescription = "Add",
+    symbol = UIKitSymbols.systemUI.Apps,
+    contentDescription = "Apps",
     symbolStyle = UIKitSymbolStyle.MultiColor,
     symbolEffect = UIKitSymbolEffect()
         .visibleEffect(true)
 )
 ```
 
-#### 3.2.2.着色模式
-`symbolStyle` 参数是 UIKitIcon 的一个重要参数，它决定了图标的**着色模式**，UIKit Symbols 提供了以下四种着色模式及一个辅助着色模式
-- **Monochrome：** 单色着色，可传入一个画刷并整体使用
-- **Hierarchical：** 分层着色，可传入一个画刷并整体使用，同时内部会对各个层施加不同的透明度，可以为符号**提高层次感**或**区分视觉优先级**
-- **MultiColor：** 多色，使用符号内置的配色，让图标拥有更好的**语义着色**或反映图标现实原型的颜色
-- **Palette：** 调色板，你可以为每层传入不同的颜色以获得**最高自定义性**
-- **PaletteWithId：** 作为调色板的辅助方案，你可以通过 ID 以更好地为各层图标精准着色
+#### 3.2.2. 绘制实现与性能
+**绘制**
 
-#### 3.2.3.动画效果
+UIKitSymbol 对象中的 `onDraw` DSL 接口作用域方法描述了符号的所有路径，在你首次调用 `groups` 属性时会一次性构建所有路径的 `UIKitPath` 实例，并在首次调用 `builtPath` 属性时将 UIKitPath 构建为 `Path`，并在 Canvas 中绘制
+
+**选择**
+
+UIKitSymbol 中的最小单位是 `UIKitSymbolPathGroup`，但存在 `Layer` 用于 DSL 和选择器中以简化 API；你可以用 `UIKitSymbolSelector` 选择到任意一个或多个符合条件的 **组或组衍生物**，Selector 使用 **symbol**, **layer**, **group** 三级定位，在传入 Selector 中若某一级传入 `null` 则表示不在乎这一级，可以找到这一级为 **任意的组**
+> UIKit 中用于匹配组的方法如下
+> ```kotlin
+> fun <V> Map<UIKitSymbolSelector, V>.matchSelector(selector: UIKitSymbolSelector): Map.Entry<UIKitSymbolSelector, V>? {
+>     return this.entries.firstOrNull {
+>         (it.key.symbol == selector.symbol || it.key.symbol == null)
+>             && (it.key.layer == selector.layer || it.key.layer == null)
+>             && (it.key.group == selector.group || it.key.group == null)
+>     }
+> }
+> ```
+> 则形如 `UIKitSymbolSelector(someSymbol, null, "group")` 可以捕获到 `(someSymbol, "layer0", "group")`, `(someSymbol, "layer1", "group")`
+
+UIKitSymbol 的所有组或组衍圣属性使用 Key 为 UIKitSymbolSelector 的 `Map` 存储，故在 **确定 Map** 中的 **指定组或组衍生物** 获取使用 Key 一次获取以减少遍历搜寻的性能损耗
+
+**懒加载**
+
+UIKitSymbols 中的符号采用 `懒加载`，符号对象在被调用时才会创建，符号中的各种构建也懒构建并缓存
+
+在 Symbols 中，我提供了 `UIKitSymbolPool` 作为符号的缓存池，调用的符号会 **缓存在池中**，在同一个池中重复调用同一个符号无需反复构建
+
+而 `UIKitSymbols` 实际为 UIKitSymbolPool 的一个 **静态实现**，使用它调用的符号会被 **全局缓存**，`UIKitSymbolPool.Default` 等价于 `UIKitSymbols`
+
+在实际使用中，倘若你需要调用 `UIKitSymbols.entries.forEach` 等 `迭代器函数`，它会要求你传入一个池，此时你可以创建一个新的池供给迭代，以免迭代中全局激活符号而占用过多的内存空间
+> [!IMPORTANT]
+> 你应该在 **局部作用域内** 使用你创建的池，若将池或池中的符号赋值给长生命周期的作用域可能会导致 **池与符号无法被正常回收** 而占用内存空间
+> - 若泄漏整个 UIKitSymbolPool 实例，**池以及池中的所有符号** 无法被正常回收
+> - 所泄漏池中的某个符号，则 **该符号** 无法被正常回收
+
+#### 3.2.3.着色模式
+`symbolStyle` 参数是 UIKitIcon 的一个重要参数，它决定了符号的 **着色模式**，UIKit Symbols 提供了以下四种着色模式及一个辅助着色模式
+- **Monochrome：** 单色着色，可传入一个画刷并整体使用
+- **Hierarchical：** 分层着色，可传入一个画刷并整体使用，同时内部会对各个层施加不同的透明度，可以为符号 **提高层次感** 或 **区分视觉优先级**
+- **MultiColor：** 多色，使用符号内置的配色，让符号拥有更好的 **语义着色** 或反映符号现实原型的颜色
+- **Palette：** 调色板，你可以为每层传入不同的颜色以获得 **最高自定义性**
+- **PaletteWithId：** 作为调色板的辅助方案，你可以通过 ID 以更好地为各层符号或组精准着色
+
+#### 3.2.4.动画效果
 UIKit Symbols 提供了 `UIKitSymbolEffect` 系统以添加动画，你可以链式调用各个动画 Effect 并传入触发器；UIKitSymbolEffect 主要有两种不同类型
 - **离散:** 通过 `trigger` 触发，每当 trigger 变动时播放一次或多次动画
-  ```kt
+  ```kotlin
   val trigger = remember { mutableStateOf(0) }
   UIKitIcon(
       symbol = UIKitSymbols.shapes.Layer,
@@ -165,8 +201,8 @@ UIKit Symbols 提供了 `UIKitSymbolEffect` 系统以添加动画，你可以链
           .bounceEffect(trigger, repeat = 1)
   )
   ```
-- **无限:** 通过 `isActive` 布尔属性控制，当其为 true 时持续播放周期性动画，部分无限动画提供了离散版本，可以在 trigger 变化时播放一次或多次周期
-  ```kt
+- **无限:** 通过 `isActive` 布尔属性控制，当其为 true 时持续播放周期性动画，部分无限动画提供了离散版本，可以在 trigger 变化时播放一次或多次循环周期
+  ```kotlin
   UIKitIcon(
       symbol = UIKitSymbols.media.Volume,
       contentDescription = "Volume",
@@ -176,49 +212,50 @@ UIKit Symbols 提供了 `UIKitSymbolEffect` 系统以添加动画，你可以链
   )
   ```
   
-在内部，图标通过 `UIKitSymbolAnimTree` 编排动画，可以添加**串、并行**节点并链式调用
+在内部，符号通过 `UIKitSymbolAnimTree` 编排动画，可以添加**串、并行**节点并链式调用
 
 如果你不满足于内置的动画，你可以通过 `customEffect` 传入自定义的 UIKitSymbolAnimTree
 
-#### 3.2.4.自定义符号
-UIKit Symbols 支持自定义，只需要继承 `UIKitSymbol` 抽象基类，即可创建一个自定义符号，我们推荐使用 **对象 (`object`)** 而不是类来作为符号载体
+#### 3.2.5.自定义符号
+UIKit Symbols 支持自定义，只需要继承 `UIKitSymbol` 抽象基类，即可创建一个自定义符号，我们推荐使用 **对象 (`object`)** 而不是类来作为符号载体，因为符号仅负责描述故无需重复创建
 
 你可以创建一个 UIKitSymbol 子对象，并实现 `layers` 属性，在其中使用 DSL 描述符号矢量路径，并实现 `colorSet` 方法定义着色，`abilityStatement` 属性声明能力
-```kt
+```kotlin
 object MySymbol: UIKitSymbol(
     name = "MySymbol",
+    uid = "ext.my_symbol"
     defaultSize = DpSize(20.dp, 20.dp),
     viewportSize = Size(20f, 20f),
 ) {
-  override val layers: List<UIKitSymbolLayer> = listOf(
-      UIKitSymbolLayer("layer0").apply { 
-          group(
-              id = "group0", 
-              drawType = UIKitPathDrawType.Fill
-          ) {
-              moveTo(10f, 2f)
-              curveTo(5.6f, 2f, 2f, 5.6f, 2f, 10f)
-              // ...
-          }
-      }
-  )
+    override fun UIKitSymbolDrawer.onDraw() {
+        addLayer("layer0") {
+            addGroup(
+                id = "group0",
+                drawType = UIKitPathDrawType.Fill
+            ) {
+                moveTo(10f, 2f)
+                curveTo(5.6f, 2f, 2f, 5.6f, 2f, 10f)
+                // ...
+            }
+        }
+    }
 
-  override val abilityStatement: List<UIKitSymbolAbility> = listOf(
-      UIKitSymbolAbility.Appear
-      // ...
-  )
+    override val abilityStatement: List<UIKitSymbolAbility>
+        get() = listOf(
+            // ...
+        )
 
-  @Composable
-  override fun colorSet(
-      style: UIKitSymbolStyle,
-      states: List<Pair<String, UIKitSymbolGroupState>>
-  ): List<UIKitSymbolColor> {
-      // ...
-  }
+    @Composable
+    override fun colorSet(
+        style: UIKitSymbolStyle,
+        states: Map<UIKitSymbolSelector, UIKitSymbolGroupState>
+    ): Map<UIKitSymbolSelector, UIKitSymbolColor> {
+        // ...
+    }
 }
 ```
 
-如果你希望为图标设定动画，你可以覆写 `*Effect` 系列方法以返回一个 UIKitSymbolAnimTree，或返回 `null` 则使此动画不支持（调用时无事发生）
+如果你希望为符号设定动画，你可以覆写 `*Effect` 系列方法以返回一个 UIKitSymbolAnimTree，或返回 `null` 则使此动画不支持（调用时无事发生）
 
 ### 3.3.材质
 在 UIKit 中提供了 `AcrylicMaterial`， 它包含一个背景模糊和边缘高光，可以在 `UIKitAcrylicMaterial` 中配置默认属性
@@ -230,7 +267,7 @@ object MySymbol: UIKitSymbol(
 > 亚克力效果展示图片中的背景图片来自 [Pixabay](https://pixabay.com/zh/photos/beach-cliff-bay-sea-ocean-418742/)（[使用许可](https://pixabay.com/service/license-summary/)）
 
 要使用亚克力材质，应该先使用 `rememberAcrylicMaterialState` 创建一个 State，然后设置 Source 并为容器添加材质
-```kt
+```kotlin
 Box {
     val state = rememberAcrylicMaterialState()
 
@@ -252,7 +289,7 @@ Box {
 
 > [!IMPORTANT]
 > 绝对不能在 AcrylicMaterialSource 的子级使用同一个 State 的 AcrylicMaterial，即一个 AcrylicMaterial 的 Source 不能是自己，否则会导致程序崩溃：
-> ```kt
+> ```kotlin
 > Box {
 >    val state = rememberAcrylicMaterialState()
 >
@@ -283,7 +320,7 @@ Box {
 我是来自中国的一名高中生，一名科技爱好者，编程爱好者，独立学习并开发软件，爱好二次元、动漫；我在今年（2026年）5月份时初识了 Kotlin 这门语言和 Compose Multiplatform 框架，并喜欢上了这种声明式 UI 框架，从此开始深入学习和使用此语言和框架，并于同年7月初中学业水平考试结束后开始投入到 UIKit 的开发
 
 ### 5.1.联系我
-- MillenTec@outlook.com
+- [MillenTec@outlook.com](mailto:MillenTec@outlook.com)
 - [GitHub](https://github.com/MillenTec)
 - [Gitee](https://gitee.com/MillenTec)
 - [bilibili](https://space.bilibili.com/3546591566760474)

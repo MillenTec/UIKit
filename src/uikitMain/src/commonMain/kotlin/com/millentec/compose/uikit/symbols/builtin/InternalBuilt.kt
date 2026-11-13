@@ -53,9 +53,9 @@ internal fun UIKitSymbol.UIKitSymbolColorSet(
                 }.toMap()
             }
 
-            is UIKitSymbolStyle.PaletteWithId -> style.brushes.map {
+            is UIKitSymbolStyle.PaletteWithId -> style.brushes.associate {
                 Pair(it.first, UIKitSymbolColor(it.second, 1f))
-            }.toMap()
+            }
         }
     }
 
