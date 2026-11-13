@@ -21,7 +21,7 @@ fun CommonSlider(
     state: MutableState<Float>,
     iconStart: @Composable BoxScope.() -> Unit = {},
     iconEnd: @Composable BoxScope.() -> Unit = {},
-    maxValue: Float = 1f,
+    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
 ) {
     val uikitTheme = getUIKitTheme()
     val isAnimatedChange = remember { mutableStateOf(false) }
@@ -71,7 +71,7 @@ fun CommonSlider(
             modifier = Modifier
                 .weight(1f),
             value = value.value,
-            maxValue = maxValue,
+            valueRange = valueRange,
             onValueChange = { v, type ->
                 isAnimatedChange.value = type != UIKitSliderChangeType.ThumbDrag
                 value.value = v

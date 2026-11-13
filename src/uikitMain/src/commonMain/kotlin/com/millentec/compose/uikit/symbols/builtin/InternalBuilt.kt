@@ -12,40 +12,6 @@ import com.millentec.compose.uikit.symbols.draw.UIKitSymbolSelector
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.getUIKitColors
 
-//internal fun UIKitSymbolDisable(zIndex: Int = 1): UIKitSymbolLayer {
-//    return UIKitSymbolLayer("disable", zIndex).apply {
-//        group(
-//            id = "disable.mask",
-//            drawType = UIKitPathDrawType.MaskStroke(
-//                lineWidth = 3f,
-//                cap = StrokeCap.Round,
-//                join = StrokeJoin.Round
-//            ),
-//            defaultState = UIKitSymbolGroupState(
-//                pathTrimEnd = 0f
-//            )
-//        ) {
-//            moveTo(2.5f, 2.5f)
-//            lineTo(17.5f, 17.5f)
-//        }
-//
-//        group(
-//            id = "disable",
-//            drawType = UIKitPathDrawType.Stroke(
-//                lineWidth = 1f,
-//                cap = StrokeCap.Round,
-//                join = StrokeJoin.Round
-//            ),
-//            defaultState = UIKitSymbolGroupState(
-//                pathTrimEnd = 0f
-//            )
-//        ) {
-//            moveTo(2.5f, 2.5f)
-//            lineTo(17.5f, 17.5f)
-//        }
-//    }
-//}
-
 @Composable
 internal fun UIKitSymbol.UIKitSymbolColorSet(
     style: UIKitSymbolStyle,

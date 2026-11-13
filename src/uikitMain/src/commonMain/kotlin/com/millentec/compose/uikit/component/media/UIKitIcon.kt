@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.graphics.UIKitAnimateBrush
 import com.millentec.compose.uikit.foundation.graphics.UIKitBrush
+import com.millentec.compose.uikit.foundation.helper.matchSelector
 import com.millentec.compose.uikit.symbols.*
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimState
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffect
@@ -129,13 +130,13 @@ private fun UIKitAnimatableIcon(
             coroutineScope {
                 colorsAnimated.forEach { color ->
                     launch {
-                        color.value.snapTo(colorSet[color.key]?.brush ?: color.value.value)
+                        color.value.snapTo(colorSet.matchSelector(color.key)?.value?.brush ?: color.value.value)
                     }
                 }
 
                 alphasAnimated.forEach { alpha ->
                     launch {
-                        alpha.value.snapTo(colorSet[alpha.key]?.alpha ?: alpha.value.value)
+                        alpha.value.snapTo(colorSet.matchSelector(alpha.key)?.value?.alpha ?: alpha.value.value)
                     }
                 }
             }
@@ -145,10 +146,12 @@ private fun UIKitAnimatableIcon(
     }
 
     LaunchedEffect(colorSet) {
+        if (symbolStyle != cacheSymbolStyle.value) return@LaunchedEffect
+
         coroutineScope {
             colorsAnimated.forEach { color ->
                 launch {
-                    val colorCurrent = colorSet[color.key]?.brush ?: color.value.value
+                    val colorCurrent = colorSet.matchSelector(color.key)?.value?.brush ?: color.value.value
 
                     if (colorCurrent != color.value.value) {
                         color.value.animateTo(
@@ -162,7 +165,7 @@ private fun UIKitAnimatableIcon(
 
             alphasAnimated.forEach { alpha ->
                 launch {
-                    val alphaCurrent = colorSet[alpha.key]?.alpha ?: alpha.value.value
+                    val alphaCurrent = colorSet.matchSelector(alpha.key)?.value?.alpha ?: alpha.value.value
 
                     if (alphaCurrent != alpha.value.value) {
                         alpha.value.animateTo(
@@ -253,16 +256,8 @@ private fun UIKitAnimatableIcon(
             }
 
             symbol.groupsOrdered.forEach { group ->
-                val brush = colorsAnimated.entries.firstOrNull {
-                    (it.key.symbol == group.first.symbol || it.key.symbol == null)
-                            && (it.key.layer == group.first.layer || it.key.layer == null)
-                            && (it.key.group == group.first.group || it.key.group == null)
-                }?.value?.value ?: UIKitBrush.solid(Color.Transparent)
-                val alpha = alphasAnimated.entries.firstOrNull {
-                    (it.key.symbol == group.first.symbol || it.key.symbol == null)
-                            && (it.key.layer == group.first.layer || it.key.layer == null)
-                            && (it.key.group == group.first.group || it.key.group == null)
-                }?.value?.value ?: 0f
+                val brush = colorsAnimated.matchSelector(group.first)?.value?.value ?: UIKitBrush.solid(Color.Transparent)
+                val alpha = alphasAnimated.matchSelector(group.first)?.value?.value ?: 0f
 
                 val animateState = animStates[group.first]
                 val path = builtPaths.value[group.first] ?: Path()
@@ -463,16 +458,8 @@ private fun UIKitStaticIcon(
             }
 
             symbol.groupsOrdered.forEach { group ->
-                val brush = colorSet.entries.firstOrNull {
-                    (it.key.symbol == group.first.symbol || it.key.symbol == null)
-                            && (it.key.layer == group.first.layer || it.key.layer == null)
-                            && (it.key.group == group.first.group || it.key.group == null)
-                }?.value?.brush ?: UIKitBrush.solid(Color.Transparent)
-                val alpha = colorSet.entries.firstOrNull {
-                    (it.key.symbol == group.first.symbol || it.key.symbol == null)
-                            && (it.key.layer == group.first.layer || it.key.layer == null)
-                            && (it.key.group == group.first.group || it.key.group == null)
-                }?.value?.alpha ?: 0f
+                val brush = colorSet.matchSelector(group.first)?.value?.brush ?: UIKitBrush.solid(Color.Transparent)
+                val alpha = colorSet.matchSelector(group.first)?.value?.alpha ?: 0f
 
                 val path = builtPaths.value[group.first] ?: Path()
                 val isRender = group.second.defaultState.visible && weight > 0f
@@ -501,7 +488,7 @@ private fun UIKitStaticIcon(
                                 drawPath(
                                     path = path,
                                     brush = brushScaled.asComposeBrush(),
-                                    alpha = alpha * group.second.defaultState.alpha,
+                                    alpha = alpha * group.second.defaultState.alpha * group.second.defaultState.alphaAddition,
                                     style = Fill
                                 )
                             }
@@ -526,7 +513,7 @@ private fun UIKitStaticIcon(
                                 drawPath(
                                     path = trimmedPath,
                                     brush = brushScaled.asComposeBrush(),
-                                    alpha = alpha * group.second.defaultState.alpha,
+                                    alpha = alpha * group.second.defaultState.alpha * group.second.defaultState.alphaAddition,
                                     style = Stroke(
                                         width = drawType.lineWidth * weight,
                                         cap = drawType.cap,
@@ -539,7 +526,7 @@ private fun UIKitStaticIcon(
                                 drawPath(
                                     path = path,
                                     color = Color.Transparent,
-                                    alpha = alpha * group.second.defaultState.alpha,
+                                    alpha = alpha * group.second.defaultState.alpha * group.second.defaultState.alphaAddition,
                                     style = Fill,
                                     blendMode = BlendMode.DstIn
                                 )
@@ -574,7 +561,7 @@ private fun UIKitStaticIcon(
                                 drawPath(
                                     path = trimmedPath,
                                     color = Color.Transparent,
-                                    alpha = alpha * group.second.defaultState.alpha,
+                                    alpha = alpha * group.second.defaultState.alpha * group.second.defaultState.alphaAddition,
                                     style = Stroke(
                                         width = drawType.lineWidth * weight,
                                         cap = drawType.cap,
@@ -618,6 +605,44 @@ private fun UIKitImageVectorIcon(
         tint = tint,
     )
 }
+
+/**
+ * @param symbolStyle 图标的着色模式
+ * @param symbolEffect 图标动态效果, 传入 null 则无动态效果, 按图标的默认配置渲染
+ * @param weight 字重, 倍数值, 默认为 1f; 仅在声明支持 VariableWeight 的图标中生效
+ */
+data class UIKitIconOptions(
+    val symbolStyle: UIKitSymbolStyle,
+    val symbolEffect: UIKitSymbolEffect?,
+    val weight: Float,
+) {
+    companion object {
+        /**
+         * @param symbolStyle 图标的着色模式
+         * @param symbolEffect 图标动态效果, 传入 null 则无动态效果, 按图标的默认配置渲染
+         * @param weight 字重, 倍数值, 默认为 1f; 仅在声明支持 VariableWeight 的图标中生效
+         */
+        @Composable
+        fun default(
+            symbolStyle: UIKitSymbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush),
+            symbolEffect: UIKitSymbolEffect? = null,
+            weight: Float = 1f,
+        ): UIKitIconOptions {
+            return UIKitIconOptions(symbolStyle, symbolEffect, weight)
+        }
+    }
+}
+
+@Composable
+fun UIKitIcon(
+    modifier: Modifier = Modifier,
+    symbol: UIKitSymbol,
+    contentDescription: String?,
+    options: UIKitIconOptions = UIKitIconOptions.default()
+) = UIKitIcon(
+    modifier, symbol, contentDescription,
+    options.symbolStyle, options.symbolEffect, options.weight
+)
 
 /**
  * 用于渲染 UIKitSymbol 的可组合项

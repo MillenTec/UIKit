@@ -90,17 +90,17 @@ val UIKitSystemUISymbols.Bluetooth: UIKitSymbol
                 return UIKitSymbolColorSet(
                     style = style,
                     layerInfo = mapOf(
-                        Pair(UIKitSymbolSelector(this, "bluetooth", null), 1f),
-                        Pair(UIKitSymbolSelector(this, "bluetooth_back", null), 1f)
+                        Pair(UIKitSymbolSelector(null, "bluetooth", null), 1f),
+                        Pair(UIKitSymbolSelector(null, "bluetooth_back", null), 1f)
                     ),
                     multiColor = mapOf(
                         Pair(
-                            UIKitSymbolSelector(this, "bluetooth", null),
-                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush), 1f)
+                            UIKitSymbolSelector(null, "bluetooth", null),
+                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 1f)
                         ),
                         Pair(
-                            UIKitSymbolSelector(this, "bluetooth_back", null),
-                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush), 1f)
+                            UIKitSymbolSelector(null, "bluetooth_back", null),
+                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 1f)
                         )
                     )
                 )

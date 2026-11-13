@@ -6,7 +6,11 @@ object UIKitSymbols: UIKitSymbolPool() {
     }
 }
 
-class UIKitSystemUISymbols internal constructor()
+class UIKitSystemUISymbols internal constructor() {
+    val filled = UIKitSystemUIFilledSymbols()
+
+    class UIKitSystemUIFilledSymbols internal constructor()
+}
 
 class UIKitMediaSymbols internal constructor() {
     val filled = UIKitMediaFilledSymbols()
@@ -27,3 +31,5 @@ class UIKitLanguageSymbols internal constructor()
 class UIKitArrowSymbols internal constructor()
 
 class UIKitAcademicSymbols internal constructor()
+
+class UIKitObjectsSymbols internal constructor()

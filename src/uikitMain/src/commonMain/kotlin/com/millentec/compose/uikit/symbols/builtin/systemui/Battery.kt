@@ -1,5 +1,8 @@
 package com.millentec.compose.uikit.symbols.builtin.systemui
 
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.DpSize
@@ -14,6 +17,7 @@ import com.millentec.compose.uikit.symbols.animate.UIKitSymbolAnimTree
 import com.millentec.compose.uikit.symbols.animate.UIKitSymbolGroupState
 import com.millentec.compose.uikit.symbols.builtin.UIKitSymbolColorSet
 import com.millentec.compose.uikit.symbols.draw.*
+import com.millentec.compose.uikit.theme.UIKitAnimate
 import com.millentec.compose.uikit.theme.getUIKitColors
 import kotlin.math.abs
 
@@ -105,6 +109,7 @@ val UIKitSystemUISymbols.Battery: UIKitSymbol
                 get() = listOf(
                     UIKitSymbolAbility.Appear,
                     UIKitSymbolAbility.Disappear,
+                    UIKitSymbolAbility.Bounce,
                     UIKitSymbolAbility.Progressable
                 )
 
@@ -169,7 +174,19 @@ val UIKitSystemUISymbols.Battery: UIKitSymbol
             override fun bounceEffect(
                 states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>?,
                 coefficient: Float
-            ): UIKitSymbolAnimTree? = null
+            ): UIKitSymbolAnimTree? {
+                val currentTranslate = states?.get(UIKitSymbolSelector(this, "battery_remain", "remain"))?.translateXState?.value ?: return null
+
+                return UIKitSymbolAnimTree()
+                    .addParallel(UIKitSymbolAnimNode.translateXTo(
+                        selector = UIKitSymbolSelector(this, "battery_remain", "remain"),
+                        targetValue = 0f,
+                        animateSpec = tween(150, easing = FastOutLinearInEasing)))
+                    .addSequential(UIKitSymbolAnimNode.translateXTo(
+                        selector = UIKitSymbolSelector(this, "battery_remain", "remain"),
+                        targetValue = currentTranslate,
+                        animateSpec = spring(UIKitAnimate().standardSpringDampingRatio, UIKitAnimate().standardSpringStiffness)))
+            }
         }
 
         return _Battery!!

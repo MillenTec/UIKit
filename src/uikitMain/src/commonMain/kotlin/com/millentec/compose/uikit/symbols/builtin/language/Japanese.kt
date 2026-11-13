@@ -89,7 +89,7 @@ val UIKitLanguageSymbols.Japanese: UIKitSymbol
                     multiColor = mapOf(
                         Pair(
                             UIKitSymbolSelector(this, "text_a", null),
-                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush), 1f)
+                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 1f)
                         )
                     )
                 )

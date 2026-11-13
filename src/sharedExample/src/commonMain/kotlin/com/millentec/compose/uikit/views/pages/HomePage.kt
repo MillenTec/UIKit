@@ -5,25 +5,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.additionsymbols.GitHubSymbol
-import com.millentec.compose.uikit.component.input.UIKitButton
-import com.millentec.compose.uikit.component.input.UIKitSlider
-import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
-import com.millentec.compose.uikit.component.media.UIKitIcon
-import com.millentec.compose.uikit.symbols.UIKitEmptySymbol
-import com.millentec.compose.uikit.symbols.UIKitSymbolPool
-import com.millentec.compose.uikit.symbols.UIKitSymbols
-import com.millentec.compose.uikit.symbols.animate.*
-import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
-import com.millentec.compose.uikit.symbols.entries
 import com.millentec.compose.uikit.theme.LocalStrings
 import com.millentec.compose.uikit.theme.getUIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
@@ -86,64 +73,6 @@ fun HomePage() {
                     }
                 )
             }
-        }
-
-        item {
-            val isActive0 = remember { mutableStateOf(false) }
-            val visible = remember { mutableStateOf(true) }
-            val bounceTigger = remember { mutableStateOf(false) }
-            val weight = remember { mutableStateOf(1f) }
-            val progress = remember { mutableStateOf(1f) }
-
-            UIKitIcon(
-                modifier = Modifier
-                    .size(100.dp),
-                symbol = UIKitSymbols.entries.firstOrNull(UIKitSymbolPool.Default) { key, _ -> key == "ic.sys.globe" } ?: UIKitEmptySymbol,
-                symbolStyle = UIKitSymbolStyle.MultiColor,
-                symbolEffect = UIKitSymbolEffect()
-                    .bounceEffect(bounceTigger.value)
-                    .visibleEffect(visible.value)
-                    .variableColorEffect(isActive0.value)
-                    .progressibleEffect(progress.value),
-                contentDescription = null,
-                weight = weight.value,
-            )
-
-            Row {
-                UIKitToggleSwitch(
-                    checked = isActive0.value,
-                    onCheckedChange = {
-                        isActive0.value = !isActive0.value
-                    }
-                )
-
-                UIKitToggleSwitch(
-                    checked = visible.value,
-                    onCheckedChange = {
-                        visible.value = !visible.value
-                    }
-                )
-
-                UIKitButton("Bounce", onClick = {
-                    bounceTigger.value = !bounceTigger.value
-                })
-            }
-
-            UIKitSlider(
-                value = weight.value,
-                onValueChange = {
-                    weight.value = it
-                },
-                valueRange = 0f..2f
-            )
-
-            UIKitSlider(
-                value = progress.value,
-                onValueChange = {
-                    progress.value = it
-                },
-                valueRange = 0f..1f
-            )
         }
     }
 }
