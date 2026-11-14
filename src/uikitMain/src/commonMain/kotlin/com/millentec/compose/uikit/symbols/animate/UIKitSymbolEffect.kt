@@ -461,6 +461,60 @@ fun UIKitSymbolEffect.pulseEffect(
     return this
 }
 
+@Composable
+fun UIKitSymbolEffect.rotateEffect(
+    trigger: Any,
+    repeat: Int = 1
+): UIKitSymbolEffect {
+    val uuid = remember { Uuid.random().toString() }
+
+    this.addEffect(UIKitSymbolEffectNode.UIKitDiscreteEffectNode(
+        uuid = uuid,
+        triggerCurrent = trigger,
+        repeat = repeat,
+        initializable = false,
+        initialize = null,
+        execute = { symbol, states ->
+            val tree = symbol.rotateEffect(states)
+
+            tree?.let {
+                standardExecute(it, states)
+            }
+        }
+    ))
+
+    return this
+}
+
+@Composable
+fun UIKitSymbolEffect.rotateEffect(
+    angle: Float
+): UIKitSymbolEffect {
+    val uuid = remember { Uuid.random().toString() }
+    this.addEffect(UIKitSymbolEffectNode.UIKitDiscreteEffectNode(
+        uuid = uuid,
+        triggerCurrent = angle,
+        repeat = 1,
+        initializable = true,
+        initialize = { symbol, states ->
+            val progressibleTree = symbol.rotateEffect(angle, states)
+
+            progressibleTree?.let {
+                standardExecute(it, states, true)
+            }
+        },
+        execute = { symbol, states ->
+            val progressibleTree = symbol.rotateEffect(angle, states)
+
+            progressibleTree?.let {
+                standardExecute(it, states)
+            }
+        }
+    ))
+
+    return this
+}
+
 fun UIKitSymbolEffect.then(effect: UIKitSymbolEffect): UIKitSymbolEffect {
     this.addEffects(effect)
     return this

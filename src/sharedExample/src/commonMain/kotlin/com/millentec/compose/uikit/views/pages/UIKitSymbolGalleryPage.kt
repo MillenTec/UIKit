@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -43,7 +44,7 @@ import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.navigation.UIKitNavigationAnimate
 import com.millentec.compose.uikit.symbols.*
 import com.millentec.compose.uikit.symbols.animate.*
-import com.millentec.compose.uikit.symbols.builtin.arrow.ArrowCircleDown
+import com.millentec.compose.uikit.symbols.builtin.arrow.ArrowCircle
 import com.millentec.compose.uikit.symbols.builtin.graphic.Flash
 import com.millentec.compose.uikit.symbols.builtin.graphic.Shapes
 import com.millentec.compose.uikit.symbols.builtin.media.Play
@@ -91,6 +92,7 @@ fun UIKitSymbolsGalleryPage(
     symbols: UIKitSymbolSet,
     title: String,
 ) {
+    val lazyGridState = rememberLazyGridState()
     val symbolPool = remember { UIKitSymbolPool() }
     val uikitTheme by rememberUpdatedState(getUIKitTheme())
     val acrylicMaterialState = rememberAcrylicMaterialState()
@@ -182,7 +184,8 @@ fun UIKitSymbolsGalleryPage(
                                     .bounceEffect(symbolConfig.bounceTrigger.value)
                                     .variableColorEffect(symbolConfig.variableColorActive.value)
                                     .pulseEffect(symbolConfig.pulseActive.value)
-                                    .progressibleEffect(symbolConfig.progress.value),
+                                    .progressibleEffect(symbolConfig.progress.value)
+                                    .rotateEffect(symbolConfig.rotateAngle.value),
                                 weight = symbolConfig.weight.value
                             )
                         }
@@ -266,6 +269,7 @@ fun UIKitSymbolsGalleryPage(
                                         getUIKitLayout().screenSideSpacing
                                     )
                                 ) + WindowInsets.safeDrawing.asPaddingValues(LocalDensity.current),
+                                state = lazyGridState,
                                 columns = GridCells.Adaptive(128.dp)
                             ) {
                                 item(span = { GridItemSpan(maxLineSpan) }) {
@@ -387,7 +391,7 @@ fun UIKitSymbolsGalleryPage(
                 ) {
                     if (selectedSymbol.value != null) {
                         selectedSymbol.value?.let { symbol ->
-                            SymbolOptions(
+                            symbolOptions(
                                 commonConfig = commonConfig,
                                 symbol = symbol,
                                 config = symbolConfig
@@ -638,13 +642,15 @@ private fun LazyListScope.CommonOptions(
 private class SymbolConfig {
     val visible = mutableStateOf(true)
     val bounceTrigger = mutableStateOf(false)
+    val rotateTrigger = mutableStateOf(false)
     val variableColorActive = mutableStateOf(false)
     val pulseActive = mutableStateOf(false)
     val progress = mutableStateOf(1f)
     val weight = mutableStateOf(1f)
+    val rotateAngle = mutableStateOf(0f)
 }
 
-private fun LazyListScope.SymbolOptions(
+private fun LazyListScope.symbolOptions(
     commonConfig: CommonConfig,
     symbol: UIKitSymbol,
     config: SymbolConfig
@@ -740,7 +746,7 @@ private fun LazyListScope.SymbolOptions(
                             UIKitIcon(
                                 modifier = Modifier
                                     .size(getUIKitTypography().body.lineHeight.value.dp),
-                                symbol = UIKitSymbols.arrow.ArrowCircleDown,
+                                symbol = UIKitSymbols.arrow.ArrowCircle,
                                 symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().textFillColorPrimaryBrush),
                                 contentDescription = "Low Progress",
                                 symbolEffect = UIKitSymbolEffect()
@@ -751,11 +757,53 @@ private fun LazyListScope.SymbolOptions(
                             UIKitIcon(
                                 modifier = Modifier
                                     .size(getUIKitTypography().body.lineHeight.value.dp),
-                                symbol = UIKitSymbols.arrow.ArrowCircleDown,
+                                symbol = UIKitSymbols.arrow.ArrowCircle,
                                 symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().textFillColorPrimaryBrush),
                                 contentDescription = "Height Progress",
                                 symbolEffect = UIKitSymbolEffect()
                                     .progressibleEffect(1f)
+                            )
+                        }
+                    )
+                }
+            }
+            if (symbol.abilityStatement?.any { it is UIKitSymbolAbility.DiscreteRotatable } == true) {
+                Divider()
+                SettingCard(
+                    title = "Rotate",
+                    symbol = UIKitSymbols.graphic.Flash,
+                    onClick = {
+                        config.rotateTrigger.value = !config.rotateTrigger.value
+                    },
+                    actionSymbol = UIKitSymbols.media.Play
+                )
+            }
+            if (symbol.abilityStatement?.any { it is UIKitSymbolAbility.Rotatable } == true) {
+                Divider()
+                Item {
+                    CommonSlider(
+                        state = config.rotateAngle,
+                        valueRange = 0f..360f,
+                        iconStart = {
+                            UIKitIcon(
+                                modifier = Modifier
+                                    .size(getUIKitTypography().body.lineHeight.value.dp),
+                                symbol = UIKitSymbols.arrow.ArrowCircle,
+                                symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().textFillColorPrimaryBrush),
+                                contentDescription = "Angle 0",
+                                symbolEffect = UIKitSymbolEffect()
+                                    .rotateEffect(0f)
+                            )
+                        },
+                        iconEnd = {
+                            UIKitIcon(
+                                modifier = Modifier
+                                    .size(getUIKitTypography().body.lineHeight.value.dp),
+                                symbol = UIKitSymbols.arrow.ArrowCircle,
+                                symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().textFillColorPrimaryBrush),
+                                contentDescription = "Angle 135",
+                                symbolEffect = UIKitSymbolEffect()
+                                    .rotateEffect(135f)
                             )
                         }
                     )
@@ -831,7 +879,8 @@ private fun SymbolView(
                     .bounceEffect(symbolConfig.bounceTrigger.value)
                     .variableColorEffect(symbolConfig.variableColorActive.value)
                     .pulseEffect(symbolConfig.pulseActive.value)
-                    .progressibleEffect(symbolConfig.progress.value),
+                    .progressibleEffect(symbolConfig.progress.value)
+                    .rotateEffect(symbolConfig.rotateAngle.value),
                 weight = symbolConfig.weight.value
             )
         }
@@ -845,7 +894,7 @@ private fun SymbolView(
                 bottom = paddingValues.calculateBottomPadding()
             )
         ) {
-            SymbolOptions(
+            symbolOptions(
                 commonConfig = commonConfig,
                 symbol = symbol,
                 config = symbolConfig

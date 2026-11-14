@@ -28,6 +28,8 @@ sealed class UIKitSymbolAbility {
     object VariableColor: UIKitSymbolAbility()
     object Progressable: UIKitSymbolAbility()
     object Pulse: UIKitSymbolAbility()
+    object Rotatable: UIKitSymbolAbility()
+    object DiscreteRotatable: UIKitSymbolAbility()
 }
 
 /**
@@ -364,6 +366,15 @@ abstract class UIKitSymbol(
 
     open fun progressibleEffect(
         progress: Float,
+        states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>? = null,
+    ): UIKitSymbolAnimTree? = null
+
+    open fun rotateEffect(
+        states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>? = null
+    ): UIKitSymbolAnimTree? = null
+
+    open fun rotateEffect(
+        angle: Float,
         states: Map<UIKitSymbolSelector, UIKitSymbolAnimState>? = null,
     ): UIKitSymbolAnimTree? = null
 }

@@ -33,3 +33,5 @@ class UIKitArrowSymbols internal constructor()
 class UIKitAcademicSymbols internal constructor()
 
 class UIKitObjectsSymbols internal constructor()
+
+class UIKitTypographySymbols internal constructor()

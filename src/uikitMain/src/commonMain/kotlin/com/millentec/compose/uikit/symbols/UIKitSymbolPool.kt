@@ -20,6 +20,7 @@ open class UIKitSymbolPool {
     val arrow = UIKitArrowSymbols()
     val academic = UIKitAcademicSymbols()
     val objects = UIKitObjectsSymbols()
+    val typography = UIKitTypographySymbols()
 
     companion object {
         val Default: UIKitSymbolPool

@@ -30,6 +30,7 @@ import com.millentec.compose.uikit.symbols.animate.UIKitSymbolEffectNode
 import com.millentec.compose.uikit.symbols.animate.visibleEffect
 import com.millentec.compose.uikit.symbols.builtin.systemui.Bluetooth
 import com.millentec.compose.uikit.symbols.draw.UIKitPathDrawType
+import com.millentec.compose.uikit.symbols.draw.UIKitPathNode
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.getUIKitColors
 import kotlinx.coroutines.coroutineScope
@@ -256,7 +257,8 @@ private fun UIKitAnimatableIcon(
             }
 
             symbol.groupsOrdered.forEach { group ->
-                val brush = colorsAnimated.matchSelector(group.first)?.value?.value ?: UIKitBrush.solid(Color.Transparent)
+                val brush =
+                    colorsAnimated.matchSelector(group.first)?.value?.value ?: UIKitBrush.solid(Color.Transparent)
                 val alpha = alphasAnimated.matchSelector(group.first)?.value?.value ?: 0f
 
                 val animateState = animStates[group.first]
@@ -290,17 +292,18 @@ private fun UIKitAnimatableIcon(
                                 y = animateState.scaleAdditionCenterY.value
                             )
                         ) {
-                            translate(
-                                left = animateState.translateXState.value,
-                                top = animateState.translateYState.value,
+                            rotate(
+                                degrees = animateState.rotateState.value,
+                                pivot = Offset(
+                                    x = animateState.rotateCenterXState.value,
+                                    y = animateState.rotateCenterYState.value
+                                )
                             ) {
-                                rotate(
-                                    degrees = animateState.rotateState.value,
-                                    pivot = Offset(
-                                        x = animateState.rotateCenterXState.value,
-                                        y = animateState.rotateCenterYState.value
-                                    )
+                                translate(
+                                    left = animateState.translateXState.value,
+                                    top = animateState.translateYState.value,
                                 ) {
+
                                     when (val drawType = group.second.drawType) {
                                         UIKitPathDrawType.Fill -> {
                                             drawPath(
@@ -312,32 +315,45 @@ private fun UIKitAnimatableIcon(
                                         }
 
                                         is UIKitPathDrawType.Stroke -> {
-                                            val pathMeasure = PathMeasure()
-                                            pathMeasure.setPath(
-                                                path = path,
-                                                forceClosed = false
-                                            )
-
-                                            val length = pathMeasure.length
-
-                                            val trimmedPath = Path()
-                                            pathMeasure.getSegment(
-                                                animateState.pathTrimStartState.value * length,
-                                                animateState.pathTrimEndState.value * length,
-                                                trimmedPath,
-                                                true
-                                            )
-
-                                            drawPath(
-                                                path = trimmedPath,
-                                                brush = brushScaled.asComposeBrush(),
-                                                alpha = alpha * animateState.alphaState.value * animateState.alphaAdditionState.value,
-                                                style = Stroke(
-                                                    width = drawType.lineWidth * weight,
-                                                    cap = drawType.cap,
-                                                    join = drawType.join,
+                                            if (group.second.path.nodes.count { it is UIKitPathNode.MoveTo} >= 2) {
+                                                drawPath(
+                                                    path = path,
+                                                    brush = brushScaled.asComposeBrush(),
+                                                    alpha = alpha * animateState.alphaState.value * animateState.alphaAdditionState.value,
+                                                    style = Stroke(
+                                                        width = drawType.lineWidth * weight,
+                                                        cap = drawType.cap,
+                                                        join = drawType.join,
+                                                    )
                                                 )
-                                            )
+                                            } else {
+                                                val pathMeasure = PathMeasure()
+                                                pathMeasure.setPath(
+                                                    path = path,
+                                                    forceClosed = false
+                                                )
+
+                                                val length = pathMeasure.length
+
+                                                val trimmedPath = Path()
+                                                pathMeasure.getSegment(
+                                                    animateState.pathTrimStartState.value * length,
+                                                    animateState.pathTrimEndState.value * length,
+                                                    trimmedPath,
+                                                    true
+                                                )
+
+                                                drawPath(
+                                                    path = trimmedPath,
+                                                    brush = brushScaled.asComposeBrush(),
+                                                    alpha = alpha * animateState.alphaState.value * animateState.alphaAdditionState.value,
+                                                    style = Stroke(
+                                                        width = drawType.lineWidth * weight,
+                                                        cap = drawType.cap,
+                                                        join = drawType.join,
+                                                    )
+                                                )
+                                            }
                                         }
 
                                         UIKitPathDrawType.MaskFilled -> {
@@ -360,6 +376,58 @@ private fun UIKitAnimatableIcon(
                                         }
 
                                         is UIKitPathDrawType.MaskStroke -> {
+                                            if (group.second.path.nodes.count { it is UIKitPathNode.MoveTo} >= 2) {
+                                                drawPath(
+                                                    path = path,
+                                                    brush = brushScaled.asComposeBrush(),
+                                                    alpha = alpha * animateState.alphaState.value * animateState.alphaAdditionState.value,
+                                                    style = Stroke(
+                                                        width = drawType.lineWidth * weight,
+                                                        cap = drawType.cap,
+                                                        join = drawType.join,
+                                                    )
+                                                )
+                                            } else {
+                                                val pathMeasure = PathMeasure()
+                                                pathMeasure.setPath(
+                                                    path = path,
+                                                    forceClosed = false
+                                                )
+
+                                                val length = pathMeasure.length
+
+                                                val trimmedPath = Path()
+                                                pathMeasure.getSegment(
+                                                    animateState.pathTrimStartState.value * length,
+                                                    animateState.pathTrimEndState.value * length,
+                                                    trimmedPath,
+                                                    true
+                                                )
+
+                                                drawPath(
+                                                    path = trimmedPath,
+                                                    color = Color.Transparent,
+                                                    alpha = alpha * animateState.alphaState.value * animateState.alphaAdditionState.value,
+                                                    style = Stroke(
+                                                        width = drawType.lineWidth * weight,
+                                                        cap = drawType.cap,
+                                                        join = drawType.join,
+                                                    ),
+                                                    blendMode = BlendMode.DstIn
+                                                )
+                                            }
+
+                                            drawContext.canvas.saveLayer(
+                                                bounds = Rect(
+                                                    Offset.Zero,
+                                                    symbol.viewportSize,
+                                                ),
+                                                paint = Paint()
+                                            )
+                                            saveCount++
+                                        }
+
+                                        is UIKitPathDrawType.Dashed -> {
                                             val pathMeasure = PathMeasure()
                                             pathMeasure.setPath(
                                                 path = path,
@@ -376,26 +444,29 @@ private fun UIKitAnimatableIcon(
                                                 true
                                             )
 
+                                            val trimmedMeasure = PathMeasure().apply { setPath(trimmedPath, false) }
+                                            val trimmedLength = trimmedMeasure.length
+                                            val dash = drawType.dash * weight
+                                            val minGap = drawType.minGap * weight
+                                            val cycle = dash + minGap
+                                            val n = ((trimmedLength + minGap) / cycle).toInt().coerceAtLeast(2)
+                                            val gap = ((trimmedLength - n * dash) / (n - 1)).coerceAtLeast(0f)
+                                            val pathEffect = PathEffect.dashPathEffect(
+                                                intervals = floatArrayOf(dash, gap),
+                                                phase = 0f
+                                            )
+
                                             drawPath(
                                                 path = trimmedPath,
-                                                color = Color.Transparent,
+                                                brush = brushScaled.asComposeBrush(),
                                                 alpha = alpha * animateState.alphaState.value * animateState.alphaAdditionState.value,
                                                 style = Stroke(
                                                     width = drawType.lineWidth * weight,
                                                     cap = drawType.cap,
                                                     join = drawType.join,
-                                                ),
-                                                blendMode = BlendMode.DstIn
+                                                    pathEffect = pathEffect
+                                                )
                                             )
-
-                                            drawContext.canvas.saveLayer(
-                                                bounds = Rect(
-                                                    Offset.Zero,
-                                                    symbol.viewportSize,
-                                                ),
-                                                paint = Paint()
-                                            )
-                                            saveCount++
                                         }
                                     }
                                 }
@@ -420,7 +491,8 @@ private fun UIKitStaticIcon(
     symbolStyle: UIKitSymbolStyle,
     weight: Float
 ) {
-    val defaultStates = remember(symbol) { symbol.groups.map { Pair(it.key, it.value.defaultState) }.toMutableStateMap() }
+    val defaultStates =
+        remember(symbol) { symbol.groups.map { Pair(it.key, it.value.defaultState) }.toMutableStateMap() }
     val colorSet by rememberUpdatedState(symbol.colorSet(symbolStyle, defaultStates))
     val builtPaths = remember(symbol) { mutableStateOf(symbol.builtPaths) }
 
@@ -494,32 +566,45 @@ private fun UIKitStaticIcon(
                             }
 
                             is UIKitPathDrawType.Stroke -> {
-                                val pathMeasure = PathMeasure()
-                                pathMeasure.setPath(
-                                    path = path,
-                                    forceClosed = false
-                                )
-
-                                val length = pathMeasure.length
-
-                                val trimmedPath = Path()
-                                pathMeasure.getSegment(
-                                    group.second.defaultState.pathTrimStart * length,
-                                    group.second.defaultState.pathTrimEnd * length,
-                                    trimmedPath,
-                                    true
-                                )
-
-                                drawPath(
-                                    path = trimmedPath,
-                                    brush = brushScaled.asComposeBrush(),
-                                    alpha = alpha * group.second.defaultState.alpha * group.second.defaultState.alphaAddition,
-                                    style = Stroke(
-                                        width = drawType.lineWidth * weight,
-                                        cap = drawType.cap,
-                                        join = drawType.join,
+                                if (group.second.path.nodes.count { it is UIKitPathNode.MoveTo} >= 2) {
+                                    drawPath(
+                                        path = path,
+                                        brush = brushScaled.asComposeBrush(),
+                                        alpha = alpha * group.second.defaultState.alpha * group.second.defaultState.alphaAddition,
+                                        style = Stroke(
+                                            width = drawType.lineWidth * weight,
+                                            cap = drawType.cap,
+                                            join = drawType.join,
+                                        )
                                     )
-                                )
+                                } else {
+                                    val pathMeasure = PathMeasure()
+                                    pathMeasure.setPath(
+                                        path = path,
+                                        forceClosed = false
+                                    )
+
+                                    val length = pathMeasure.length
+
+                                    val trimmedPath = Path()
+                                    pathMeasure.getSegment(
+                                        group.second.defaultState.pathTrimStart * length,
+                                        group.second.defaultState.pathTrimEnd * length,
+                                        trimmedPath,
+                                        true
+                                    )
+
+                                    drawPath(
+                                        path = trimmedPath,
+                                        brush = brushScaled.asComposeBrush(),
+                                        alpha = alpha * group.second.defaultState.alpha * group.second.defaultState.alphaAddition,
+                                        style = Stroke(
+                                            width = drawType.lineWidth * weight,
+                                            cap = drawType.cap,
+                                            join = drawType.join,
+                                        )
+                                    )
+                                }
                             }
 
                             UIKitPathDrawType.MaskFilled -> {
@@ -542,6 +627,58 @@ private fun UIKitStaticIcon(
                             }
 
                             is UIKitPathDrawType.MaskStroke -> {
+                                if (group.second.path.nodes.count { it is UIKitPathNode.MoveTo} >= 2) {
+                                    drawPath(
+                                        path = path,
+                                        brush = brushScaled.asComposeBrush(),
+                                        alpha = alpha * group.second.defaultState.alpha * group.second.defaultState.alphaAddition,
+                                        style = Stroke(
+                                            width = drawType.lineWidth * weight,
+                                            cap = drawType.cap,
+                                            join = drawType.join,
+                                        )
+                                    )
+                                } else {
+                                    val pathMeasure = PathMeasure()
+                                    pathMeasure.setPath(
+                                        path = path,
+                                        forceClosed = false
+                                    )
+
+                                    val length = pathMeasure.length
+
+                                    val trimmedPath = Path()
+                                    pathMeasure.getSegment(
+                                        group.second.defaultState.pathTrimStart * length,
+                                        group.second.defaultState.pathTrimEnd * length,
+                                        trimmedPath,
+                                        true
+                                    )
+
+                                    drawPath(
+                                        path = trimmedPath,
+                                        color = Color.Transparent,
+                                        alpha = alpha * group.second.defaultState.alpha * group.second.defaultState.alphaAddition,
+                                        style = Stroke(
+                                            width = drawType.lineWidth * weight,
+                                            cap = drawType.cap,
+                                            join = drawType.join,
+                                        ),
+                                        blendMode = BlendMode.DstIn
+                                    )
+                                }
+
+                                drawContext.canvas.saveLayer(
+                                    bounds = Rect(
+                                        Offset.Zero,
+                                        symbol.viewportSize,
+                                    ),
+                                    paint = Paint()
+                                )
+                                saveCount++
+                            }
+
+                            is UIKitPathDrawType.Dashed -> {
                                 val pathMeasure = PathMeasure()
                                 pathMeasure.setPath(
                                     path = path,
@@ -558,26 +695,29 @@ private fun UIKitStaticIcon(
                                     true
                                 )
 
+                                val trimmedMeasure = PathMeasure().apply { setPath(trimmedPath, false) }
+                                val trimmedLength = trimmedMeasure.length
+                                val dash = drawType.dash * weight
+                                val minGap = drawType.minGap * weight
+                                val cycle = dash + minGap
+                                val n = ((trimmedLength + minGap) / cycle).toInt().coerceAtLeast(2)
+                                val gap = ((trimmedLength - n * dash) / (n - 1)).coerceAtLeast(0f)
+                                val pathEffect = PathEffect.dashPathEffect(
+                                    intervals = floatArrayOf(dash, gap),
+                                    phase = 0f
+                                )
+
                                 drawPath(
                                     path = trimmedPath,
-                                    color = Color.Transparent,
+                                    brush = brushScaled.asComposeBrush(),
                                     alpha = alpha * group.second.defaultState.alpha * group.second.defaultState.alphaAddition,
                                     style = Stroke(
                                         width = drawType.lineWidth * weight,
                                         cap = drawType.cap,
                                         join = drawType.join,
-                                    ),
-                                    blendMode = BlendMode.DstIn
+                                        pathEffect = pathEffect
+                                    )
                                 )
-
-                                drawContext.canvas.saveLayer(
-                                    bounds = Rect(
-                                        Offset.Zero,
-                                        symbol.viewportSize,
-                                    ),
-                                    paint = Paint()
-                                )
-                                saveCount++
                             }
                         }
                     }

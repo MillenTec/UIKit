@@ -19,4 +19,12 @@ sealed class UIKitPathDrawType {
         val cap: StrokeCap = StrokeCap.Round,
         val join: StrokeJoin = StrokeJoin.Round
     ): UIKitPathDrawType()
+
+    data class Dashed(
+        val lineWidth: Float,
+        val dash: Float,
+        val minGap: Float,
+        val cap: StrokeCap = StrokeCap.Round,
+        val join: StrokeJoin = StrokeJoin.Round
+    ): UIKitPathDrawType()
 }

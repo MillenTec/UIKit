@@ -32,16 +32,11 @@ val UIKitArrowSymbols.ArrowCircleDown: UIKitSymbol
             override fun UIKitSymbolDrawer.onDraw() {
                 addLayer("arrow_down") {
                     addGroup(
-                        id = "vertical_line",
+                        id = "arrow",
                         drawType = UIKitPathDrawType.Stroke(lineWidth = 1f)
                     ) {
                         moveTo(10f, 6.5f)
                         lineTo(10f, 13.5f)
-                    }
-                    addGroup(
-                        id = "arrow",
-                        drawType = UIKitPathDrawType.Stroke(lineWidth = 1f)
-                    ) {
                         moveTo(13f, 10.5f)
                         lineToRelative(-3f, 3f)
                         lineToRelative(-3f, -3f)
