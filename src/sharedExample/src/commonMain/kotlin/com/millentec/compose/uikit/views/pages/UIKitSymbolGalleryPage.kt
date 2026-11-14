@@ -182,7 +182,8 @@ fun UIKitSymbolsGalleryPage(
                                     .bounceEffect(symbolConfig.bounceTrigger.value)
                                     .variableColorEffect(symbolConfig.variableColorActive.value)
                                     .pulseEffect(symbolConfig.pulseActive.value)
-                                    .progressibleEffect(symbolConfig.progress.value)
+                                    .progressibleEffect(symbolConfig.progress.value),
+                                weight = symbolConfig.weight.value
                             )
                         }
                     } else {

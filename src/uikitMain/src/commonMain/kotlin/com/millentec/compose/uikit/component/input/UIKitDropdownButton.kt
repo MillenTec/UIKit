@@ -33,7 +33,7 @@ private fun Preview() {
     }
 }
 
-data class UIKitDropdownButtonColors(
+data class UIKitDropdownColors(
     val background: Color,
     val backgroundDisabled: Color,
     val content: Color,
@@ -58,8 +58,8 @@ data class UIKitDropdownButtonColors(
             menuDivider: Color = getUIKitColors().lineFillColorPrimaryBrush,
             menuContent: Color = getUIKitColors().textFillColorPrimaryBrush,
             menuBorder: Color = getUIKitColors().lineFillColorPrimaryBrush,
-        ): UIKitDropdownButtonColors {
-            return UIKitDropdownButtonColors(
+        ): UIKitDropdownColors {
+            return UIKitDropdownColors(
                 background = background,
                 backgroundDisabled = backgroundDisabled,
                 content = content,
@@ -76,7 +76,7 @@ data class UIKitDropdownButtonColors(
 }
 
 @Composable
-fun UIKitDropdownButton(
+fun UIKitDropdown(
     modifier: Modifier = Modifier,
     expanded: Boolean,
     cornerRadius: Dp = getUIKitShapes().cardRounded,
@@ -84,7 +84,7 @@ fun UIKitDropdownButton(
     minWidth: Dp = 200.dp,
     offset: DpOffset = DpOffset.Zero,
     onDismissRequest: (() -> Unit)? = null,
-    colors: UIKitDropdownButtonColors = UIKitDropdownButtonColors.default(),
+    colors: UIKitDropdownColors = UIKitDropdownColors.default(),
     appearPosition: Alignment? = null,
     acrylicEffectEnabled: Boolean = false,
     acrylicMaterialState: AcrylicMaterialState? = null,
@@ -93,8 +93,8 @@ fun UIKitDropdownButton(
     ),
     hasBorder: Boolean = !acrylicEffectEnabled,
     borderWidth: Dp = 1.dp,
-    content: @Composable UIKitMenuScope.() -> Unit,
-    clickableContent: @Composable BoxScope.() -> Unit
+    clickableContent: @Composable BoxScope.() -> Unit,
+    content: @Composable UIKitMenuScope.() -> Unit
 ) {
     val uiKitTheme = getUIKitTheme()
 

@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.LocalAcrylicMaterialState
-import com.millentec.compose.uikit.component.input.UIKitDropdownButton
+import com.millentec.compose.uikit.component.input.UIKitDropdown
 import com.millentec.compose.uikit.component.input.UIKitToggleSwitch
 import com.millentec.compose.uikit.component.layout.UIKitGroupedCard
 import com.millentec.compose.uikit.foundation.Pages
@@ -71,7 +71,7 @@ fun SettingsPage() {
                     title = LocalStrings.current.settings.themeSettingTitle,
                     icon = FluentIcons.Color,
                 ) {
-                    UIKitDropdownButton(
+                    UIKitDropdown(
                         onDismissRequest = {
                             themeOptionsExpanded.value = false
                         },
@@ -82,58 +82,58 @@ fun SettingsPage() {
                             y = 0.dp
                         ),
                         expanded = themeOptionsExpanded.value,
-                        content = {
-                            TextWithIcon(
-                                text = LocalStrings.current.settings.themeSystem,
-                                icon = FluentIcons.Person,
-                                onClick = {
-                                    AppTheme.switchTheme(ThemeType.System)
-                                    themeOptionsExpanded.value = false
-                                }
-                            )
-                            Divider()
-                            TextWithIcon(
-                                text = LocalStrings.current.settings.themeLight,
-                                icon = FluentIcons.weatherSunny(),
-                                onClick = {
-                                    AppTheme.switchTheme(ThemeType.Light)
-                                    themeOptionsExpanded.value = false
-                                }
-                            )
-                            Divider()
-                            TextWithIcon(
-                                text = LocalStrings.current.settings.themeDark,
-                                icon = FluentIcons.Moon,
-                                onClick = {
-                                    AppTheme.switchTheme(ThemeType.Dark)
-                                    themeOptionsExpanded.value = false
-                                }
-                            )
+                        clickableContent = {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    text = when(AppTheme.theme.collectAsState().value) {
+                                        System -> LocalStrings.current.settings.themeSystem
+                                        Light -> LocalStrings.current.settings.themeLight
+                                        Dark -> LocalStrings.current.settings.themeDark
+                                    },
+                                    style = getUIKitTypography().footnote,
+                                    color = getUIKitColors().textFillColorPrimaryBrush
+                                )
+
+                                Spacer(Modifier.width(getUIKitLayout().smallSpacing))
+
+                                Icon(
+                                    modifier = Modifier
+                                        .size(getUIKitTypography().footnote.lineHeight.value.dp),
+                                    imageVector = FluentIcons.ChevronArrowDown,
+                                    contentDescription = "Expand Dropdown Menu of Theme",
+                                    tint = getUIKitColors().textFillColorPrimaryBrush
+                                )
+                            }
                         }
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = when(AppTheme.theme.collectAsState().value) {
-                                    System -> LocalStrings.current.settings.themeSystem
-                                    Light -> LocalStrings.current.settings.themeLight
-                                    Dark -> LocalStrings.current.settings.themeDark
-                                },
-                                style = getUIKitTypography().footnote,
-                                color = getUIKitColors().textFillColorPrimaryBrush
-                            )
-
-                            Spacer(Modifier.width(getUIKitLayout().smallSpacing))
-
-                            Icon(
-                                modifier = Modifier
-                                    .size(getUIKitTypography().footnote.lineHeight.value.dp),
-                                imageVector = FluentIcons.ChevronArrowDown,
-                                contentDescription = "Expand Dropdown Menu of Theme",
-                                tint = getUIKitColors().textFillColorPrimaryBrush
-                            )
-                        }
+                        TextWithIcon(
+                            text = LocalStrings.current.settings.themeSystem,
+                            icon = FluentIcons.Person,
+                            onClick = {
+                                AppTheme.switchTheme(ThemeType.System)
+                                themeOptionsExpanded.value = false
+                            }
+                        )
+                        Divider()
+                        TextWithIcon(
+                            text = LocalStrings.current.settings.themeLight,
+                            icon = FluentIcons.weatherSunny(),
+                            onClick = {
+                                AppTheme.switchTheme(ThemeType.Light)
+                                themeOptionsExpanded.value = false
+                            }
+                        )
+                        Divider()
+                        TextWithIcon(
+                            text = LocalStrings.current.settings.themeDark,
+                            icon = FluentIcons.Moon,
+                            onClick = {
+                                AppTheme.switchTheme(ThemeType.Dark)
+                                themeOptionsExpanded.value = false
+                            }
+                        )
                     }
                 }
                 Divider()

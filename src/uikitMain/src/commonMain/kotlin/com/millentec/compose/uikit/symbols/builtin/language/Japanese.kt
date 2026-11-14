@@ -24,7 +24,7 @@ val UIKitLanguageSymbols.Japanese: UIKitSymbol
         if (_Japanese != null)
             return _Japanese!!
         _Japanese = object : UIKitSymbol(
-            name = "Bluetooth",
+            name = "Japanese",
             uid = "ic.lang.jajp",
             defaultSize = DpSize(20.dp, 20.dp),
             viewportSize = Size(20f, 20f)

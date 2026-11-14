@@ -29,7 +29,7 @@ fun Modifier.uikitClickable(
     interactionSource: MutableInteractionSource? = null,
     indication: Indication? = UIKitInteraction.ripple(),
     shape: Shape = RectangleShape,
-    interaction: (@Composable Modifier.(State<Boolean>, State<Boolean>, State<Shape>) -> Modifier)? = null
+    interaction: UIKitInteraction? = null
 ): Modifier {
     val interactionSource = interactionSource ?: remember { MutableInteractionSource() }
     val isHovered = interactionSource.collectIsHoveredAsState()
@@ -53,7 +53,8 @@ fun Modifier.uikitClickable(
                 )
         }
 
-        return interaction(
+        return interaction.interaction(
+                this,
                 isHovered,
                 isPressed,
                 shapeState
@@ -155,9 +156,11 @@ fun Modifier.uikitClickable(
     }
 }
 
-class UIKitInteraction {
+data class UIKitInteraction(
+    val interaction: @Composable Modifier.(isHover: State<Boolean>, isPress: State<Boolean>, shape: State<Shape>) -> Modifier
+) {
     companion object {
-        val DarkenWithScale: @Composable Modifier.(State<Boolean>, State<Boolean>, State<Shape>) -> Modifier = @Composable { isHover, isPress, shape ->
+        val DarkenWithScale = UIKitInteraction { isHover, isPress, shape ->
             val degreeAnimated by animateFloatAsState(
                 targetValue = if (isHover.value) 0.05f else 0f,
                 animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)

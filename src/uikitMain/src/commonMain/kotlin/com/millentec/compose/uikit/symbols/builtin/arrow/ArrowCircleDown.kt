@@ -125,14 +125,8 @@ val UIKitArrowSymbols.ArrowCircleDown: UIKitSymbol
                 style: UIKitSymbolStyle,
                 states: Map<UIKitSymbolSelector, UIKitSymbolGroupState>
             ): Map<UIKitSymbolSelector, UIKitSymbolColor> {
-                return UIKitSymbolColorSet(
-                    style = style,
-                    layerInfo = mapOf(
-                        Pair(UIKitSymbolSelector(null, "arrow_down", null), 1f),
-                        Pair(UIKitSymbolSelector(null, "circle_active", null), 1f),
-                        Pair(UIKitSymbolSelector(null, "circle_inactive", null), 0.3f)
-                    ),
-                    multiColor = mapOf(
+                return if (style is UIKitSymbolStyle.Monochrome)
+                    mapOf(
                         Pair(
                             UIKitSymbolSelector(null, "arrow_down", null),
                             UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 1f)
@@ -143,10 +137,32 @@ val UIKitArrowSymbols.ArrowCircleDown: UIKitSymbol
                         ),
                         Pair(
                             UIKitSymbolSelector(null, "circle_inactive", null),
-                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().lineFillColorDisabled), 1f)
+                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 0f)
                         )
                     )
-                )
+                else
+                    UIKitSymbolColorSet(
+                        style = style,
+                        layerInfo = mapOf(
+                            Pair(UIKitSymbolSelector(null, "arrow_down", null), 1f),
+                            Pair(UIKitSymbolSelector(null, "circle_active", null), 1f),
+                            Pair(UIKitSymbolSelector(null, "circle_inactive", null), 0.3f)
+                        ),
+                        multiColor = mapOf(
+                            Pair(
+                                UIKitSymbolSelector(null, "arrow_down", null),
+                                UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 1f)
+                            ),
+                            Pair(
+                                UIKitSymbolSelector(null, "circle_active", null),
+                                UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().textFillColorPrimaryBrush), 1f)
+                            ),
+                            Pair(
+                                UIKitSymbolSelector(null, "circle_inactive", null),
+                                UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().lineFillColorDisabled), 1f)
+                            )
+                        )
+                    )
             }
 
             override fun progressibleEffect(

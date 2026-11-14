@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,7 +51,7 @@ fun UIKitSurface(
     border: BorderStroke? = null,
     interactionSource: MutableInteractionSource? = null,
     indication: Indication? = UIKitInteraction.ripple(),
-    interaction: (@Composable Modifier.(State<Boolean>, State<Boolean>, State<Shape>) -> Modifier)? = null,
+    interaction: UIKitInteraction? = null,
     contentAlignment: Alignment = Alignment.Center,
     content: @Composable () -> Unit
 ) {

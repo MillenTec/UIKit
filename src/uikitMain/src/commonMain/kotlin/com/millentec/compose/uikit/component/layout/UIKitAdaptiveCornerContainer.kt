@@ -10,14 +10,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -44,30 +42,29 @@ private fun Preview() {
         UIKitAdaptiveCornerContainer(
             onClick = {},
             indication = null,
-            interaction = 
-                @Composable { isHover, isPress, shape ->
-                    val degreeAnimated by animateFloatAsState(
-                        targetValue = if (isHover.value) 0.05f else 0f,
-                        animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
-                    )
+            interaction = UIKitInteraction { isHover, isPress, shape ->
+                val degreeAnimated by animateFloatAsState(
+                    targetValue = if (isHover.value) 0.05f else 0f,
+                    animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
+                )
 
-                    val scaleAnimated by animateFloatAsState(
-                        targetValue = if (isPress.value) 0.9f else 1f,
-                        animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = FastOutSlowInEasing)
-                    )
+                val scaleAnimated by animateFloatAsState(
+                    targetValue = if (isPress.value) 0.9f else 1f,
+                    animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = FastOutSlowInEasing)
+                )
 
-                    this
-                        .clip(shape.value)
-                        .then(if (getUIKitColors().contentFillColorPrimaryBrush.toHsv().value <= 0.5f) {
-                            Modifier.lighten(degreeAnimated)
-                        } else {
-                            Modifier.darken(degreeAnimated)
-                        })
-                        .graphicsLayer(
-                            scaleX = scaleAnimated,
-                            scaleY = scaleAnimated,
-                        )
-                },
+                this
+                    .clip(shape.value)
+                    .then(if (getUIKitColors().contentFillColorPrimaryBrush.toHsv().value <= 0.5f) {
+                        Modifier.lighten(degreeAnimated)
+                    } else {
+                        Modifier.darken(degreeAnimated)
+                    })
+                    .graphicsLayer(
+                        scaleX = scaleAnimated,
+                        scaleY = scaleAnimated,
+                    )
+            },
             state = rememberUIKitAdaptiveCornerContainerState(
                 position = UIKitAlignment.BottomEnd,
                 fillWidth = false,
@@ -202,7 +199,7 @@ fun UIKitAdaptiveCornerContainer(
     clickable: Boolean = true,
     onClick: () -> Unit,
     indication: Indication? = if (isDesktopOS()) null else UIKitInteraction.ripple(),
-    interaction: (@Composable Modifier.(State<Boolean>, State<Boolean>, State<Shape>) -> Modifier)? = null,
+    interaction: UIKitInteraction? = null,
     background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     acrylicEffectEnabled: Boolean = false,
     acrylicState: AcrylicMaterialState? = null,

@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -97,19 +96,51 @@ data class UIKitButtonColors(
     }
 }
 
+data class UIKitButtonStyle(
+    val colors: UIKitButtonColors,
+    val shape: Shape,
+    val border: Dp?,
+    val contentPadding: PaddingValues,
+    val interactionSource: MutableInteractionSource?,
+    val indication: Indication?,
+    val interaction: UIKitInteraction?,
+) {
+    companion object {
+        @Composable
+        fun default(
+            colors: UIKitButtonColors = UIKitButtonColors.default(),
+            shape: Shape = RoundedCornerShape(getUIKitShapes().circular),
+            border: Dp? = null,
+            contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
+            interactionSource: MutableInteractionSource? = null,
+            indication: Indication? = if (isDesktopOS()) null else UIKitInteraction.ripple(),
+            interaction: UIKitInteraction? = null,
+        ): UIKitButtonStyle {
+            return UIKitButtonStyle(
+                colors,
+                shape,
+                border,
+                contentPadding,
+                interactionSource,
+                indication,
+                interaction
+            )
+        }
+    }
+}
+
 @Composable
 fun UIKitButton(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(getUIKitShapes().circular),
     colors: UIKitButtonColors = UIKitButtonColors.default(),
-    hasBorder: Boolean = false,
-    borderWidth: Dp = 1.dp,
+    border: Dp? = null,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
     enabled: Boolean = true,
     onClick: () -> Unit,
     interactionSource: MutableInteractionSource? = null,
     indication: Indication? = if (isDesktopOS()) null else UIKitInteraction.ripple(),
-    interaction: (@Composable Modifier.(State<Boolean>, State<Boolean>, State<Shape>) -> Modifier)? = null,
+    interaction: UIKitInteraction? = null,
     content: @Composable BoxScope.() -> Unit
 ) {
     val backgroundColorAnimated = animateColorAsState(
@@ -128,9 +159,9 @@ fun UIKitButton(
                 minWidth = 120.dp,
                 minHeight = getUIKitLayout().interactiveHotspot
             )
-            .then(if (hasBorder)
+            .then(if (border != null)
                 Modifier.border(
-                    width = borderWidth,
+                    width = border,
                     color = borderColorAnimated.value,
                     shape = shape)
             else Modifier),
@@ -157,21 +188,25 @@ fun UIKitButton(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(getUIKitShapes().circular),
     colors: UIKitButtonColors = UIKitButtonColors.default(),
-    hasBorder: Boolean = false,
-    borderWidth: Dp = 1.dp,
+    border: Dp? = null,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
     enabled: Boolean = true,
     onClick: () -> Unit,
+    interactionSource: MutableInteractionSource? = null,
+    indication: Indication? = if (isDesktopOS()) null else UIKitInteraction.ripple(),
+    interaction: UIKitInteraction? = null,
     textStyle: TextStyle = getUIKitTypography().body,
 ) = UIKitButton(
     modifier = modifier,
     shape = shape,
     colors = colors,
-    hasBorder = hasBorder,
-    borderWidth = borderWidth,
+    border = border,
     contentPadding = contentPadding,
     enabled = enabled,
-    onClick = onClick
+    onClick = onClick,
+    interactionSource = interactionSource,
+    indication = indication,
+    interaction = interaction,
 ) {
     val contentColorAnimated by animateColorAsState(
         targetValue = if (enabled) colors.content else colors.contentDisabled,
@@ -192,20 +227,24 @@ fun UIKitButton(
     iconSize: DpSize = DpSize(icon.defaultWidth, icon.defaultHeight),
     shape: Shape = RoundedCornerShape(getUIKitShapes().circular),
     colors: UIKitButtonColors = UIKitButtonColors.default(),
-    hasBorder: Boolean = false,
-    borderWidth: Dp = 1.dp,
+    border: Dp? = null,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
     enabled: Boolean = true,
     onClick: () -> Unit,
+    interactionSource: MutableInteractionSource? = null,
+    indication: Indication? = if (isDesktopOS()) null else UIKitInteraction.ripple(),
+    interaction: UIKitInteraction? = null,
 ) = UIKitButton(
     modifier = modifier,
     shape = shape,
     colors = colors,
-    hasBorder = hasBorder,
-    borderWidth = borderWidth,
+    border = border,
     contentPadding = contentPadding,
     enabled = enabled,
-    onClick = onClick
+    onClick = onClick,
+    interactionSource = interactionSource,
+    indication = indication,
+    interaction = interaction
 ) {
     val contentColorAnimated by animateColorAsState(
         targetValue = if (enabled) colors.content else colors.contentDisabled,
@@ -229,21 +268,25 @@ fun UIKitButton(
     text: String,
     shape: Shape = RoundedCornerShape(getUIKitShapes().circular),
     colors: UIKitButtonColors = UIKitButtonColors.default(),
-    hasBorder: Boolean = false,
-    borderWidth: Dp = 1.dp,
+    border: Dp? = null,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
     enabled: Boolean = true,
     onClick: () -> Unit,
+    interactionSource: MutableInteractionSource? = null,
+    indication: Indication? = if (isDesktopOS()) null else UIKitInteraction.ripple(),
+    interaction: UIKitInteraction? = null,
     textStyle: TextStyle = getUIKitTypography().body
 ) = UIKitButton(
     modifier = modifier,
     shape = shape,
     colors = colors,
-    hasBorder = hasBorder,
-    borderWidth = borderWidth,
+    border = border,
     contentPadding = contentPadding,
     enabled = enabled,
-    onClick = onClick
+    onClick = onClick,
+    interactionSource = interactionSource,
+    indication = indication,
+    interaction = interaction,
 ) {
     val contentColorAnimated by animateColorAsState(
         targetValue = if (enabled) colors.content else colors.contentDisabled,

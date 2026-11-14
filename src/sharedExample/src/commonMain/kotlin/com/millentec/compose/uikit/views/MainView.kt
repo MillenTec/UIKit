@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.App
 import com.millentec.compose.uikit.BackHandler
 import com.millentec.compose.uikit.LocalAcrylicMaterialState
-import com.millentec.compose.uikit.component.input.UIKitDropdownButton
+import com.millentec.compose.uikit.component.input.UIKitDropdown
 import com.millentec.compose.uikit.component.input.UIKitNavigationBar
 import com.millentec.compose.uikit.component.layout.UIKitSurface
 import com.millentec.compose.uikit.component.layout.rememberUIKitAdaptiveCornerContainerState
@@ -240,74 +240,74 @@ fun MainView() {
                             )
                     ) {
                         val expanded = remember { mutableStateOf(false) }
-                        UIKitDropdownButton(
+                        UIKitDropdown(
                             expanded = expanded.value,
                             onDismissRequest = { expanded.value = false },
                             appearPosition = Alignment.BottomEnd,
                             acrylicMaterialState = LocalAcrylicMaterialState.current,
                             acrylicEffectEnabled = AppTheme.useAcrylic.collectAsState().value,
-                            content = {
-                                TextWithIcon(
-                                    icon = FluentIcons.Scales,
-                                    text = strings.navigation.license,
+                            clickableContent = {
+                                UIKitSurface(
+                                    modifier = Modifier
+                                        .size(
+                                            width = state.height,
+                                            height = state.height,
+                                        ),
+                                    color = getUIKitColors().contentFillColorSecondaryBrush,
+                                    shape = RoundedCornerShape(state.cornerRadius),
+                                    shadow = UIKitShadowMaterial.getMarginal(),
+                                    acrylicEffectEnabled = acrylicEnabled,
+                                    acrylicMaterialState = acrylicMaterialsState,
+                                    indication = if (isDesktopOS()) null else UIKitInteraction.ripple(),
                                     onClick = {
-                                        nav.switchPage(License, type = UIKitNavigationType.Forward)
-                                        expanded.value = false
-                                    }
-                                )
-                                Divider()
-                                TextWithIcon(
-                                    icon = FluentIcons.certificate(),
-                                    text = strings.navigation.thirdPartyLicenses,
-                                    onClick = {
-                                        nav.switchPage(ThirdParty, type = UIKitNavigationType.Forward)
-                                        expanded.value = false
-                                    }
-                                )
-                                Divider()
-                                TextWithIcon(
-                                    icon = FluentIcons.Settings,
-                                    text = strings.navigation.settings,
-                                    onClick = {
-                                        nav.switchPage(Settings, type = UIKitNavigationType.Forward)
-                                        expanded.value = false
-                                    }
-                                )
+                                        expanded.value = !expanded.value
+                                    },
+                                ) {
+                                    val iconRotateAnimated = animateFloatAsState(
+                                        targetValue = if (expanded.value) 45f else 0f,
+                                        animationSpec = tween(
+                                            getUIKitAnimate().motionRegularDurationMillis,
+                                            easing = FastOutSlowInEasing
+                                        )
+                                    )
+
+                                    Icon(
+                                        modifier = Modifier
+                                            .fillMaxSize(0.6f)
+                                            .rotate(iconRotateAnimated.value),
+                                        imageVector = FluentIcons.Add,
+                                        contentDescription = strings.navigation.more,
+                                        tint = getUIKitColors().textFillColorPrimaryBrush
+                                    )
+                                }
                             }
                         ) {
-                            UIKitSurface(
-                                modifier = Modifier
-                                    .size(
-                                        width = state.height,
-                                        height = state.height,
-                                    ),
-                                color = getUIKitColors().contentFillColorSecondaryBrush,
-                                shape = RoundedCornerShape(state.cornerRadius),
-                                shadow = UIKitShadowMaterial.getMarginal(),
-                                acrylicEffectEnabled = acrylicEnabled,
-                                acrylicMaterialState = acrylicMaterialsState,
-                                indication = if (isDesktopOS()) null else UIKitInteraction.ripple(),
+                            TextWithIcon(
+                                icon = FluentIcons.Scales,
+                                text = strings.navigation.license,
                                 onClick = {
-                                    expanded.value = !expanded.value
-                                },
-                            ) {
-                                val iconRotateAnimated = animateFloatAsState(
-                                    targetValue = if (expanded.value) 45f else 0f,
-                                    animationSpec = tween(
-                                        getUIKitAnimate().motionRegularDurationMillis,
-                                        easing = FastOutSlowInEasing
-                                    )
-                                )
-
-                                Icon(
-                                    modifier = Modifier
-                                        .fillMaxSize(0.6f)
-                                        .rotate(iconRotateAnimated.value),
-                                    imageVector = FluentIcons.Add,
-                                    contentDescription = strings.navigation.more,
-                                    tint = getUIKitColors().textFillColorPrimaryBrush
-                                )
-                            }
+                                    nav.switchPage(License, type = UIKitNavigationType.Forward)
+                                    expanded.value = false
+                                }
+                            )
+                            Divider()
+                            TextWithIcon(
+                                icon = FluentIcons.certificate(),
+                                text = strings.navigation.thirdPartyLicenses,
+                                onClick = {
+                                    nav.switchPage(ThirdParty, type = UIKitNavigationType.Forward)
+                                    expanded.value = false
+                                }
+                            )
+                            Divider()
+                            TextWithIcon(
+                                icon = FluentIcons.Settings,
+                                text = strings.navigation.settings,
+                                onClick = {
+                                    nav.switchPage(Settings, type = UIKitNavigationType.Forward)
+                                    expanded.value = false
+                                }
+                            )
                         }
                     }
                 }
