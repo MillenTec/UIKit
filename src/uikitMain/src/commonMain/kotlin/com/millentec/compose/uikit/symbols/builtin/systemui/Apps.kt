@@ -116,7 +116,7 @@ val UIKitSystemUISymbols.Apps: UIKitSymbol
                     multiColor = mapOf(
                         Pair(
                             UIKitSymbolSelector(null, "e0", null),
-                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush), 1f)
+                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().accentColorPrimaryBrush), 1f)
                         ),
                         Pair(
                             UIKitSymbolSelector(null, "e1", null),

@@ -29,6 +29,7 @@ import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
 import com.millentec.compose.uikit.theme.*
+import com.millentec.compose.uikit.theme.colors.UIKitColors
 
 @Composable
 @Preview
@@ -77,20 +78,21 @@ data class UIKitButtonColors(
     companion object {
         @Composable
         fun default(
-            background: Color = getUIKitColors().contentFillColorTertiaryBrush,
-            backgroundDisabled: Color = getUIKitColors().contentFillColorBrushDisabled,
-            content: Color = UIKitColors.contentColor(background),
-            contentDisabled: Color = getUIKitColors().textFillColorDisabled,
-            border: Color = getUIKitColors().lineFillColorPrimaryBrush,
-            borderDisabled: Color = getUIKitColors().lineFillColorPrimaryBrush
+            background: Color? = null,
+            backgroundDisabled: Color? = null,
+            content: Color? = null,
+            contentDisabled: Color? = null,
+            border: Color? = null,
+            borderDisabled: Color? = null,
         ): UIKitButtonColors {
-            return UIKitButtonColors(
-                background = background,
-                backgroundDisabled = backgroundDisabled,
-                content = content,
-                contentDisabled = contentDisabled,
-                border = border,
-                borderDisabled = borderDisabled
+            val colors = getUIKitColors().button
+            return colors.copy(
+                background = background ?: colors.background,
+                backgroundDisabled = backgroundDisabled ?: colors.backgroundDisabled,
+                content = content ?: colors.content,
+                contentDisabled = contentDisabled ?: colors.contentDisabled,
+                border = border ?: colors.border,
+                borderDisabled = borderDisabled ?: colors.borderDisabled,
             )
         }
     }
@@ -153,32 +155,37 @@ fun UIKitButton(
         animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
     )
 
-    UIKitSurface(
-        modifier = modifier
-            .defaultMinSize(
-                minWidth = 120.dp,
-                minHeight = getUIKitLayout().interactiveHotspot
-            )
-            .then(if (border != null)
-                Modifier.border(
-                    width = border,
-                    color = borderColorAnimated.value,
-                    shape = shape)
-            else Modifier),
-        shape = shape,
-        color = backgroundColorAnimated.value,
+    UIKitAvailabilityScope(
         enabled = enabled,
-        onClick = onClick,
-        interactionSource = interactionSource,
-        indication = indication,
-        interaction = interaction
+        adjust = { it.copy(button = colors) }
     ) {
-        Box(
-            modifier = Modifier
-                .padding(contentPadding),
-            contentAlignment = Alignment.Center,
-            content = content,
-        )
+        UIKitSurface(
+            modifier = modifier
+                .defaultMinSize(
+                    minWidth = 120.dp,
+                    minHeight = getUIKitLayout().interactiveHotspot
+                )
+                .then(if (border != null)
+                    Modifier.border(
+                        width = border,
+                        color = borderColorAnimated.value,
+                        shape = shape)
+                else Modifier),
+            shape = shape,
+            color = backgroundColorAnimated.value,
+            enabled = enabled,
+            onClick = onClick,
+            interactionSource = interactionSource,
+            indication = indication,
+            interaction = interaction
+        ) {
+            Box(
+                modifier = Modifier
+                    .padding(contentPadding),
+                contentAlignment = Alignment.Center,
+                content = content,
+            )
+        }
     }
 }
 

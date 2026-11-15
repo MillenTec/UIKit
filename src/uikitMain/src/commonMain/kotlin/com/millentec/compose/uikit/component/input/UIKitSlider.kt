@@ -1,6 +1,6 @@
 /*
  * AIGC: 使用了人工智能优化并修复分段式滑块, 适配 Ltr 布局以及竖向滑块功能
- * - Time: 2026-09-06 16:24
+ * - Time: 2026-09-06 UTC+8 16:24
  * - Model: GLM 5.3 Flash
  * - Harness: ZCode
  * - State: Reviewed
@@ -32,10 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.millentec.compose.uikit.component.input.UIKitSliderChangeType.*
 import com.millentec.compose.uikit.foundation.isDesktopOS
-import com.millentec.compose.uikit.theme.UIKitShadowMaterial
-import com.millentec.compose.uikit.theme.getUIKitAnimate
-import com.millentec.compose.uikit.theme.getUIKitColors
-import com.millentec.compose.uikit.theme.getUIKitShapes
+import com.millentec.compose.uikit.theme.*
 import kotlin.math.abs
 import kotlin.math.floor
 
@@ -93,24 +90,27 @@ data class UIKitSliderColors(
     companion object {
         @Composable
         fun default(
-            thumb: Color = Color.White,
-            thumbDisabled: Color = getUIKitColors().contentFillColorBrushDisabled,
-            activeTrack: Color = getUIKitColors().highlightColorPrimaryBrush,
-            inactiveTrack: Color = getUIKitColors().contentFillColorTertiaryBrush,
-            activeTrackDisabled: Color = getUIKitColors().lineFillColorDisabled,
-            inactiveTrackDisabled: Color = getUIKitColors().lineFillColorPrimaryBrush,
-            tick: Color = getUIKitColors().lineFillColorPrimaryBrush,
-            tickDisabled: Color = getUIKitColors().lineFillColorDisabled
-        ) = UIKitSliderColors(
-            thumb = thumb,
-            thumbDisabled = thumbDisabled,
-            activeTrack = activeTrack,
-            inactiveTrack = inactiveTrack,
-            activeTrackDisabled = activeTrackDisabled,
-            inactiveTrackDisabled = inactiveTrackDisabled,
-            tick = tick,
-            tickDisabled = tickDisabled
-        )
+            thumb: Color? = null,
+            thumbDisabled: Color? = null,
+            activeTrack: Color? = null,
+            inactiveTrack: Color? = null,
+            activeTrackDisabled: Color? = null,
+            inactiveTrackDisabled: Color? = null,
+            tick: Color? = null,
+            tickDisabled: Color? = null
+        ): UIKitSliderColors {
+            val colors = getUIKitColors().slider
+            return colors.copy(
+                thumb = thumb ?: colors.thumb,
+                thumbDisabled = thumbDisabled ?: colors.thumbDisabled,
+                activeTrack = activeTrack ?: colors.activeTrack,
+                inactiveTrack = inactiveTrack ?: colors.inactiveTrack,
+                activeTrackDisabled = activeTrackDisabled ?: colors.activeTrackDisabled,
+                inactiveTrackDisabled = inactiveTrackDisabled ?: colors.inactiveTrackDisabled,
+                tick = tick ?: colors.tick,
+                tickDisabled = tickDisabled ?: colors.tickDisabled
+            )
+        }
     }
 }
 
@@ -336,334 +336,339 @@ fun UIKitSlider(
     adsorbedOntoTick: Boolean = hasTick,
     colors: UIKitSliderColors = UIKitSliderColors.default()
 ) {
-    BoxWithConstraints(
-        modifier = if (isVertical) {
-            modifier.padding(bottom = thumbSize.height)
-        } else {
-            modifier.padding(end = thumbSize.width)
-        },
-        contentAlignment = if (isVertical) Alignment.TopCenter else Alignment.CenterStart,
+    UIKitAvailabilityScope(
+        enabled = enabled,
+        adjust = { it.copy(slider = colors) }
     ) {
-        val onValueChangeCurrent by rememberUpdatedState(onValueChange)
-        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-
-        // 行程轴最大长度: 水平为宽度, 垂直为高度
-        val maxTravel = if (isVertical) maxHeight else maxWidth
-
-        val rangeStart = minOf(valueRange.start, valueRange.endInclusive)
-        val rangeEnd = maxOf(valueRange.start, valueRange.endInclusive)
-
-        fun toOffset(value: Float): Dp {
-            val fraction = if (rangeEnd == rangeStart) {
-                0f
+        BoxWithConstraints(
+            modifier = if (isVertical) {
+                modifier.padding(bottom = thumbSize.height)
             } else {
-                (value - rangeStart) / (rangeEnd - rangeStart)
-            }
-            // NaN 输入按最小值处理; 行程无限 (如垂直模式在 LazyColumn 等无限高度容器中未约束高度) 时收在 0:
-            // 有限的 fraction 乘 Infinity 行程会得到 Infinity/NaN, 进入 Animatable 将直接崩溃
-            val safeFraction = if (fraction.isNaN()) 0f else fraction
-            return if (maxTravel.value.isFinite()) {
-                safeFraction.coerceIn(0f, 1f) * maxTravel
-            } else {
-                0.dp
-            }
-        }
+                modifier.padding(end = thumbSize.width)
+            },
+            contentAlignment = if (isVertical) Alignment.TopCenter else Alignment.CenterStart,
+        ) {
+            val onValueChangeCurrent by rememberUpdatedState(onValueChange)
+            val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
-        fun toValue(offset: Dp): Float {
-            if (rangeEnd == rangeStart) return rangeStart
-            val fraction = (offset / maxTravel).coerceIn(0f, 1f)
-            return rangeStart + (if (fraction.isNaN()) 0f else fraction) * (rangeEnd - rangeStart)
-        }
+            // 行程轴最大长度: 水平为宽度, 垂直为高度
+            val maxTravel = if (isVertical) maxHeight else maxWidth
 
-        val density = LocalDensity.current
-        val uikitAnimate = getUIKitAnimate()
-        val valueChangeType = remember { mutableStateOf<UIKitSliderChangeType?>(null) }
+            val rangeStart = minOf(valueRange.start, valueRange.endInclusive)
+            val rangeEnd = maxOf(valueRange.start, valueRange.endInclusive)
 
-        val thumbColorAnimated by animateColorAsState(
-            targetValue = if (enabled) colors.thumb else colors.thumbDisabled,
-            animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
-        )
-
-        val activeTrackColorAnimated by animateColorAsState(
-            targetValue = if (enabled) colors.activeTrack else colors.activeTrackDisabled,
-            animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
-        )
-
-        val inactiveTrackColorAnimated by animateColorAsState(
-            targetValue = if (enabled) colors.inactiveTrack else colors.inactiveTrackDisabled,
-            animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
-        )
-
-        val tickColorAnimated by animateColorAsState(
-            targetValue = if (enabled) colors.tick else colors.tickDisabled,
-            animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
-        )
-
-        val thumbPressed = remember { mutableStateOf(false) }
-        val dragging = remember { mutableStateOf(false) }
-        val thumbScaleAnimated by animateFloatAsState(
-            targetValue = if (thumbPressed.value) 1.2f else 1f,
-            animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = FastOutSlowInEasing)
-        )
-
-        val thumbOffsetAnimated = remember {
-            Animatable(
-                initialValue = 0.dp,
-                typeConverter = Dp.VectorConverter,
-            )
-        }
-
-        // 刻度值单一来源: 刻度绘制与吸附共用同一列表, 保证两者永不失步
-        val tickValues = remember(rangeStart, rangeEnd, tickStep) {
-            buildList {
-                val span = rangeEnd - rangeStart
-                if (span > 0f && tickStep.isFinite() && tickStep > 0f) {
-                    // 步数上限保护, 避免过小的 tickStep 造成冻结
-                    val stepCount = floor(span / tickStep + 1e-4f).toInt().coerceAtMost(10000)
-                    repeat(stepCount + 1) { add(rangeStart + it * tickStep) }
-                    // 末点容差修正: 浮点误差使其足够接近 rangeEnd 时直接取 rangeEnd, 否则补上尾段端点刻度
-                    val last = this[stepCount]
-                    if (abs(last - rangeEnd) <= tickStep * 1e-4f) {
-                        this[stepCount] = rangeEnd
-                    } else {
-                        add(rangeEnd)
-                    }
+            fun toOffset(value: Float): Dp {
+                val fraction = if (rangeEnd == rangeStart) {
+                    0f
                 } else {
-                    add(rangeStart)
-                    add(rangeEnd)
+                    (value - rangeStart) / (rangeEnd - rangeStart)
+                }
+                // NaN 输入按最小值处理; 行程无限 (如垂直模式在 LazyColumn 等无限高度容器中未约束高度) 时收在 0:
+                // 有限的 fraction 乘 Infinity 行程会得到 Infinity/NaN, 进入 Animatable 将直接崩溃
+                val safeFraction = if (fraction.isNaN()) 0f else fraction
+                return if (maxTravel.value.isFinite()) {
+                    safeFraction.coerceIn(0f, 1f) * maxTravel
+                } else {
+                    0.dp
                 }
             }
-        }
-        val tickOffsets = tickValues.map { toOffset(it) }
 
-        val currentOffset = toOffset(value)
+            fun toValue(offset: Dp): Float {
+                if (rangeEnd == rangeStart) return rangeStart
+                val fraction = (offset / maxTravel).coerceIn(0f, 1f)
+                return rangeStart + (if (fraction.isNaN()) 0f else fraction) * (rangeEnd - rangeStart)
+            }
 
-        LaunchedEffect(value) {
-            val targetOffset = toOffset(value)
-            if (dragging.value) {
-                if (valueChangeType.value == DragAdsorption) {
+            val density = LocalDensity.current
+            val uikitAnimate = getUIKitAnimate()
+            val valueChangeType = remember { mutableStateOf<UIKitSliderChangeType?>(null) }
+
+            val thumbColorAnimated by animateColorAsState(
+                targetValue = if (enabled) colors.thumb else colors.thumbDisabled,
+                animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
+            )
+
+            val activeTrackColorAnimated by animateColorAsState(
+                targetValue = if (enabled) colors.activeTrack else colors.activeTrackDisabled,
+                animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
+            )
+
+            val inactiveTrackColorAnimated by animateColorAsState(
+                targetValue = if (enabled) colors.inactiveTrack else colors.inactiveTrackDisabled,
+                animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
+            )
+
+            val tickColorAnimated by animateColorAsState(
+                targetValue = if (enabled) colors.tick else colors.tickDisabled,
+                animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
+            )
+
+            val thumbPressed = remember { mutableStateOf(false) }
+            val dragging = remember { mutableStateOf(false) }
+            val thumbScaleAnimated by animateFloatAsState(
+                targetValue = if (thumbPressed.value) 1.2f else 1f,
+                animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = FastOutSlowInEasing)
+            )
+
+            val thumbOffsetAnimated = remember {
+                Animatable(
+                    initialValue = 0.dp,
+                    typeConverter = Dp.VectorConverter,
+                )
+            }
+
+            // 刻度值单一来源: 刻度绘制与吸附共用同一列表, 保证两者永不失步
+            val tickValues = remember(rangeStart, rangeEnd, tickStep) {
+                buildList {
+                    val span = rangeEnd - rangeStart
+                    if (span > 0f && tickStep.isFinite() && tickStep > 0f) {
+                        // 步数上限保护, 避免过小的 tickStep 造成冻结
+                        val stepCount = floor(span / tickStep + 1e-4f).toInt().coerceAtMost(10000)
+                        repeat(stepCount + 1) { add(rangeStart + it * tickStep) }
+                        // 末点容差修正: 浮点误差使其足够接近 rangeEnd 时直接取 rangeEnd, 否则补上尾段端点刻度
+                        val last = this[stepCount]
+                        if (abs(last - rangeEnd) <= tickStep * 1e-4f) {
+                            this[stepCount] = rangeEnd
+                        } else {
+                            add(rangeEnd)
+                        }
+                    } else {
+                        add(rangeStart)
+                        add(rangeEnd)
+                    }
+                }
+            }
+            val tickOffsets = tickValues.map { toOffset(it) }
+
+            val currentOffset = toOffset(value)
+
+            LaunchedEffect(value) {
+                val targetOffset = toOffset(value)
+                if (dragging.value) {
+                    if (valueChangeType.value == DragAdsorption) {
+                        thumbOffsetAnimated.animateTo(
+                            targetValue = targetOffset,
+                            animationSpec = tween(
+                                uikitAnimate.motionMomentaryDurationMillis,
+                                easing = FastOutSlowInEasing
+                            )
+                        )
+                    } else {
+                        thumbOffsetAnimated.snapTo(targetOffset)
+                    }
+                } else {
                     thumbOffsetAnimated.animateTo(
                         targetValue = targetOffset,
                         animationSpec = tween(
-                            uikitAnimate.motionMomentaryDurationMillis,
+                            uikitAnimate.motionFastDurationMillis,
                             easing = FastOutSlowInEasing
                         )
                     )
-                } else {
-                    thumbOffsetAnimated.snapTo(targetOffset)
                 }
-            } else {
-                thumbOffsetAnimated.animateTo(
-                    targetValue = targetOffset,
-                    animationSpec = tween(
-                        uikitAnimate.motionFastDurationMillis,
-                        easing = FastOutSlowInEasing
-                    )
-                )
+                valueChangeType.value = null
             }
-            valueChangeType.value = null
-        }
 
-        LaunchedEffect(maxTravel, rangeStart, rangeEnd) {
-            thumbOffsetAnimated.snapTo(toOffset(value))
-        }
+            LaunchedEffect(maxTravel, rangeStart, rangeEnd) {
+                thumbOffsetAnimated.snapTo(toOffset(value))
+            }
 
-        UIKitBasicSlider(
-            offset = currentOffset,
-            maxWidth = maxTravel,
-            onOffsetChange = { offset: Dp, type: UIKitSliderChangeType ->
-                valueChangeType.value = type
-                // 吸附发射的偏移即为刻度位置, 直接取同源的刻度值, 避免浮点往返误差
-                val tickIndex = tickOffsets.indexOf(offset)
-                onValueChangeCurrent(
-                    if (tickIndex >= 0) tickValues[tickIndex] else toValue(offset),
-                    type
-                )
-            },
-            onThumbPressed = {
-                thumbPressed.value = true
-            },
-            onThumbReleased = {
-                thumbPressed.value = false
-            },
-            onDragStart = {
-                dragging.value = true
-            },
-            onDragEnd = {
-                dragging.value = false
-            },
-            adsorptionEnable = adsorbedOntoTick,
-            adsorptionPoints = tickOffsets,
-            isVertical = isVertical,
-        ) { trackHandler: Modifier, thumbHandler: Modifier ->
-            if (isVertical) {
-                if (hasTick) {
+            UIKitBasicSlider(
+                offset = currentOffset,
+                maxWidth = maxTravel,
+                onOffsetChange = { offset: Dp, type: UIKitSliderChangeType ->
+                    valueChangeType.value = type
+                    // 吸附发射的偏移即为刻度位置, 直接取同源的刻度值, 避免浮点往返误差
+                    val tickIndex = tickOffsets.indexOf(offset)
+                    onValueChangeCurrent(
+                        if (tickIndex >= 0) tickValues[tickIndex] else toValue(offset),
+                        type
+                    )
+                },
+                onThumbPressed = {
+                    thumbPressed.value = true
+                },
+                onThumbReleased = {
+                    thumbPressed.value = false
+                },
+                onDragStart = {
+                    dragging.value = true
+                },
+                onDragEnd = {
+                    dragging.value = false
+                },
+                adsorptionEnable = adsorbedOntoTick,
+                adsorptionPoints = tickOffsets,
+                isVertical = isVertical,
+            ) { trackHandler: Modifier, thumbHandler: Modifier ->
+                if (isVertical) {
+                    if (hasTick) {
+                        Canvas(
+                            modifier = Modifier
+                                .offset { IntOffset(0, (thumbSize.height / 2).roundToPx()) }
+                                .width(thumbSize.width)
+                                .fillMaxHeight()
+                        ) {
+                            tickOffsets.forEach { tickOffset ->
+                                val tickY = size.height - tickOffset.toPx()
+                                drawLine(
+                                    start = Offset(
+                                        x = 2.dp.toPx(),
+                                        y = tickY
+                                    ),
+                                    end = Offset(
+                                        x = size.width - 2.dp.toPx(),
+                                        y = tickY
+                                    ),
+                                    color = tickColorAnimated,
+                                    strokeWidth = 1.dp.toPx(),
+                                    cap = StrokeCap.Round
+                                )
+                            }
+                        }
+                    }
+
                     Canvas(
                         modifier = Modifier
                             .offset { IntOffset(0, (thumbSize.height / 2).roundToPx()) }
                             .width(thumbSize.width)
                             .fillMaxHeight()
+                            .then(if (enabled) {
+                                trackHandler
+                            } else Modifier)
                     ) {
-                        tickOffsets.forEach { tickOffset ->
-                            val tickY = size.height - tickOffset.toPx()
-                            drawLine(
-                                start = Offset(
-                                    x = 2.dp.toPx(),
-                                    y = tickY
-                                ),
-                                end = Offset(
-                                    x = size.width - 2.dp.toPx(),
-                                    y = tickY
-                                ),
-                                color = tickColorAnimated,
-                                strokeWidth = 1.dp.toPx(),
-                                cap = StrokeCap.Round
+                        val centerX = size.width / 2
+                        val thumbY = size.height - thumbOffsetAnimated.value.toPx()
+                        drawLine(
+                            color = activeTrackColorAnimated,
+                            strokeWidth = (lineWidth * density.density).value,
+                            cap = StrokeCap.Round,
+                            start = Offset(
+                                x = centerX,
+                                y = size.height
+                            ),
+                            end = Offset(
+                                x = centerX,
+                                y = thumbY
                             )
+                        )
+
+                        drawLine(
+                            color = inactiveTrackColorAnimated,
+                            strokeWidth = (lineWidth * density.density).value,
+                            cap = StrokeCap.Round,
+                            start = Offset(
+                                x = centerX,
+                                y = thumbY
+                            ),
+                            end = Offset(
+                                x = centerX,
+                                y = 0f
+                            )
+                        )
+                    }
+                } else {
+                    if (hasTick) {
+                        Canvas(
+                            modifier = Modifier
+                                .offset { IntOffset((thumbSize.width / 2).roundToPx(), 0) }
+                                .fillMaxWidth()
+                                .height(thumbSize.height)
+                        ) {
+                            tickOffsets.forEach { tickOffset ->
+                                // offset 为方向感知修饰符, RTL 下节点位置已自动镜像, 绘制时仅需在节点坐标系内镜像行程
+                                val tickX = if (isRtl) size.width - tickOffset.toPx() else tickOffset.toPx()
+                                drawLine(
+                                    start = Offset(
+                                        x = tickX,
+                                        y = 2.dp.toPx()
+                                    ),
+                                    end = Offset(
+                                        x = tickX,
+                                        y = size.height - 2.dp.toPx()
+                                    ),
+                                    color = tickColorAnimated,
+                                    strokeWidth = 1.dp.toPx(),
+                                    cap = StrokeCap.Round
+                                )
+                            }
                         }
                     }
-                }
 
-                Canvas(
-                    modifier = Modifier
-                        .offset { IntOffset(0, (thumbSize.height / 2).roundToPx()) }
-                        .width(thumbSize.width)
-                        .fillMaxHeight()
-                        .then(if (enabled) {
-                            trackHandler
-                        } else Modifier)
-                ) {
-                    val centerX = size.width / 2
-                    val thumbY = size.height - thumbOffsetAnimated.value.toPx()
-                    drawLine(
-                        color = activeTrackColorAnimated,
-                        strokeWidth = (lineWidth * density.density).value,
-                        cap = StrokeCap.Round,
-                        start = Offset(
-                            x = centerX,
-                            y = size.height
-                        ),
-                        end = Offset(
-                            x = centerX,
-                            y = thumbY
-                        )
-                    )
-
-                    drawLine(
-                        color = inactiveTrackColorAnimated,
-                        strokeWidth = (lineWidth * density.density).value,
-                        cap = StrokeCap.Round,
-                        start = Offset(
-                            x = centerX,
-                            y = thumbY
-                        ),
-                        end = Offset(
-                            x = centerX,
-                            y = 0f
-                        )
-                    )
-                }
-            } else {
-                if (hasTick) {
                     Canvas(
                         modifier = Modifier
                             .offset { IntOffset((thumbSize.width / 2).roundToPx(), 0) }
                             .fillMaxWidth()
                             .height(thumbSize.height)
+                            .then(if (enabled) {
+                                trackHandler
+                            } else Modifier)
                     ) {
-                        tickOffsets.forEach { tickOffset ->
-                            // offset 为方向感知修饰符, RTL 下节点位置已自动镜像, 绘制时仅需在节点坐标系内镜像行程
-                            val tickX = if (isRtl) size.width - tickOffset.toPx() else tickOffset.toPx()
-                            drawLine(
-                                start = Offset(
-                                    x = tickX,
-                                    y = 2.dp.toPx()
-                                ),
-                                end = Offset(
-                                    x = tickX,
-                                    y = size.height - 2.dp.toPx()
-                                ),
-                                color = tickColorAnimated,
-                                strokeWidth = 1.dp.toPx(),
-                                cap = StrokeCap.Round
-                            )
-                        }
-                    }
-                }
-
-                Canvas(
-                    modifier = Modifier
-                        .offset { IntOffset((thumbSize.width / 2).roundToPx(), 0) }
-                        .fillMaxWidth()
-                        .height(thumbSize.height)
-                        .then(if (enabled) {
-                            trackHandler
-                        } else Modifier)
-                ) {
-                    val centerY = size.height / 2
-                    val thumbX = if (isRtl) {
-                        size.width - thumbOffsetAnimated.value.toPx()
-                    } else {
-                        thumbOffsetAnimated.value.toPx()
-                    }
-                    drawLine(
-                        color = activeTrackColorAnimated,
-                        strokeWidth = (lineWidth * density.density).value,
-                        cap = StrokeCap.Round,
-                        start = Offset(
-                            x = if (isRtl) size.width else 0f,
-                            y = centerY
-                        ),
-                        end = Offset(
-                            x = thumbX,
-                            y = centerY
-                        )
-                    )
-
-                    drawLine(
-                        color = inactiveTrackColorAnimated,
-                        strokeWidth = (lineWidth * density.density).value,
-                        cap = StrokeCap.Round,
-                        start = Offset(
-                            x = thumbX,
-                            y = centerY
-                        ),
-                        end = Offset(
-                            x = if (isRtl) 0f else size.width,
-                            y = centerY
-                        )
-                    )
-                }
-            }
-
-            Box(
-                modifier = Modifier
-                    .offset {
-                        if (isVertical) {
-                            // 垂直: 行程自下而上, 最小值位于底部; 行程无限时按 0 处理
-                            val thumbY = maxTravel - thumbOffsetAnimated.value
-                            IntOffset(0, if (thumbY.value.isFinite()) thumbY.roundToPx() else 0)
+                        val centerY = size.height / 2
+                        val thumbX = if (isRtl) {
+                            size.width - thumbOffsetAnimated.value.toPx()
                         } else {
-                            // offset 为方向感知修饰符: RTL 下 x 轴自动镜像, 配合 CenterStart 对齐恰好得到正确的拇指位置
-                            IntOffset(thumbOffsetAnimated.value.roundToPx(), 0)
+                            thumbOffsetAnimated.value.toPx()
                         }
+                        drawLine(
+                            color = activeTrackColorAnimated,
+                            strokeWidth = (lineWidth * density.density).value,
+                            cap = StrokeCap.Round,
+                            start = Offset(
+                                x = if (isRtl) size.width else 0f,
+                                y = centerY
+                            ),
+                            end = Offset(
+                                x = thumbX,
+                                y = centerY
+                            )
+                        )
+
+                        drawLine(
+                            color = inactiveTrackColorAnimated,
+                            strokeWidth = (lineWidth * density.density).value,
+                            cap = StrokeCap.Round,
+                            start = Offset(
+                                x = thumbX,
+                                y = centerY
+                            ),
+                            end = Offset(
+                                x = if (isRtl) 0f else size.width,
+                                y = centerY
+                            )
+                        )
                     }
-                    .size(thumbSize)
-                    .then(if (enabled) {
-                        thumbHandler
-                    } else Modifier)
-                    .graphicsLayer {
-                        scaleX = thumbScaleAnimated
-                        scaleY = thumbScaleAnimated
-                    }
-                    .dropShadow(
-                        shadow = UIKitShadowMaterial.getMarginal(),
-                        shape = RoundedCornerShape(getUIKitShapes().circular)
-                    )
-                    .clip(RoundedCornerShape(getUIKitShapes().circular))
-                    .drawBehind {
-                        drawRect(thumbColorAnimated)
-                    }
-            )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .offset {
+                            if (isVertical) {
+                                // 垂直: 行程自下而上, 最小值位于底部; 行程无限时按 0 处理
+                                val thumbY = maxTravel - thumbOffsetAnimated.value
+                                IntOffset(0, if (thumbY.value.isFinite()) thumbY.roundToPx() else 0)
+                            } else {
+                                // offset 为方向感知修饰符: RTL 下 x 轴自动镜像, 配合 CenterStart 对齐恰好得到正确的拇指位置
+                                IntOffset(thumbOffsetAnimated.value.roundToPx(), 0)
+                            }
+                        }
+                        .size(thumbSize)
+                        .then(if (enabled) {
+                            thumbHandler
+                        } else Modifier)
+                        .graphicsLayer {
+                            scaleX = thumbScaleAnimated
+                            scaleY = thumbScaleAnimated
+                        }
+                        .dropShadow(
+                            shadow = UIKitShadowMaterial.getMarginal(),
+                            shape = RoundedCornerShape(getUIKitShapes().circular)
+                        )
+                        .clip(RoundedCornerShape(getUIKitShapes().circular))
+                        .drawBehind {
+                            drawRect(thumbColorAnimated)
+                        }
+                )
+            }
         }
     }
 }

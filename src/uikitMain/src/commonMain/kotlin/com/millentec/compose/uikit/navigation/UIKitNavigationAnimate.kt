@@ -3,7 +3,7 @@ package com.millentec.compose.uikit.navigation
 import androidx.compose.animation.*
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import com.millentec.compose.uikit.theme.UIKitColors
+import com.millentec.compose.uikit.theme.colors.UIKitColors
 
 object UIKitNavigationAnimate {
     val jump: ContentTransform = ContentTransform(

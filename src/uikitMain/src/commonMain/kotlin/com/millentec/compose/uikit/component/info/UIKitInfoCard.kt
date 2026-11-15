@@ -28,6 +28,7 @@ import com.millentec.compose.uikit.icons.fluenticons.filled.dp20.warning
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Dismiss
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.info
 import com.millentec.compose.uikit.theme.*
+import com.millentec.compose.uikit.theme.colors.UIKitColors
 
 @Composable
 @Preview
@@ -100,31 +101,31 @@ fun UIKitInfoCard(
     type: UIKitInfoCardType = Info,
     background: Color = when(type) {
         Info -> getUIKitColors().contentFillColorSecondaryBrush
-        HighlightInfo -> getUIKitColors().highlightColorFourthBrush
-        Warning -> getUIKitColors().warningYellowColorFourthBrush
-        Success -> getUIKitColors().successGreenColorFourthBrush
-        Error -> getUIKitColors().errorRedColorFourthBrush
+        HighlightInfo -> getUIKitColors().accentColorFourthBrush
+        Warning -> getUIKitColors().warningColorFourthBrush
+        Success -> getUIKitColors().successColorFourthBrush
+        Error -> getUIKitColors().errorColorFourthBrush
     },
     contentColor: Color = when(type) {
         Info -> getUIKitColors().textFillColorPrimaryBrush
-        HighlightInfo -> getUIKitColors().highlightColorPrimaryBrush
-        Warning -> getUIKitColors().warningYellowColorPrimaryBrush
-        Success -> getUIKitColors().successGreenColorPrimaryBrush
-        Error -> getUIKitColors().errorRedColorPrimaryBrush
+        HighlightInfo -> getUIKitColors().accentColorPrimaryBrush
+        Warning -> getUIKitColors().warningColorPrimaryBrush
+        Success -> getUIKitColors().successColorPrimaryBrush
+        Error -> getUIKitColors().errorColorPrimaryBrush
     },
     icon: ImageVector? = when(type) {
-        Info -> FluentIcons.info(getUIKitColors().highlightColorPrimaryBrush, true)
-        HighlightInfo -> FluentIcons.Filled.info(getUIKitColors().highlightColorPrimaryBrush, true)
-        Warning -> FluentIcons.Filled.warning(getUIKitColors().warningYellowColorPrimaryBrush, true)
-        Success -> FluentIcons.Filled.checkmarkCircle(getUIKitColors().successGreenColorPrimaryBrush, true)
-        Error -> FluentIcons.Filled.dismissCircle(getUIKitColors().errorRedColorPrimaryBrush, true)
+        Info -> FluentIcons.info(getUIKitColors().accentColorPrimaryBrush, true)
+        HighlightInfo -> FluentIcons.Filled.info(getUIKitColors().accentColorPrimaryBrush, true)
+        Warning -> FluentIcons.Filled.warning(getUIKitColors().warningColorPrimaryBrush, true)
+        Success -> FluentIcons.Filled.checkmarkCircle(getUIKitColors().successColorPrimaryBrush, true)
+        Error -> FluentIcons.Filled.dismissCircle(getUIKitColors().errorColorPrimaryBrush, true)
     },
     iconColor: Color = when(type) {
-        Info -> getUIKitColors().highlightColorPrimaryBrush
-        HighlightInfo -> getUIKitColors().highlightColorPrimaryBrush
-        Warning -> getUIKitColors().warningYellowColorPrimaryBrush
-        Success -> getUIKitColors().successGreenColorPrimaryBrush
-        Error -> getUIKitColors().errorRedColorPrimaryBrush
+        Info -> getUIKitColors().accentColorPrimaryBrush
+        HighlightInfo -> getUIKitColors().accentColorPrimaryBrush
+        Warning -> getUIKitColors().warningColorPrimaryBrush
+        Success -> getUIKitColors().successColorPrimaryBrush
+        Error -> getUIKitColors().errorColorPrimaryBrush
     },
     shadowEnabled: Boolean = false,
     title: String,
@@ -235,31 +236,31 @@ fun UIKitInfoCard(
     type: UIKitInfoCardType = Info,
     background: Color = when(type) {
         Info -> getUIKitColors().contentFillColorSecondaryBrush
-        HighlightInfo -> getUIKitColors().highlightColorFourthBrush
-        Warning -> getUIKitColors().warningYellowColorFourthBrush
-        Success -> getUIKitColors().successGreenColorFourthBrush
-        Error -> getUIKitColors().errorRedColorFourthBrush
+        HighlightInfo -> getUIKitColors().accentColorFourthBrush
+        Warning -> getUIKitColors().warningColorFourthBrush
+        Success -> getUIKitColors().successColorFourthBrush
+        Error -> getUIKitColors().errorColorFourthBrush
     },
     titleColor: Color = when(type) {
         Info -> getUIKitColors().textFillColorPrimaryBrush
-        HighlightInfo -> getUIKitColors().highlightColorPrimaryBrush
-        Warning -> getUIKitColors().warningYellowColorPrimaryBrush
-        Success -> getUIKitColors().successGreenColorPrimaryBrush
-        Error -> getUIKitColors().errorRedColorPrimaryBrush
+        HighlightInfo -> getUIKitColors().accentColorPrimaryBrush
+        Warning -> getUIKitColors().warningColorPrimaryBrush
+        Success -> getUIKitColors().successColorPrimaryBrush
+        Error -> getUIKitColors().errorColorPrimaryBrush
     },
     icon: ImageVector? = when(type) {
-        Info -> FluentIcons.info(getUIKitColors().highlightColorPrimaryBrush, true)
-        HighlightInfo -> FluentIcons.Filled.info(getUIKitColors().highlightColorPrimaryBrush, true)
-        Warning -> FluentIcons.Filled.warning(getUIKitColors().warningYellowColorPrimaryBrush, true)
-        Success -> FluentIcons.Filled.checkmarkCircle(getUIKitColors().successGreenColorPrimaryBrush, true)
-        Error -> FluentIcons.Filled.dismissCircle(getUIKitColors().errorRedColorPrimaryBrush, true)
+        Info -> FluentIcons.info(getUIKitColors().accentColorPrimaryBrush, true)
+        HighlightInfo -> FluentIcons.Filled.info(getUIKitColors().accentColorPrimaryBrush, true)
+        Warning -> FluentIcons.Filled.warning(getUIKitColors().warningColorPrimaryBrush, true)
+        Success -> FluentIcons.Filled.checkmarkCircle(getUIKitColors().successColorPrimaryBrush, true)
+        Error -> FluentIcons.Filled.dismissCircle(getUIKitColors().errorColorPrimaryBrush, true)
     },
     iconColor: Color = when(type) {
-        Info -> getUIKitColors().highlightColorPrimaryBrush
-        HighlightInfo -> getUIKitColors().highlightColorPrimaryBrush
-        Warning -> getUIKitColors().warningYellowColorPrimaryBrush
-        Success -> getUIKitColors().successGreenColorPrimaryBrush
-        Error -> getUIKitColors().errorRedColorPrimaryBrush
+        Info -> getUIKitColors().accentColorPrimaryBrush
+        HighlightInfo -> getUIKitColors().accentColorPrimaryBrush
+        Warning -> getUIKitColors().warningColorPrimaryBrush
+        Success -> getUIKitColors().successColorPrimaryBrush
+        Error -> getUIKitColors().errorColorPrimaryBrush
     },
     shadowEnabled: Boolean = false,
     title: String,

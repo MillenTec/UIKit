@@ -415,7 +415,7 @@ fun FluentIcons.AnimatableIcons.ArrowCircle(
     progress: Float = 0f,
     state: UIKitArrowCircleAnimateState = Running,
     resetProgressOnError: Boolean = true,
-    primaryTint: Color = getUIKitColors().highlightColorPrimaryBrush,
+    primaryTint: Color = getUIKitColors().accentColorPrimaryBrush,
     autoTint: Boolean = true,
     lineWidth: Dp = 1.dp,
     rotate: Float
@@ -423,9 +423,9 @@ fun FluentIcons.AnimatableIcons.ArrowCircle(
     val tintAnimated by animateColorAsState(
         targetValue = if (autoTint) when(state) {
             Running -> primaryTint
-            Success -> getUIKitColors().successGreenColorPrimaryBrush
-            Stopped -> getUIKitColors().warningYellowColorPrimaryBrush
-            Error -> getUIKitColors().errorRedColorPrimaryBrush
+            Success -> getUIKitColors().successColorPrimaryBrush
+            Stopped -> getUIKitColors().warningColorPrimaryBrush
+            Error -> getUIKitColors().errorColorPrimaryBrush
         } else primaryTint,
         animationSpec = tween(
             getUIKitAnimate().transformRegularDurationMillis,

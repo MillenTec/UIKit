@@ -44,7 +44,7 @@ private fun Preview() {
 //            .size(100.dp),
         symbol = UIKitSymbols.systemUI.Bluetooth,
         contentDescription = "AddCircle",
-        symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush)
+        symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().accentColorPrimaryBrush)
     )
 }
 
@@ -65,7 +65,7 @@ private fun UIKitIconSample() {
             .size(32.dp),
         symbol = UIKitSymbols.systemUI.Bluetooth,
         contentDescription = "Volume",
-        symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().highlightColorPrimaryBrush),
+        symbolStyle = UIKitSymbolStyle.Hierarchical(getUIKitColors().accentColorPrimaryBrush),
         symbolEffect = UIKitSymbolEffect()
             .visibleEffect(true)
     )
@@ -764,7 +764,7 @@ data class UIKitIconOptions(
          */
         @Composable
         fun default(
-            symbolStyle: UIKitSymbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush),
+            symbolStyle: UIKitSymbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().symbol.stroke),
             symbolEffect: UIKitSymbolEffect? = null,
             weight: Float = 1f,
         ): UIKitIconOptions {
@@ -799,7 +799,7 @@ fun UIKitIcon(
     modifier: Modifier = Modifier,
     symbol: UIKitSymbol,
     contentDescription: String?,
-    symbolStyle: UIKitSymbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush),
+    symbolStyle: UIKitSymbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().symbol.stroke),
     symbolEffect: UIKitSymbolEffect? = null,
     weight: Float = 1f,
 ) {

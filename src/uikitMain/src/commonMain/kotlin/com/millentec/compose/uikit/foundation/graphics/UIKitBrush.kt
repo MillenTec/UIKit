@@ -57,7 +57,7 @@ data class UIKitBrush(
 
 /*
  * AIGC: 使用了人工智能制作了 Brush 动画部分
- * - Time: 2026-09-06 13:02
+ * - Time: 2026-09-06 UTC+8 13:02
  * - Model: MiMo V2.5
  * - Harness: OpenCode
  * - State: Reviewed

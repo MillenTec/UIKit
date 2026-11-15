@@ -26,6 +26,7 @@ import com.millentec.compose.uikit.foundation.UIKitHSVColor
 import com.millentec.compose.uikit.foundation.helper.toHsv
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.theme.*
+import com.millentec.compose.uikit.theme.colors.UIKitColors
 
 @Composable
 @Preview
@@ -265,7 +266,7 @@ fun UIKitAlphaSlider(
         }
 
         val colorAnimated by animateColorAsState(
-            targetValue = if (enabled) color else getUIKitColors().lineFillColorDisabled,
+            targetValue = if (enabled) color else getUIKitColors().lineFillColorDisabledBrush,
             animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
         )
 

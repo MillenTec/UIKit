@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.theme.*
+import com.millentec.compose.uikit.theme.colors.UIKitColors
 
 @Composable
 @Preview
@@ -70,26 +71,29 @@ data class UIKitToggleSwitchColors(
     companion object {
         @Composable
         fun default(
-            background: Color = getUIKitColors().contentFillColorSecondaryBrush,
-            backgroundDisabled: Color = getUIKitColors().contentFillColorBrushDisabled,
-            backgroundChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
-            border: Color = getUIKitColors().lineFillColorPrimaryBrush,
-            borderDisabled: Color = getUIKitColors().lineFillColorDisabled,
-            borderChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
-            thumb: Color = getUIKitColors().contentFillColorFourthBrush,
-            thumbDisabled: Color = getUIKitColors().lineFillColorDisabled,
-            thumbChecked: Color = UIKitColors.White
-        ) = UIKitToggleSwitchColors(
-            background = background,
-            backgroundDisabled = backgroundDisabled,
-            backgroundChecked = backgroundChecked,
-            border = border,
-            borderDisabled = borderDisabled,
-            borderChecked = borderChecked,
-            thumb = thumb,
-            thumbDisabled = thumbDisabled,
-            thumbChecked = thumbChecked
-        )
+            background: Color? = null,
+            backgroundDisabled: Color? = null,
+            backgroundChecked: Color? = null,
+            border: Color? = null,
+            borderDisabled: Color? = null,
+            borderChecked: Color? = null,
+            thumb: Color? = null,
+            thumbDisabled: Color? = null,
+            thumbChecked: Color? = null
+        ): UIKitToggleSwitchColors {
+            val colors = getUIKitColors().toggleSwitch
+            return colors.copy(
+                background = background ?: colors.background,
+                backgroundDisabled = backgroundDisabled ?: colors.backgroundDisabled,
+                backgroundChecked = backgroundChecked ?: colors.backgroundChecked,
+                border = border ?: colors.border,
+                borderDisabled = borderDisabled ?: colors.borderDisabled,
+                borderChecked = borderChecked ?: colors.borderChecked,
+                thumb = thumb ?: colors.thumb,
+                thumbDisabled = thumbDisabled ?: colors.thumbDisabled,
+                thumbChecked = thumbChecked ?: colors.thumbChecked
+            )
+        }
     }
 }
 
@@ -102,10 +106,14 @@ fun UIKitToggleSwitch(
     colors: UIKitToggleSwitchColors = UIKitToggleSwitchColors.default(),
     onCheckedChange: ((Boolean) -> Unit),
 ) {
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center,
+    UIKitAvailabilityScope(
+        enabled = enabled,
+        adjust = { it.copy(toggleSwitch = colors) }
     ) {
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.Center,
+        ) {
         val backgroundColorAnimated by animateColorAsState(
             targetValue = if (!enabled) colors.backgroundDisabled else if (checked) colors.backgroundChecked else colors.background,
             animationSpec = tween(if (enabled) getUIKitAnimate().transformMomentaryDurationMillis else getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
@@ -145,33 +153,34 @@ fun UIKitToggleSwitch(
             )
         }
 
-        Row(
-            modifier = Modifier
-                .clip(RoundedCornerShape(getUIKitShapes().circular))
-                .size(size)
-                .background(backgroundColorAnimated)
-                .border(
-                    width = 1.dp,
-                    color = borderColorAnimated,
-                    shape = RoundedCornerShape(getUIKitShapes().circular)
-                )
-                .uikitClickable(
-                    enabled = enabled,
-                    onClick = { onCheckedChange(!checked) },
-                    indicationEnabled = isDesktopOS(),
-                    indication = null
-                ),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
+            Row(
                 modifier = Modifier
-                    .offset { IntOffset((thumbOffsetAnimated.value).roundToPx(), 0) }
                     .clip(RoundedCornerShape(getUIKitShapes().circular))
-                    .size(thumbSizeAnimated)
-                    .drawBehind {
-                        drawRect(thumbColorAnimated)
-                    }
-            )
+                    .size(size)
+                    .background(backgroundColorAnimated)
+                    .border(
+                        width = 1.dp,
+                        color = borderColorAnimated,
+                        shape = RoundedCornerShape(getUIKitShapes().circular)
+                    )
+                    .uikitClickable(
+                        enabled = enabled,
+                        onClick = { onCheckedChange(!checked) },
+                        indicationEnabled = isDesktopOS(),
+                        indication = null
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .offset { IntOffset((thumbOffsetAnimated.value).roundToPx(), 0) }
+                        .clip(RoundedCornerShape(getUIKitShapes().circular))
+                        .size(thumbSizeAnimated)
+                        .drawBehind {
+                            drawRect(thumbColorAnimated)
+                        }
+                )
+            }
         }
     }
 }

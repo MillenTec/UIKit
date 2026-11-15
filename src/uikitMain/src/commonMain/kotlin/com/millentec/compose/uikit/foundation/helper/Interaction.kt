@@ -105,9 +105,9 @@ fun Modifier.uikitClickable(
         val density = LocalDensity.current
 
         val targetColor = when {
-            isPressed -> getUIKitColors().pointerTapInteractionColor
-            isHovered -> getUIKitColors().pointerHoverInteractionColor
-            else -> getUIKitColors().pointerHoverInteractionColor.copy(0f)
+            isPressed -> getUIKitColors().interaction.tap
+            isHovered -> getUIKitColors().interaction.hover
+            else -> getUIKitColors().interaction.hover.copy(0f)
         }
 
         val animatedColor by animateColorAsState(
@@ -194,7 +194,7 @@ data class UIKitInteraction(
 
         @Composable
         fun ripple() = ripple(
-            color = getUIKitColors().pointerInteractionBrush
+            color = getUIKitColors().interaction.pointer
         )
     }
 }

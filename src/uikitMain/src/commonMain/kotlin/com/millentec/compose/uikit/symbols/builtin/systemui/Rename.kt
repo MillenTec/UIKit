@@ -121,7 +121,7 @@ val UIKitSystemUISymbols.Rename: UIKitSymbol
                         ),
                         Pair(
                             UIKitSymbolSelector(null, "cursor", null),
-                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().highlightColorPrimaryBrush), 1f)
+                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().accentColorPrimaryBrush), 1f)
                         )
                     )
                 )
