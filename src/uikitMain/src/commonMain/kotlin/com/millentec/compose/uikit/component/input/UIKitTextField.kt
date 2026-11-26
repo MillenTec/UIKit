@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -46,7 +45,9 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.BackHandler
 import com.millentec.compose.uikit.component.media.UIKitIcon
 import com.millentec.compose.uikit.foundation.graphics.UIKitBrush
+import com.millentec.compose.uikit.foundation.helper.LocalUIKitClientAreaHelper
 import com.millentec.compose.uikit.foundation.helper.onClickOutside
+import com.millentec.compose.uikit.foundation.helper.positionInClient
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.dismissCircle
@@ -244,6 +245,7 @@ fun UIKitTextField(
     val densityDpi = LocalDensity.current.density
     val rootSize = remember { mutableStateOf(DpSize.Zero) }
     val rootPosition = remember { mutableStateOf(Offset.Zero) }
+    val areaHelper = LocalUIKitClientAreaHelper.current
 
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -275,7 +277,7 @@ fun UIKitTextField(
                         (layoutCoordinates.size.width / densityDpi).dp,
                         (layoutCoordinates.size.height / densityDpi).dp
                     )
-                    rootPosition.value = layoutCoordinates.positionInRoot()
+                    rootPosition.value = layoutCoordinates.positionInClient(areaHelper)
                 }
                 .onClickOutside(
                     enabled = enabled && isFocused.value
