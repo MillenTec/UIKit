@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -22,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.flyout.UIKitDropdownMenu
 import com.millentec.compose.uikit.component.flyout.UIKitFlyouter
 import com.millentec.compose.uikit.foundation.graphics.AcrylicMaterialState
+import com.millentec.compose.uikit.foundation.helper.LocalUIKitClientAreaHelper
+import com.millentec.compose.uikit.foundation.helper.positionInClient
 import com.millentec.compose.uikit.foundation.layout.UIKitMenuScope
 import com.millentec.compose.uikit.theme.*
 
@@ -97,6 +98,7 @@ fun UIKitDropdown(
     content: @Composable UIKitMenuScope.() -> Unit
 ) {
     val uiKitTheme = getUIKitTheme()
+    val areaHelper = LocalUIKitClientAreaHelper.current
 
     val position = remember { mutableStateOf(Offset.Zero) }
     val buttonSize = remember { mutableStateOf(IntSize.Zero) }
@@ -108,7 +110,7 @@ fun UIKitDropdown(
         modifier = modifier
             .onGloballyPositioned {
                 if (it.isAttached) {
-                    position.value = it.positionInRoot()
+                    position.value = it.positionInClient(areaHelper)
                     buttonSize.value = it.size
                 }
             },

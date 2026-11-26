@@ -19,7 +19,6 @@ import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
@@ -28,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.layout.UIKitVerticalMenu
 import com.millentec.compose.uikit.foundation.graphics.AcrylicMaterialState
 import com.millentec.compose.uikit.foundation.graphics.acrylicMaterial
+import com.millentec.compose.uikit.foundation.helper.LocalUIKitClientAreaHelper
+import com.millentec.compose.uikit.foundation.helper.positionInClient
 import com.millentec.compose.uikit.foundation.layout.UIKitMenuScope
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.Accessibility
@@ -75,6 +76,7 @@ fun UIKitDropdownMenu(
     content: @Composable UIKitMenuScope.() -> Unit
 ) {
     val positionOnRoot = remember { mutableStateOf(Offset.Zero) }
+    val areaHelper = LocalUIKitClientAreaHelper.current
 
     LaunchedEffect(positionOnRoot.value) {
         acrylicMaterialState?.invalidate()
@@ -91,7 +93,7 @@ fun UIKitDropdownMenu(
             .clip(RoundedCornerShape(cornerRadius))
             .onGloballyPositioned {
                 if (it.isAttached)
-                    positionOnRoot.value = it.positionInRoot()
+                    positionOnRoot.value = it.positionInClient(areaHelper)
             },
         alignment = alignment,
         offset = offset,

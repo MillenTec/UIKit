@@ -751,7 +751,7 @@ private fun UIKitImageVectorIcon(
  * @param symbolEffect 图标动态效果, 传入 null 则无动态效果, 按图标的默认配置渲染
  * @param weight 字重, 倍数值, 默认为 1f; 仅在声明支持 VariableWeight 的图标中生效
  */
-data class UIKitIconOptions(
+data class UIKitSymbolOptions(
     val symbolStyle: UIKitSymbolStyle,
     val symbolEffect: UIKitSymbolEffect?,
     val weight: Float,
@@ -767,8 +767,8 @@ data class UIKitIconOptions(
             symbolStyle: UIKitSymbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().textFillColorPrimaryBrush),
             symbolEffect: UIKitSymbolEffect? = null,
             weight: Float = 1f,
-        ): UIKitIconOptions {
-            return UIKitIconOptions(symbolStyle, symbolEffect, weight)
+        ): UIKitSymbolOptions {
+            return UIKitSymbolOptions(symbolStyle, symbolEffect, weight)
         }
     }
 }
@@ -778,7 +778,7 @@ fun UIKitIcon(
     modifier: Modifier = Modifier,
     symbol: UIKitSymbol,
     contentDescription: String?,
-    options: UIKitIconOptions = UIKitIconOptions.default()
+    options: UIKitSymbolOptions = UIKitSymbolOptions.default()
 ) = UIKitIcon(
     modifier, symbol, contentDescription,
     options.symbolStyle, options.symbolEffect, options.weight

@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.component.media.UIKitIcon
-import com.millentec.compose.uikit.component.media.UIKitIconOptions
+import com.millentec.compose.uikit.component.media.UIKitSymbolOptions
 import com.millentec.compose.uikit.foundation.helper.UIKitInteraction
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
@@ -55,7 +55,7 @@ class UIKitCardScope {
         onClick = onClick,
         enabled = enabled,
         symbol = icon?.let { UIKitImageVectorSymbol(it) },
-        symbolOptions = UIKitIconOptions.default(symbolStyle = UIKitSymbolStyle.Monochrome(iconColor)),
+        symbolOptions = UIKitSymbolOptions.default(symbolStyle = UIKitSymbolStyle.Monochrome(iconColor)),
         description = description,
         background = background,
         contentPadding = contentPadding,
@@ -71,12 +71,12 @@ class UIKitCardScope {
         onClick: (() -> Unit)? = null,
         enabled: Boolean = true,
         symbol: UIKitSymbol? = null,
-        symbolOptions: UIKitIconOptions = UIKitIconOptions.default(),
+        symbolOptions: UIKitSymbolOptions = UIKitSymbolOptions.default(),
         description: String? = null,
         background: Color = getUIKitColors().contentFillColorSecondaryBrush,
         contentPadding: PaddingValues = PaddingValues(getUIKitLayout().cardPadding),
         actionSymbol: UIKitSymbol? = null,
-        actionSymbolOptions: UIKitIconOptions? = UIKitIconOptions.default(),
+        actionSymbolOptions: UIKitSymbolOptions? = UIKitSymbolOptions.default(),
         actionDescription: String? = null,
         content: (@Composable BoxScope.() -> Unit)? = null
     ) {

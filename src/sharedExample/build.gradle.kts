@@ -50,7 +50,7 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation(projects.uikitMain)
+            api(projects.uikitMain)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

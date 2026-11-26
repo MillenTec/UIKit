@@ -119,6 +119,8 @@ fun Modifier.onClickOutside(
 
     this.onGloballyPositioned {
         rootRect.value = Rect(
+            // 此处获取的绝对定位用作比较而非位置渲染
+            // 故应继续使用 positionInRoot, localToRoot(change.position) 与其处于同一个坐标系
             offset = it.positionInRoot(),
             size = it.size.toSize()
         )
