@@ -55,7 +55,6 @@ import com.millentec.compose.uikit.icons.fluenticons.animatable.*
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.*
 import com.millentec.compose.uikit.icons.fluenticons.resizeable.shapes
 import com.millentec.compose.uikit.theme.*
-import com.millentec.compose.uikit.theme.colors.UIKitColors
 import com.millentec.compose.uikit.views.LocalNavigationDockHeight
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -368,10 +367,10 @@ private fun OptionsWindow(
                 val optionalColor = listOf(
                     OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary),
                     OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrushReversed, LocalStrings.current.designs.fluentIcons.options.colors.reversed),
-                    OptionalColorInfo(getUIKitColors().accentColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight),
-                    OptionalColorInfo(getUIKitColors().successColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.success),
-                    OptionalColorInfo(getUIKitColors().warningColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning),
-                    OptionalColorInfo(getUIKitColors().errorColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.error),
+                    OptionalColorInfo(getUIKitColors().highlightColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight),
+                    OptionalColorInfo(getUIKitColors().successGreenColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.success),
+                    OptionalColorInfo(getUIKitColors().warningYellowColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning),
+                    OptionalColorInfo(getUIKitColors().errorRedColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.error),
                 )
 
                 BoxWithConstraints {
@@ -435,10 +434,10 @@ private fun OptionsWindow(
                 val optionalColor = listOf(
                     OptionalColorInfo(getUIKitColors().contentFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary),
                     OptionalColorInfo(getUIKitColors().contentFillColorSecondaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.secondary),
-                    OptionalColorInfo(getUIKitColors().accentColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight),
-                    OptionalColorInfo(getUIKitColors().successColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.success),
-                    OptionalColorInfo(getUIKitColors().warningColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning),
-                    OptionalColorInfo(getUIKitColors().errorColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.error),
+                    OptionalColorInfo(getUIKitColors().highlightColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight),
+                    OptionalColorInfo(getUIKitColors().successGreenColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.success),
+                    OptionalColorInfo(getUIKitColors().warningYellowColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning),
+                    OptionalColorInfo(getUIKitColors().errorRedColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.error),
                 )
 
                 BoxWithConstraints {
@@ -550,7 +549,7 @@ fun IconGalleryPage() {
     val uikitTheme = getUIKitTheme()
     val acrylicMaterialsState = rememberAcrylicMaterialState()
     val optionsState = remember { OptionState(
-        initialTint = uikitTheme.colors.accentColorPrimaryBrush.toHsv(),
+        initialTint = uikitTheme.colors.highlightColorPrimaryBrush.toHsv(),
         initialBackground = uikitTheme.colors.contentFillColorSecondaryBrush.toHsv()
     ) }
     val iconLists = remember { mutableStateOf(IconGalleryList(

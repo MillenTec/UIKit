@@ -31,7 +31,7 @@ private fun Preview() {
     UIKitVerticalMenu {
         TextWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {})
         Divider()
-        Text("Option 2", onClick = {}, background = getUIKitColors().successColorFourthBrush)
+        Text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush)
         Icon(FluentIcons.Text, onClick = {}, contentDescription = null)
     }
 }
@@ -41,7 +41,7 @@ fun UIKitVerticalMenu(
     modifier: Modifier = Modifier,
     maxLength: Dp = (-1).dp,
     minWidth: Dp = 200.dp,
-    background: Color = getUIKitColors().menu.background,
+    background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     cornerRadius: Dp = getUIKitShapes().cardRounded,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().smallSpacing),
     content: @Composable UIKitMenuScope.() -> Unit

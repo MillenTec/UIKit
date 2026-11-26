@@ -38,7 +38,7 @@ fun StateSelector(
     ) {
         items(states.size) { index ->
             val borderColor by animateColorAsState(
-                targetValue = if (index == state.value) getUIKitColors().accentColorPrimaryBrush else Color.Transparent,
+                targetValue = if (index == state.value) getUIKitColors().highlightColorPrimaryBrush else Color.Transparent,
                 animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
             )
 

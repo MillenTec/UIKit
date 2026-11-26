@@ -80,7 +80,7 @@ val UIKitGraphicSymbols.Flash: UIKitSymbol
                     multiColor = mapOf(
                         Pair(
                             UIKitSymbolSelector(null, "flash", null),
-                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().yellowPrimaryBrush), 1f)
+                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().yellowThemedBrush), 1f)
                         )
                     ),
                 )

@@ -1,0 +1,181 @@
+package com.millentec.compose.uikit.theme
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import com.millentec.compose.uikit.foundation.graphics.contrast
+
+/**
+ * UIKitTheme 主题的颜色部分, 默认为亮色主题, 使用 getDark() 方法获取默认的暗色主题
+ */
+data class UIKitColors(
+    /**
+     * 一般可用于应用程序的窗口背景颜色
+     */
+    val contentFillColorPrimaryBrush: Color = Color(0xFFF5F5F7),
+
+    /**
+     * 一般用于卡片等容器背景颜色
+     */
+    val contentFillColorSecondaryBrush: Color = Color(0xFFFFFFFF),
+
+    val contentFillColorTertiaryBrush: Color = Color(0xFFE8E8ED),
+
+    val contentFillColorFourthBrush: Color = Color(0xFF666668),
+
+    val contentFillColorBrushDisabled: Color = Color(0xFFEFEFF2),
+
+    /**
+     * 用于普通正文的颜色
+     */
+    val textFillColorPrimaryBrush: Color = Color(0xFF1D1D1F),
+
+    val textFillColorPrimaryBrushReversed: Color = Color(0xFFF5F5F7),
+
+    /**
+     * 可用于副标题, 脚注, 不可用控件的文本颜色
+     */
+    val textFillColorSecondaryBrush: Color = Color(0xFF6E6E73),
+
+    val textFillColorDisabled: Color = Color(0xFFB9B9BB),
+
+    val lineFillColorPrimaryBrush: Color = Color(0xFFE8E8ED),
+
+    val lineFillColorDisabled: Color = Color(0xFFB9B9BB),
+
+    val highlightColorPrimaryBrush: Color = Color(0xFF0071E3),
+
+    val highlightColorSecondaryBrush: Color = Color(0xFF5B99EC),
+
+    val highlightColorTertiaryBrush: Color = Color(0xFF8FB8F2),
+
+    val highlightColorFourthBrush: Color = Color(0xFFD7E3F6),
+
+    val successGreenColorPrimaryBrush: Color = Color(0xFF34C759),
+
+    val successGreenColorSecondaryBrush: Color = Color(0xFF7AD588),
+
+    val successGreenColorTertiaryBrush: Color = Color(0xFFA6E1AE),
+
+    val successGreenColorFourthBrush: Color = Color(0xFFDFEFE2),
+
+    val warningYellowColorPrimaryBrush: Color = Color(0xFFFFCC00),
+
+    val warningYellowColorSecondaryBrush: Color = Color(0xFFFCD974),
+
+    val warningYellowColorTertiaryBrush: Color = Color(0xFFFAE3A4),
+
+    val warningYellowColorFourthBrush: Color = Color(0xFFF7F0E0),
+
+    val errorRedColorPrimaryBrush: Color = Color(0xFFFF383C),
+
+    val errorRedColorSecondaryBrush: Color = Color(0xFFFF8077),
+
+    val errorRedColorTertiaryBrush: Color = Color(0xFFFFAAA2),
+
+    val errorRedColorFourthBrush: Color = Color(0xFFFCDFDD),
+
+    val pointerInteractionBrush: Color = Color(0xFF000000),
+
+    val pointerHoverInteractionColor: Color = pointerInteractionBrush.copy(0.05f),
+
+    val pointerTapInteractionColor: Color = pointerInteractionBrush.copy(0.1f),
+
+    val blueThemedBrush: Color = Color(0xFF0088FF),
+    val greenThemedBrush: Color = Color(0xFF34C759),
+    val yellowThemedBrush: Color = Color(0xFFFFCC00),
+    val redThemedBrush: Color = Color(0xFFFF383C),
+    val mintThemedBrush: Color = Color(0xFF00C8B3),
+    val tealThemedBrush: Color = Color(0xFF00C3D0),
+    val cyanThemedBrush: Color = Color(0xFF00C0E8),
+    val indigoThemedBrush: Color = Color(0xFF6155F5),
+    val purpleThemedBrush: Color = Color(0xFFCB30E0),
+    val pinkThemedBrush: Color = Color(0xFFFF2D55),
+    val brownThemedBrush: Color = Color(0xFFAC7F5E),
+    val orangeThemedBrush: Color = Color(0xFFFF8D28),
+) {
+
+    /**
+     * UIKitTheme 主题的颜色部分, 默认为亮色主题, 使用 getDark() 方法获取默认的暗色主题
+     */
+    companion object {
+        @Composable
+        fun contentColor(background: Color, minContrast: Float = 4.5f): Color {
+            return if (Color.contrast(background, getUIKitColors().textFillColorPrimaryBrush) < minContrast) {
+                getUIKitColors().textFillColorPrimaryBrushReversed
+            } else getUIKitColors().textFillColorPrimaryBrush
+        }
+
+        fun contentColor(background: Color, colors: UIKitColors, minContrast: Float = 4.5f): Color {
+            return if (Color.contrast(background, colors.textFillColorPrimaryBrush) < minContrast) {
+                colors.textFillColorPrimaryBrushReversed
+            } else colors.textFillColorPrimaryBrush
+        }
+
+        /**
+         * 获取默认的亮色主题
+         * @return 包含默认亮色主题的 UIKitColors 实例
+         */
+        fun getLight(): UIKitColors = UIKitColors()
+
+        /**
+         * 获取默认的暗色主题
+         * @return 包含默认暗色主题的 UIKitColors 实例
+         */
+        fun getDark(): UIKitColors = UIKitColors(
+            contentFillColorPrimaryBrush = Color(0xFF151517),
+            contentFillColorSecondaryBrush = Color(0xFF1D1D1F),
+            contentFillColorTertiaryBrush = Color(0xFF353537),
+            contentFillColorFourthBrush = Color(0xFF7D7D7F),
+            contentFillColorBrushDisabled = Color(0xFF2A2A2C),
+            textFillColorPrimaryBrush = Color(0xFFF5F5F7),
+            textFillColorPrimaryBrushReversed = Color(0xFF1D1D1F),
+            textFillColorSecondaryBrush = Color(0xFF86868B),
+            textFillColorDisabled = Color(0xFF4D4D4F),
+            lineFillColorPrimaryBrush = Color(0xFF303032),
+            lineFillColorDisabled = Color(0xFF4D4D4F),
+            highlightColorPrimaryBrush = Color(0xFF0091FF),
+            highlightColorSecondaryBrush = Color(0xFF1879D0),
+            highlightColorTertiaryBrush = Color(0xFF1F5F9E),
+            highlightColorFourthBrush = Color(0xFF1E334C),
+            successGreenColorPrimaryBrush = Color(0xFF30D158),
+            successGreenColorSecondaryBrush = Color(0xFF34A34E),
+            successGreenColorTertiaryBrush = Color(0xFF317D41),
+            successGreenColorFourthBrush = Color(0xFF243E29),
+            warningYellowColorPrimaryBrush = Color(0xFFFFD600),
+            warningYellowColorSecondaryBrush = Color(0xFFCFA721),
+            warningYellowColorTertiaryBrush = Color(0xFF9D802A),
+            warningYellowColorFourthBrush = Color(0xFF493F24),
+            errorRedColorPrimaryBrush = Color(0xFFFF4245),
+            errorRedColorSecondaryBrush = Color(0xFFD03737),
+            errorRedColorTertiaryBrush = Color(0xFF9F3231),
+            errorRedColorFourthBrush = Color(0xFF4C2423),
+            pointerInteractionBrush = Color(0xFFFFFFFF),
+            blueThemedBrush = Color(0xFF0091FF),
+            yellowThemedBrush = Color(0xFFFFD600),
+            redThemedBrush = Color(0xFFFF4245),
+            mintThemedBrush = Color(0xFF00DAC3),
+            tealThemedBrush = Color(0xFF00D2E0),
+            cyanThemedBrush = Color(0xFF3CD3FE),
+            indigoThemedBrush = Color(0xFF6D7CFF),
+            purpleThemedBrush = Color(0xFFDB34F2),
+            pinkThemedBrush = Color(0xFFFF375F),
+            brownThemedBrush = Color(0xFFB78A66),
+            orangeThemedBrush = Color(0xFFFF9230),
+        )
+
+        val White = Color(0xFFF5F5F7)
+        val Black = Color(0xFF1D1D1F)
+        val Blue = Color(0xFF0088FF)
+        val Green = Color(0xFF34C759)
+        val Yellow = Color(0xFFFFCC00)
+        val Red = Color(0xFFFF383C)
+        val Mint = Color(0xFF00C8B3)
+        val Teal = Color(0xFF00C3D0)
+        val Cyan = Color(0xFF00C0E8)
+        val Indigo = Color(0xFF6155F5)
+        val Purple = Color(0xFFCB30E0)
+        val Pink = Color(0xFFFF2D55)
+        val Brown = Color(0xFFAC7F5E)
+        val Orange = Color(0xFFFF8D28)
+    }
+}

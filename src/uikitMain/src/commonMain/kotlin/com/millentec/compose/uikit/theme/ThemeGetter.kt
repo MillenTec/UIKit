@@ -1,7 +1,6 @@
 package com.millentec.compose.uikit.theme
 
 import androidx.compose.runtime.Composable
-import com.millentec.compose.uikit.theme.colors.UIKitColors
 
 @Composable
 fun getUIKitTheme(): UIKitTheme {

@@ -27,7 +27,6 @@ import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.icons.fluenticons.FluentIcons
 import com.millentec.compose.uikit.icons.fluenticons.regular.dp20.designIdeas
 import com.millentec.compose.uikit.theme.*
-import com.millentec.compose.uikit.theme.colors.UIKitColors
 
 @Composable
 @Preview
@@ -109,29 +108,26 @@ data class UIKitToggleButtonColors(
     companion object {
         @Composable
         fun default(
-            background: Color? = null,
-            backgroundDisabled: Color? = null,
-            backgroundChecked: Color? = null,
-            content: Color? = null,
-            contentDisabled: Color? = null,
-            contentChecked: Color? = null,
-            border: Color? = null,
-            borderDisabled: Color? = null,
-            borderChecked: Color? = null,
-        ): UIKitToggleButtonColors {
-            val colors = getUIKitColors().toggleButton
-            return colors.copy(
-                background = background ?: colors.background,
-                backgroundDisabled = backgroundDisabled ?: colors.backgroundDisabled,
-                backgroundChecked = backgroundChecked ?: colors.backgroundChecked,
-                content = content ?: colors.content,
-                contentDisabled = contentDisabled ?: colors.contentDisabled,
-                contentChecked = contentChecked ?: colors.contentChecked,
-                border = border ?: colors.border,
-                borderDisabled = borderDisabled ?: colors.borderDisabled,
-                borderChecked = borderChecked ?: colors.borderChecked,
-            )
-        }
+            background: Color = getUIKitColors().contentFillColorTertiaryBrush,
+            backgroundDisabled: Color = getUIKitColors().contentFillColorBrushDisabled,
+            backgroundChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
+            content: Color = UIKitColors.contentColor(background),
+            contentDisabled: Color = getUIKitColors().textFillColorDisabled,
+            contentChecked: Color = UIKitColors.contentColor(backgroundChecked),
+            border: Color = getUIKitColors().lineFillColorPrimaryBrush,
+            borderDisabled: Color = getUIKitColors().lineFillColorPrimaryBrush,
+            borderChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
+        ): UIKitToggleButtonColors = UIKitToggleButtonColors(
+            background = background,
+            backgroundDisabled = backgroundDisabled,
+            backgroundChecked = backgroundChecked,
+            content = content,
+            contentDisabled = contentDisabled,
+            contentChecked = contentChecked,
+            border = border,
+            borderDisabled = borderDisabled,
+            borderChecked = borderChecked
+        )
     }
 }
 
@@ -153,41 +149,36 @@ fun UIKitToggleButton(
         animationSpec = tween(if (enabled) getUIKitAnimate().transformMomentaryDurationMillis else getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
     )
 
-        val borderColorAnimated = animateColorAsState(
-            targetValue = if (!enabled) colors.borderDisabled else if (checked) colors.borderChecked else colors.border,
-            animationSpec = tween(if (enabled) getUIKitAnimate().transformMomentaryDurationMillis else getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
-        )
+    val borderColorAnimated = animateColorAsState(
+        targetValue = if (!enabled) colors.borderDisabled else if (checked) colors.borderChecked else colors.border,
+        animationSpec = tween(if (enabled) getUIKitAnimate().transformMomentaryDurationMillis else getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
+    )
 
-        UIKitAvailabilityScope(
-            enabled = enabled,
-            adjust = { it.copy(toggleButton = colors) }
-        ) {
-            UIKitSurface(
-                modifier = modifier
-                    .defaultMinSize(
-                        minWidth = 120.dp,
-                        minHeight = getUIKitLayout().interactiveHotspot
-                    )
-                    .then(if (hasBorder)
-                        Modifier.border(
-                            width = borderWidth,
-                            color = borderColorAnimated.value,
-                            shape = shape)
-                    else Modifier),
-                shape = shape,
-                color = backgroundColorAnimated.value,
-                enabled = enabled,
-                onClick = { onCheckedChange(!checked) },
-                indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
-            ) {
-                Box(
-                    modifier = Modifier
-                        .padding(contentPadding),
-                    contentAlignment = Alignment.Center,
-                    content = content,
-                )
-            }
-        }
+    UIKitSurface(
+        modifier = modifier
+            .defaultMinSize(
+                minWidth = 120.dp,
+                minHeight = getUIKitLayout().interactiveHotspot
+            )
+            .then(if (hasBorder)
+                Modifier.border(
+                    width = borderWidth,
+                    color = borderColorAnimated.value,
+                    shape = shape)
+            else Modifier),
+        shape = shape,
+        color = backgroundColorAnimated.value,
+        enabled = enabled,
+        onClick = { onCheckedChange(!checked) },
+        indication = if (isDesktopOS()) null else UIKitInteraction.ripple()
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(contentPadding),
+            contentAlignment = Alignment.Center,
+            content = content,
+        )
+    }
 }
 
 @Composable

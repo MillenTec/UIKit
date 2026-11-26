@@ -89,37 +89,37 @@ data class UIKitTextFieldColors(
     companion object {
         @Composable
         fun default(
-            background: Color? = null,
-            backgroundDisabled: Color? = null,
-            backgroundActive: Color? = null,
-            border: Color? = null,
-            borderActive: Color? = null,
-            borderDisabled: Color? = null,
-            watermark: Color? = null,
-            watermarkActive: Color? = null,
-            watermarkDisabled: Color? = null,
-            content: Color? = null,
-            contentActive: Color? = null,
-            contentDisabled: Color? = null,
-            textSelectionColors: TextSelectionColors? = null
-        ): UIKitTextFieldColors {
-            val colors = getUIKitColors().textField
-            return colors.copy(
-                background = background ?: colors.background,
-                backgroundDisabled = backgroundDisabled ?: colors.backgroundDisabled,
-                backgroundActive = backgroundActive ?: colors.backgroundActive,
-                border = border ?: colors.border,
-                borderActive = borderActive ?: colors.borderActive,
-                borderDisabled = borderDisabled ?: colors.borderDisabled,
-                watermark = watermark ?: colors.watermark,
-                watermarkActive = watermarkActive ?: colors.watermarkActive,
-                watermarkDisabled = watermarkDisabled ?: colors.watermarkDisabled,
-                content = content ?: colors.content,
-                contentActive = contentActive ?: colors.contentActive,
-                contentDisabled = contentDisabled ?: colors.contentDisabled,
-                textSelectionColors = textSelectionColors ?: colors.textSelectionColors
+            background: Color = getUIKitColors().contentFillColorTertiaryBrush,
+            backgroundDisabled: Color = getUIKitColors().contentFillColorBrushDisabled,
+            backgroundActive: Color = getUIKitColors().contentFillColorSecondaryBrush,
+            border: Color = getUIKitColors().lineFillColorPrimaryBrush,
+            borderActive: Color = getUIKitColors().highlightColorPrimaryBrush,
+            borderDisabled: Color = getUIKitColors().lineFillColorDisabled,
+            watermark: Color = getUIKitColors().textFillColorSecondaryBrush,
+            watermarkActive: Color = getUIKitColors().textFillColorSecondaryBrush,
+            watermarkDisabled: Color = getUIKitColors().textFillColorDisabled,
+            content: Color = getUIKitColors().textFillColorPrimaryBrush,
+            contentActive: Color = getUIKitColors().textFillColorPrimaryBrush,
+            contentDisabled: Color = getUIKitColors().textFillColorDisabled,
+            textSelectionColors: TextSelectionColors = TextSelectionColors(
+                handleColor = getUIKitColors().highlightColorPrimaryBrush,
+                backgroundColor = getUIKitColors().highlightColorPrimaryBrush.copy(0.3f)
             )
-        }
+        ): UIKitTextFieldColors = UIKitTextFieldColors(
+            background,
+            backgroundDisabled,
+            backgroundActive,
+            border,
+            borderDisabled,
+            borderActive,
+            watermark,
+            watermarkDisabled,
+            watermarkActive,
+            content,
+            contentDisabled,
+            contentActive,
+            textSelectionColors
+        )
     }
 }
 
@@ -259,60 +259,176 @@ fun UIKitTextField(
         }
     }
 
-    UIKitAvailabilityScope(
-        enabled = enabled,
-        adjust = { it.copy(textField = colors) }
-    ) {
-            CompositionLocalProvider(LocalTextSelectionColors provides colors.textSelectionColors) {
-            Box(
-                modifier = Modifier
-                    .background(backgroundAnimated, shape)
-                    .then(
-                        if (border != null) Modifier.border(
-                            width = border,
-                            color = borderAnimated,
-                            shape = shape
-                        ) else Modifier
+    CompositionLocalProvider(LocalTextSelectionColors provides colors.textSelectionColors) {
+        Box(
+            modifier = Modifier
+                .background(backgroundAnimated, shape)
+                .then(
+                    if (border != null) Modifier.border(
+                        width = border,
+                        color = borderAnimated,
+                        shape = shape
+                    ) else Modifier
+                )
+                .onGloballyPositioned { layoutCoordinates ->
+                    rootSize.value = DpSize(
+                        (layoutCoordinates.size.width / densityDpi).dp,
+                        (layoutCoordinates.size.height / densityDpi).dp
                     )
-                    .onGloballyPositioned { layoutCoordinates ->
-                        rootSize.value = DpSize(
-                            (layoutCoordinates.size.width / densityDpi).dp,
-                            (layoutCoordinates.size.height / densityDpi).dp
-                        )
-                        rootPosition.value = layoutCoordinates.positionInRoot()
-                    }
-                    .onClickOutside(
-                        enabled = enabled && isFocused.value
-                    ) {
-                        onDismissRequest?.invoke()
-                    }
-            ) {
-                Row(
-                    modifier = modifier
-                        .defaultMinSize(minHeight = getUIKitLayout().interactiveHotspot)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
+                    rootPosition.value = layoutCoordinates.positionInRoot()
+                }
+                .onClickOutside(
+                    enabled = enabled && isFocused.value
                 ) {
-                    if (symbol == null) {
-                        Spacer(
-                            Modifier.width(
-                                ((rootSize.value.height - textStyle.lineHeight.value.dp) / 2).coerceIn(
-                                    getUIKitLayout().basicSpacing..getUIKitLayout().mediumSpacing
-                                )
+                    onDismissRequest?.invoke()
+                }
+        ) {
+            Row(
+                modifier = modifier
+                    .defaultMinSize(minHeight = getUIKitLayout().interactiveHotspot)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                if (symbol == null) {
+                    Spacer(
+                        Modifier.width(
+                            ((rootSize.value.height - textStyle.lineHeight.value.dp) / 2).coerceIn(
+                                getUIKitLayout().basicSpacing..getUIKitLayout().mediumSpacing
                             )
                         )
-                    } else {
+                    )
+                } else {
+                    UIKitIcon(
+                        modifier = Modifier
+                            .then(
+                                if (onSymbolClick != null) {
+                                    Modifier.uikitClickable(
+                                        onClick = {
+                                            onSymbolClick(value)
+                                        },
+                                        indicationEnabled = false
+                                    )
+                                } else Modifier
+                            )
+                            .padding(run {
+                                val padding = ((rootSize.value.height - textStyle.lineHeight.value.dp) / 2).coerceIn(
+                                    getUIKitLayout().basicSpacing..getUIKitLayout().mediumSpacing
+                                )
+
+                                PaddingValues(
+                                    start = padding,
+                                    top = padding,
+                                    bottom = padding,
+                                    end = getUIKitLayout().smallSpacing,
+                                )
+                            })
+                            .size(textStyle.lineHeight.value.dp),
+                        symbol = symbol,
+                        contentDescription = null
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (mask == UIKitTextFieldMask.Ellipsis) {
+                        Canvas(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            repeat(value.length) {
+                                drawCircle(
+                                    color = contentAnimated,
+                                    radius = 5.dp.toPx(),
+                                    center = Offset(
+                                        5.dp.toPx() + (it * 15.dp.toPx()),
+                                        0f
+                                    )
+                                )
+                            }
+                        }
+                    }
+
+                    BackHandler(enabled = isFocused.value && options.dismissOnGoBack) {
+                        onDismissRequest?.invoke()
+                    }
+
+                    BasicTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(focusRequester)
+                            .onFocusChanged {
+                                isFocused.value = it.isFocused
+                                onFocusChange?.invoke(it.isFocused)
+                            },
+                        enabled = enabled,
+                        value = value,
+                        onValueChange = onValueChange,
+                        textStyle = textStyle.merge(color = contentAnimated),
+                        keyboardOptions = keyboardOptions,
+                        keyboardActions = keyboardActions,
+                        singleLine = maxLines == 1,
+                        maxLines = maxLines,
+                        minLines = minLines,
+                        cursorBrush = SolidColor(colors.textSelectionColors.handleColor),
+                        visualTransformation = when (mask) {
+                            UIKitTextFieldMask.None -> VisualTransformation.None
+                            is UIKitTextFieldMask.Char -> VisualTransformation { string ->
+                                TransformedText(
+                                    AnnotatedString(text = CharArray(string.length) { mask.char }.concatToString()),
+                                    offsetMapping = OffsetMapping.Identity
+                                )
+                            }
+
+                            UIKitTextFieldMask.Ellipsis -> VisualTransformation { string ->
+                                TransformedText(
+                                    AnnotatedString(text = CharArray(string.length) { '\u200d' }.concatToString()),
+                                    offsetMapping = OffsetMapping.Identity
+                                )
+                            }
+                        }
+                    )
+
+                    watermark?.let {
+                        if (value.isEmpty() || value.isBlank()) {
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                text = it,
+                                style = textStyle.merge(color = colors.watermark)
+                            )
+                        }
+                    }
+                }
+
+                if (options == UIKitTextFieldOptions.Default) {
+                    Spacer(Modifier.width(getUIKitLayout().basicSpacing))
+                } else {
+                    if (options.clear) {
+                        val interactionSource = remember { MutableInteractionSource() }
+                        val isHovered by interactionSource.collectIsHoveredAsState()
+                        val isPressed by interactionSource.collectIsPressedAsState()
+                        val alphaAnimated by animateFloatAsState(
+                            targetValue = if (isPressed) 0.15f else if (isHovered) 0.3f else 0.15f,
+                            tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
+                        )
+
                         UIKitIcon(
                             modifier = Modifier
-                                .then(
-                                    if (onSymbolClick != null) {
-                                        Modifier.uikitClickable(
-                                            onClick = {
-                                                onSymbolClick(value)
-                                            },
-                                            indicationEnabled = false
-                                        )
-                                    } else Modifier
+                                .uikitClickable(
+                                    onClick = {
+                                        if (actions.onClear == null) {
+                                            onValueChange("")
+                                        } else {
+                                            actions.onClear()
+                                        }
+                                    },
+                                    indicationEnabled = false
+                                )
+                                .hoverable(
+                                    interactionSource = interactionSource,
                                 )
                                 .padding(run {
                                     val padding = ((rootSize.value.height - textStyle.lineHeight.value.dp) / 2).coerceIn(
@@ -320,141 +436,20 @@ fun UIKitTextField(
                                     )
 
                                     PaddingValues(
-                                        start = padding,
+                                        start = getUIKitLayout().smallSpacing,
                                         top = padding,
                                         bottom = padding,
-                                        end = getUIKitLayout().smallSpacing,
+                                        end = padding,
                                     )
                                 })
                                 .size(textStyle.lineHeight.value.dp),
-                            symbol = symbol,
-                            contentDescription = null
+                            symbol = UIKitImageVectorSymbol(FluentIcons.dismissCircle()),
+                            symbolStyle = UIKitSymbolStyle.Palette(
+                                UIKitBrush.solid(getUIKitColors().textFillColorSecondaryBrush),
+                                UIKitBrush.solid(getUIKitColors().textFillColorSecondaryBrush.copy(alphaAnimated))
+                            ),
+                            contentDescription = "Clear"
                         )
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .weight(1f),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        if (mask == UIKitTextFieldMask.Ellipsis) {
-                            Canvas(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                            ) {
-                                repeat(value.length) {
-                                    drawCircle(
-                                        color = contentAnimated,
-                                        radius = 5.dp.toPx(),
-                                        center = Offset(
-                                            5.dp.toPx() + (it * 15.dp.toPx()),
-                                            0f
-                                        )
-                                    )
-                                }
-                            }
-                        }
-
-                        BackHandler(enabled = isFocused.value && options.dismissOnGoBack) {
-                            onDismissRequest?.invoke()
-                        }
-
-                        BasicTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .focusRequester(focusRequester)
-                                .onFocusChanged {
-                                    isFocused.value = it.isFocused
-                                    onFocusChange?.invoke(it.isFocused)
-                                },
-                            enabled = enabled,
-                            value = value,
-                            onValueChange = onValueChange,
-                            textStyle = textStyle.merge(color = contentAnimated),
-                            keyboardOptions = keyboardOptions,
-                            keyboardActions = keyboardActions,
-                            singleLine = maxLines == 1,
-                            maxLines = maxLines,
-                            minLines = minLines,
-                            cursorBrush = SolidColor(colors.textSelectionColors.handleColor),
-                            visualTransformation = when (mask) {
-                                UIKitTextFieldMask.None -> VisualTransformation.None
-                                is UIKitTextFieldMask.Char -> VisualTransformation { string ->
-                                    TransformedText(
-                                        AnnotatedString(text = CharArray(string.length) { mask.char }.concatToString()),
-                                        offsetMapping = OffsetMapping.Identity
-                                    )
-                                }
-
-                                UIKitTextFieldMask.Ellipsis -> VisualTransformation { string ->
-                                    TransformedText(
-                                        AnnotatedString(text = CharArray(string.length) { '\u200d' }.concatToString()),
-                                        offsetMapping = OffsetMapping.Identity
-                                    )
-                                }
-                            }
-                        )
-
-                        watermark?.let {
-                            if (value.isEmpty() || value.isBlank()) {
-                                Text(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    text = it,
-                                    style = textStyle.merge(color = colors.watermark)
-                                )
-                            }
-                        }
-                    }
-
-                    if (options == UIKitTextFieldOptions.Default) {
-                        Spacer(Modifier.width(getUIKitLayout().basicSpacing))
-                    } else {
-                        if (options.clear) {
-                            val interactionSource = remember { MutableInteractionSource() }
-                            val isHovered by interactionSource.collectIsHoveredAsState()
-                            val isPressed by interactionSource.collectIsPressedAsState()
-                            val alphaAnimated by animateFloatAsState(
-                                targetValue = if (isPressed) 0.15f else if (isHovered) 0.3f else 0.15f,
-                                tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
-                            )
-
-                            UIKitIcon(
-                                modifier = Modifier
-                                    .uikitClickable(
-                                        onClick = {
-                                            if (actions.onClear == null) {
-                                                onValueChange("")
-                                            } else {
-                                                actions.onClear()
-                                            }
-                                        },
-                                        indicationEnabled = false
-                                    )
-                                    .hoverable(
-                                        interactionSource = interactionSource,
-                                    )
-                                    .padding(run {
-                                        val padding = ((rootSize.value.height - textStyle.lineHeight.value.dp) / 2).coerceIn(
-                                            getUIKitLayout().basicSpacing..getUIKitLayout().mediumSpacing
-                                        )
-
-                                        PaddingValues(
-                                            start = getUIKitLayout().smallSpacing,
-                                            top = padding,
-                                            bottom = padding,
-                                            end = padding,
-                                        )
-                                    })
-                                    .size(textStyle.lineHeight.value.dp),
-                                symbol = UIKitImageVectorSymbol(FluentIcons.dismissCircle()),
-                                symbolStyle = UIKitSymbolStyle.Palette(
-                                    UIKitBrush.solid(getUIKitColors().textField.watermark),
-                                    UIKitBrush.solid(getUIKitColors().textField.watermark.copy(alphaAnimated))
-                                ),
-                                contentDescription = "Clear"
-                            )
-                        }
                     }
                 }
             }

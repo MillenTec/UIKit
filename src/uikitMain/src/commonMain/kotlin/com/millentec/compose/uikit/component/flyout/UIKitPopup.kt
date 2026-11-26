@@ -24,7 +24,7 @@ import com.millentec.compose.uikit.foundation.graphics.acrylicMaterial
 import com.millentec.compose.uikit.foundation.graphics.acrylicMaterialSource
 import com.millentec.compose.uikit.foundation.graphics.rememberAcrylicMaterialState
 import com.millentec.compose.uikit.foundation.helper.onClickOutside
-import com.millentec.compose.uikit.theme.colors.UIKitColors
+import com.millentec.compose.uikit.theme.UIKitColors
 import com.millentec.compose.uikit.theme.getUIKitLayout
 
 @Composable

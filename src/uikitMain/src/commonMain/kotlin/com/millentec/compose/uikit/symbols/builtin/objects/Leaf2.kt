@@ -114,11 +114,11 @@ val UIKitObjectsSymbols.Leaf2: UIKitSymbol
                     multiColor = mapOf(
                         Pair(
                             UIKitSymbolSelector(null, "leaf0", null),
-                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().greenPrimaryBrush), 1f)
+                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().greenThemedBrush), 1f)
                         ),
                         Pair(
                             UIKitSymbolSelector(null, "leaf1", null),
-                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().greenPrimaryBrush), 1f)
+                            UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().greenThemedBrush), 1f)
                         )
                     )
                 )

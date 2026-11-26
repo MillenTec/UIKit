@@ -29,7 +29,7 @@ class UIKitMenuScope {
         text: String,
         onClick: () -> Unit,
         minHeight: Dp = if (isDesktopOS()) 24.dp else 32.dp,
-        color: Color = getUIKitColors().menu.itemText,
+        color: Color = getUIKitColors().textFillColorPrimaryBrush,
         contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
         background: Color = Color.Transparent,
         cornerRadius: Dp = maxOf(getUIKitShapes().cardRounded - getUIKitLayout().smallSpacing, getUIKitShapes().smallRounded),
@@ -62,7 +62,7 @@ class UIKitMenuScope {
         onClick: () -> Unit,
         minHeight: Dp = if (isDesktopOS()) 24.dp else 32.dp,
         contentDescription: String?,
-        color: Color = getUIKitColors().menu.itemIcon,
+        color: Color = getUIKitColors().textFillColorPrimaryBrush,
         contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
         background: Color = Color.Transparent,
         cornerRadius: Dp = maxOf(getUIKitShapes().cardRounded - getUIKitLayout().smallSpacing, getUIKitShapes().smallRounded),
@@ -98,8 +98,8 @@ class UIKitMenuScope {
         contentDescription: String? = text,
         onClick: () -> Unit,
         minHeight: Dp = if (isDesktopOS()) 24.dp else 32.dp,
-        textColor: Color = getUIKitColors().menu.itemText,
-        iconColor: Color = getUIKitColors().menu.itemIcon,
+        textColor: Color = getUIKitColors().textFillColorPrimaryBrush,
+        iconColor: Color = getUIKitColors().textFillColorPrimaryBrush,
         contentPadding: PaddingValues = PaddingValues(getUIKitLayout().basicSpacing),
         background: Color = Color.Transparent,
         cornerRadius: Dp = maxOf(getUIKitShapes().cardRounded - getUIKitLayout().smallSpacing, getUIKitShapes().smallRounded),
@@ -139,7 +139,7 @@ class UIKitMenuScope {
 
     @Composable
     fun Divider(
-        color: Color = getUIKitColors().menu.divider,
+        color: Color = getUIKitColors().lineFillColorPrimaryBrush,
         width: Dp = 1.dp,
         spacing: Dp = 0.dp,
     ) {

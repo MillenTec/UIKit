@@ -48,7 +48,7 @@ private fun Preview() {
                 onDismissRequest = {}
             ) {
                 TextWithIcon(FluentIcons.Accessibility, "Option 1", onClick = {})
-                Text("Option 2", onClick = {}, background = getUIKitColors().successColorFourthBrush)
+                Text("Option 2", onClick = {}, background = getUIKitColors().successGreenColorFourthBrush)
                 Icon(FluentIcons.Text, onClick = {}, contentDescription = null)
             }
         }
@@ -61,7 +61,7 @@ fun UIKitDropdownMenu(
     expanded: Boolean,
     maxLength: Dp = (-1).dp,
     minWidth: Dp = 200.dp,
-    background: Color = getUIKitColors().menu.background,
+    background: Color = getUIKitColors().contentFillColorSecondaryBrush,
     cornerRadius: Dp = getUIKitShapes().cardRounded,
     contentPadding: PaddingValues = PaddingValues(getUIKitLayout().smallSpacing),
     alignment: Alignment = Alignment.Center,

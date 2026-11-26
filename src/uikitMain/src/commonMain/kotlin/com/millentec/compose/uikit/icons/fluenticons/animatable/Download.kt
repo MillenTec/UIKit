@@ -44,7 +44,7 @@ fun FluentIcons.AnimatableIcons.Download(
     modifier: Modifier = Modifier,
     progress: Float,
     state: UIKitArrowCircleAnimateState = Running,
-    primaryTint: Color = getUIKitColors().accentColorPrimaryBrush,
+    primaryTint: Color = getUIKitColors().highlightColorPrimaryBrush,
     autoTint: Boolean = true,
     resetProgressOnError: Boolean = true,
     lineWidth: Dp = 1.dp

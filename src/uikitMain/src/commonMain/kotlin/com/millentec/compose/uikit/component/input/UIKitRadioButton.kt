@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import com.millentec.compose.uikit.foundation.helper.uikitClickable
 import com.millentec.compose.uikit.foundation.isDesktopOS
 import com.millentec.compose.uikit.theme.*
-import com.millentec.compose.uikit.theme.colors.UIKitColors
 
 @Composable
 @Preview
@@ -75,19 +74,16 @@ data class UIKitRadioButtonColors(
     companion object {
         @Composable
         fun default(
-            selected: Color? = null,
-            unselected: Color? = null,
-            selectedDisabled: Color? = null,
-            unselectedDisable: Color? = null
-        ): UIKitRadioButtonColors {
-            val colors = getUIKitColors().radioButton
-            return colors.copy(
-                selected = selected ?: colors.selected,
-                unselected = unselected ?: colors.unselected,
-                selectedDisabled = selectedDisabled ?: colors.selectedDisabled,
-                unselectedDisable = unselectedDisable ?: colors.unselectedDisable
-            )
-        }
+            selected: Color = getUIKitColors().highlightColorPrimaryBrush,
+            unselected: Color = getUIKitColors().contentFillColorTertiaryBrush,
+            selectedDisabled: Color = getUIKitColors().lineFillColorDisabled,
+            unselectedDisable: Color = getUIKitColors().lineFillColorDisabled
+        ) = UIKitRadioButtonColors(
+            selected = selected,
+            unselected = unselected,
+            selectedDisabled = selectedDisabled,
+            unselectedDisable = unselectedDisable
+        )
     }
 }
 
@@ -100,62 +96,57 @@ fun UIKitRadioButton(
     colors: UIKitRadioButtonColors = UIKitRadioButtonColors.default(),
     size: DpSize = DpSize(18.dp, 18.dp)
 ) {
-    UIKitAvailabilityScope(
-        enabled = enabled,
-        adjust = { it.copy(radioButton = colors) }
+    Box(
+        modifier = modifier
     ) {
+       val colorAnimated by animateColorAsState(
+           targetValue = if (!enabled) {
+               if (selected) colors.selectedDisabled else colors.unselectedDisable
+           } else {
+               if (selected) colors.selected else colors.unselected
+           },
+           animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
+       )
+
         Box(
-            modifier = modifier
+            modifier = Modifier
+                .clip(RoundedCornerShape(getUIKitShapes().circular))
+                .size(size)
+                .border(
+                    width = 1.dp,
+                    color = colorAnimated,
+                    shape = RoundedCornerShape(getUIKitShapes().circular)
+                )
+                .uikitClickable(
+                    enabled = enabled && !selected,
+                    onClick = onClick,
+                    indicationEnabled = isDesktopOS(),
+                    indication = null
+                )
         ) {
-            val colorAnimated by animateColorAsState(
-                targetValue = if (!enabled) {
-                    if (selected) colors.selectedDisabled else colors.unselectedDisable
-                } else {
-                    if (selected) colors.selected else colors.unselected
-                },
-                animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
-            )
-
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(getUIKitShapes().circular))
-                    .size(size)
-                    .border(
-                        width = 1.dp,
-                        color = colorAnimated,
-                        shape = RoundedCornerShape(getUIKitShapes().circular)
-                    )
-                    .uikitClickable(
-                        enabled = enabled && !selected,
-                        onClick = onClick,
-                        indicationEnabled = isDesktopOS(),
-                        indication = null
-                    )
+            AnimatedVisibility(
+                visible = selected,
+                enter = scaleIn(
+                    initialScale = 0f,
+                    animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = FastOutSlowInEasing)
+                ),
+                exit = scaleOut(
+                    targetScale = 0f,
+                    animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = FastOutSlowInEasing)
+                )
             ) {
-                AnimatedVisibility(
-                    visible = selected,
-                    enter = scaleIn(
-                        initialScale = 0f,
-                        animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = FastOutSlowInEasing)
-                    ),
-                    exit = scaleOut(
-                        targetScale = 0f,
-                        animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = FastOutSlowInEasing)
-                    )
-                ) {
-                    val colorAnimated by animateColorAsState(
-                        targetValue = if (enabled) colors.selected else colors.selectedDisabled,
-                        animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
-                    )
+                val colorAnimated by animateColorAsState(
+                    targetValue = if (enabled) colors.selected else colors.selectedDisabled,
+                    animationSpec = tween(getUIKitAnimate().transformRegularDurationMillis, easing = LinearEasing)
+                )
 
-                    Box(
-                        modifier = Modifier
-                            .padding(getUIKitLayout().smallSpacing)
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(getUIKitShapes().circular))
-                            .background(colorAnimated)
-                    )
-                }
+                Box(
+                    modifier = Modifier
+                        .padding(getUIKitLayout().smallSpacing)
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(getUIKitShapes().circular))
+                        .background(colorAnimated)
+                )
             }
         }
     }

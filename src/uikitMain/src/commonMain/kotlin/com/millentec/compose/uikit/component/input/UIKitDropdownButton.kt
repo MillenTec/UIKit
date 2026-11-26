@@ -48,29 +48,28 @@ data class UIKitDropdownColors(
     companion object {
         @Composable
         fun default(
-            background: Color? = null,
-            backgroundDisabled: Color? = null,
-            content: Color? = null,
-            contentDisabled: Color? = null,
-            border: Color? = null,
-            borderDisabled: Color? = null,
-            menuBackground: Color? = null,
-            menuDivider: Color? = null,
-            menuContent: Color? = null,
-            menuBorder: Color? = null,
+            background: Color = getUIKitColors().contentFillColorTertiaryBrush,
+            backgroundDisabled: Color = getUIKitColors().contentFillColorBrushDisabled,
+            content: Color = getUIKitColors().textFillColorPrimaryBrush,
+            contentDisabled: Color = getUIKitColors().textFillColorDisabled,
+            border: Color = getUIKitColors().lineFillColorPrimaryBrush,
+            borderDisabled: Color = getUIKitColors().lineFillColorPrimaryBrush,
+            menuBackground: Color = getUIKitColors().contentFillColorSecondaryBrush,
+            menuDivider: Color = getUIKitColors().lineFillColorPrimaryBrush,
+            menuContent: Color = getUIKitColors().textFillColorPrimaryBrush,
+            menuBorder: Color = getUIKitColors().lineFillColorPrimaryBrush,
         ): UIKitDropdownColors {
-            val colors = getUIKitColors().dropdown
-            return colors.copy(
-                background = background ?: colors.background,
-                backgroundDisabled = backgroundDisabled ?: colors.backgroundDisabled,
-                content = content ?: colors.content,
-                contentDisabled = contentDisabled ?: colors.contentDisabled,
-                border = border ?: colors.border,
-                borderDisabled = borderDisabled ?: colors.borderDisabled,
-                menuBackground = menuBackground ?: colors.menuBackground,
-                menuDivider = menuDivider ?: colors.menuDivider,
-                menuContent = menuContent ?: colors.menuContent,
-                menuBorder = menuBorder ?: colors.menuBorder,
+            return UIKitDropdownColors(
+                background = background,
+                backgroundDisabled = backgroundDisabled,
+                content = content,
+                contentDisabled = contentDisabled,
+                border = border,
+                borderDisabled = borderDisabled,
+                menuBackground = menuBackground,
+                menuDivider = menuDivider,
+                menuContent = menuContent,
+                menuBorder = menuBorder,
             )
         }
     }

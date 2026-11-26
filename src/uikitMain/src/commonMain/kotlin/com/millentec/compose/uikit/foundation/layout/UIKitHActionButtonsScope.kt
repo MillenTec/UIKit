@@ -76,9 +76,9 @@ class UIKitHActionButtonsScope {
         textFieldOptions: UIKitTextFieldOptions = UIKitTextFieldOptions(clear = true),
         maxWidth: Dp = (-1).dp,
         colors: UIKitTextFieldColors = UIKitTextFieldColors.default(
-            background = getUIKitColors().cardBackgroundFillColorBrush.copy(0f),
-            backgroundDisabled = getUIKitColors().control.disabledBackground.copy(0.3f),
-            backgroundActive = getUIKitColors().cardBackgroundFillColorBrush.copy(0.15f),
+            background = getUIKitColors().contentFillColorSecondaryBrush.copy(0f),
+            backgroundDisabled = getUIKitColors().contentFillColorBrushDisabled.copy(0.3f),
+            backgroundActive = getUIKitColors().contentFillColorSecondaryBrush.copy(0.15f),
             border = Color.Transparent,
             borderActive = Color.Transparent,
             borderDisabled = Color.Transparent

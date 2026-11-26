@@ -30,10 +30,10 @@ private fun Preview() {
             .size(100.dp),
         progress = 0.3f,
         basicIcon = FluentIcons.addCircle(
-            SolidColor(getUIKitColors().accentColorPrimaryBrush),
-            SolidColor(getUIKitColors().accentColorPrimaryBrush.copy(0.3f)),
+            SolidColor(getUIKitColors().highlightColorPrimaryBrush),
+            SolidColor(getUIKitColors().highlightColorPrimaryBrush.copy(0.3f)),
         ),
-        activeColor = getUIKitColors().accentColorPrimaryBrush
+        activeColor = getUIKitColors().highlightColorPrimaryBrush
     )
 }
 

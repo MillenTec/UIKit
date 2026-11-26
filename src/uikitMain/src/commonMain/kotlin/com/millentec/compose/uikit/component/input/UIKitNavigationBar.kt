@@ -55,28 +55,28 @@ private fun Preview(){
                 text = "Text",
                 symbol = UIKitImageVectorSymbol(FluentIcons.Text),
                 color = getUIKitColors().textFillColorPrimaryBrush,
-                colorChecked = getUIKitColors().accentColorPrimaryBrush,
+                colorChecked = getUIKitColors().highlightColorPrimaryBrush,
                 contentDescription = "Text",
             )
             TextWithIcon(
                 text = "Accessibility",
                 symbol = UIKitImageVectorSymbol(FluentIcons.Accessibility),
                 color = getUIKitColors().textFillColorPrimaryBrush,
-                colorChecked = getUIKitColors().accentColorPrimaryBrush,
+                colorChecked = getUIKitColors().highlightColorPrimaryBrush,
                 contentDescription = "Accessibility",
             )
             TextWithIcon(
                 text = "Settings",
                 symbol = UIKitImageVectorSymbol(FluentIcons.Settings),
                 color = getUIKitColors().textFillColorPrimaryBrush,
-                colorChecked = getUIKitColors().accentColorPrimaryBrush,
+                colorChecked = getUIKitColors().highlightColorPrimaryBrush,
                 contentDescription = "Settings",
             )
             TextWithIcon(
                 text = "Alert",
                 symbol = UIKitImageVectorSymbol(FluentIcons.Alert),
                 color = getUIKitColors().textFillColorPrimaryBrush,
-                colorChecked = getUIKitColors().accentColorPrimaryBrush,
+                colorChecked = getUIKitColors().highlightColorPrimaryBrush,
                 contentDescription = "Alert",
             )
         }
@@ -91,8 +91,8 @@ fun UIKitNavigationBar(
     checkedIndex: Int,
     onChecked: (Int) -> Unit,
     position: UIKitAlignment = UIKitAlignment.BottomCenter,
-    background: Color = getUIKitColors().navigationBar.background,
-    indicatorBackground: Color = getUIKitColors().navigationBar.indicator,
+    background: Color = getUIKitColors().contentFillColorSecondaryBrush,
+    indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.2f),
     acrylicEffectEnabled: Boolean = false,
     acrylicState: AcrylicMaterialState? = null,
     shadowEnable: Boolean = true,
@@ -129,8 +129,8 @@ fun UIKitNavigationBar(
     modifier: Modifier = Modifier,
     checkedIndex: Int,
     onChecked: (Int) -> Unit,
-    background: Color = getUIKitColors().navigationBar.background,
-    indicatorBackground: Color = getUIKitColors().navigationBar.indicator,
+    background: Color = getUIKitColors().contentFillColorSecondaryBrush,
+    indicatorBackground: Color = getUIKitColors().textFillColorPrimaryBrush.copy(0.2f),
     state: UIKitAdaptiveCornerContainerState,
     acrylicEffectEnabled: Boolean = false,
     acrylicState: AcrylicMaterialState? = null,

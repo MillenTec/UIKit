@@ -51,7 +51,6 @@ import com.millentec.compose.uikit.symbols.builtin.media.Play
 import com.millentec.compose.uikit.symbols.builtin.systemui.Battery
 import com.millentec.compose.uikit.symbols.draw.UIKitSymbolStyle
 import com.millentec.compose.uikit.theme.*
-import com.millentec.compose.uikit.theme.colors.UIKitColors
 import com.millentec.compose.uikit.viewmodels.MainViewModel
 import com.millentec.compose.uikit.views.LocalNavigationDockHeight
 import com.millentec.compose.uikit.views.component.CommonSlider
@@ -209,11 +208,11 @@ fun UIKitSymbolsGalleryPage(
                                         ),
                                     symbol = UIKitImageVectorSymbol(
                                         FluentIcons.dismissCircle(
-                                            getUIKitColors().errorColorPrimaryBrush,
+                                            getUIKitColors().errorRedColorPrimaryBrush,
                                             true
                                         )
                                     ),
-                                    symbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().errorColorPrimaryBrush),
+                                    symbolStyle = UIKitSymbolStyle.Monochrome(getUIKitColors().errorRedColorPrimaryBrush),
                                     contentDescription = "No Symbol Found"
                                 )
 
@@ -242,7 +241,7 @@ fun UIKitSymbolsGalleryPage(
                                                     tag = "Reset keywords",
                                                     styles = TextLinkStyles(
                                                         style = SpanStyle(
-                                                            color = getUIKitColors().accentColorSecondaryBrush
+                                                            color = getUIKitColors().highlightColorSecondaryBrush
                                                         )
                                                     ),
                                                     linkInteractionListener = {
@@ -435,7 +434,7 @@ private fun CommonOptionsPreview() {
     ) {
         val commonConfig = CommonConfig(
             style = Monochrome,
-            tint = getUIKitColors().accentColorPrimaryBrush,
+            tint = getUIKitColors().highlightColorPrimaryBrush,
             backgroundColor = getUIKitColors().contentFillColorSecondaryBrush,
         )
         LazyColumn(
@@ -522,10 +521,10 @@ private fun LazyListScope.CommonOptions(
                     val optionalColor = listOf(
                         OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary),
                         OptionalColorInfo(getUIKitColors().textFillColorPrimaryBrushReversed, LocalStrings.current.designs.fluentIcons.options.colors.reversed),
-                        OptionalColorInfo(getUIKitColors().accentColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight),
-                        OptionalColorInfo(getUIKitColors().successColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.success),
-                        OptionalColorInfo(getUIKitColors().warningColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning),
-                        OptionalColorInfo(getUIKitColors().errorColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.error),
+                        OptionalColorInfo(getUIKitColors().highlightColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight),
+                        OptionalColorInfo(getUIKitColors().successGreenColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.success),
+                        OptionalColorInfo(getUIKitColors().warningYellowColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning),
+                        OptionalColorInfo(getUIKitColors().errorRedColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.error),
                     )
 
                     BoxWithConstraints {
@@ -595,10 +594,10 @@ private fun LazyListScope.CommonOptions(
                     val optionalColor = listOf(
                         OptionalColorInfo(getUIKitColors().contentFillColorPrimaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.primary),
                         OptionalColorInfo(getUIKitColors().contentFillColorSecondaryBrush, LocalStrings.current.designs.fluentIcons.options.colors.secondary),
-                        OptionalColorInfo(getUIKitColors().accentColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight),
-                        OptionalColorInfo(getUIKitColors().successColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.success),
-                        OptionalColorInfo(getUIKitColors().warningColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning),
-                        OptionalColorInfo(getUIKitColors().errorColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.error),
+                        OptionalColorInfo(getUIKitColors().highlightColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.highlight),
+                        OptionalColorInfo(getUIKitColors().successGreenColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.success),
+                        OptionalColorInfo(getUIKitColors().warningYellowColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.warning),
+                        OptionalColorInfo(getUIKitColors().errorRedColorFourthBrush, LocalStrings.current.designs.fluentIcons.options.colors.error),
                     )
 
                     BoxWithConstraints {
@@ -840,7 +839,7 @@ private fun SymbolViewPreview() {
     ) {
         SymbolView(UIKitSymbols.systemUI.Battery, CommonConfig(
             style = Monochrome,
-            tint = getUIKitColors().accentColorPrimaryBrush,
+            tint = getUIKitColors().highlightColorPrimaryBrush,
             backgroundColor = getUIKitColors().contentFillColorSecondaryBrush
         ), PaddingValues(getUIKitLayout().screenSideSpacing))
     }

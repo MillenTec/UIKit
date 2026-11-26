@@ -154,7 +154,7 @@ val UIKitArrowSymbols.ArrowCircleDown: UIKitSymbol
                             ),
                             Pair(
                                 UIKitSymbolSelector(null, "circle_inactive", null),
-                                UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().lineFillColorDisabledBrush), 1f)
+                                UIKitSymbolColor(UIKitBrush.solid(getUIKitColors().lineFillColorDisabled), 1f)
                             )
                         )
                     )

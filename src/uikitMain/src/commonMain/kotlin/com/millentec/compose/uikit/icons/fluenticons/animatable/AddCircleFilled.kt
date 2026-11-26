@@ -266,15 +266,15 @@ fun FluentIcons.AnimatableIcons.AddCircleFilled(
 fun FluentIcons.AnimatableIcons.AddCircleFilled(
     modifier: Modifier = Modifier,
     state: UIKitAddCircleAnimateState = UIKitAddCircleAnimateState.Add,
-    primaryTint: Color = getUIKitColors().accentColorPrimaryBrush,
+    primaryTint: Color = getUIKitColors().highlightColorPrimaryBrush,
     autoTint: Boolean = true,
     lineWidth: Dp = 1.dp
 ) {
     val tintAnimated by animateColorAsState(
         targetValue = if (autoTint) when(state) {
             UIKitAddCircleAnimateState.Add -> primaryTint
-            UIKitAddCircleAnimateState.Error -> getUIKitColors().errorColorPrimaryBrush
-            UIKitAddCircleAnimateState.Success -> getUIKitColors().successColorPrimaryBrush
+            UIKitAddCircleAnimateState.Error -> getUIKitColors().errorRedColorPrimaryBrush
+            UIKitAddCircleAnimateState.Success -> getUIKitColors().successGreenColorPrimaryBrush
         } else primaryTint,
         animationSpec = tween(
             getUIKitAnimate().transformRegularDurationMillis,

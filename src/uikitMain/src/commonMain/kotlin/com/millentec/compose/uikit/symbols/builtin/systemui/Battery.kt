@@ -136,9 +136,9 @@ val UIKitSystemUISymbols.Battery: UIKitSymbol
                             UIKitSymbolSelector(null, "battery_remain", null),
                             UIKitSymbolColor(UIKitBrush.solid(
                                 when(remain) {
-                                    in 0f..<0.1f -> getUIKitColors().errorColorPrimaryBrush
-                                    in 0.1f..<0.3f -> getUIKitColors().warningColorPrimaryBrush
-                                    in 0.3f..1f -> getUIKitColors().successColorPrimaryBrush
+                                    in 0f..<0.1f -> getUIKitColors().errorRedColorPrimaryBrush
+                                    in 0.1f..<0.3f -> getUIKitColors().warningYellowColorPrimaryBrush
+                                    in 0.3f..1f -> getUIKitColors().successGreenColorPrimaryBrush
                                     else -> getUIKitColors().textFillColorPrimaryBrush
                                 }
                             ), 1f)

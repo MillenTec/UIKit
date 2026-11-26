@@ -43,7 +43,7 @@ fun UIKitSurface(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     shape: Shape = RectangleShape,
-    color: Color = getUIKitColors().control.background,
+    color: Color = getUIKitColors().contentFillColorTertiaryBrush,
     shadow: Shadow? = null,
     acrylicEffectEnabled: Boolean = false,
     acrylicMaterialState: AcrylicMaterialState? = null,
@@ -101,7 +101,7 @@ fun UIKitSurface(
 fun UIKitSurface(
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
-    color: Color = getUIKitColors().control.background,
+    color: Color = getUIKitColors().contentFillColorTertiaryBrush,
     shadow: Shadow? = null,
     border: BorderStroke? = null,
     content: @Composable () -> Unit
@@ -122,7 +122,7 @@ fun UIKitSurface(
 fun UIKitSurface(
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
-    color: Color = getUIKitColors().control.background,
+    color: Color = getUIKitColors().contentFillColorTertiaryBrush,
     shadow: Shadow? = null,
     border: BorderStroke? = null
 ) = UIKitSurface(

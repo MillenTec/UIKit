@@ -28,8 +28,8 @@ class UIKitNavigationBarScope : UIKitItemScope<UIKitCheckableItem>() {
     @Composable
     fun Text(
         text: String,
-        color: Color = getUIKitColors().navigationBar.text,
-        colorChecked: Color = getUIKitColors().navigationBar.textActive
+        color: Color = getUIKitColors().textFillColorPrimaryBrush,
+        colorChecked: Color = getUIKitColors().highlightColorPrimaryBrush
     ) {
         add(object : UIKitCheckableItem() {
             @Composable
@@ -58,8 +58,8 @@ class UIKitNavigationBarScope : UIKitItemScope<UIKitCheckableItem>() {
     @Composable
     fun Icon(
         symbol: UIKitSymbol,
-        color: Color = getUIKitColors().navigationBar.text,
-        colorChecked: Color = getUIKitColors().navigationBar.textActive,
+        color: Color = getUIKitColors().textFillColorPrimaryBrush,
+        colorChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
         contentDescription: String?,
     ) {
         add(object : UIKitCheckableItem() {
@@ -106,8 +106,8 @@ class UIKitNavigationBarScope : UIKitItemScope<UIKitCheckableItem>() {
     @Composable
     fun Icon(
         icon: ImageVector,
-        color: Color = getUIKitColors().navigationBar.text,
-        colorChecked: Color = getUIKitColors().navigationBar.textActive,
+        color: Color = getUIKitColors().textFillColorPrimaryBrush,
+        colorChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
         contentDescription: String?,
     ) {
         Icon(
@@ -122,8 +122,8 @@ class UIKitNavigationBarScope : UIKitItemScope<UIKitCheckableItem>() {
     fun TextWithIcon(
         text: String,
         symbol: UIKitSymbol,
-        color: Color = getUIKitColors().navigationBar.text,
-        colorChecked: Color = getUIKitColors().navigationBar.textActive,
+        color: Color = getUIKitColors().textFillColorPrimaryBrush,
+        colorChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
         contentDescription: String? = text,
     ) {
         add(object : UIKitCheckableItem() {
@@ -185,8 +185,8 @@ class UIKitNavigationBarScope : UIKitItemScope<UIKitCheckableItem>() {
     fun TextWithIcon(
         text: String,
         icon: ImageVector,
-        color: Color = getUIKitColors().navigationBar.text,
-        colorChecked: Color = getUIKitColors().navigationBar.textActive,
+        color: Color = getUIKitColors().textFillColorPrimaryBrush,
+        colorChecked: Color = getUIKitColors().highlightColorPrimaryBrush,
         contentDescription: String? = text,
     ) {
         TextWithIcon(

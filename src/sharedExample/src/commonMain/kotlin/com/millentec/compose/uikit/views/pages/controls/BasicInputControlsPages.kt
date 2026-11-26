@@ -274,7 +274,7 @@ val BasicInputControls = listOf(
                         ),
                         enabled = buttonEnabled.value,
                         colors = UIKitToggleButtonColors.default(
-                            backgroundChecked = buttonBackground.value ?: getUIKitColors().accentColorPrimaryBrush
+                            backgroundChecked = buttonBackground.value ?: getUIKitColors().highlightColorPrimaryBrush
                         ),
                         onCheckedChange = {
                             checked.value = it
@@ -320,7 +320,7 @@ val BasicInputControls = listOf(
                         ),
                         enabled = buttonEnabled.value,
                         colors = UIKitToggleButtonColors.default(
-                            backgroundChecked = buttonBackground.value ?: getUIKitColors().accentColorPrimaryBrush
+                            backgroundChecked = buttonBackground.value ?: getUIKitColors().highlightColorPrimaryBrush
                         ),
                         icon = FluentIcons.Checkmark,
                         onCheckedChange = {
@@ -411,7 +411,7 @@ val BasicInputControls = listOf(
                     cornerRadius = 0.dp
                 ) {
                     val uikitColors = getUIKitColors()
-                    val color = remember { mutableStateOf((buttonBackground.value ?: uikitColors.accentColorPrimaryBrush).toHsv()) }
+                    val color = remember { mutableStateOf((buttonBackground.value ?: uikitColors.highlightColorPrimaryBrush).toHsv()) }
                     LaunchedEffect(color.value) {
                         buttonBackground.value = color.value.getColor()
                     }
@@ -463,8 +463,8 @@ val BasicInputControls = listOf(
                         checked = checked.value,
                         enabled = buttonEnabled.value,
                         colors = UIKitToggleSwitchColors.default(
-                            backgroundChecked = buttonBackground.value ?: getUIKitColors().accentColorPrimaryBrush,
-                            borderChecked = buttonBackground.value ?: getUIKitColors().accentColorPrimaryBrush
+                            backgroundChecked = buttonBackground.value ?: getUIKitColors().highlightColorPrimaryBrush,
+                            borderChecked = buttonBackground.value ?: getUIKitColors().highlightColorPrimaryBrush
                         ),
                         onCheckedChange = {
                             checked.value = it
@@ -531,7 +531,7 @@ val BasicInputControls = listOf(
                     cornerRadius = 0.dp
                 ) {
                     val uikitColors = getUIKitColors()
-                    val color = remember { mutableStateOf((buttonBackground.value ?: uikitColors.accentColorPrimaryBrush).toHsv()) }
+                    val color = remember { mutableStateOf((buttonBackground.value ?: uikitColors.highlightColorPrimaryBrush).toHsv()) }
                     LaunchedEffect(color.value) {
                         buttonBackground.value = color.value.getColor()
                     }
